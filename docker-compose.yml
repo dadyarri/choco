@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  vkontakte:
+    build: ./vk
+    env_file: .env
+  telegram:
+    build: ./tg
+    env_file: .env
