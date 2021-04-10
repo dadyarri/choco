@@ -1,8 +1,55 @@
 version: "3.7"
+
 services:
+  db:
+    container_name: postgres
+    image: postgres
+    env_file: .env
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgres/data
+    environment:
+      - POSTGRES_DB=jacob
+      - POSTGRES_PASSWORD=mjro10011
+      - POSTGRES_USER=dadyarri
+
+  redis:
+    container_name: redis
+    image: redis
+    command: bash -c "redis-server --appendonly yes --requirepass mjro10011"
+    ports:
+    - "6378:6379"
+    volumes:
+    - ./redis-volume:/data
+
   vkontakte:
+    container_name: choco_vk
     build: ./vk
     env_file: .env
+    command: python /code/vk/main.py
+    volumes:
+      - ./vk:/code/vk
+    depends_on:
+      - db
+      - redis
+
   telegram:
+    container_name: choco_tg
     build: ./tg
     env_file: .env
+    command: python /code/tg/main.py
+    volumes:
+      - ./tg:/code/tg
+    depends_on:
+      - db
+      - redis
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  db_data: {}

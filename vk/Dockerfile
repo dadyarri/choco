@@ -1,20 +1,19 @@
-FROM python:3.9.0-alpine3.12
+FROM python:3.9-slim
 
+# System deps
+RUN apt-get update && apt-get install -y -qq git gcc
+# Download and install poetry
+RUN pip install poetry
 
-# System deps:
-RUN apk add build-base curl git libffi-dev
-RUN apk add openssl
-RUN apk add libressl-dev musl-dev libffi-dev
-RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
-# Copy only requirements to cache them in docker layer
+# Copy Poetry's files
 WORKDIR /code
 COPY poetry.lock pyproject.toml /code/
 
-# Project initialization:
-RUN /root/.poetry/bin/poetry config virtualenvs.create false \
-  && /root/.poetry/bin/poetry install $(test "$PROD" == 1 && echo "--no-dev") --no-interaction
+RUN pip install --upgrade pip
 
-# Creating folders, and files for a project:
-COPY . /code
+# Install deps
+RUN poetry config virtualenvs.create false \
+ && poetry install --no-dev --no-interaction
 
-CMD ["python", "main.py"]
+# Copy sources
+COPY . /code/vk
