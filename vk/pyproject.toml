@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "choco"
+name = "choco-vk"
 version = "0.4.1"
 description = ""
 authors = ["Daniil <dadyarri@gmail.com>"]
@@ -10,6 +10,7 @@ python = "^3.8"
 vkwave = {git = "https://github.com/fscdev/vkwave.git"}
 requests = "^2.25.0"
 pony = "^0.7.14"
+ujson = "^4.0.2"
 
 [tool.poetry.dev-dependencies]
 
