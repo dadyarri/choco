@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   db:
-    container_name: postgres
+    container_name: choco_postgres
     image: postgres
     env_file: .env
     restart: always
@@ -14,7 +14,7 @@ services:
       - POSTGRES_USER=dadyarri
 
   redis:
-    container_name: redis
+    container_name: choco_redis
     image: redis
     command: bash -c "redis-server --appendonly yes --requirepass mjro10011"
     ports:
@@ -45,11 +45,11 @@ services:
       - redis
 
   adminer:
-    container_name: adminer
+    container_name: choco_adminer
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 3333:3333
 
 volumes:
   db_data: {}
