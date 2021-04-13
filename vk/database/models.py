@@ -7,6 +7,7 @@ class Taste(db.Entity):
     code = orm.Required(int)
     name = orm.Required(str)
     price = orm.Required(int)
+    leftovers = orm.Set("Leftover")
 
 
 class Leftover(db.Entity):
