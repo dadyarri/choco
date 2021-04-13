@@ -1,12 +1,10 @@
-import os
 import logging
-import time
+import os
 
-from vkwave import bots
 import requests
+from vkwave import bots
 
 import filters
-
 
 bot = bots.SimpleLongPollBot(
     tokens=os.getenv("VK_TOKEN"),
@@ -69,19 +67,13 @@ async def _new_message(event: bots.SimpleBotEvent):
         if message.attachments is not None:
             for attach in message.attachments:
                 if attach.photo is not None:
-                    max_url = ""
-                    max_size = 0
-                    for size in attach.photo.sizes:
-                        if size.height > max_size:
-                            max_size = size.height
-                            max_url = size.url
                     requests.post(
                         "https://api.telegram.org/bot{0}/sendPhoto".format(
                             telegram_token
                         ),
                         params={
                             "chat_id": chat,
-                            "photo": max_url,
+                            "photo": attach.photo.sizes[-1].url,
                             "caption": "Вложение от {0} {1}".format(fname, lname),
                         },
                     )
