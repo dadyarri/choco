@@ -7,14 +7,9 @@ TORTOISE_ORM = {
     "apps": {
         "models": {
             "models": [
-                "jacob.database.models",
+                "api.database.models",
                 "aerich.models",
             ],
         },
     },
 }
-
-
-async def init_db_connection():
-    await Tortoise.init(TORTOISE_ORM)
-    await Tortoise.generate_schemas()
