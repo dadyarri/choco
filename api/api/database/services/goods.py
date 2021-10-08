@@ -26,31 +26,41 @@ async def create_good(name: str, wholesale_price: int, retail_price: int, leftov
 async def rename_good(good_id: int, new_name: str):
     async with in_transaction():
         good = await models.Good.get(id=good_id)
-        return await good.update_from_dict({"name": new_name})
+        new_good = await good.update_from_dict({"name": new_name})
+        await new_good.save()
+        return new_good
 
 
 async def increment_good_leftover(good_id: int):
     async with in_transaction():
         good = await models.Good.get(id=good_id)
-        return await good.update_from_dict({"leftover": good.leftover + 1})
+        new_good = await good.update_from_dict({"leftover": good.leftover + 1})
+        await new_good.save()
+        return new_good
 
 
 async def decrement_good_leftover(good_id: int):
     async with in_transaction():
         good = await models.Good.get(id=good_id)
-        return await good.update_from_dict({"leftover": good.leftover - 1})
+        new_good = await good.update_from_dict({"leftover": good.leftover - 1})
+        await new_good.save()
+        return new_good
 
 
 async def change_good_wholesale_price(good_id: int, new_price: int):
     async with in_transaction():
         good = await models.Good.get(id=good_id)
-        return await good.update_from_dict({"wholesale_price": new_price})
+        new_good = await good.update_from_dict({"wholesale_price": new_price})
+        await new_good.save()
+        return new_good
 
 
 async def change_good_retail_price(good_id: int, new_price: int):
     async with in_transaction():
         good = await models.Good.get(id=good_id)
-        return await good.update_from_dict({"retail_price": new_price})
+        new_good = await good.update_from_dict({"wholesale_price": new_price})
+        await new_good.save()
+        return new_good
 
 
 
