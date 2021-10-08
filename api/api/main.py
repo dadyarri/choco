@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+from tortoise.contrib.fastapi import register_tortoise
 
+from api.database.core.init import TORTOISE_ORM
 from api.database.services import goods
 
 app = FastAPI()
@@ -43,3 +45,11 @@ async def set_wholesale_price(goods_id: int, new_price: int):
 @app.post("/goods/price/retail/set/{goods_id}")
 async def set_retail_price(goods_id: int, new_price: int):
     pass
+
+
+register_tortoise(
+    app,
+    config=TORTOISE_ORM,
+    generate_schemas=True,
+    add_exception_handlers=True,
+)
