@@ -8,6 +8,7 @@ authors = ["Daniil <dadyarri@gmail.com>"]
 python = "^3.9"
 fastapi = {extras = ["all"], version = "^0.70.0"}
 tortoise-orm = "^0.17.8"
+asyncpg = "^0.24.0"
 
 [tool.poetry.dev-dependencies]
 aerich = "^0.5.8"
