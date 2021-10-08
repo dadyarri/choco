@@ -19,7 +19,7 @@ async def create_goods(name: str, wholesale_price: int, retail_price: int, lefto
 
 
 @app.post("/goods/rename/{goods_id}")
-async def rename_goods(new_name: str):
+async def rename_goods(goods_id: int, new_name: str):
     pass
 
 
@@ -34,10 +34,10 @@ async def decrement_goods(goods_id: int):
 
 
 @app.post("/goods/price/wholesale/set/{goods_id}")
-async def set_wholesale_price(goods_id: int):
+async def set_wholesale_price(goods_id: int, new_price: int):
     pass
 
 
 @app.post("/goods/price/retail/set/{goods_id}")
-async def set_retail_price(goods_id: int):
+async def set_retail_price(goods_id: int, new_price: int):
     pass
