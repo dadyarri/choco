@@ -14,7 +14,7 @@ async def get_all_goods():
 
 @app.get("/goods/{goods_id}")
 async def get_goods(goods_id: int):
-    pass
+    return await goods.fetch_good(goods_id)
 
 
 @app.post("/goods/create")
@@ -24,27 +24,27 @@ async def create_goods(name: str, wholesale_price: int, retail_price: int, lefto
 
 @app.post("/goods/rename/{goods_id}")
 async def rename_goods(goods_id: int, new_name: str):
-    pass
+    return {"renamed": await goods.rename_good(goods_id, new_name)}
 
 
 @app.post("/goods/increment/{goods_id}")
 async def increment_goods(goods_id: int):
-    pass
+    return {"incremented": await goods.increment_good_leftover(goods_id)}
 
 
 @app.post("/goods/decrement/{goods_id}")
 async def decrement_goods(goods_id: int):
-    pass
+    return {"decremented": await goods.decrement_good_leftover(goods_id)}
 
 
 @app.post("/goods/price/wholesale/set/{goods_id}")
 async def set_wholesale_price(goods_id: int, new_price: int):
-    pass
+    return {"wholesale_price_updated": await goods.change_good_wholesale_price(goods_id, new_price)}
 
 
 @app.post("/goods/price/retail/set/{goods_id}")
 async def set_retail_price(goods_id: int, new_price: int):
-    pass
+    return {"retail_price_updated": await goods.change_good_retail_price(goods_id, new_price)}
 
 
 register_tortoise(
