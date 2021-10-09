@@ -5,7 +5,7 @@ from vkbottle.bot import Message
 from vkbottle.dispatch.rules.bot import VBMLRule
 
 from bot.utils import keyboards
-from bot.utils.core import get_vk_token, get_admins_ids
+from bot.utils.core import get_vk_token, get_admins_ids, make_request
 from bot.utils.rules import EventPayloadContainsRule
 
 logging.basicConfig(level="DEBUG")
@@ -30,6 +30,16 @@ async def greeting(message: Message):
         await message.answer(
             "Этот бот не имеет пользовательского интерфейса. Для заказа воспользуйтесь вкладкой Товары"
         )
+
+
+@bot.on.message(
+    EventPayloadContainsRule({"block": "manage_leftovers", "action": "init"}),
+)
+async def init_leftovers_managing(message: Message):
+    goods = await make_request("goods/")
+    await message.answer(
+        "Управление остатками", keyboard=keyboards.list_goods(goods["items"])
+    )
 
 
 if __name__ == "__main__":
