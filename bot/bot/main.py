@@ -1,12 +1,17 @@
 import json
 import logging
 
-from vkbottle import Bot, OrFilter
+from vkbottle import Bot, OrFilter, CtxStorage
 from vkbottle.bot import Message
 from vkbottle.dispatch.rules.bot import VBMLRule
 
 from bot.utils import keyboards
-from bot.utils.core import get_vk_token, get_admins_ids, make_request
+from bot.utils.core import (
+    get_vk_token,
+    get_admins_ids,
+    make_get_request,
+    make_post_request,
+)
 from bot.utils.rules import EventPayloadContainsRule
 
 logging.basicConfig(level="DEBUG")
@@ -16,6 +21,7 @@ bot.labeler.vbml_ignore_case = True
 vbml_rule = VBMLRule.with_config(
     bot.labeler.rule_config,
 )  # FIXME: temporary fix, bug in vkbottle
+ctx_storage = CtxStorage()
 
 
 @bot.on.message(
@@ -37,7 +43,7 @@ async def greeting(message: Message):
     EventPayloadContainsRule({"block": "manage_leftovers", "action": "init"}),
 )
 async def init_leftovers_managing(message: Message):
-    goods = await make_request("goods/", params={"page": 0})
+    goods = await make_get_request("goods/", params={"page": 0})
     await message.answer(
         "Управление остатками", keyboard=keyboards.list_goods(goods["items"], page=0)
     )
@@ -52,7 +58,7 @@ async def leftovers_managing_go_back(message: Message):
     if page == -1:
         await message.answer("Нельзя перейти на страницу с отрицательным номером")
     else:
-        goods = await make_request("goods/", params={"page": page})
+        goods = await make_get_request("goods/", params={"page": page})
         await message.answer(
             "Управление остатками",
             keyboard=keyboards.list_goods(goods["items"], page=page),
@@ -65,7 +71,7 @@ async def leftovers_managing_go_back(message: Message):
 async def leftovers_managing_go_forward(message: Message):
     payload = json.loads(message.payload)
     page = payload["page"]
-    goods = await make_request("goods/", params={"page": page})
+    goods = await make_get_request("goods/", params={"page": page})
     if goods["items"]:
         await message.answer(
             "Управление остатками",
@@ -73,6 +79,47 @@ async def leftovers_managing_go_forward(message: Message):
         )
     else:
         await message.answer("Элементов больше нет")
+
+
+@bot.on.message(
+    EventPayloadContainsRule({"block": "manage_leftovers", "action": "select_good"}),
+)
+async def leftovers_managing_select_good(message: Message):
+    payload = json.loads(message.payload)
+    good_id = payload["id"]
+    good = await make_get_request(f"goods/{good_id}")
+    ctx_storage.set(f"{message.peer_id}.selected_good", good["id"])
+    await message.answer(
+        f"Товар: {good['name']}\nОстаток: {good['leftover']}",
+        keyboard=keyboards.manage_leftovers(),
+    )
+
+
+@bot.on.message(
+    EventPayloadContainsRule({"block": "manage_leftovers", "action": "plus"}),
+)
+async def leftovers_managing_increment_good(message: Message):
+    good_id = int(ctx_storage.get(f"{message.peer_id}.selected_good"))
+    resp = await make_post_request(f"goods/increment/{good_id}/")
+    logging.debug(resp)
+    good = resp["incremented"]
+    await message.answer(
+        f"Товар: {good['name']}\nОстаток: {good['leftover']}",
+        keyboard=keyboards.manage_leftovers(),
+    )
+
+
+@bot.on.message(
+    EventPayloadContainsRule({"block": "manage_leftovers", "action": "minus"}),
+)
+async def leftovers_managing_decrement_good(message: Message):
+    good_id = int(ctx_storage.get(f"{message.peer_id}.selected_good"))
+    resp = await make_post_request(f"goods/decrement/{good_id}")
+    good = resp["decremented"]
+    await message.answer(
+        f"Товар: {good['name']}\nОстаток: {good['leftover']}",
+        keyboard=keyboards.manage_leftovers(),
+    )
 
 
 if __name__ == "__main__":
