@@ -1,4 +1,4 @@
-from vkbottle import Keyboard, Text
+from vkbottle import Keyboard, Text, KeyboardButtonColor
 
 
 def main_menu() -> str:
@@ -43,6 +43,21 @@ def list_goods(goods: list[dict], page: int) -> str:
     kb.add(Text("Назад", payload={"block": "main_menu"}))
     kb.add(
         Text(">", {"block": "manage_leftovers", "action": "forward", "page": page + 1})
+    )
+
+    return kb.get_json()
+
+
+def manage_leftovers():
+    kb = Keyboard(inline=True)
+
+    kb.add(
+        Text("+", payload={"block": "manage_leftovers", "action": "plus"}),
+        color=KeyboardButtonColor.POSITIVE,
+    )
+    kb.add(
+        Text("-", payload={"block": "manage_leftovers", "action": "minus"}),
+        color=KeyboardButtonColor.NEGATIVE,
     )
 
     return kb.get_json()
