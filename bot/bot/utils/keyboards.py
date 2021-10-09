@@ -21,7 +21,8 @@ def main_menu() -> str:
 def list_goods(goods: list[dict]) -> str:
     kb = Keyboard()
     for good in goods:
-        kb.add(Text(good["name"], payload={"goods_id": good["id"]}))
+        if good["leftover"]:
+            kb.add(Text(good["name"], payload={"goods_id": good["id"]}))
 
         if len(kb.buttons[-1]) == 2:
             kb.row()
