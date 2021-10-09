@@ -1,9 +1,11 @@
+import logging
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
 
 from api.database.core.init import TORTOISE_ORM
 from api.database.services import goods
 
+logging.basicConfig(level="DEBUG")
 app = FastAPI()
 
 
@@ -18,8 +20,14 @@ async def get_goods(goods_id: int):
 
 
 @app.post("/goods/create")
-async def create_goods(name: str, wholesale_price: int, retail_price: int, leftover: int):
-    return {"created": await goods.create_good(name, wholesale_price, retail_price, leftover)}
+async def create_goods(
+    name: str, wholesale_price: int, retail_price: int, leftover: int
+):
+    return {
+        "created": await goods.create_good(
+            name, wholesale_price, retail_price, leftover
+        )
+    }
 
 
 @app.post("/goods/rename/{goods_id}")
@@ -39,12 +47,20 @@ async def decrement_goods(goods_id: int):
 
 @app.post("/goods/price/wholesale/set/{goods_id}")
 async def set_wholesale_price(goods_id: int, new_price: int):
-    return {"wholesale_price_updated": await goods.change_good_wholesale_price(goods_id, new_price)}
+    return {
+        "wholesale_price_updated": await goods.change_good_wholesale_price(
+            goods_id, new_price
+        )
+    }
 
 
 @app.post("/goods/price/retail/set/{goods_id}")
 async def set_retail_price(goods_id: int, new_price: int):
-    return {"retail_price_updated": await goods.change_good_retail_price(goods_id, new_price)}
+    return {
+        "retail_price_updated": await goods.change_good_retail_price(
+            goods_id, new_price
+        )
+    }
 
 
 register_tortoise(
