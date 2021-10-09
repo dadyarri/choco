@@ -1,3 +1,4 @@
+import json
 import logging
 
 from vkbottle import Bot, OrFilter
@@ -36,10 +37,42 @@ async def greeting(message: Message):
     EventPayloadContainsRule({"block": "manage_leftovers", "action": "init"}),
 )
 async def init_leftovers_managing(message: Message):
-    goods = await make_request("goods/")
+    goods = await make_request("goods/", params={"page": 0})
     await message.answer(
-        "Управление остатками", keyboard=keyboards.list_goods(goods["items"])
+        "Управление остатками", keyboard=keyboards.list_goods(goods["items"], page=0)
     )
+
+
+@bot.on.message(
+    EventPayloadContainsRule({"block": "manage_leftovers", "action": "back"}),
+)
+async def leftovers_managing_go_back(message: Message):
+    payload = json.loads(message.payload)
+    page = payload["page"]
+    if page == -1:
+        await message.answer("Нельзя перейти на страницу с отрицательным номером")
+    else:
+        goods = await make_request("goods/", params={"page": page})
+        await message.answer(
+            "Управление остатками",
+            keyboard=keyboards.list_goods(goods["items"], page=page),
+        )
+
+
+@bot.on.message(
+    EventPayloadContainsRule({"block": "manage_leftovers", "action": "forward"}),
+)
+async def leftovers_managing_go_forward(message: Message):
+    payload = json.loads(message.payload)
+    page = payload["page"]
+    goods = await make_request("goods/", params={"page": page})
+    if goods["items"]:
+        await message.answer(
+            "Управление остатками",
+            keyboard=keyboards.list_goods(goods["items"], page=page),
+        )
+    else:
+        await message.answer("Элементов больше нет")
 
 
 if __name__ == "__main__":
