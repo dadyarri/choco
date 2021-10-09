@@ -21,7 +21,7 @@ def get_request_url(endpoint: str):
     return f"http://{get_api_host()}/{endpoint}"
 
 
-async def make_request(endpoint: str, params: dict) -> dict:
+async def make_request(endpoint: str, params: dict = None) -> dict:
     async with aiohttp.ClientSession() as session:
         url = get_request_url(endpoint)
         async with session.get(url, params=params) as resp:
