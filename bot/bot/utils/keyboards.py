@@ -25,7 +25,16 @@ def list_goods(goods: list[dict], page: int) -> str:
         if len(kb.buttons[-1]) == 2:
             kb.row()
         if good["leftover"]:
-            kb.add(Text(good["name"], payload={"goods_id": good["id"]}))
+            kb.add(
+                Text(
+                    good["name"],
+                    payload={
+                        "block": "manage_leftovers",
+                        "action": "select_good",
+                        "id": good["id"],
+                    },
+                )
+            )
 
     if kb.buttons[-1]:
         kb.row()
