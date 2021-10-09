@@ -4,24 +4,39 @@ import { View, ScreenSpinner, AdaptivityProvider, AppRoot } from '@vkontakte/vku
 import '@vkontakte/vkui/dist/vkui.css';
 
 import Home from './panels/Home';
-import Persik from './panels/Persik';
+import Leftovers from './panels/Leftovers';
+
+const ROUTES = {
+	HOME: 'home',
+	LEFTOVERS: 'leftovers'
+}
 
 const App = () => {
-	const [activePanel, setActivePanel] = useState('home');
-	const [fetchedUser, setUser] = useState(null);
+	const [activePanel, setActivePanel] = useState(ROUTES.LEFTOVERS);
+	const [fetchedList, setList] = useState(null);
 	const [popout, setPopout] = useState(<ScreenSpinner size='large' />);
 
 	useEffect(() => {
 		bridge.subscribe(({ detail: { type, data }}) => {
 			if (type === 'VKWebAppUpdateConfig') {
 				const schemeAttribute = document.createAttribute('scheme');
-				schemeAttribute.value = data.scheme ? data.scheme : 'client_light';
+				schemeAttribute.value = data.scheme ? data.scheme : 'client_dark';
 				document.body.attributes.setNamedItem(schemeAttribute);
 			}
 		});
-		async function fetchData() {
-			const user = await bridge.send('VKWebAppGetUserInfo');
-			setUser(user);
+		function fetchData() {
+			const data = {
+				"items": [
+					{
+						"id": 1,
+						"leftover": 10,
+						"name": "Test2",
+						"retail_price": 200,
+						"wholesale_price": 100
+					}
+				]
+			}
+			setList(data);
 			setPopout(null);
 		}
 		fetchData();
@@ -35,8 +50,8 @@ const App = () => {
 		<AdaptivityProvider>
 			<AppRoot>
 				<View activePanel={activePanel} popout={popout}>
-					<Home id='home' fetchedUser={fetchedUser} go={go} />
-					<Persik id='persik' go={go} />
+					<Home id={ROUTES.HOME} go={go} />
+					<Leftovers id={ROUTES.LEFTOVERS} go={go} fetchedList={fetchedList}/>
 				</View>
 			</AppRoot>
 		</AdaptivityProvider>
