@@ -18,13 +18,22 @@ def main_menu() -> str:
     return kb.get_json()
 
 
-def list_goods(goods: list[dict]) -> str:
+def list_goods(goods: list[dict], page: int) -> str:
     kb = Keyboard()
+    kb.row()
     for good in goods:
+        if len(kb.buttons[-1]) == 2:
+            kb.row()
         if good["leftover"]:
             kb.add(Text(good["name"], payload={"goods_id": good["id"]}))
 
-        if len(kb.buttons[-1]) == 2:
-            kb.row()
+    if kb.buttons[-1]:
+        kb.row()
+
+    kb.add(Text("<", {"block": "manage_leftovers", "action": "back", "page": page - 1}))
+    kb.add(Text("Назад", payload={"block": "main_menu"}))
+    kb.add(
+        Text(">", {"block": "manage_leftovers", "action": "forward", "page": page + 1})
+    )
 
     return kb.get_json()
