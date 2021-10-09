@@ -3,9 +3,10 @@ from tortoise.transactions import in_transaction
 from api.database import models
 
 
-async def fetch_all_goods() -> list[models.Good]:
+async def fetch_all_goods(page: int = 0) -> list[models.Good]:
+    limit = 4
     async with in_transaction():
-        return await models.Good.all()
+        return await models.Good.all().limit(limit).offset(page * limit)
 
 
 async def fetch_good(good_id: int) -> models.Good:
@@ -13,13 +14,18 @@ async def fetch_good(good_id: int) -> models.Good:
         return await models.Good.get(id=good_id)
 
 
-async def create_good(name: str, wholesale_price: int, retail_price: int, leftover: int):
+async def create_good(
+    name: str,
+    wholesale_price: int,
+    retail_price: int,
+    leftover: int,
+):
     async with in_transaction():
         return await models.Good.create(
             name=name,
             wholesale_price=wholesale_price,
             retail_price=retail_price,
-            leftover=leftover
+            leftover=leftover,
         )
 
 
@@ -61,6 +67,3 @@ async def change_good_retail_price(good_id: int, new_price: int):
         new_good = await good.update_from_dict({"wholesale_price": new_price})
         await new_good.save()
         return new_good
-
-
-

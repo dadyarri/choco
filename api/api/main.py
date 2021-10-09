@@ -10,8 +10,8 @@ app = FastAPI()
 
 
 @app.get("/goods/")
-async def get_all_goods():
-    return {"items": await goods.fetch_all_goods()}
+async def get_all_goods(page: int = 0):
+    return {"items": await goods.fetch_all_goods(page)}
 
 
 @app.get("/goods/{goods_id}")
