@@ -16,4 +16,4 @@ RUN poetry config virtualenvs.create false \
  && poetry install --no-dev --no-interaction
 
 # Copy sources
-COPY . /code/vk
+COPY ./ /code/bot

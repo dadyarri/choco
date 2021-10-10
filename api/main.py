@@ -1,4 +1,6 @@
 import logging
+import os
+
 from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
 
@@ -6,6 +8,7 @@ from database.core.init import TORTOISE_ORM
 from database.services import goods
 
 logging.basicConfig(level="DEBUG")
+logging.info(os.getenv("DATABASE_URL"))
 app = FastAPI()
 
 

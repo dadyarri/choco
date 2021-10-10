@@ -2,19 +2,50 @@ version: "3.7"
 
 services:
 
+  postgres:
+    container_name: choco_postgres
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: "choco"
+      POSTGRES_USER: "dadyarri"
+      POSTGRES_PASSWORD: "mjro10011"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - .dump.sql:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "10000:5432"
+    restart: always
+    networks:
+      - postgres
+
   api:
     container_name: choco_api
     build: ./api
+    expose:
+      - 8080
+    ports:
+      - "8080:8000"
     env_file: .env
     command: gunicorn api.main:app
     volumes:
       - ./api:/code/api
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    networks:
+      default:
+        aliases:
+          - choco.api
 
   vkontakte:
     container_name: choco_vk
     build: ./bot
     env_file: .env
     command: python /code/bot/main.py
+    links:
+      - api
     volumes:
       - ./bot:/code/bot
     depends_on:
@@ -28,5 +59,30 @@ services:
     volumes:
       - ./tg:/code/tg
 
+#  pgadmin:
+#    container_name: choco_pgadmin
+#    image: dpage/pgadmin4:5.7
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: "me@dadyarri.io"
+#      PGADMIN_DEFAULT_PASSWORD: "pgadmin_dadyarri"
+#      PGADMIN_CONFIG_SERVER_MODE: "False"
+#    volumes:
+#      - ./pgadmin:/pgadmin
+#    ports:
+#      - "5050:80"
+#    restart: unless-stopped
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.5'
+#          memory: 1G
+#    networks:
+#      - postgres
+
 volumes:
   db_data: {}
+
+networks:
+  default:
+  postgres:
+    driver: bridge

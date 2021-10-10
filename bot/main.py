@@ -137,6 +137,13 @@ async def send_user_message_to_admins(message: Message):
         for attach in message.attachments:
             if attach.photo is not None:
                 await send_photo_to_telegram(attach.photo.sizes[-1].url)
+            if attach.market is not None:
+                await send_photo_to_telegram(
+                    attach.market.thumb_photo,
+                    first_name=first_name,
+                    last_name=last_name,
+                )
+                await send_message_to_telegram(attach.market.title)
 
 
 if __name__ == "__main__":
