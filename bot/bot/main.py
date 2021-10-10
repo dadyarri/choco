@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 
 from vkbottle import Bot, OrFilter, CtxStorage
 from vkbottle.bot import Message
@@ -11,6 +12,8 @@ from bot.utils.core import (
     get_admins_ids,
     make_get_request,
     make_post_request,
+    send_message_to_telegram,
+    send_photo_to_telegram,
 )
 from bot.utils.rules import EventPayloadContainsRule
 
@@ -34,9 +37,19 @@ async def greeting(message: Message):
     if message.from_id in get_admins_ids():
         await message.answer("Добро пожаловать", keyboard=keyboards.main_menu())
     else:
-        await message.answer(
-            "Этот бот не имеет пользовательского интерфейса. Для заказа воспользуйтесь вкладкой Товары"
+        resp = await message.ctx_api.users.get(user_ids=[str(message.from_id)])
+        first_name = resp[0].first_name
+        last_name = resp[0].last_name
+        group_id = os.getenv("VK_GROUP")
+        tg_msg = "**Новое сообщение от {0} {1}**:\n{2}\nLink: https://vk.com/gim{3}?sel={4}".format(
+            first_name, last_name, message.text, group_id, message.from_id
         )
+        await send_message_to_telegram(tg_msg)
+
+        if message.attachments is not None:
+            for attach in message.attachments:
+                if attach.photo is not None:
+                    await send_photo_to_telegram(attach.photo.sizes[-1].url)
 
 
 @bot.on.message(
