@@ -1,37 +1,24 @@
 version: "3.7"
 
 services:
-  db:
-    container_name: choco_postgres
-    image: postgres
-    env_file: .env
-    restart: always
-    volumes:
-      - db_data:/var/lib/postgres/data
-    environment:
-      - POSTGRES_DB=choco
-      - POSTGRES_PASSWORD=mjro10011
-      - POSTGRES_USER=dadyarri
 
-  redis:
-    container_name: choco_redis
-    image: redis
-    command: bash -c "redis-server --appendonly yes --requirepass mjro10011"
-    ports:
-    - "6378:6379"
+  api:
+    container_name: choco_api
+    build: ./api
+    env_file: .env
+    command: gunicorn api.main:app
     volumes:
-    - ./redis-volume:/data
+      - ./api:/code/api
 
   vkontakte:
     container_name: choco_vk
-    build: ./vk
+    build: ./bot
     env_file: .env
-    command: python /code/vk/main.py
+    command: python /code/bot/main.py
     volumes:
-      - ./vk:/code/vk
+      - ./bot:/code/bot
     depends_on:
-      - db
-      - redis
+      - api
 
   telegram:
     container_name: choco_tg
@@ -40,16 +27,6 @@ services:
     command: python /code/tg/main.py
     volumes:
       - ./tg:/code/tg
-    depends_on:
-      - db
-      - redis
-
-  adminer:
-    container_name: choco_adminer
-    image: adminer
-    restart: always
-    ports:
-      - 3333:3333
 
 volumes:
   db_data: {}
