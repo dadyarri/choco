@@ -37,3 +37,29 @@ async def make_post_request(endpoint: str, params: dict = None) -> dict:
             result = await resp.json()
 
     return result
+
+
+async def send_message_to_telegram(message: str):
+    token = os.getenv("TG_TOKEN")
+    chats = os.getenv("SEND_IDS")
+    async with aiohttp.ClientSession() as session:
+        for chat in chats.split(","):
+            await session.post(
+                "https://api.telegram.org/bot{0}/sendMessage".format(token),
+                params={"chat_id": chat, "text": message, "parse_mode": "Markdown"},
+            )
+
+
+async def send_photo_to_telegram(photo_url: str, **kwargs):
+    token = os.getenv("TG_TOKEN")
+    chats = os.getenv("SEND_IDS")
+    async with aiohttp.ClientSession() as session:
+        for chat in chats.split(","):
+            await session.post(
+                "https://api.telegram.org/bot{0}/sendPhoto".format(token),
+                params={
+                    "chat_id": chat,
+                    "photo": photo_url,
+                    "caption": f"Вложение от {kwargs['first_name']} {kwargs['last_name']}",
+                },
+            )
