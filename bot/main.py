@@ -6,8 +6,8 @@ from vkbottle import Bot, OrFilter, CtxStorage
 from vkbottle.bot import Message
 from vkbottle.dispatch.rules.bot import VBMLRule
 
-from bot.utils import keyboards
-from bot.utils.core import (
+from utils import keyboards
+from utils.core import (
     get_vk_token,
     get_admins_ids,
     make_get_request,
@@ -15,7 +15,7 @@ from bot.utils.core import (
     send_message_to_telegram,
     send_photo_to_telegram,
 )
-from bot.utils.rules import EventPayloadContainsRule
+from utils.rules import EventPayloadContainsRule
 
 logging.basicConfig(level="DEBUG")
 
@@ -36,20 +36,6 @@ ctx_storage = CtxStorage()
 async def greeting(message: Message):
     if message.from_id in get_admins_ids():
         await message.answer("Добро пожаловать", keyboard=keyboards.main_menu())
-    else:
-        resp = await message.ctx_api.users.get(user_ids=[str(message.from_id)])
-        first_name = resp[0].first_name
-        last_name = resp[0].last_name
-        group_id = os.getenv("VK_GROUP")
-        tg_msg = "**Новое сообщение от {0} {1}**:\n{2}\nLink: https://vk.com/gim{3}?sel={4}".format(
-            first_name, last_name, message.text, group_id, message.from_id
-        )
-        await send_message_to_telegram(tg_msg)
-
-        if message.attachments is not None:
-            for attach in message.attachments:
-                if attach.photo is not None:
-                    await send_photo_to_telegram(attach.photo.sizes[-1].url)
 
 
 @bot.on.message(
@@ -133,6 +119,24 @@ async def leftovers_managing_decrement_good(message: Message):
         f"Товар: {good['name']}\nОстаток: {good['leftover']}",
         keyboard=keyboards.manage_leftovers(),
     )
+
+
+@bot.on.message()
+async def send_user_message_to_admins(message: Message):
+    # if message.from_id not in get_admins_ids():
+    resp = await message.ctx_api.users.get(user_ids=[str(message.from_id)])
+    first_name = resp[0].first_name
+    last_name = resp[0].last_name
+    group_id = os.getenv("VK_GROUP")
+    tg_msg = "**Новое сообщение от {0} {1}**:\n{2}\nLink: https://vk.com/gim{3}?sel={4}".format(
+        first_name, last_name, message.text, group_id, message.from_id
+    )
+    await send_message_to_telegram(tg_msg)
+
+    if message.attachments is not None:
+        for attach in message.attachments:
+            if attach.photo is not None:
+                await send_photo_to_telegram(attach.photo.sizes[-1].url)
 
 
 if __name__ == "__main__":
