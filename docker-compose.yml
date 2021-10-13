@@ -17,7 +17,7 @@ services:
       - "10000:5432"
     restart: always
     networks:
-      - postgres
+      - net
 
   api:
     container_name: choco_api
@@ -35,7 +35,7 @@ services:
     depends_on:
       - postgres
     networks:
-      default:
+      net:
         aliases:
           - choco.api
 
@@ -50,6 +50,8 @@ services:
       - ./bot:/code/bot
     depends_on:
       - api
+    networks:
+      - net
 
   telegram:
     container_name: choco_tg
@@ -83,6 +85,5 @@ volumes:
   db_data: {}
 
 networks:
-  default:
-  postgres:
+  net:
     driver: bridge
