@@ -1,3 +1,4 @@
+import logging
 import os
 
 import aiohttp
@@ -63,3 +64,18 @@ async def send_photo_to_telegram(photo_url: str, **kwargs):
                     "caption": f"Вложение от {kwargs['first_name']} {kwargs['last_name']}",
                 },
             )
+
+
+async def generate_post_message():
+    page_num = 0
+    resp = await make_get_request("goods/", params={"page": page_num})
+    result = []
+
+    while resp["items"]:
+        for item in resp["items"]:
+            result.append(
+                f"{item['name']} x{item['leftover']} ({item['retail_price']}₽)"
+            )
+        page_num += 1
+        resp = await make_get_request("goods/", params={"page": page_num})
+    return "\n".join(result)
