@@ -123,27 +123,27 @@ async def leftovers_managing_decrement_good(message: Message):
 
 @bot.on.message()
 async def send_user_message_to_admins(message: Message):
-    # if message.from_id not in get_admins_ids():
-    resp = await message.ctx_api.users.get(user_ids=[str(message.from_id)])
-    first_name = resp[0].first_name
-    last_name = resp[0].last_name
-    group_id = os.getenv("VK_GROUP")
-    tg_msg = "**Новое сообщение от {0} {1}**:\n{2}\nLink: https://vk.com/gim{3}?sel={4}".format(
-        first_name, last_name, message.text, group_id, message.from_id
-    )
-    await send_message_to_telegram(tg_msg)
+    if message.from_id not in get_admins_ids():
+        resp = await message.ctx_api.users.get(user_ids=[str(message.from_id)])
+        first_name = resp[0].first_name
+        last_name = resp[0].last_name
+        group_id = os.getenv("VK_GROUP")
+        tg_msg = "**Новое сообщение от {0} {1}**:\n{2}\nLink: https://vk.com/gim{3}?sel={4}".format(
+            first_name, last_name, message.text, group_id, message.from_id
+        )
+        await send_message_to_telegram(tg_msg)
 
-    if message.attachments is not None:
-        for attach in message.attachments:
-            if attach.photo is not None:
-                await send_photo_to_telegram(attach.photo.sizes[-1].url)
-            if attach.market is not None:
-                await send_photo_to_telegram(
-                    attach.market.thumb_photo,
-                    first_name=first_name,
-                    last_name=last_name,
-                )
-                await send_message_to_telegram(attach.market.title)
+        if message.attachments is not None:
+            for attach in message.attachments:
+                if attach.photo is not None:
+                    await send_photo_to_telegram(attach.photo.sizes[-1].url)
+                if attach.market is not None:
+                    await send_photo_to_telegram(
+                        attach.market.thumb_photo,
+                        first_name=first_name,
+                        last_name=last_name,
+                    )
+                    await send_message_to_telegram(attach.market.title)
 
 
 if __name__ == "__main__":
