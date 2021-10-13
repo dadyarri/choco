@@ -2,7 +2,7 @@ import json
 import logging
 import os
 
-from vkbottle import Bot, OrFilter, CtxStorage
+from vkbottle import Bot, OrFilter, CtxStorage, API, Token
 from vkbottle.bot import Message
 from vkbottle.dispatch.rules.bot import VBMLRule
 
@@ -14,6 +14,7 @@ from utils.core import (
     make_post_request,
     send_message_to_telegram,
     send_photo_to_telegram,
+    generate_post_message,
 )
 from utils.rules import EventPayloadContainsRule
 
@@ -25,6 +26,7 @@ vbml_rule = VBMLRule.with_config(
     bot.labeler.rule_config,
 )  # FIXME: temporary fix, bug in vkbottle
 ctx_storage = CtxStorage()
+user_api = API(os.getenv("VK_USER_TOKEN"))
 
 
 @bot.on.message(
@@ -119,6 +121,25 @@ async def leftovers_managing_decrement_good(message: Message):
         f"Товар: {good['name']}\nОстаток: {good['leftover']}",
         keyboard=keyboards.manage_leftovers(),
     )
+
+
+@bot.on.message(
+    EventPayloadContainsRule({"block": "update_post"}),
+)
+async def update_post(message: Message):
+    vk_group = -int(os.getenv("VK_GROUP"))
+    last_post = await user_api.wall.get(vk_group, count=1)
+    post_id = last_post.items[0].id
+
+    await user_api.wall.delete(vk_group, post_id)
+    resp = await user_api.wall.post(
+        vk_group,
+        message=await generate_post_message(),
+        from_group=True,
+        close_comments=True,
+    )
+    await user_api.wall.pin(resp.post_id, vk_group)
+    await message.answer("Пост обновлён!")
 
 
 @bot.on.message()
