@@ -66,6 +66,11 @@ async def set_retail_price(goods_id: int, new_price: int):
     }
 
 
+@app.post("/goods/market_id/set/{goods_id}")
+async def set_retail_price(goods_id: int, new_id: int):
+    return {"market_id_updated": await goods.change_good_market_id(goods_id, new_id)}
+
+
 register_tortoise(
     app,
     config=TORTOISE_ORM,
