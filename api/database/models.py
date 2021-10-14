@@ -7,4 +7,4 @@ class Good(Model):
     wholesale_price = fields.IntField()
     retail_price = fields.IntField()
     leftover = fields.IntField()
-    market_link = fields.CharField(max_length=255, null=True)
+    market_id = fields.CharField(max_length=255, null=True)
