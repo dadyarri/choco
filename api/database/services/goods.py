@@ -18,7 +18,7 @@ async def create_good(
     name: str,
     wholesale_price: int,
     retail_price: int,
-    leftover: int,
+    leftover: float,
     market_id: int,
 ):
     async with in_transaction():

@@ -24,7 +24,7 @@ async def get_goods(goods_id: int):
 
 @app.post("/goods/create")
 async def create_goods(
-    name: str, wholesale_price: int, retail_price: int, leftover: int, market_id: int
+    name: str, wholesale_price: int, retail_price: int, leftover: float, market_id: int
 ):
     return {
         "created": await goods.create_good(
