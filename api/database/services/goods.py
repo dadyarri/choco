@@ -19,6 +19,7 @@ async def create_good(
     wholesale_price: int,
     retail_price: int,
     leftover: int,
+    market_id: int,
 ):
     async with in_transaction():
         return await models.Good.create(
@@ -26,6 +27,7 @@ async def create_good(
             wholesale_price=wholesale_price,
             retail_price=retail_price,
             leftover=leftover,
+            market_id=market_id,
         )
 
 
