@@ -67,3 +67,11 @@ async def change_good_retail_price(good_id: int, new_price: int):
         new_good = await good.update_from_dict({"wholesale_price": new_price})
         await new_good.save()
         return new_good
+
+
+async def change_good_market_id(goods_id: int, market_id: int):
+    async with in_transaction():
+        good = await models.Good.get(id=goods_id)
+        new_good = await good.update_from_dict({"market_id": market_id})
+        await new_good.save()
+        return new_good
