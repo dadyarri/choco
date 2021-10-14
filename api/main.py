@@ -22,6 +22,11 @@ async def get_goods(goods_id: int):
     return await goods.fetch_good(goods_id)
 
 
+@app.get("/goods/get/market/{market_id}")
+async def find_good_by_market_id(market_id: int):
+    return await goods.get_good_by_market_id(market_id)
+
+
 @app.post("/goods/create")
 async def create_goods(
     name: str, wholesale_price: int, retail_price: int, leftover: float, market_id: int
