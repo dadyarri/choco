@@ -6,7 +6,9 @@ from database import models
 async def fetch_all_goods(page: int = 0) -> list[models.Good]:
     limit = 4
     async with in_transaction():
-        return await models.Good.all().limit(limit).offset(page * limit)
+        return (
+            await models.Good.all().order_by("name").limit(limit).offset(page * limit)
+        )
 
 
 async def fetch_good(good_id: int) -> models.Good:
