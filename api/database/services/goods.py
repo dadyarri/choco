@@ -3,15 +3,20 @@ from tortoise.transactions import in_transaction
 from database import models
 
 
-async def fetch_all_goods(page: int = 0) -> list[models.Good]:
-    limit = 4
+async def fetch_all_goods(page: int = None) -> list[models.Good]:
     async with in_transaction():
-        return (
-            await models.Good.all().order_by("name").limit(limit).offset(page * limit)
-        )
+        if page:
+            limit = 4
+            return (
+                await models.Good.all()
+                .order_by("name")
+                .limit(limit)
+                .offset(page * limit)
+            )
+        return await models.Good.all().order_by("name")
 
 
-async def fetch_good(good_id: int) -> models.Good:
+async def get_good_by_id(good_id: int) -> models.Good:
     async with in_transaction():
         return await models.Good.get(id=good_id)
 
@@ -46,20 +51,24 @@ async def rename_good(good_id: int, new_name: str):
         return new_good
 
 
+async def update_good_leftover(good_id: int, value: float):
+    async with in_transaction():
+        good = await models.Good.get(id=good_id)
+        new_good = await good.update_from_dict({"leftover": value})
+        await new_good.save()
+        return new_good
+
+
 async def increment_good_leftover(good_id: int):
     async with in_transaction():
         good = await models.Good.get(id=good_id)
-        new_good = await good.update_from_dict({"leftover": good.leftover + 1})
-        await new_good.save()
-        return new_good
+        await update_good_leftover(good_id, good.leftover + 1)
 
 
 async def decrement_good_leftover(good_id: int):
     async with in_transaction():
         good = await models.Good.get(id=good_id)
-        new_good = await good.update_from_dict({"leftover": good.leftover - 1})
-        await new_good.save()
-        return new_good
+        await update_good_leftover(good_id, good.leftover - 1)
 
 
 async def change_good_wholesale_price(good_id: int, new_price: int):
