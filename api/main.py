@@ -43,7 +43,13 @@ async def get_all_goods(page: int = None):
     :param page: number of page (4 items on page)
     :return: dict
     """
-    return {"response": await goods.fetch_all_goods(page)}
+    items = await goods.fetch_all_goods(page)
+    return {
+        "response": {
+            "count": len(items),
+            "items": items,
+        },
+    }
 
 
 @app.get("/goods/id/{goods_id}")
