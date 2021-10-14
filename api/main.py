@@ -7,7 +7,7 @@ from tortoise.contrib.fastapi import register_tortoise
 
 from database.core.init import TORTOISE_ORM
 from database.services import goods
-
+from models import BaseResponseModel, GetAllGoodsResponseModel, BaseGoodResponse
 
 logging.basicConfig(level="DEBUG")
 version = toml.load("pyproject.toml")["tool"]["poetry"]["version"]
@@ -25,7 +25,11 @@ app = FastAPI(
 )
 
 
-@app.get("/", status_code=status.HTTP_418_IM_A_TEAPOT)
+@app.get(
+    "/",
+    status_code=status.HTTP_418_IM_A_TEAPOT,
+    response_model=BaseResponseModel,
+)
 async def teapot():
     """
     GET to root returns 418
@@ -35,7 +39,10 @@ async def teapot():
     return {"response": "i'm a teapot"}
 
 
-@app.get("/goods/")
+@app.get(
+    "/goods/",
+    response_model=GetAllGoodsResponseModel,
+)
 async def get_all_goods(page: int = None):
     """
     GET returns list of goods (may be paged)
@@ -52,7 +59,10 @@ async def get_all_goods(page: int = None):
     }
 
 
-@app.get("/goods/id/{goods_id}")
+@app.get(
+    "/goods/id/{goods_id}",
+    response_model=BaseGoodResponse,
+)
 async def get_good(goods_id: int):
     """
     GET return one good by its id
@@ -63,7 +73,10 @@ async def get_good(goods_id: int):
     return {"response": await goods.get_good_by_id(goods_id)}
 
 
-@app.get("/goods/market/{market_id}")
+@app.get(
+    "/goods/market/{market_id}",
+    response_model=BaseGoodResponse,
+)
 async def find_good_by_market_id(market_id: int):
     """
     GET return one good by its id of market card in VK
@@ -74,7 +87,10 @@ async def find_good_by_market_id(market_id: int):
     return {"response": await goods.get_good_by_market_id(market_id)}
 
 
-@app.post("/goods/market/{goods_id}/set")
+@app.post(
+    "/goods/market/{goods_id}/set",
+    response_model=BaseGoodResponse,
+)
 async def set_market_id(goods_id: int, value: int):
     """
     POST return one good by its id
@@ -86,7 +102,10 @@ async def set_market_id(goods_id: int, value: int):
     return {"response": await goods.change_good_market_id(goods_id, value)}
 
 
-@app.post("/goods/name/{goods_id}")
+@app.post(
+    "/goods/name/{goods_id}",
+    response_model=BaseGoodResponse,
+)
 async def rename_goods(goods_id: int, value: str):
     """
     POST rename good by its id
@@ -98,7 +117,10 @@ async def rename_goods(goods_id: int, value: str):
     return {"response": await goods.rename_good(goods_id, value)}
 
 
-@app.post("/goods/leftover/{goods_id}/inc")
+@app.post(
+    "/goods/leftover/{goods_id}/inc",
+    response_model=BaseGoodResponse,
+)
 async def increment_leftover(goods_id: int):
     """
     POST increment leftover by one
@@ -109,7 +131,10 @@ async def increment_leftover(goods_id: int):
     return {"response": await goods.increment_good_leftover(goods_id)}
 
 
-@app.post("/goods/leftover/{goods_id}/dec")
+@app.post(
+    "/goods/leftover/{goods_id}/dec",
+    response_model=BaseGoodResponse,
+)
 async def decrement_leftover(goods_id: int):
     """
     POST decrement leftover by one
@@ -120,7 +145,10 @@ async def decrement_leftover(goods_id: int):
     return {"response": await goods.decrement_good_leftover(goods_id)}
 
 
-@app.post("/goods/leftover/{goods_id}/set")
+@app.post(
+    "/goods/leftover/{goods_id}/set",
+    response_model=BaseGoodResponse,
+)
 async def update_leftover(goods_id: int, value: float):
     """
     POST set leftover
@@ -132,7 +160,10 @@ async def update_leftover(goods_id: int, value: float):
     return {"response": await goods.update_good_leftover(goods_id, value)}
 
 
-@app.post("/goods/price/wholesale/{goods_id}/set")
+@app.post(
+    "/goods/price/wholesale/{goods_id}/set",
+    response_model=BaseGoodResponse,
+)
 async def set_wholesale_price(goods_id: int, value: int):
     """
     POST update wholesale price
@@ -144,7 +175,10 @@ async def set_wholesale_price(goods_id: int, value: int):
     return {"response": await goods.change_good_wholesale_price(goods_id, value)}
 
 
-@app.post("/goods/price/retail/{goods_id}/set")
+@app.post(
+    "/goods/price/retail/{goods_id}/set",
+    response_model=BaseGoodResponse,
+)
 async def set_retail_price(goods_id: int, value: int):
     """
     POST update retail price
@@ -156,7 +190,11 @@ async def set_retail_price(goods_id: int, value: int):
     return {"response": await goods.change_good_retail_price(goods_id, value)}
 
 
-@app.post("/goods/create", status_code=status.HTTP_201_CREATED)
+@app.post(
+    "/goods/create",
+    status_code=status.HTTP_201_CREATED,
+    response_model=BaseGoodResponse,
+)
 async def create_goods(
     name: str, wholesale_price: int, retail_price: int, leftover: float, market_id: int
 ):
