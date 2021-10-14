@@ -4,6 +4,9 @@ version = "0.1.0"
 description = "Client for ChocoManager's API"
 authors = ["Daniil <dadyarri@gmail.com>"]
 license = "Proprietary"
+packages = [
+    { include = "*.py" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"
