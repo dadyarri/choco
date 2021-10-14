@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "api"
 version = "0.1.0"
-description = ""
+description = "internal api for chocomanager"
 authors = ["Daniil <dadyarri@gmail.com>"]
 
 [tool.poetry.dependencies]
@@ -11,8 +11,7 @@ tortoise-orm = "^0.17.8"
 asyncpg = "^0.24.0"
 gunicorn = "^20.1.0"
 aerich = "^0.5.8"
-
-[tool.poetry.dev-dependencies]
+toml = "^0.10.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
