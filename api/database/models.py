@@ -6,5 +6,5 @@ class Good(Model):
     name = fields.CharField(max_length=255)
     wholesale_price = fields.IntField()
     retail_price = fields.IntField()
-    leftover = fields.IntField()
+    leftover = fields.FloatField()
     market_id = fields.IntField(null=True)
