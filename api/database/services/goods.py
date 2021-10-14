@@ -16,6 +16,11 @@ async def fetch_good(good_id: int) -> models.Good:
         return await models.Good.get(id=good_id)
 
 
+async def get_good_by_market_id(market_id: int) -> models.Good:
+    async with in_transaction():
+        return await models.Good.get(market_id=market_id)
+
+
 async def create_good(
     name: str,
     wholesale_price: int,
