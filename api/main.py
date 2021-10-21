@@ -7,7 +7,12 @@ from tortoise.contrib.fastapi import register_tortoise
 
 from database.core.init import TORTOISE_ORM
 from database.services import goods
-from models import BaseResponseModel, GetAllGoodsResponseModel, BaseGoodResponse
+from models import (
+    BaseResponseModel,
+    GetAllGoodsResponseModel,
+    BaseGoodResponse,
+    GetAllGoodsResponse,
+)
 
 logging.basicConfig(level="DEBUG")
 version = toml.load("pyproject.toml")["tool"]["poetry"]["version"]
@@ -41,7 +46,7 @@ async def teapot():
 
 @app.get(
     "/goods/",
-    response_model=GetAllGoodsResponseModel,
+    response_model=GetAllGoodsResponse,
 )
 async def get_all_goods(page: int = None):
     """
