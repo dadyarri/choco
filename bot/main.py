@@ -46,7 +46,8 @@ async def greeting(message: Message):
 async def init_leftovers_managing(message: Message):
     goods = await make_get_request("goods/", params={"page": 0})
     await message.answer(
-        "Управление остатками", keyboard=keyboards.list_goods(goods["items"], page=0)
+        "Управление остатками",
+        keyboard=keyboards.list_goods(goods["response"]["items"], page=0),
     )
 
 
@@ -62,7 +63,7 @@ async def leftovers_managing_go_back(message: Message):
         goods = await make_get_request("goods/", params={"page": page})
         await message.answer(
             "Управление остатками",
-            keyboard=keyboards.list_goods(goods["items"], page=page),
+            keyboard=keyboards.list_goods(goods["response"]["items"], page=page),
         )
 
 
@@ -73,10 +74,10 @@ async def leftovers_managing_go_forward(message: Message):
     payload = json.loads(message.payload)
     page = payload["page"]
     goods = await make_get_request("goods/", params={"page": page})
-    if goods["items"]:
+    if goods["response"]["items"]:
         await message.answer(
             "Управление остатками",
-            keyboard=keyboards.list_goods(goods["items"], page=page),
+            keyboard=keyboards.list_goods(goods["response"]["items"], page=page),
         )
     else:
         await message.answer("Элементов больше нет")
@@ -88,10 +89,10 @@ async def leftovers_managing_go_forward(message: Message):
 async def leftovers_managing_select_good(message: Message):
     payload = json.loads(message.payload)
     good_id = payload["id"]
-    good = await make_get_request(f"goods/{good_id}")
-    ctx_storage.set(f"{message.peer_id}.selected_good", good["id"])
+    good = await make_get_request(f"goods/id/{good_id}")
+    ctx_storage.set(f"{message.peer_id}.selected_good", good["response"]["id"])
     await message.answer(
-        f"Товар: {good['name']}\nОстаток: {good['leftover']}",
+        f"Товар: {good['response']['name']}\nОстаток: {good['response']['leftover']}",
         keyboard=keyboards.manage_leftovers(),
     )
 
@@ -101,9 +102,9 @@ async def leftovers_managing_select_good(message: Message):
 )
 async def leftovers_managing_increment_good(message: Message):
     good_id = int(ctx_storage.get(f"{message.peer_id}.selected_good"))
-    resp = await make_post_request(f"goods/increment/{good_id}/")
+    resp = await make_post_request(f"goods/leftover/{good_id}/inc/")
     logging.debug(resp)
-    good = resp["incremented"]
+    good = resp["response"]
     await message.answer(
         f"Товар: {good['name']}\nОстаток: {good['leftover']}",
         keyboard=keyboards.manage_leftovers(),
@@ -115,8 +116,8 @@ async def leftovers_managing_increment_good(message: Message):
 )
 async def leftovers_managing_decrement_good(message: Message):
     good_id = int(ctx_storage.get(f"{message.peer_id}.selected_good"))
-    resp = await make_post_request(f"goods/decrement/{good_id}")
-    good = resp["decremented"]
+    resp = await make_post_request(f"goods/leftover/{good_id}/dec")
+    good = resp["response"]
     await message.answer(
         f"Товар: {good['name']}\nОстаток: {good['leftover']}",
         keyboard=keyboards.manage_leftovers(),
@@ -128,13 +129,19 @@ async def leftovers_managing_decrement_good(message: Message):
 )
 async def update_post(message: Message):
     vk_group = -int(os.getenv("VK_GROUP"))
+
+    await message.answer("Удаление старого поста...")
     last_post = await user_api.wall.get(vk_group, count=1)
     post_id = last_post.items[0].id
-
     await user_api.wall.delete(vk_group, post_id)
+
+    await message.answer("Генерация текста сообщения...")
+    message_ = await generate_post_message()
+
+    await message.answer("Публикация нового поста...")
     resp = await user_api.wall.post(
         vk_group,
-        message=await generate_post_message(),
+        message=message_,
         from_group=True,
         close_comments=True,
     )
