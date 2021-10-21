@@ -84,3 +84,12 @@ async def get_all_goods():
         page_num += 1
         resp = await make_get_request("goods/", params={"page": page_num})
     return result
+
+
+async def shorten_name(name: str) -> str:
+    return (
+        name.replace("Горький", "Г.")
+        .replace("Молочный тёмный", "Мол/т.")
+        .replace("Молочный", "Мол.")
+        .replace("Масса", "М.")
+    )

@@ -1,5 +1,7 @@
 from vkbottle import Keyboard, Text, KeyboardButtonColor
 
+from utils.core import shorten_name
+
 
 def main_menu() -> str:
     kb = Keyboard()
@@ -25,9 +27,13 @@ def list_goods(goods: list[dict], page: int) -> str:
         if len(kb.buttons[-1]) == 2:
             kb.row()
         if good["leftover"]:
+            if len(good["name"]) > 40:
+                name_ = shorten_name(good["name"])
+            else:
+                name_ = good["name"]
             kb.add(
                 Text(
-                    good["name"],
+                    name_,
                     payload={
                         "block": "manage_leftovers",
                         "action": "select_good",
