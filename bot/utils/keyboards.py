@@ -31,6 +31,8 @@ def list_goods(goods: list[dict], page: int) -> str:
                 name_ = shorten_name(good["name"])
             else:
                 name_ = good["name"]
+            logging.debug(name_)
+            logging.debug(len(name_))
             kb.add(
                 Text(
                     name_,
