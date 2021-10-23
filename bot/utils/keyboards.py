@@ -1,3 +1,5 @@
+import logging
+
 from vkbottle import Keyboard, Text, KeyboardButtonColor
 
 from utils.core import shorten_name
