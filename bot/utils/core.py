@@ -27,6 +27,7 @@ async def make_get_request(endpoint: str, params: dict = None) -> dict:
         url = get_request_url(endpoint)
         async with session.get(url, params=params) as resp:
             result = await resp.json()
+        await session.close()
 
     return result
 
@@ -36,6 +37,7 @@ async def make_post_request(endpoint: str, params: dict = None) -> dict:
         url = get_request_url(endpoint)
         async with session.post(url, params=params) as resp:
             result = await resp.json()
+        await session.close()
 
     return result
 
