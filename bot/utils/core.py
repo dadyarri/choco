@@ -1,7 +1,7 @@
+import aiohttp
 import logging
 import os
-
-import aiohttp
+from typing import Union
 
 
 def get_vk_token():
@@ -73,14 +73,22 @@ async def generate_post_message():
     return "\n".join(result)
 
 
+def round_leftover(leftover: float) -> Union[float, int]:
+    if leftover - int(leftover) == 0:
+        res = int(leftover)
+    else:
+        res = leftover
+
+    return res
+
+
 async def get_all_goods():
     resp = await make_get_request("goods/")
     result = []
     for item in resp["response"]["items"]:
         if item["leftover"]:
-            result.append(
-                f"{item['name']} x{item['leftover']} ({item['retail_price']}₽)"
-            )
+            leftover = round_leftover(item["leftover"])
+            result.append(f"{item['name']} x{leftover} ({item['retail_price']}₽)")
     return result
 
 
