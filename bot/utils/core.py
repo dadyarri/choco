@@ -74,17 +74,13 @@ async def generate_post_message():
 
 
 async def get_all_goods():
-    page_num = 0
-    resp = await make_get_request("goods/", params={"page": page_num})
+    resp = await make_get_request("goods/", params={"page": None})
     result = []
-    while resp["items"]:
-        for item in resp["items"]:
-            if item["leftover"]:
-                result.append(
-                    f"{item['name']} x{item['leftover']} ({item['retail_price']}₽)"
-                )
-        page_num += 1
-        resp = await make_get_request("goods/", params={"page": page_num})
+    for item in resp["response"]["items"]:
+        if item["leftover"]:
+            result.append(
+                f"{item['name']} x{item['leftover']} ({item['retail_price']}₽)"
+            )
     return result
 
 
