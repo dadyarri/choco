@@ -17,6 +17,7 @@ from utils.core import (
     send_message_to_telegram,
     send_photo_to_telegram,
     generate_post_message,
+    round_leftover,
 )
 from utils.rules import EventPayloadContainsRule
 
@@ -104,7 +105,7 @@ async def leftovers_managing_select_good(message: Message):
     good = await make_get_request(f"goods/id/{good_id}")
     ctx_storage.set(f"{message.peer_id}.selected_good", good["response"]["id"])
     await message.answer(
-        f"Товар: {good['response']['name']}\nОстаток: {good['response']['leftover']}",
+        f"Товар: {good['response']['name']}\nОстаток: {round_leftover(good['response']['leftover'])}",
         keyboard=keyboards.manage_leftovers(),
     )
 
