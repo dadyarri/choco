@@ -74,7 +74,7 @@ async def generate_post_message():
 
 
 async def get_all_goods():
-    resp = await make_get_request("goods/", params={"page": None})
+    resp = await make_get_request("goods/")
     result = []
     for item in resp["response"]["items"]:
         if item["leftover"]:
