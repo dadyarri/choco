@@ -92,4 +92,6 @@ def shorten_name(name: str) -> str:
         .replace("Молочный тёмный", "Мол/т.")
         .replace("Молочный", "Мол.")
         .replace("Масса", "М.")
+        .replace("Мармелад", "М/м")
+        .replace(" (на развес)", "")
     )
