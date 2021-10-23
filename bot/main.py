@@ -5,6 +5,7 @@ import os
 from vkbottle import Bot, OrFilter, CtxStorage, API, Token
 from vkbottle.bot import Message
 from vkbottle.dispatch.rules.bot import VBMLRule
+import sentry_sdk
 
 from utils import keyboards
 from utils.core import (
@@ -25,6 +26,11 @@ bot.labeler.vbml_ignore_case = True
 vbml_rule = VBMLRule.with_config(
     bot.labeler.rule_config,
 )  # FIXME: temporary fix, bug in vkbottle
+sentry_sdk.init(
+    os.getenv("SENTRY_URL"),
+    environment=os.getenv("ENV"),
+    traces_sample_rate=1.0,
+)
 ctx_storage = CtxStorage()
 user_api = API(os.getenv("VK_USER_TOKEN"))
 
