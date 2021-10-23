@@ -114,8 +114,7 @@ async def leftovers_managing_select_good(message: Message):
 )
 async def leftovers_managing_increment_good(message: Message):
     good_id = int(ctx_storage.get(f"{message.peer_id}.selected_good"))
-    resp = await make_post_request(f"goods/leftover/{good_id}/inc/")
-    logging.debug(resp)
+    resp = await make_post_request(f"goods/leftover/{good_id}/inc")
     good = resp["response"]
     await message.answer(
         f"Товар: {good['name']}\nОстаток: {good['leftover']}",
