@@ -9,7 +9,6 @@ from database.core.init import TORTOISE_ORM
 from database.services import goods
 from models import (
     BaseResponseModel,
-    GetAllGoodsResponseModel,
     BaseGoodResponse,
     GetAllGoodsResponse,
 )
