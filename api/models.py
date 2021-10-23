@@ -8,7 +8,7 @@ class Good(BaseModel):
     name: str
     wholesale_price: int
     retail_price: int
-    leftover: int
+    leftover: float
     market_id: Optional[int]
 
 
