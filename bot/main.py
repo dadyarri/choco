@@ -27,7 +27,10 @@ bot.labeler.vbml_ignore_case = True
 vbml_rule = VBMLRule.with_config(
     bot.labeler.rule_config,
 )  # FIXME: temporary fix, bug in vkbottle
-sentry_logging = LoggingIntegration(event_level=logging.DEBUG)
+sentry_logging = LoggingIntegration(
+    level=logging.INFO,
+    event_level=logging.ERROR,
+)
 sentry_sdk.init(
     os.getenv("SENTRY_URL"),
     environment=os.getenv("ENV"),
