@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "api"
-version = "1.2.2"
+version = "1.2.5"
 description = "internal api for chocomanager"
 authors = ["Daniil <dadyarri@gmail.com>"]
 
