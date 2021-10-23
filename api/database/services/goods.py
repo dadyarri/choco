@@ -5,7 +5,7 @@ from database import models
 
 async def fetch_all_goods(page: int = None) -> list[models.Good]:
     async with in_transaction():
-        if page:
+        if page is not None:
             limit = 4
             return (
                 await models.Good.all()
