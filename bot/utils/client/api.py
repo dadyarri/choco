@@ -55,7 +55,7 @@ class ChocoManagerClient:
             )
         )
 
-    async def increment_leftover(self, good_id: int, value: float):
+    async def increment_leftover(self, good_id: int, value: float = 1):
         return BaseGoodResponse(
             **await self._make_post_request(
                 f"goods/leftover/{good_id}/inc/by",
@@ -63,7 +63,7 @@ class ChocoManagerClient:
             )
         )
 
-    async def decrement_leftover(self, good_id: int, value: float):
+    async def decrement_leftover(self, good_id: int, value: float = 1):
         return BaseGoodResponse(
             **await self._make_post_request(
                 f"goods/leftover/{good_id}/dec/by",
