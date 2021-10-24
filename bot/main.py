@@ -138,6 +138,38 @@ async def leftovers_managing_decrement_good(message: Message):
 
 
 @bot.on.message(
+    EventPayloadContainsRule({"block": "manage_leftovers", "action": "minus_small"}),
+)
+async def leftovers_managing_increment_good(message: Message):
+    good_id = int(ctx_storage.get(f"{message.peer_id}.selected_good"))
+    resp = await make_post_request(
+        f"goods/leftover/{good_id}/inc/by",
+        params={"value": 0.3},
+    )
+    good = resp["response"]
+    await message.answer(
+        f"Товар: {good['name']}\nОстаток: {good['leftover']}",
+        keyboard=keyboards.manage_leftovers(is_float(good["leftover"])),
+    )
+
+
+@bot.on.message(
+    EventPayloadContainsRule({"block": "manage_leftovers", "action": "minus_big"}),
+)
+async def leftovers_managing_decrement_good(message: Message):
+    good_id = int(ctx_storage.get(f"{message.peer_id}.selected_good"))
+    resp = await make_post_request(
+        f"goods/leftover/{good_id}/dec/by",
+        params={"value": 0.8},
+    )
+    good = resp["response"]
+    await message.answer(
+        f"Товар: {good['name']}\nОстаток: {good['leftover']}",
+        keyboard=keyboards.manage_leftovers(is_float(good["leftover"])),
+    )
+
+
+@bot.on.message(
     EventPayloadContainsRule({"block": "update_post"}),
 )
 async def update_post(message: Message):
