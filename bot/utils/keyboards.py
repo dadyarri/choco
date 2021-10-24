@@ -2,6 +2,7 @@ import logging
 
 from vkbottle import Keyboard, Text, KeyboardButtonColor
 
+from utils.client import Good
 from utils.core import shorten_name
 
 
@@ -22,24 +23,24 @@ def main_menu() -> str:
     return kb.get_json()
 
 
-def list_goods(goods: list[dict], page: int) -> str:
+def list_goods(goods: list[Good], page: int) -> str:
     kb = Keyboard()
     kb.row()
     for good in goods:
         if len(kb.buttons[-1]) == 2:
             kb.row()
-        if good["leftover"]:
-            if len(good["name"]) > 40:
-                name_ = shorten_name(good["name"])
+        if good.leftover:
+            if len(good.name) > 40:
+                name_ = shorten_name(good.name)
             else:
-                name_ = good["name"]
+                name_ = good.name
             kb.add(
                 Text(
                     name_,
                     payload={
                         "block": "manage_leftovers",
                         "action": "select_good",
-                        "id": good["id"],
+                        "id": good.id,
                     },
                 )
             )
