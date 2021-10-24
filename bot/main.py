@@ -119,7 +119,7 @@ async def leftovers_managing_increment_good(message: Message):
     resp = await client.increment_leftover(good_id)
     good = resp.response
     await message.answer(
-        f"Товар: {good.name}\nОстаток: {good.leftover}",
+        f"Товар: {good.name}\nОстаток: {round_leftover(good.leftover)}",
         keyboard=keyboards.manage_leftovers(is_float(good.leftover)),
     )
 
@@ -132,7 +132,7 @@ async def leftovers_managing_decrement_good(message: Message):
     resp = await client.decrement_leftover(good_id)
     good = resp.response
     await message.answer(
-        f"Товар: {good.name}\nОстаток: {good.leftover}",
+        f"Товар: {good.name}\nОстаток: {round_leftover(good.leftover)}",
         keyboard=keyboards.manage_leftovers(is_float(good.leftover)),
     )
 
@@ -145,7 +145,7 @@ async def leftovers_managing_increment_good(message: Message):
     resp = await client.decrement_leftover(good_id, 0.3)
     good = resp.response
     await message.answer(
-        f"Товар: {good.name}\nОстаток: {good.leftover}",
+        f"Товар: {good.name}\nОстаток: {round_leftover(good.leftover)}",
         keyboard=keyboards.manage_leftovers(is_float(good.leftover)),
     )
 
@@ -158,7 +158,7 @@ async def leftovers_managing_decrement_good(message: Message):
     resp = await client.decrement_leftover(good_id, 0.8)
     good = resp.response
     await message.answer(
-        f"Товар: {good.name}\nОстаток: {good.leftover}",
+        f"Товар: {good.name}\nОстаток: {round_leftover(good.leftover)}",
         keyboard=keyboards.manage_leftovers(is_float(good.leftover)),
     )
 
