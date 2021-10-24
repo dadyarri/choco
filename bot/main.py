@@ -111,11 +111,11 @@ async def leftovers_managing_select_good(message: Message):
 
 
 @bot.on.message(
-    EventPayloadContainsRule({"block": "manage_leftovers", "action": "plus"}),
+    EventPayloadContainsRule({"block": "manage_leftovers", "action": "plus_one"}),
 )
 async def leftovers_managing_increment_good(message: Message):
     good_id = int(ctx_storage.get(f"{message.peer_id}.selected_good"))
-    resp = await make_post_request(f"goods/leftover/{good_id}/inc")
+    resp = await make_post_request(f"goods/leftover/{good_id}/inc/by")
     good = resp["response"]
     await message.answer(
         f"Товар: {good['name']}\nОстаток: {good['leftover']}",
@@ -124,11 +124,11 @@ async def leftovers_managing_increment_good(message: Message):
 
 
 @bot.on.message(
-    EventPayloadContainsRule({"block": "manage_leftovers", "action": "minus"}),
+    EventPayloadContainsRule({"block": "manage_leftovers", "action": "minus_one"}),
 )
 async def leftovers_managing_decrement_good(message: Message):
     good_id = int(ctx_storage.get(f"{message.peer_id}.selected_good"))
-    resp = await make_post_request(f"goods/leftover/{good_id}/dec")
+    resp = await make_post_request(f"goods/leftover/{good_id}/dec/by")
     good = resp["response"]
     await message.answer(
         f"Товар: {good['name']}\nОстаток: {good['leftover']}",
