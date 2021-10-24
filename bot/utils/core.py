@@ -73,11 +73,17 @@ async def generate_post_message():
     return "\n".join(result)
 
 
-def round_leftover(leftover: float) -> Union[float, int]:
+def is_float(leftover: float) -> bool:
     if leftover - int(leftover) == 0:
-        res = int(leftover)
-    else:
+        return False
+    return True
+
+
+def round_leftover(leftover: float) -> Union[float, int]:
+    if is_float(leftover):
         res = leftover
+    else:
+        res = int(leftover)
 
     return res
 
