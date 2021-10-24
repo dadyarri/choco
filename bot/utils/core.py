@@ -22,26 +22,6 @@ def get_request_url(endpoint: str):
     return f"http://{get_api_host()}/{endpoint}"
 
 
-async def make_get_request(endpoint: str, params: dict = None) -> dict:
-    async with aiohttp.ClientSession() as session:
-        url = get_request_url(endpoint)
-        async with session.get(url, params=params) as resp:
-            result = await resp.json()
-        await session.close()
-
-    return result
-
-
-async def make_post_request(endpoint: str, params: dict = None) -> dict:
-    async with aiohttp.ClientSession() as session:
-        url = get_request_url(endpoint)
-        async with session.post(url, params=params) as resp:
-            result = await resp.json()
-        await session.close()
-
-    return result
-
-
 async def send_message_to_telegram(message: str):
     token = os.getenv("TG_TOKEN")
     chats = os.getenv("SEND_IDS")
