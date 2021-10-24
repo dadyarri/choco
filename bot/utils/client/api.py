@@ -2,7 +2,7 @@ from typing import Optional
 
 import aiohttp
 
-from utils.client import GetAllGoodsResponse, BaseGoodResponse
+from utils.client.models import GetAllGoodsResponse, BaseGoodResponse
 from utils.core import get_api_host
 
 
