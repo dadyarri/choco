@@ -81,7 +81,7 @@ def is_float(leftover: float) -> bool:
 
 def round_leftover(leftover: float) -> Union[float, int]:
     if is_float(leftover):
-        res = leftover
+        res = round(leftover, 1)
     else:
         res = int(leftover)
 
