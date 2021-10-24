@@ -121,31 +121,39 @@ async def rename_goods(goods_id: int, value: str):
 
 
 @app.post(
-    "/goods/leftover/{goods_id}/inc",
+    "/goods/leftover/{goods_id}/inc/by",
     response_model=BaseGoodResponse,
 )
-async def increment_leftover(goods_id: int):
+async def increment_leftover(
+    goods_id: int,
+    value: float = 1,
+):
     """
     POST increment leftover by one
 
     :param goods_id: ID of good
+    :param value: Value to increment
     :return: dict
     """
-    return {"response": await goods.increment_good_leftover(goods_id)}
+    return {"response": await goods.increment_good_leftover(goods_id, value)}
 
 
 @app.post(
-    "/goods/leftover/{goods_id}/dec",
+    "/goods/leftover/{goods_id}/dec/by",
     response_model=BaseGoodResponse,
 )
-async def decrement_leftover(goods_id: int):
+async def decrement_leftover(
+    goods_id: int,
+    value: float = 1,
+):
     """
     POST decrement leftover by one
 
     :param goods_id: ID of good
+    :param value: Value to decrement
     :return: dict
     """
-    return {"response": await goods.decrement_good_leftover(goods_id)}
+    return {"response": await goods.decrement_good_leftover(goods_id, value)}
 
 
 @app.post(

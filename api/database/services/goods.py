@@ -59,16 +59,16 @@ async def update_good_leftover(good_id: int, value: float):
         return new_good
 
 
-async def increment_good_leftover(good_id: int):
+async def increment_good_leftover(good_id: int, value: float):
     async with in_transaction():
         good = await models.Good.get(id=good_id)
-        return await update_good_leftover(good_id, good.leftover + 1)
+        return await update_good_leftover(good_id, good.leftover + value)
 
 
-async def decrement_good_leftover(good_id: int):
+async def decrement_good_leftover(good_id: int, value: float):
     async with in_transaction():
         good = await models.Good.get(id=good_id)
-        return await update_good_leftover(good_id, good.leftover - 1)
+        return await update_good_leftover(good_id, good.leftover - value)
 
 
 async def change_good_wholesale_price(good_id: int, new_price: int):
