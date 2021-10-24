@@ -117,7 +117,7 @@ async def leftovers_managing_select_good(message: Message):
 async def leftovers_managing_increment_good(message: Message):
     good_id = int(ctx_storage.get(f"{message.peer_id}.selected_good"))
     resp = await client.increment_leftover(good_id)
-    good = resp["response"]
+    good = resp.response
     await message.answer(
         f"Товар: {good['name']}\nОстаток: {good['leftover']}",
         keyboard=keyboards.manage_leftovers(is_float(good["leftover"])),
@@ -130,7 +130,7 @@ async def leftovers_managing_increment_good(message: Message):
 async def leftovers_managing_decrement_good(message: Message):
     good_id = int(ctx_storage.get(f"{message.peer_id}.selected_good"))
     resp = await client.decrement_leftover(good_id)
-    good = resp["response"]
+    good = resp.response
     await message.answer(
         f"Товар: {good['name']}\nОстаток: {good['leftover']}",
         keyboard=keyboards.manage_leftovers(is_float(good["leftover"])),
