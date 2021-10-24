@@ -56,7 +56,7 @@ def list_goods(goods: list[dict], page: int) -> str:
     return kb.get_json()
 
 
-def manage_leftovers():
+def manage_leftovers(is_float: bool):
     kb = Keyboard(inline=True)
 
     kb.add(
@@ -67,5 +67,18 @@ def manage_leftovers():
         Text("-", payload={"block": "manage_leftovers", "action": "minus_one"}),
         color=KeyboardButtonColor.NEGATIVE,
     )
+
+    if is_float:
+        kb.row()
+        kb.add(
+            Text(
+                "-0.3", payload={"block": "manage_leftovers", "action": "minus_small"}
+            ),
+            color=KeyboardButtonColor.NEGATIVE,
+        )
+        kb.add(
+            Text("-0.8", payload={"block": "manage_leftovers", "action": "minus_big"}),
+            color=KeyboardButtonColor.NEGATIVE,
+        )
 
     return kb.get_json()

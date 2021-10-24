@@ -18,6 +18,7 @@ from utils.core import (
     send_photo_to_telegram,
     generate_post_message,
     round_leftover,
+    is_float,
 )
 from utils.rules import EventPayloadContainsRule
 
@@ -106,7 +107,7 @@ async def leftovers_managing_select_good(message: Message):
     ctx_storage.set(f"{message.peer_id}.selected_good", good["response"]["id"])
     await message.answer(
         f"Товар: {good['response']['name']}\nОстаток: {round_leftover(good['response']['leftover'])}",
-        keyboard=keyboards.manage_leftovers(),
+        keyboard=keyboards.manage_leftovers(is_float(good["leftover"])),
     )
 
 
@@ -119,7 +120,7 @@ async def leftovers_managing_increment_good(message: Message):
     good = resp["response"]
     await message.answer(
         f"Товар: {good['name']}\nОстаток: {good['leftover']}",
-        keyboard=keyboards.manage_leftovers(),
+        keyboard=keyboards.manage_leftovers(is_float(good["leftover"])),
     )
 
 
@@ -132,7 +133,7 @@ async def leftovers_managing_decrement_good(message: Message):
     good = resp["response"]
     await message.answer(
         f"Товар: {good['name']}\nОстаток: {good['leftover']}",
-        keyboard=keyboards.manage_leftovers(),
+        keyboard=keyboards.manage_leftovers(is_float(good["leftover"])),
     )
 
 
