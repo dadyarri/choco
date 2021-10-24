@@ -60,11 +60,11 @@ def manage_leftovers():
     kb = Keyboard(inline=True)
 
     kb.add(
-        Text("+", payload={"block": "manage_leftovers", "action": "plus"}),
+        Text("+", payload={"block": "manage_leftovers", "action": "plus_one"}),
         color=KeyboardButtonColor.POSITIVE,
     )
     kb.add(
-        Text("-", payload={"block": "manage_leftovers", "action": "minus"}),
+        Text("-", payload={"block": "manage_leftovers", "action": "minus_one"}),
         color=KeyboardButtonColor.NEGATIVE,
     )
 
