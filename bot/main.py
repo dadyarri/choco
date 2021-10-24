@@ -2,11 +2,11 @@ import json
 import logging
 import os
 
-from vkbottle import Bot, OrFilter, CtxStorage, API, Token
-from vkbottle.bot import Message
-from vkbottle.dispatch.rules.bot import VBMLRule
 import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
+from vkbottle import Bot, OrFilter, CtxStorage, API
+from vkbottle.bot import Message
+from vkbottle.dispatch.rules.bot import VBMLRule
 
 from utils import keyboards
 from utils.core import (
