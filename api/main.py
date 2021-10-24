@@ -15,7 +15,6 @@ from models import (
 
 logging.basicConfig(level="DEBUG")
 version = toml.load("pyproject.toml")["tool"]["poetry"]["version"]
-logging.info(version)
 app = FastAPI(
     title="ChocoManager API",
     description="Internal API for ChocoManager system",
