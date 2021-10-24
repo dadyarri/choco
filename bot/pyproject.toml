@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "choco-bot"
-version = "0.3.0"
+version = "0.3.2"
 description = ""
 authors = ["Daniil <dadyarri@gmail.com>"]
 
