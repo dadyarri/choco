@@ -107,7 +107,7 @@ async def leftovers_managing_select_good(message: Message):
     ctx_storage.set(f"{message.peer_id}.selected_good", good["response"]["id"])
     await message.answer(
         f"Товар: {good['response']['name']}\nОстаток: {round_leftover(good['response']['leftover'])}",
-        keyboard=keyboards.manage_leftovers(is_float(good["leftover"])),
+        keyboard=keyboards.manage_leftovers(is_float(good["response"]["leftover"])),
     )
 
 
