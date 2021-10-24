@@ -200,7 +200,11 @@ async def set_retail_price(goods_id: int, value: int):
     response_model=BaseGoodResponse,
 )
 async def create_goods(
-    name: str, wholesale_price: int, retail_price: int, leftover: float, market_id: int
+    name: str,
+    wholesale_price: int,
+    retail_price: int,
+    leftover: float,
+    market_id: int = None,
 ):
     """
     POST create new good
