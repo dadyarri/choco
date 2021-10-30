@@ -3,6 +3,7 @@ import logging
 import os
 
 import sentry_sdk
+from pydantic import ValidationError
 from sentry_sdk.integrations.logging import LoggingIntegration
 from vkbottle import Bot, OrFilter, CtxStorage, API
 from vkbottle.bot import Message
@@ -210,10 +211,14 @@ async def send_user_message_to_admins(message: Message):
                         first_name=first_name,
                         last_name=last_name,
                     )
-                    resp = await client.get_good_by_market_id(attach.market.id)
-                    await send_message_to_telegram(
-                        f"{resp.response.name} x{resp.response.leftover} ({resp.response.retail_price}₽)"
-                    )
+                    try:
+                        resp = await client.get_good_by_market_id(attach.market.id)
+                    except ValidationError:
+                        logging.error("Item was not found")
+                    else:
+                        await send_message_to_telegram(
+                            f"{resp.response.name} x{resp.response.leftover} ({resp.response.retail_price}₽)"
+                        )
 
 
 if __name__ == "__main__":
