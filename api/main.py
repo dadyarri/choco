@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 
 import toml
 from fastapi import FastAPI
@@ -46,7 +47,7 @@ async def teapot():
     "/goods/",
     response_model=GetAllGoodsResponse,
 )
-async def get_all_goods(page: Optional[int] = None):
+async def get_all_goods(page: int = 0):
     """
     GET returns list of goods (may be paged)
 

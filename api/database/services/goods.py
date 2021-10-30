@@ -3,17 +3,17 @@ from tortoise.transactions import in_transaction
 from database import models
 
 
-async def fetch_all_goods(page: int = None) -> list[models.Good]:
+async def fetch_all_goods(page: int = 0) -> list[models.Good]:
     async with in_transaction():
-        if page is not None:
-            limit = 4
-            return (
-                await models.Good.all()
-                .order_by("name")
-                .limit(limit)
-                .offset(page * limit)
-            )
-        return await models.Good.all().order_by("name")
+        if page == 0:
+            return await models.Good.all().order_by("name")
+        limit = 4
+        return (
+            await models.Good.all()
+            .order_by("name")
+            .limit(limit)
+            .offset(page - 1 * limit)
+        )
 
 
 async def get_good_by_id(good_id: int) -> models.Good:
