@@ -65,7 +65,7 @@ python-versions = ">=3.7,<4.0"
 
 [[package]]
 name = "idna"
-version = "3.2"
+version = "3.3"
 description = "Internationalized Domain Names in Applications (IDNA)"
 category = "main"
 optional = false
@@ -172,7 +172,7 @@ watchgod = ">=0.7,<0.8"
 
 [[package]]
 name = "vkbottle-types"
-version = "5.131"
+version = "5.131.119.4"
 description = "Types for vkbottle"
 category = "main"
 optional = false
@@ -268,8 +268,8 @@ choicelib = [
     {file = "choicelib-0.1.4.tar.gz", hash = "sha256:fef2ed7252db1a49d3e75170f37ad0af1d76dc5bf7a748e16ebe141d463998fb"},
 ]
 idna = [
-    {file = "idna-3.2-py3-none-any.whl", hash = "sha256:14475042e284991034cb48e06f6851428fb14c4dc953acd9be9a5e95c7b6dd7a"},
-    {file = "idna-3.2.tar.gz", hash = "sha256:467fbad99067910785144ce333826c71fb0e63a425657295239737f7ecd125f3"},
+    {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
+    {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
 ]
 multidict = [
     {file = "multidict-5.2.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3822c5894c72e3b35aae9909bef66ec83e44522faf767c0ad39e0e2de11d3b55"},
@@ -391,8 +391,8 @@ vkbottle = [
     {file = "vkbottle-3.0.2.tar.gz", hash = "sha256:e9daa7f0e53569b4a89ebcb31660e9f6b424bdf67c86e55eeeb2bde38ec63b10"},
 ]
 vkbottle-types = [
-    {file = "vkbottle-types-5.131.tar.gz", hash = "sha256:0a4029d5c68624f37119c75f6849bbf3a759e79da758774957b30f9b870e0ec2"},
-    {file = "vkbottle_types-5.131-py3-none-any.whl", hash = "sha256:881e881b5513313f054f9078326eb937c45845bd2766de9b70f4f0c337c5de3e"},
+    {file = "vkbottle-types-5.131.119.4.tar.gz", hash = "sha256:098cdd3f22f055a20fb0d1cbd75f42c94d1823a0e662a3bbb4e87f30629ae3de"},
+    {file = "vkbottle_types-5.131.119.4-py3-none-any.whl", hash = "sha256:0c16289e4646e775a4c00145caee9f0f229b421c71aa6356fdbec41d00e6562a"},
 ]
 watchgod = [
     {file = "watchgod-0.7-py3-none-any.whl", hash = "sha256:d6c1ea21df37847ac0537ca0d6c2f4cdf513562e95f77bb93abbcf05573407b7"},
