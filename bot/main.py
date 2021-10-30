@@ -71,8 +71,8 @@ async def init_leftovers_managing(message: Message):
 async def leftovers_managing_go_back(message: Message):
     payload = json.loads(message.payload)
     page = payload["page"]
-    if page == -1:
-        await message.answer("Нельзя перейти на страницу с отрицательным номером")
+    if page == 0:
+        await message.answer("Уже выбрана первая страница!")
     else:
         goods = await client.get_all_goods(page)
         await message.answer(
