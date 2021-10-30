@@ -37,7 +37,6 @@ class ChocoManagerClient:
 
     async def get_all_goods(self, page: int = 0):
         page_ = await self._make_get_request("goods/", {"page": page})
-        logging.info(**page_)
         return GetAllGoodsResponse(**page_)
 
     async def get_good_by_id(self, good_id: int):
