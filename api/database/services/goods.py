@@ -1,3 +1,5 @@
+import logging
+
 from tortoise.transactions import in_transaction
 
 from database import models
@@ -8,6 +10,7 @@ async def fetch_all_goods(page: int = 0) -> list[models.Good]:
         if page == 0:
             return await models.Good.all().order_by("name")
         limit = 4
+        logging.debug(page)
         return (
             await models.Good.all()
             .order_by("name")
