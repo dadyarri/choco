@@ -46,7 +46,7 @@ async def teapot():
     "/goods/",
     response_model=GetAllGoodsResponse,
 )
-async def get_all_goods(page: int = None):
+async def get_all_goods(page: Optional[int] = None):
     """
     GET returns list of goods (may be paged)
 
