@@ -210,7 +210,10 @@ async def send_user_message_to_admins(message: Message):
                         first_name=first_name,
                         last_name=last_name,
                     )
-                    await send_message_to_telegram(attach.market.title)
+                    resp = await client.get_good_by_market_id(attach.market.id)
+                    await send_message_to_telegram(
+                        f"{resp.response.name} x{resp.response.leftover} ({resp.response.retail_price}₽)"
+                    )
 
 
 if __name__ == "__main__":
