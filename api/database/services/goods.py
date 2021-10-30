@@ -10,12 +10,11 @@ async def fetch_all_goods(page: int = 0) -> list[models.Good]:
         if page == 0:
             return await models.Good.all().order_by("name")
         limit = 4
-        logging.debug(page - 1 * limit)
         return (
             await models.Good.all()
             .order_by("name")
             .limit(limit)
-            .offset(page - 1 * limit)
+            .offset((page - 1) * limit)
         )
 
 
