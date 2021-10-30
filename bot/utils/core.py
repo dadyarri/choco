@@ -1,7 +1,9 @@
-import aiohttp
-import logging
 import os
 from typing import Union
+
+import aiohttp
+
+from utils.client import ChocoManagerClient
 
 
 def get_vk_token():
@@ -69,12 +71,13 @@ def round_leftover(leftover: float) -> Union[float, int]:
 
 
 async def get_all_goods():
-    resp = await make_get_request("goods/")
+    client = ChocoManagerClient()
+    resp = await client.get_all_goods()
     result = []
-    for item in resp["response"]["items"]:
-        if item["leftover"]:
-            leftover = round_leftover(item["leftover"])
-            result.append(f"{item['name']} x{leftover} ({item['retail_price']}₽)")
+    for item in resp.response.items:
+        if item.leftover:
+            leftover = round_leftover(item.leftover)
+            result.append(f"{item.name} x{leftover} ({item.retail_price}₽)")
     return result
 
 
