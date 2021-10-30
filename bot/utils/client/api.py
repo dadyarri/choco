@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Optional
 
@@ -35,9 +36,9 @@ class ChocoManagerClient:
         return result
 
     async def get_all_goods(self, page: int = None):
-        return GetAllGoodsResponse(
-            **await self._make_get_request("goods/", {"page": page})
-        )
+        page_ = await self._make_get_request("goods/", {"page": page})
+        logging.info(**page_)
+        return GetAllGoodsResponse(**page_)
 
     async def get_good_by_id(self, good_id: int):
         return BaseGoodResponse(**await self._make_get_request(f"goods/id/{good_id}"))
