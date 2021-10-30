@@ -58,10 +58,10 @@ async def greeting(message: Message):
     EventPayloadContainsRule({"block": "manage_leftovers", "action": "init"}),
 )
 async def init_leftovers_managing(message: Message):
-    goods = await client.get_all_goods(page=0)
+    goods = await client.get_all_goods(page=1)
     await message.answer(
         "Управление остатками",
-        keyboard=keyboards.list_goods(goods.response.items, page=0),
+        keyboard=keyboards.list_goods(goods.response.items, page=1),
     )
 
 
