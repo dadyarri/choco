@@ -1,15 +1,20 @@
+import os
 from typing import Optional
 
 import aiohttp
 
 from utils.client.models import GetAllGoodsResponse, BaseGoodResponse
-from utils.core import get_api_host
 
 
 class ChocoManagerClient:
     @staticmethod
-    def _get_request_url(endpoint: str):
-        return f"http://{get_api_host()}/{endpoint}"
+    def _get_api_host():
+        if os.getenv("ENV") == "DEV":
+            return os.getenv("DEV_API_HOST")
+        return os.getenv("API_HOST")
+
+    def _get_request_url(self, endpoint: str):
+        return f"http://{self._get_api_host()}/{endpoint}"
 
     async def _make_get_request(self, endpoint: str, params: dict = None):
         async with aiohttp.ClientSession() as session:
