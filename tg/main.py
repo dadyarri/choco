@@ -26,7 +26,7 @@ async def _main_menu(message: types.Message):
 
 
 @dp.message_handler()
-async def _resender(message: types.Message):
+async def reply_to_vk(message: types.Message):
 
     if message.reply_to_message is not None:
         replied_msg = message.reply_to_message.text
