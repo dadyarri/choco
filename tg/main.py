@@ -1,37 +1,19 @@
 import logging
 import os
 import re
-import typing
 
 from aiogram import Bot, Dispatcher, executor, types
-from aiogram.dispatcher.filters import Command, AbstractFilter
+from aiogram.dispatcher.filters import Command
 from vkbottle import API
 
 from utils.core import get_tg_token
-
+from utils.filters import IsAdmin
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=get_tg_token())
 vk = API(os.getenv("VK_TOKEN"))
 dp = Dispatcher(bot)
-
-
-class IsAdmin(AbstractFilter):
-
-    admin_ids = map(int, os.getenv("SEND_IDS").split(","))
-
-    def __init__(self, is_admin):
-        self.is_admin = is_admin
-
-    @classmethod
-    def validate(
-        cls, full_config: typing.Dict[str, typing.Any]
-    ) -> typing.Optional[typing.Dict[str, typing.Any]]:
-        pass
-
-    async def check(self, message: types.Message):
-        return (message.from_user.id in self.admin_ids) == self.is_admin
 
 
 def extract_chat_id(msg: str) -> int:
