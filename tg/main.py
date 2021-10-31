@@ -3,19 +3,37 @@ import os
 import re
 
 from aiogram import Bot, Dispatcher, executor, types
-from vkwave_api import API
+from aiogram.dispatcher.filters import Command
+from vkbottle import API
+
+from utils.core import get_tg_token
 
 
 logging.basicConfig(level=logging.INFO)
 
-bot = Bot(token=os.getenv("TG_TOKEN"))
-vk_api = API(os.getenv("VK_TOKEN"))
-vk = vk_api.get_api()
+bot = Bot(token=get_tg_token())
+vk = API(os.getenv("VK_TOKEN"))
 dp = Dispatcher(bot)
+
+
+class IsAdmin:
+
+    admin_ids = map(int, os.getenv("SEND_IDS").split(","))
+
+    def __init__(self, is_admin):
+        self.is_admin = is_admin
+
+    def check(self, message: types.Message):
+        return (message.from_user.id in self.admin_ids) == self.is_admin
 
 
 def extract_chat_id(msg: str) -> int:
     return int(re.search(r"\?sel=(\d+)", msg)[1])
+
+
+@dp.message_handler(Command("start", prefixes="!/"), IsAdmin(True))
+async def _main_menu(message: types.Message):
+    await message.answer("Добро пожаловать")
 
 
 @dp.message_handler()
