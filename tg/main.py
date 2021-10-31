@@ -3,13 +3,15 @@ import os
 import re
 
 from aiogram import Bot, Dispatcher, executor, types
-from aiogram.dispatcher.filters import Command
+from aiogram.dispatcher.filters import CommandStart, Command
+from aiogram.dispatcher.filters.filters import AndFilter, OrFilter
 from vkbottle import API
 
 from utils.core import get_tg_token
-from utils.filters import IsAdmin
+from utils.filters import IsAdmin, CallbackFilter
+from utils.keyboards import main_menu_markup
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 bot = Bot(token=get_tg_token())
 vk = API(os.getenv("VK_TOKEN"))
@@ -20,7 +22,7 @@ def extract_chat_id(msg: str) -> int:
     return int(re.search(r"\?sel=(\d+)", msg)[1])
 
 
-@dp.message_handler(Command("start", prefixes="!/"), IsAdmin(True))
+@dp.message_handler(OrFilter(AndFilter(CommandStart(), IsAdmin(True)), Command("menu")))
 async def _main_menu(message: types.Message):
     await message.answer("Добро пожаловать")
 
