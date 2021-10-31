@@ -84,6 +84,14 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
+name = "choicelib"
+version = "0.1.4"
+description = "Choice a best similar-interface library from given list"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[[package]]
 name = "idna"
 version = "3.3"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -131,32 +139,50 @@ optional = false
 python-versions = "*"
 
 [[package]]
-name = "vkwave"
-version = "0.2.11"
-description = "Framework for building high-performance & easy to scale projects interacting with VK's API."
+name = "vbml"
+version = "1.1"
+description = "Way to check, match & resist. Sofisticated object oriented regex-based text parser"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-aiohttp = ">=3.6,<4.0"
-pydantic = ">=1.7,<2.0"
 typing_extensions = ">=3.7.4,<4.0.0"
 
-[package.extras]
-storage-redis = ["aioredis (>=1.3,<2.0)"]
-all = ["aioredis (>=1.3,<2.0)"]
-
 [[package]]
-name = "vkwave-api"
-version = "0.3.5"
-description = "Accessing VK API for humans."
+name = "vkbottle"
+version = "3.0.2"
+description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-vkwave = "*"
+aiohttp = ">=3.6.2,<4.0.0"
+choicelib = ">=0.1.1,<0.2.0"
+vbml = ">=1.0,<2.0"
+vkbottle-types = ">=5.131,<6.0"
+watchgod = ">=0.7,<0.8"
+
+[[package]]
+name = "vkbottle-types"
+version = "5.131.119.4"
+description = "Types for vkbottle"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[package.dependencies]
+pydantic = ">=1.6.1,<2.0.0"
+vkbottle = ">=3.0,<4.0"
+
+[[package]]
+name = "watchgod"
+version = "0.7"
+description = "Simple, modern file watching and code reload in python."
+category = "main"
+optional = false
+python-versions = ">=3.5"
 
 [[package]]
 name = "yarl"
@@ -173,7 +199,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "ce73bd0b6f299976eee807589cd3fa329142038ac41f7368a7bf3f13cdd8631f"
+content-hash = "c6a7c7681b6cbeaff5077c73509deda91fbf85555afee1c34489be88aec45e81"
 
 [metadata.files]
 aiogram = [
@@ -238,6 +264,10 @@ certifi = [
 chardet = [
     {file = "chardet-4.0.0-py2.py3-none-any.whl", hash = "sha256:f864054d66fd9118f2e67044ac8981a54775ec5b67aed0441892edb553d21da5"},
     {file = "chardet-4.0.0.tar.gz", hash = "sha256:0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa"},
+]
+choicelib = [
+    {file = "choicelib-0.1.4-py3-none-any.whl", hash = "sha256:2b600bd875201e31d3467ce7ed068558152db9c2a306886745ddf20b0ef270ff"},
+    {file = "choicelib-0.1.4.tar.gz", hash = "sha256:fef2ed7252db1a49d3e75170f37ad0af1d76dc5bf7a748e16ebe141d463998fb"},
 ]
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
@@ -350,13 +380,21 @@ typing-extensions = [
     {file = "typing_extensions-3.10.0.2-py3-none-any.whl", hash = "sha256:f1d25edafde516b146ecd0613dabcc61409817af4766fbbcfb8d1ad4ec441a34"},
     {file = "typing_extensions-3.10.0.2.tar.gz", hash = "sha256:49f75d16ff11f1cd258e1b988ccff82a3ca5570217d7ad8c5f48205dd99a677e"},
 ]
-vkwave = [
-    {file = "vkwave-0.2.11-cp39-cp39-manylinux_2_33_x86_64.whl", hash = "sha256:d661f5a455054cf46692ac02277565d09ff4a57201d74a6ba2625b24d4657128"},
-    {file = "vkwave-0.2.11.tar.gz", hash = "sha256:d84a5c8f66bfa96aece087b34f0255f35bb158c98ad249dfb99f5870c749b83a"},
+vbml = [
+    {file = "vbml-1.1-py3-none-any.whl", hash = "sha256:d04aea2bafd97d5d2b982d5a4c9e9ab059029b2d46eeb0faf83565971b0ebee5"},
+    {file = "vbml-1.1.tar.gz", hash = "sha256:6926402c79793147daf70ce2c866b086f482eaf6e54369f17d3754b4b414d2f5"},
 ]
-vkwave-api = [
-    {file = "vkwave-api-0.3.5.tar.gz", hash = "sha256:c79b2b8dd8d516dbc166fbe114fd8f37e50cc2e60f3f89e674ea84f3846e6a9c"},
-    {file = "vkwave_api-0.3.5-py3-none-any.whl", hash = "sha256:8bf531dc4569e8bcf5ca1f3326b8f425cc3529d3284a926cc482ff3fc2edb1ef"},
+vkbottle = [
+    {file = "vkbottle-3.0.2-py3-none-any.whl", hash = "sha256:dd52f1a8eeb3703a563a08635be1bfa7ead7450b246d86f0069ad5273fe3a5e5"},
+    {file = "vkbottle-3.0.2.tar.gz", hash = "sha256:e9daa7f0e53569b4a89ebcb31660e9f6b424bdf67c86e55eeeb2bde38ec63b10"},
+]
+vkbottle-types = [
+    {file = "vkbottle-types-5.131.119.4.tar.gz", hash = "sha256:098cdd3f22f055a20fb0d1cbd75f42c94d1823a0e662a3bbb4e87f30629ae3de"},
+    {file = "vkbottle_types-5.131.119.4-py3-none-any.whl", hash = "sha256:0c16289e4646e775a4c00145caee9f0f229b421c71aa6356fdbec41d00e6562a"},
+]
+watchgod = [
+    {file = "watchgod-0.7-py3-none-any.whl", hash = "sha256:d6c1ea21df37847ac0537ca0d6c2f4cdf513562e95f77bb93abbcf05573407b7"},
+    {file = "watchgod-0.7.tar.gz", hash = "sha256:48140d62b0ebe9dd9cf8381337f06351e1f2e70b2203fa9c6eff4e572ca84f29"},
 ]
 yarl = [
     {file = "yarl-1.7.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:e35d8230e4b08d86ea65c32450533b906a8267a87b873f2954adeaecede85169"},
