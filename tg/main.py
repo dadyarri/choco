@@ -24,7 +24,14 @@ def extract_chat_id(msg: str) -> int:
 
 @dp.message_handler(OrFilter(AndFilter(CommandStart(), IsAdmin(True)), Command("menu")))
 async def _main_menu(message: types.Message):
-    await message.answer("Добро пожаловать")
+    await message.answer("Добро пожаловать", reply_markup=main_menu_markup())
+
+
+@dp.callback_query_handler(
+    CallbackFilter({"block": "manage_leftovers", "action": "init"})
+)
+async def _manage_leftovers(query: types.CallbackQuery):
+    await query.message.edit_text("Выберите элемент")
 
 
 @dp.message_handler()
