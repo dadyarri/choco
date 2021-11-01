@@ -29,7 +29,7 @@ def main_menu_markup():
     return kb
 
 
-def list_goods(goods: list[Good]):
+def list_goods(goods: list[Good], page: int):
     buttons = [[]]
     for good in goods:
         if len(buttons[-1]) == 2:
@@ -53,14 +53,18 @@ def list_goods(goods: list[Good]):
 
     backward = InlineKeyboardButton(
         text="<",
-        callback_data=json.dumps({"block": "leftovers", "action": "backward"}),
+        callback_data=json.dumps(
+            {"block": "leftovers", "action": "backward", "page": page - 1}
+        ),
     )
     back = InlineKeyboardButton(
         text="Назад", callback_data=json.dumps({"block": "main_menu"})
     )
     forward = InlineKeyboardButton(
         text=">",
-        callback_data=json.dumps({"block": "leftovers", "action": "forward"}),
+        callback_data=json.dumps(
+            {"block": "leftovers", "action": "forward", "page": page + 1}
+        ),
     )
     buttons[-1].extend([backward, back, forward])
 
