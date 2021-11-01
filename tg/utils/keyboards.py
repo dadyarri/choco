@@ -69,3 +69,52 @@ def list_goods(goods: list[Good], page: int):
     buttons[-1].extend([backward, back, forward])
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def manage_leftovers(is_float: bool):
+    buttons = [[]]
+
+    buttons[-1].extend(
+        [
+            InlineKeyboardButton(
+                "+",
+                callback_data=json.dumps(
+                    {"block": "leftover", "action": "plus", "value": 1}
+                ),
+            ),
+            InlineKeyboardButton(
+                "-",
+                callback_data=json.dumps(
+                    {"block": "leftover", "action": "minus", "value": 1}
+                ),
+            ),
+        ]
+    )
+
+    if is_float:
+        buttons.append([])
+        buttons[-1].extend(
+            [
+                InlineKeyboardButton(
+                    "-0.3",
+                    callback_data=json.dumps(
+                        {"block": "leftover", "action": "minus", "value": 0.3}
+                    ),
+                ),
+                InlineKeyboardButton(
+                    "-0.8",
+                    callback_data=json.dumps(
+                        {"block": "leftover", "action": "minus", "value": 0.8}
+                    ),
+                ),
+            ]
+        )
+
+    buttons.append([])
+    buttons[-1].append(
+        InlineKeyboardButton(
+            "Назад", callback_data=json.dumps({"block": "leftovers", "action": "init"})
+        )
+    )
+
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
