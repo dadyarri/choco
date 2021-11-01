@@ -49,7 +49,7 @@ async def _manage_leftovers(query: types.CallbackQuery):
 async def _manage_leftovers_go_backward(query: types.CallbackQuery):
     page = json.loads(query.data)["page"]
     if page == 0:
-        await query.answer("Уже выбрана первая страница!", show_alert=True)
+        await query.answer("Уже выбрана первая страница!")
     else:
         goods = await client.get_all_goods(page)
         await query.message.edit_text(
@@ -70,7 +70,7 @@ async def _manage_leftovers_go_forward(query: types.CallbackQuery):
         )
         await query.answer()
     else:
-        await query.answer("Элементов больше нет", show_alert=True)
+        await query.answer("Элементов больше нет")
 
 
 @dp.message_handler()
