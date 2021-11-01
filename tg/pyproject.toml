@@ -10,7 +10,7 @@ python = "^3.8"
 aiogram = "^2.11.2"
 vkbottle = "^3.0.2"
 pydantic = "^1.8.2"
-aiohttp = "^3.7.4"
+aiohttp = "^3.8.0"
 
 [tool.poetry.dev-dependencies]
 
