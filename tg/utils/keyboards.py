@@ -16,7 +16,7 @@ def main_menu_markup():
     kb.insert(
         InlineKeyboardButton(
             text="Диалоги",
-            callback_data=json.dumps({"block": "manage_dialogs", "action": "init"}),
+            callback_data=json.dumps({"block": "dialogs", "action": "init"}),
         )
     )
     kb.add(
