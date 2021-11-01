@@ -1,9 +1,6 @@
 import os
-from typing import Union
 
 import aiohttp
-
-from utils.client import ChocoManagerClient
 
 
 def get_vk_token():
@@ -38,45 +35,3 @@ async def send_photo_to_telegram(photo_url: str, **kwargs):
                     "caption": f"Вложение от {kwargs['first_name']} {kwargs['last_name']}",
                 },
             )
-
-
-async def generate_post_message():
-    result = await get_all_goods()
-    return "\n".join(result)
-
-
-def is_float(leftover: float) -> bool:
-    if leftover - int(leftover) == 0:
-        return False
-    return True
-
-
-def round_leftover(leftover: float) -> Union[float, int]:
-    if is_float(leftover):
-        res = round(leftover, 1)
-    else:
-        res = int(leftover)
-
-    return res
-
-
-async def get_all_goods():
-    client = ChocoManagerClient()
-    resp = await client.get_all_goods()
-    result = []
-    for item in resp.response.items:
-        if item.leftover:
-            leftover = round_leftover(item.leftover)
-            result.append(f"{item.name} x{leftover} ({item.retail_price}₽)")
-    return result
-
-
-def shorten_name(name: str) -> str:
-    return (
-        name.replace("Горький", "Г.")
-        .replace("Молочный тёмный", "Мол/т.")
-        .replace("Молочный", "Мол.")
-        .replace("Масса", "М.")
-        .replace("Мармелад", "М/м")
-        .replace(" (на развес)", "")
-    )
