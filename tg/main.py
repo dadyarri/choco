@@ -4,14 +4,15 @@ import os
 import re
 
 from aiogram import Bot, Dispatcher, executor, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters import CommandStart, Command
 from aiogram.dispatcher.filters.filters import AndFilter, OrFilter
 from vkbottle import API
 
 from utils.client import ChocoManagerClient
-from utils.core import get_tg_token
+from utils.core import get_tg_token, is_float, round_leftover
 from utils.filters import IsAdmin, CallbackFilter
-from utils.keyboards import main_menu_markup, list_goods
+from utils.keyboards import main_menu_markup, list_goods, manage_leftovers
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -19,6 +20,7 @@ bot = Bot(token=get_tg_token())
 vk = API(os.getenv("VK_TOKEN"))
 dp = Dispatcher(bot)
 client = ChocoManagerClient()
+storage = MemoryStorage()
 
 
 def extract_chat_id(msg: str) -> int:
@@ -71,6 +73,30 @@ async def _manage_leftovers_go_forward(query: types.CallbackQuery):
         await query.answer()
     else:
         await query.answer("Элементов больше нет")
+
+
+@dp.callback_query_handler(
+    CallbackFilter({"block": "leftovers", "action": "select_product"})
+)
+async def _manage_leftovers_select_product(query: types.CallbackQuery):
+    product_id = json.loads(query.data)["value"]
+    product = await client.get_good_by_id(product_id)
+    await storage.set_data(
+        chat=query.message.chat.id,
+        user=query.from_user.id,
+        data={"product_id": product_id},
+    )
+    logging.debug(product.response.leftover)
+    await query.message.edit_text(
+        f"""\
+         Товар: {product.response.name}
+         Розничная цена: {product.response.retail_price}₽
+         Оптовая цена: {product.response.wholesale_price}₽
+         Остаток: {round_leftover(product.response.leftover)} шт.\
+         """,
+        reply_markup=manage_leftovers(is_float(product.response.leftover)),
+    )
+    await query.answer()
 
 
 @dp.message_handler()
