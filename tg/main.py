@@ -98,6 +98,48 @@ async def _manage_leftovers_select_product(query: types.CallbackQuery):
     await query.answer()
 
 
+@dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "plus"}))
+async def _manage_leftovers_plus(query: types.CallbackQuery):
+    data = await storage.get_data(
+        chat=query.message.chat.id,
+        user=query.from_user.id,
+    )
+    value = json.loads(query.data)["value"]
+    product_id = data["product_id"]
+    resp = await client.increment_leftover(product_id, value)
+    await query.message.edit_text(
+        (
+            f"Товар: {resp.response.name}\n"
+            f"Розничная цена: {resp.response.retail_price}₽\n"
+            f"Оптовая цена: {resp.response.wholesale_price}₽\n"
+            f"Остаток: {round_leftover(resp.response.leftover)} шт."
+        ),
+        reply_markup=manage_leftovers(is_float(resp.response.leftover)),
+    )
+    await query.answer(f"Продукту {resp.response.name} добавлено {value} кг.")
+
+
+@dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "minus"}))
+async def _manage_leftovers_minus(query: types.CallbackQuery):
+    data = await storage.get_data(
+        chat=query.message.chat.id,
+        user=query.from_user.id,
+    )
+    value = json.loads(query.data)["value"]
+    product_id = data["product_id"]
+    resp = await client.decrement_leftover(product_id, value)
+    await query.message.edit_text(
+        (
+            f"Товар: {resp.response.name}\n"
+            f"Розничная цена: {resp.response.retail_price}₽\n"
+            f"Оптовая цена: {resp.response.wholesale_price}₽\n"
+            f"Остаток: {round_leftover(resp.response.leftover)} шт."
+        ),
+        reply_markup=manage_leftovers(is_float(resp.response.leftover)),
+    )
+    await query.answer(f"У продукта {resp.response.name} убрано {value} кг.")
+
+
 @dp.message_handler()
 async def reply_to_vk(message: types.Message):
 
