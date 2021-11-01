@@ -86,7 +86,6 @@ async def _manage_leftovers_select_product(query: types.CallbackQuery):
         user=query.from_user.id,
         data={"product_id": product_id},
     )
-    logging.debug(product.response.leftover)
     await query.message.edit_text(
         (
             f"Товар: {product.response.name}\n"
