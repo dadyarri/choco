@@ -26,7 +26,7 @@ def extract_chat_id(msg: str) -> int:
 
 
 @dp.message_handler(OrFilter(AndFilter(CommandStart(), IsAdmin(True)), Command("menu")))
-async def _main_menu(message: Union[types.Message, types.CallbackQuery]):
+async def _main_menu(message: types.Message):
     await message.answer("Добро пожаловать", reply_markup=main_menu_markup())
 
 
