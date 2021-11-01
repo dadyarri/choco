@@ -79,13 +79,13 @@ def manage_leftovers(is_float: bool):
             InlineKeyboardButton(
                 "+",
                 callback_data=json.dumps(
-                    {"block": "leftover", "action": "plus", "value": 1}
+                    {"block": "leftovers", "action": "plus", "value": 1}
                 ),
             ),
             InlineKeyboardButton(
                 "-",
                 callback_data=json.dumps(
-                    {"block": "leftover", "action": "minus", "value": 1}
+                    {"block": "leftovers", "action": "minus", "value": 1}
                 ),
             ),
         ]
@@ -98,13 +98,13 @@ def manage_leftovers(is_float: bool):
                 InlineKeyboardButton(
                     "-0.3",
                     callback_data=json.dumps(
-                        {"block": "leftover", "action": "minus", "value": 0.3}
+                        {"block": "leftovers", "action": "minus", "value": 0.3}
                     ),
                 ),
                 InlineKeyboardButton(
                     "-0.8",
                     callback_data=json.dumps(
-                        {"block": "leftover", "action": "minus", "value": 0.8}
+                        {"block": "leftovers", "action": "minus", "value": 0.8}
                     ),
                 ),
             ]
