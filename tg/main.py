@@ -23,13 +23,17 @@ def extract_chat_id(msg: str) -> int:
 
 
 @dp.message_handler(OrFilter(AndFilter(CommandStart(), IsAdmin(True)), Command("menu")))
-async def _main_menu(message: types.Message):
+async def _main_menu(message: Union[types.Message, types.CallbackQuery]):
     await message.answer("Добро пожаловать", reply_markup=main_menu_markup())
 
 
-@dp.callback_query_handler(
-    CallbackFilter({"block": "manage_leftovers", "action": "init"})
-)
+@dp.callback_query_handler(CallbackFilter({"block": "main_menu"}))
+async def _main_menu(query: types.CallbackQuery):
+    await query.message.edit_text("Добро пожаловать", reply_markup=main_menu_markup())
+    await query.answer()
+
+
+@dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "init"}))
 async def _manage_leftovers(query: types.CallbackQuery):
     await query.message.edit_text("Выберите элемент")
 
