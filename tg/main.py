@@ -185,5 +185,10 @@ async def _update_post(query: types.CallbackQuery):
     await query.message.edit_text("Пост обновлён!", reply_markup=main_menu_markup())
 
 
+@dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "init"}))
+async def _dialogs(query: types.CallbackQuery):
+    await query.answer("В разработке...")
+
+
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True)
