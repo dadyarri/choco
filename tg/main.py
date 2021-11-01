@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import re
@@ -39,9 +40,37 @@ async def _main_menu_callback(query: types.CallbackQuery):
 async def _manage_leftovers(query: types.CallbackQuery):
     goods = await client.get_all_goods(page=1)
     await query.message.edit_text(
-        "Управление остатками", reply_markup=list_goods(goods.response.items)
+        "Управление остатками", reply_markup=list_goods(goods.response.items, page=1)
     )
     await query.answer()
+
+
+@dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "backward"}))
+async def _manage_leftovers_go_backward(query: types.CallbackQuery):
+    page = json.loads(query.data)["page"]
+    if page == 0:
+        await query.answer("Уже выбрана первая страница!", show_alert=True)
+    else:
+        goods = await client.get_all_goods(page)
+        await query.message.edit_text(
+            "Управление остатками",
+            reply_markup=list_goods(goods.response.items, page=page),
+        )
+        await query.answer()
+
+
+@dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "forward"}))
+async def _manage_leftovers_go_forward(query: types.CallbackQuery):
+    page = json.loads(query.data)["page"]
+    goods = await client.get_all_goods(page)
+    if goods.response.items:
+        await query.message.edit_text(
+            "Управление остатками",
+            reply_markup=list_goods(goods.response.items, page=page),
+        )
+        await query.answer()
+    else:
+        await query.answer("Элементов больше нет", show_alert=True)
 
 
 @dp.message_handler()
