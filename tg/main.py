@@ -1,7 +1,6 @@
 import logging
 import os
 import re
-from typing import Union
 
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters import CommandStart, Command
