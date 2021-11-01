@@ -88,12 +88,12 @@ async def _manage_leftovers_select_product(query: types.CallbackQuery):
     )
     logging.debug(product.response.leftover)
     await query.message.edit_text(
-        f"""\
-         Товар: {product.response.name}
-         Розничная цена: {product.response.retail_price}₽
-         Оптовая цена: {product.response.wholesale_price}₽
-         Остаток: {round_leftover(product.response.leftover)} шт.\
-         """,
+        (
+            f"Товар: {product.response.name}\n"
+            f"Розничная цена: {product.response.retail_price}₽\n"
+            f"Оптовая цена: {product.response.wholesale_price}₽\n"
+            f"Остаток: {round_leftover(product.response.leftover)} шт."
+        ),
         reply_markup=manage_leftovers(is_float(product.response.leftover)),
     )
     await query.answer()
