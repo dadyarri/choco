@@ -31,7 +31,7 @@ async def _main_menu(message: types.Message):
 
 
 @dp.callback_query_handler(CallbackFilter({"block": "main_menu"}))
-async def _main_menu(query: types.CallbackQuery):
+async def _main_menu_callback(query: types.CallbackQuery):
     await query.message.edit_text("Добро пожаловать", reply_markup=main_menu_markup())
     await query.answer()
 
