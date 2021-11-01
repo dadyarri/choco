@@ -35,7 +35,6 @@ async def get_all_goods():
     resp = await client.get_all_goods()
     result = []
     for item in resp.response.items:
-        if item.leftover:
-            leftover = round_leftover(item.leftover)
+        if leftover := round_leftover(item.leftover):
             result.append(f"{item.name} x{leftover} ({item.retail_price}₽)")
     return result
