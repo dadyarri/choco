@@ -1,21 +1,24 @@
 import logging
 import os
 import re
+from typing import Union
 
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters import CommandStart, Command
 from aiogram.dispatcher.filters.filters import AndFilter, OrFilter
 from vkbottle import API
 
+from utils.client import ChocoManagerClient
 from utils.core import get_tg_token
 from utils.filters import IsAdmin, CallbackFilter
-from utils.keyboards import main_menu_markup
+from utils.keyboards import main_menu_markup, list_goods
 
 logging.basicConfig(level=logging.DEBUG)
 
 bot = Bot(token=get_tg_token())
 vk = API(os.getenv("VK_TOKEN"))
 dp = Dispatcher(bot)
+client = ChocoManagerClient()
 
 
 def extract_chat_id(msg: str) -> int:
@@ -35,7 +38,11 @@ async def _main_menu(query: types.CallbackQuery):
 
 @dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "init"}))
 async def _manage_leftovers(query: types.CallbackQuery):
-    await query.message.edit_text("Выберите элемент")
+    goods = await client.get_all_goods(page=1)
+    await query.message.edit_text(
+        "Управление остатками", reply_markup=list_goods(goods.response.items)
+    )
+    await query.answer()
 
 
 @dp.message_handler()
