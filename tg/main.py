@@ -10,7 +10,7 @@ from aiogram.dispatcher.filters.filters import AndFilter, OrFilter
 from vkbottle import API
 
 from utils.client import ChocoManagerClient
-from utils.core import get_tg_token, is_float, round_leftover
+from utils.core import get_tg_token, is_float, round_leftover, generate_post_message
 from utils.filters import IsAdmin, CallbackFilter
 from utils.keyboards import main_menu_markup, list_goods, manage_leftovers
 
@@ -18,6 +18,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 bot = Bot(token=get_tg_token())
 vk = API(os.getenv("VK_TOKEN"))
+user_vk = API(os.getenv("VK_USER_TOKEN"))
 dp = Dispatcher(bot)
 client = ChocoManagerClient()
 storage = MemoryStorage()
@@ -159,6 +160,29 @@ async def reply_to_vk(message: types.Message):
         for chat in os.getenv("SEND_IDS").split(","):
             if int(chat) != message["from"]["id"]:
                 await bot.send_message(chat_id=chat, text=tg_msg)
+
+
+@dp.callback_query_handler(CallbackFilter({"block": "update_post", "action": "init"}))
+async def _update_post(query: types.CallbackQuery):
+    vk_group = -int(os.getenv("VK_GROUP"))
+
+    await query.message.edit_text("Удаление старого поста...")
+    last_post = await user_vk.wall.get(vk_group, count=1)
+    post_id = last_post.items[0].id
+    await user_vk.wall.delete(vk_group, post_id)
+
+    await query.message.edit_text("Генерация текста...")
+    message_ = await generate_post_message()
+
+    await query.message.edit_text("Публикация поста...")
+    resp = await user_vk.wall.post(
+        vk_group,
+        message=message_,
+        from_group=True,
+        close_comments=True,
+    )
+    await user_vk.wall.pin(resp.post_id, vk_group)
+    await query.message.edit_text("Пост обновлён!", reply_markup=main_menu_markup())
 
 
 if __name__ == "__main__":
