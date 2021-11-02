@@ -60,6 +60,8 @@ services:
     command: python /code/tg/main.py
     volumes:
       - ./tg:/code/tg
+    networks:
+      - net
 
   pgadmin:
     container_name: choco_pgadmin
