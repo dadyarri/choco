@@ -109,6 +109,18 @@ async def _manage_leftovers_plus(query: types.CallbackQuery):
     value = json.loads(query.data)["value"]
     product_id = data["product_id"]
     resp = await client.increment_leftover(product_id, value)
+    if resp.response.market_id:
+        product = await user_vk.market.get_by_id(
+            [f"-{os.getenv('VK_GROUP')}_{resp.response.market_id}"]
+        )
+        await user_vk.market.edit(
+            -int(os.getenv("VK_GROUP")),
+            resp.response.market_id,
+            name=product.items[0].title,
+            description=product.items[0].description,
+            category_id=product.items[0].category.id,
+            stock_amount=resp.response.leftover,
+        )
     await query.message.edit_text(
         (
             f"Товар: {resp.response.name}\n"
@@ -139,6 +151,18 @@ async def _manage_leftovers_minus(query: types.CallbackQuery):
         ),
         reply_markup=manage_leftovers(is_float(resp.response.leftover)),
     )
+    if resp.response.market_id:
+        product = await user_vk.market.get_by_id(
+            [f"-{os.getenv('VK_GROUP')}_{resp.response.market_id}"]
+        )
+        await user_vk.market.edit(
+            -int(os.getenv("VK_GROUP")),
+            resp.response.market_id,
+            name=product.items[0].title,
+            description=product.items[0].description,
+            category_id=product.items[0].category.id,
+            stock_amount=resp.response.leftover,
+        )
     await query.answer(f"У продукта {resp.response.name} убрано {value} кг.")
 
 
