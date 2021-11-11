@@ -19,6 +19,7 @@ logging.basicConfig(level=logging.DEBUG)
 bot = Bot(token=get_tg_token())
 vk = API(os.getenv("VK_TOKEN"))
 user_vk = API(os.getenv("VK_USER_TOKEN"))
+user_vk.API_VERSION = "5.140"
 dp = Dispatcher(bot)
 client = ChocoManagerClient()
 storage = MemoryStorage()
