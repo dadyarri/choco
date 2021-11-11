@@ -36,6 +36,12 @@ def main_menu_markup():
             callback_data=json.dumps({"block": "update_post", "action": "init"}),
         )
     )
+    kb.insert(
+        InlineKeyboardButton(
+            text="Список",
+            callback_data=json.dumps({"block": "list", "action": "init"}),
+        )
+    )
 
     return kb
 
