@@ -12,7 +12,7 @@ from vkbottle import API
 from utils.client import ChocoManagerClient
 from utils.core import get_tg_token, is_float, round_leftover, generate_post_message
 from utils.filters import IsAdmin, CallbackFilter
-from utils.keyboards import main_menu_markup, list_goods, manage_leftovers
+from utils.keyboards import main_menu_markup, list_goods, manage_leftovers, back_markup
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -188,6 +188,14 @@ async def _update_post(query: types.CallbackQuery):
 @dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "init"}))
 async def _dialogs(query: types.CallbackQuery):
     await query.answer("В разработке...")
+
+
+@dp.callback_query_handler(CallbackFilter({"block": "list", "action": "init"}))
+async def _show_list(query: types.CallbackQuery):
+    await query.message.edit_text(
+        await generate_post_message(), reply_markup=back_markup()
+    )
+    await query.answer()
 
 
 if __name__ == "__main__":
