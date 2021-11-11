@@ -5,6 +5,17 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from utils.client import Good
 
 
+def back_markup():
+    kb = InlineKeyboardMarkup()
+    kb.insert(
+        InlineKeyboardButton(
+            text="Назад", callback_data=json.dumps({"block": "main_menu"})
+        )
+    )
+
+    return kb
+
+
 def main_menu_markup():
     kb = InlineKeyboardMarkup()
     kb.insert(
