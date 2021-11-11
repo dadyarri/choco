@@ -4,6 +4,8 @@ import os
 from pydantic import ValidationError
 from vkbottle import Bot
 from vkbottle.bot import Message
+from vkbottle_types.events import GroupEventType, MarketOrderNew
+from vkbottle_types.objects import MarketOrder
 
 from utils.client import ChocoManagerClient
 from utils.core import (
@@ -49,6 +51,42 @@ async def send_user_message_to_admins(message: Message):
                         await send_message_to_telegram(
                             f"{resp.response.name} x{resp.response.leftover} ({resp.response.retail_price}₽)"
                         )
+
+
+@bot.on.raw_event(GroupEventType.MARKET_ORDER_NEW, dataclass=MarketOrderNew)
+async def new_order(order: MarketOrderNew):
+    """
+    Когда поступает новый заказ, прислать пользователю его содержимое и спросить данные для доставки.
+    Отправить содержимое заказа и количество товара в наличии (из нашей базы) в телеграм.
+    """
+    order_items = "\n".join(
+        f"- {item.title} {item.quantity} x {item.price.text} = {item.quantity * int(item.price.amount) / 100} ₽"
+        for item in order.object.preview_order_items
+    )
+    customer = await order.ctx_api.users.get([str(order.object.user_id)])
+
+    await order.ctx_api.messages.send(
+        user_id=order.object.user_id,
+        message=(
+            f"Здравствуйте. Вы заказали {order.object.items_count} товар(ов) на сумму {order.object.total_price.text}:\n"
+            f"{order_items}"
+        ),
+        random_id=0,
+    )
+
+    await order.ctx_api.messages.send(
+        user_id=order.object.user_id,
+        message="Укажите адрес доставки, номер телефона и удобное время получения заказа.",
+        random_id=0,
+    )
+
+    for item in order.object.preview_order_items:
+        item_object = await client.get_good_by_market_id(item.item_id)
+        await client.decrement_leftover(item_object.response.id, item.quantity)
+
+    await send_message_to_telegram(
+        f"Новый заказ от {customer[0].last_name} {customer[0].first_name}:\n{order_items}\nОстатки обновлены."
+    )
 
 
 if __name__ == "__main__":
