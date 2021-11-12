@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Optional
 
@@ -121,7 +122,7 @@ class ChocoManagerClient:
         )
 
     async def get_all_chats(self, page: int = 0) -> GetAllChatsResponse:
-        page_ = await self._make_get_request("chats/", {"page": page})
+        page_ = await self._make_get_request("chats", {"page": page})
         return GetAllChatsResponse(**page_)
 
     async def get_chat_by_id(self, chat_id: int):
