@@ -6,10 +6,12 @@ from starlette import status
 from tortoise.contrib.fastapi import register_tortoise
 
 from database.core.init import TORTOISE_ORM
-from database.services import goods
+from database.services import goods, chats
 from models import (
     BaseGoodResponse,
     GetAllGoodsResponse,
+    BaseChatResponse,
+    GetAllChatsResponse,
 )
 
 logging.basicConfig(level="DEBUG")
@@ -228,6 +230,42 @@ async def create_goods(
         "response": await goods.create_good(
             name, wholesale_price, retail_price, leftover, market_id
         )
+    }
+
+
+@app.get(
+    "/chats",
+    response_model=GetAllChatsResponse,
+    tags=["chats"],
+)
+async def get_list_of_chats(page: int = 0):
+    items = await chats.fetch_all_chats(page)
+    return {
+        "response": {
+            "count": len(items),
+            "items": items,
+        },
+    }
+
+
+@app.get("/chats/id/{chat_id}", response_model=BaseChatResponse, tags=["chat"])
+async def get_chat_by_id(chat_id: int):
+    return {
+        "response": await chats.get_chat_by_id(chat_id),
+    }
+
+
+@app.get("/chats/vk_id/{vk_id}", response_model=BaseChatResponse, tags=["chat"])
+async def get_chat_by_vk_id(vk_id: int):
+    return {
+        "response": await chats.get_chat_by_vk_id(vk_id),
+    }
+
+
+@app.post("/chats/create", response_model=BaseChatResponse, tags=["chats"])
+async def create_chat(vk_id: int):
+    return {
+        "response": await chats.create_chat(vk_id),
     }
 
 
