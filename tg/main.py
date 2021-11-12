@@ -18,6 +18,7 @@ from utils.keyboards import (
     manage_leftovers,
     back_markup,
     active_chats,
+    dialog_menu,
 )
 
 logging.basicConfig(level=logging.DEBUG)
@@ -251,6 +252,16 @@ async def _dialogs_go_forward(query: types.CallbackQuery):
         await query.answer()
     else:
         await query.answer("Элементов больше нет")
+
+
+@dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "select"}))
+async def _dialog_menu(query: types.CallbackQuery):
+    chat_id = json.loads(query.data)["value"]
+    chat = await client.get_chat_by_id(chat_id)
+    user = (await vk.users.get([str(chat.response.vk_id)]))[0]
+    full_name = f"{user.first_name} {user.last_name}"
+    await query.message.edit_text(f"Диалог с {full_name}", reply_markup=dialog_menu())
+    await query.answer()
 
 
 @dp.callback_query_handler(CallbackFilter({"block": "list", "action": "init"}))
