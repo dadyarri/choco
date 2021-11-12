@@ -18,7 +18,4 @@ async def fetch_all_chats(page):
 
 async def create_chat(vk_id: int):
     async with in_transaction():
-        return models.Chat.create(
-            vk_id=vk_id,
-            is_active=True
-        )
+        return models.Chat.create(vk_id=vk_id, is_active=True)
