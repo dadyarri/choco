@@ -12,5 +12,5 @@ class Good(Model):
 
 class Chat(Model):
     id = fields.IntField(pk=True)
-    vk_id = fields.IntField()
+    vk_id = fields.IntField(unique=True)
     is_active = fields.BooleanField()
