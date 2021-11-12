@@ -19,6 +19,7 @@ from utils.keyboards import (
     back_markup,
     active_chats,
     dialog_menu,
+    back_to_dialog_menu,
 )
 
 logging.basicConfig(level=logging.DEBUG)
@@ -264,6 +265,20 @@ async def _dialog_menu(query: types.CallbackQuery):
         f"Диалог с {full_name}\nГород: {user.city or 'Не указно'}",
         reply_markup=dialog_menu(chat_id),
     )
+    await query.answer()
+
+
+@dp.callback_query_handler(
+    CallbackFilter({"block": "dialogs", "action": "show_history"})
+)
+async def _dialogs_show_history(query: types.CallbackQuery):
+    chat_id = json.loads(query.data)["value"]
+    chat = await client.get_chat_by_id(chat_id)
+    history = await vk.messages.get_history(user_id=chat.response.vk_id)
+    messages = "\n".join(
+        f"{'А' if item.out else 'К'}: {item.text}" for item in history.items
+    )
+    await query.message.edit_text(messages, reply_markup=back_to_dialog_menu(chat_id))
     await query.answer()
 
 
