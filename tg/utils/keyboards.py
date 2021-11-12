@@ -183,7 +183,7 @@ async def active_chats(api: API, chats: list[Chat], page: int = 0):
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-def dialog_menu():
+def dialog_menu(chat_id: int):
     buttons = [[]]
     history = InlineKeyboardButton(
         "Показать историю",
@@ -191,6 +191,7 @@ def dialog_menu():
             {
                 "block": "dialogs",
                 "action": "show_history",
+                "value": chat_id,
             },
         ),
     )
@@ -200,6 +201,7 @@ def dialog_menu():
             {
                 "block": "dialogs",
                 "action": "write",
+                "value": chat_id,
             },
         ),
     )
