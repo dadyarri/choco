@@ -3,7 +3,7 @@ from tortoise.transactions import in_transaction
 from database import models
 
 
-async def fetch_all_chats(page):
+async def fetch_all_chats(page) -> list[models.Chat]:
     async with in_transaction():
         if page == 0:
             return await models.Chat.all().order_by("vk_id")
@@ -16,6 +16,6 @@ async def fetch_all_chats(page):
         )
 
 
-async def create_chat(vk_id: int):
+async def create_chat(vk_id: int) -> models.Chat:
     async with in_transaction():
-        return models.Chat.create(vk_id=vk_id, is_active=True)
+        return await models.Chat.create(vk_id=vk_id, is_active=True)
