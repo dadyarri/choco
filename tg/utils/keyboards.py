@@ -181,3 +181,34 @@ async def active_chats(api: API, chats: list[Chat], page: int = 0):
     buttons[-1].extend([backward, back, forward])
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def dialog_menu():
+    buttons = [[]]
+    history = InlineKeyboardButton(
+        "Показать историю",
+        callback_data=json.dumps(
+            {
+                "block": "dialogs",
+                "action": "show_history",
+            },
+        ),
+    )
+    write = InlineKeyboardButton(
+        "Написать",
+        callback_data=json.dumps(
+            {
+                "block": "dialogs",
+                "action": "write",
+            },
+        ),
+    )
+    buttons[-1].extend([history, write])
+    buttons.append([])
+
+    back = InlineKeyboardButton(
+        text="Назад", callback_data=json.dumps({"block": "dialogs", "action": "init"})
+    )
+    buttons[-1].append(back)
+
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
