@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 import toml
 from fastapi import FastAPI
@@ -9,13 +8,16 @@ from tortoise.contrib.fastapi import register_tortoise
 from database.core.init import TORTOISE_ORM
 from database.services import goods
 from models import (
-    BaseResponseModel,
     BaseGoodResponse,
     GetAllGoodsResponse,
 )
 
 logging.basicConfig(level="DEBUG")
 version = toml.load("pyproject.toml")["tool"]["poetry"]["version"]
+tags_metadata = [
+    {"name": "products", "description": "Управление остатками и ценами товара"},
+    {"name": "chats", "description": "Управление чатами"},
+]
 app = FastAPI(
     title="ChocoManager API",
     description="Internal API for ChocoManager system",
@@ -25,27 +27,15 @@ app = FastAPI(
         "url": "https://t.me/dadyarri",
         "email": "dadyarri@gmail.com",
     },
-    license_info={"name": "Proprietary"},
+    license_info={"name": "Unlicensed"},
+    openapi_tags=tags_metadata,
 )
-
-
-@app.get(
-    "/",
-    status_code=status.HTTP_418_IM_A_TEAPOT,
-    response_model=BaseResponseModel,
-)
-async def teapot():
-    """
-    GET to root returns 418
-
-    :return: dict
-    """
-    return {"response": "i'm a teapot"}
 
 
 @app.get(
     "/goods/",
     response_model=GetAllGoodsResponse,
+    tags=["products"],
 )
 async def get_all_goods(page: int = 0):
     """
@@ -66,6 +56,7 @@ async def get_all_goods(page: int = 0):
 @app.get(
     "/goods/id/{goods_id}",
     response_model=BaseGoodResponse,
+    tags=["products"],
 )
 async def get_good(goods_id: int):
     """
@@ -80,6 +71,7 @@ async def get_good(goods_id: int):
 @app.get(
     "/goods/market/{market_id}",
     response_model=BaseGoodResponse,
+    tags=["products"],
 )
 async def find_good_by_market_id(market_id: int):
     """
@@ -94,6 +86,7 @@ async def find_good_by_market_id(market_id: int):
 @app.post(
     "/goods/market/{goods_id}/set",
     response_model=BaseGoodResponse,
+    tags=["products"],
 )
 async def set_market_id(goods_id: int, value: int):
     """
@@ -109,6 +102,7 @@ async def set_market_id(goods_id: int, value: int):
 @app.post(
     "/goods/name/{goods_id}",
     response_model=BaseGoodResponse,
+    tags=["products"],
 )
 async def rename_goods(goods_id: int, value: str):
     """
@@ -124,6 +118,7 @@ async def rename_goods(goods_id: int, value: str):
 @app.post(
     "/goods/leftover/{goods_id}/inc/by",
     response_model=BaseGoodResponse,
+    tags=["products"],
 )
 async def increment_leftover(
     goods_id: int,
@@ -142,6 +137,7 @@ async def increment_leftover(
 @app.post(
     "/goods/leftover/{goods_id}/dec/by",
     response_model=BaseGoodResponse,
+    tags=["products"],
 )
 async def decrement_leftover(
     goods_id: int,
@@ -160,6 +156,7 @@ async def decrement_leftover(
 @app.post(
     "/goods/leftover/{goods_id}/set",
     response_model=BaseGoodResponse,
+    tags=["products"],
 )
 async def update_leftover(goods_id: int, value: float):
     """
@@ -175,6 +172,7 @@ async def update_leftover(goods_id: int, value: float):
 @app.post(
     "/goods/price/wholesale/{goods_id}/set",
     response_model=BaseGoodResponse,
+    tags=["products"],
 )
 async def set_wholesale_price(goods_id: int, value: int):
     """
@@ -190,6 +188,7 @@ async def set_wholesale_price(goods_id: int, value: int):
 @app.post(
     "/goods/price/retail/{goods_id}/set",
     response_model=BaseGoodResponse,
+    tags=["products"],
 )
 async def set_retail_price(goods_id: int, value: int):
     """
@@ -206,6 +205,7 @@ async def set_retail_price(goods_id: int, value: int):
     "/goods/create",
     status_code=status.HTTP_201_CREATED,
     response_model=BaseGoodResponse,
+    tags=["products"],
 )
 async def create_goods(
     name: str,
