@@ -14,3 +14,11 @@ async def fetch_all_chats(page):
             .limit(limit)
             .offset((page - 1) * limit)
         )
+
+
+async def create_chat(vk_id: int):
+    async with in_transaction():
+        return models.Chat.create(
+            vk_id=vk_id,
+            is_active=True
+        )
