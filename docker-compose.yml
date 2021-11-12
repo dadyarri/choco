@@ -63,25 +63,6 @@ services:
     networks:
       - net
 
-  pgadmin:
-    container_name: choco_pgadmin
-    image: dpage/pgadmin4:5.7
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "me@dadyarri.io"
-      PGADMIN_DEFAULT_PASSWORD: "pgadmin_dadyarri"
-      PGADMIN_CONFIG_SERVER_MODE: "False"
-    volumes:
-      - ./pgadmin:/pgadmin
-    ports:
-      - "5050:80"
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 1G
-    networks:
-      - net
 
 volumes:
   db_data: {}
