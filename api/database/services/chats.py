@@ -19,3 +19,13 @@ async def fetch_all_chats(page) -> list[models.Chat]:
 async def create_chat(vk_id: int) -> models.Chat:
     async with in_transaction():
         return await models.Chat.create(vk_id=vk_id, is_active=True)
+
+
+async def get_chat_by_id(chat_id: int) -> models.Chat:
+    async with in_transaction():
+        return await models.Chat.get(id=chat_id)
+
+
+async def get_chat_by_vk_id(vk_id: int) -> models.Chat:
+    async with in_transaction():
+        return await models.Chat.get(vk_id=vk_id)
