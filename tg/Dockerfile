@@ -9,11 +9,9 @@ RUN pip install poetry
 WORKDIR /code
 COPY poetry.lock pyproject.toml /code/
 
-RUN pip install --upgrade pip
-
 # Install deps
 RUN poetry config virtualenvs.create false \
  && poetry install --no-dev --no-interaction
 
 # Copy sources
-COPY . /code/vk
+COPY . /code/tg
