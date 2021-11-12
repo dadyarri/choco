@@ -248,14 +248,14 @@ async def get_list_of_chats(page: int = 0):
     }
 
 
-@app.get("/chats/id/{chat_id}", response_model=BaseChatResponse, tags=["chat"])
+@app.get("/chats/id/{chat_id}", response_model=BaseChatResponse, tags=["chats"])
 async def get_chat_by_id(chat_id: int):
     return {
         "response": await chats.get_chat_by_id(chat_id),
     }
 
 
-@app.get("/chats/vk_id/{vk_id}", response_model=BaseChatResponse, tags=["chat"])
+@app.get("/chats/vk_id/{vk_id}", response_model=BaseChatResponse, tags=["chats"])
 async def get_chat_by_vk_id(vk_id: int):
     return {
         "response": await chats.get_chat_by_vk_id(vk_id),
