@@ -1,8 +1,10 @@
 import json
 
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from vkbottle import API
 
 from utils.client import Good
+from utils.client.models import Chat
 
 
 def back_markup():
@@ -133,5 +135,49 @@ def manage_leftovers(is_float: bool):
             "Назад", callback_data=json.dumps({"block": "leftovers", "action": "init"})
         )
     )
+
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+async def active_chats(api: API, chats: list[Chat], page: int = 0):
+    buttons = [[]]
+    for chat in chats:
+        if len(buttons[-1]) == 2:
+            buttons.append([])
+        if chat.is_active:
+            user = (await api.users.get([str(chat.vk_id)]))[0]
+            full_name = f"{user.first_name} {user.last_name}"
+            buttons[-1].append(
+                InlineKeyboardButton(
+                    full_name,
+                    callback_data=json.dumps(
+                        {
+                            "block": "dialogs",
+                            "action": "select",
+                            "value": chat.id,
+                        }
+                    ),
+                )
+            )
+
+    if buttons[-1]:
+        buttons.append([])
+
+    backward = InlineKeyboardButton(
+        text="<",
+        callback_data=json.dumps(
+            {"block": "dialogs", "action": "backward", "page": page - 1}
+        ),
+    )
+    back = InlineKeyboardButton(
+        text="Назад", callback_data=json.dumps({"block": "main_menu"})
+    )
+    forward = InlineKeyboardButton(
+        text=">",
+        callback_data=json.dumps(
+            {"block": "dialogs", "action": "forward", "page": page + 1}
+        ),
+    )
+    buttons[-1].extend([backward, back, forward])
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)
