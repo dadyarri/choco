@@ -3,7 +3,12 @@ from typing import Optional
 
 import aiohttp
 
-from utils.client.models import GetAllGoodsResponse, BaseGoodResponse
+from utils.client.models import (
+    GetAllGoodsResponse,
+    BaseGoodResponse,
+    GetAllChatsResponse,
+    BaseChatResponse,
+)
 
 
 class ChocoManagerClient:
@@ -113,4 +118,19 @@ class ChocoManagerClient:
                     "market_id": market_id,
                 },
             )
+        )
+
+    async def get_all_chats(self, page: int) -> GetAllChatsResponse:
+        page_ = await self._make_get_request("chats/", {"page": page})
+        return GetAllChatsResponse(**page_)
+
+    async def get_chat_by_id(self, chat_id: int):
+        return BaseChatResponse(**await self._make_get_request(f"goods/id/{chat_id}"))
+
+    async def get_chat_by_vk_id(self, vk_id: int):
+        return BaseChatResponse(**await self._make_get_request(f"chats/vk_id/{vk_id}"))
+
+    async def create_chat(self, vk_id: int):
+        return BaseChatResponse(
+            **await self._make_post_request("chats/create", {"vk_id": vk_id})
         )
