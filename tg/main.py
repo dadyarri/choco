@@ -262,7 +262,7 @@ async def _dialog_menu(query: types.CallbackQuery):
     user = (await vk.users.get([str(chat.response.vk_id)]))[0]
     full_name = f"{user.first_name} {user.last_name}"
     await query.message.edit_text(
-        f"Диалог с {full_name}\nГород: {user.city or 'Не указно'}",
+        f"Диалог с {full_name}\nГород: {user.city.title or 'Не указано'}",
         reply_markup=dialog_menu(chat_id),
     )
     await query.answer()
