@@ -126,7 +126,8 @@ class ChocoManagerClient:
         return GetAllChatsResponse(**page_)
 
     async def get_chat_by_id(self, chat_id: int):
-        return BaseChatResponse(**await self._make_get_request(f"goods/id/{chat_id}"))
+        resp = await self._make_get_request(f"chats/id/{chat_id}")
+        return BaseChatResponse(**resp)
 
     async def get_chat_by_vk_id(self, vk_id: int):
         return BaseChatResponse(**await self._make_get_request(f"chats/vk_id/{vk_id}"))
