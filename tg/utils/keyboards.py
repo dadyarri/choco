@@ -214,3 +214,19 @@ def dialog_menu(chat_id: int):
     buttons[-1].append(back)
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def back_to_dialog_menu(chat_id: int):
+    buttons = [[]]
+    back = InlineKeyboardButton(
+        text="Назад",
+        callback_data=json.dumps(
+            {
+                "block": "dialogs",
+                "action": "select",
+                "value": chat_id,
+            },
+        ),
+    )
+    buttons[-1].append(back)
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
