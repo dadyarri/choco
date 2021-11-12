@@ -12,7 +12,13 @@ from vkbottle import API
 from utils.client import ChocoManagerClient
 from utils.core import get_tg_token, is_float, round_leftover, generate_post_message
 from utils.filters import IsAdmin, CallbackFilter
-from utils.keyboards import main_menu_markup, list_goods, manage_leftovers, back_markup
+from utils.keyboards import (
+    main_menu_markup,
+    list_goods,
+    manage_leftovers,
+    back_markup,
+    active_chats,
+)
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -212,7 +218,39 @@ async def _update_post(query: types.CallbackQuery):
 
 @dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "init"}))
 async def _dialogs(query: types.CallbackQuery):
-    await query.answer("В разработке...")
+    chats = await client.get_all_chats()
+    await query.message.edit_text(
+        "Активные чаты", reply_markup=await active_chats(vk, chats.response.items)
+    )
+    await query.answer()
+
+
+@dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "backward"}))
+async def _dialogs_go_backward(query: types.CallbackQuery):
+    page = json.loads(query.data)["page"]
+    if page == 0:
+        await query.answer("Уже выбрана первая страница!")
+    else:
+        chats = await client.get_all_chats(page)
+        await query.message.edit_text(
+            "Активные диалоги",
+            reply_markup=await active_chats(vk, chats.response.items, page=page),
+        )
+        await query.answer()
+
+
+@dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "forward"}))
+async def _dialogs_go_forward(query: types.CallbackQuery):
+    page = json.loads(query.data)["page"]
+    chats = await client.get_all_chats(page)
+    if chats.response.items:
+        await query.message.edit_text(
+            "Активные диалоги",
+            reply_markup=await active_chats(vk, chats.response.items, page),
+        )
+        await query.answer()
+    else:
+        await query.answer("Элементов больше нет")
 
 
 @dp.callback_query_handler(CallbackFilter({"block": "list", "action": "init"}))
