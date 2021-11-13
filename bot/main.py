@@ -27,9 +27,13 @@ async def send_user_message_to_admins(message: Message):
         resp = await message.ctx_api.users.get(user_ids=[str(message.from_id)])
         first_name = resp[0].first_name
         last_name = resp[0].last_name
-        group_id = os.getenv("VK_GROUP")
-        tg_msg = "**Новое сообщение от {0} {1}**:\n{2}\nLink: https://vk.com/gim{3}?sel={4}".format(
-            first_name, last_name, message.text, group_id, message.from_id
+        try:
+            chat = await client.get_chat_by_vk_id(message.from_id)
+        except ValidationError:
+            chat = await client.create_chat(message.from_id)
+        await client.enable_chat(chat.response.id)
+        tg_msg = "**Новое сообщение от {0} {1}**:\n{2}".format(
+            first_name, last_name, message.text
         )
         await send_message_to_telegram(tg_msg)
 
