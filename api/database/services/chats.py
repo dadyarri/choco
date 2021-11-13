@@ -34,4 +34,4 @@ async def get_chat_by_vk_id(vk_id: int) -> models.Chat:
 async def set_activity(chat_id: int, state: bool) -> models.Chat:
     async with in_transaction():
         chat = await models.Chat.get(id=chat_id)
-        return await chat.update_from_dict({"state": state})
+        return await chat.update_from_dict({"is_active": state})
