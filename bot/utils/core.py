@@ -1,4 +1,7 @@
+import json
+import logging
 import os
+from typing import Optional
 
 import aiohttp
 
@@ -17,14 +20,22 @@ def get_admins_ids():
     return list(map(int, os.getenv("ADMINS_IDS").split(",")))
 
 
-async def send_message_to_telegram(message: str):
-    token = os.getenv("TG_TOKEN")
+async def send_message_to_telegram(
+    message: str,
+    markup: Optional[dict[str, list[list[dict[str, str]]]]] = None,
+):
+    token = get_tg_token()
     chats = os.getenv("SEND_IDS")
     async with aiohttp.ClientSession() as session:
         for chat in chats.split(","):
             await session.post(
                 "https://api.telegram.org/bot{0}/sendMessage".format(token),
-                params={"chat_id": chat, "text": message, "parse_mode": "Markdown"},
+                params={
+                    "chat_id": chat,
+                    "text": message,
+                    "parse_mode": "MarkdownV2",
+                    "reply_markup": json.dumps(markup),
+                },
             )
 
 
