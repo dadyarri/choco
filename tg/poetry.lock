@@ -192,7 +192,7 @@ watchgod = ">=0.7,<0.8"
 
 [[package]]
 name = "vkbottle-types"
-version = "5.131.123.2"
+version = "5.131.129"
 description = "Types for vkbottle"
 category = "main"
 optional = false
@@ -528,8 +528,8 @@ vkbottle = [
     {file = "vkbottle-3.0.2.tar.gz", hash = "sha256:e9daa7f0e53569b4a89ebcb31660e9f6b424bdf67c86e55eeeb2bde38ec63b10"},
 ]
 vkbottle-types = [
-    {file = "vkbottle-types-5.131.123.2.tar.gz", hash = "sha256:2a6f419e395f74c0952ea99c8f4c3106a3ca820087e7be719b5d8cad2ca7d9f6"},
-    {file = "vkbottle_types-5.131.123.2-py3-none-any.whl", hash = "sha256:8aafd479890d948f1cc5a73ff07ca7f6597969f561bd2b4e24dae899b9aea742"},
+    {file = "vkbottle-types-5.131.129.tar.gz", hash = "sha256:5d4f4766458e87ca3896b3d73409cfb2d27cdf3eb1f9b49f79c348f629c6d122"},
+    {file = "vkbottle_types-5.131.129-py3-none-any.whl", hash = "sha256:574a0727d11814ab20b0e34e90bdddbf4dee061861d82871f7f5db9b81189f83"},
 ]
 watchgod = [
     {file = "watchgod-0.7-py3-none-any.whl", hash = "sha256:d6c1ea21df37847ac0537ca0d6c2f4cdf513562e95f77bb93abbcf05573407b7"},
