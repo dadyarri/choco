@@ -269,6 +269,16 @@ async def create_chat(vk_id: int):
     }
 
 
+@app.post("/chats/{chat_id}/enable", response_model=BaseChatResponse, tags=["chats"])
+async def enable_chat(chat_id: int):
+    return {"response": await chats.set_activity(chat_id, True)}
+
+
+@app.post("/chats/{chat_id}/disable", response_model=BaseChatResponse, tags=["chats"])
+async def disable_chat(chat_id: int):
+    return {"response": await chats.set_activity(chat_id, False)}
+
+
 register_tortoise(
     app,
     config=TORTOISE_ORM,
