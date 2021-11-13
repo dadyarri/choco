@@ -5,8 +5,10 @@ import re
 
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import CommandStart, Command
 from aiogram.dispatcher.filters.filters import AndFilter, OrFilter
+from aiogram.dispatcher.filters.state import StatesGroup, State
 from vkbottle import API
 
 from utils.client import ChocoManagerClient
@@ -28,13 +30,17 @@ bot = Bot(token=get_tg_token())
 vk = API(os.getenv("VK_TOKEN"))
 user_vk = API(os.getenv("VK_USER_TOKEN"))
 user_vk.API_VERSION = "5.140"
-dp = Dispatcher(bot)
 client = ChocoManagerClient()
 storage = MemoryStorage()
+dp = Dispatcher(bot, storage=storage)
 
 
 def extract_chat_id(msg: str) -> int:
     return int(re.search(r"\?sel=(\d+)", msg)[1])
+
+
+class States(StatesGroup):
+    input_message = State()
 
 
 @dp.message_handler(OrFilter(AndFilter(CommandStart(), IsAdmin(True)), Command("menu")))
@@ -256,11 +262,16 @@ async def _dialogs_go_forward(query: types.CallbackQuery):
 
 
 @dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "select"}))
-async def _dialog_menu(query: types.CallbackQuery):
+async def _dialog_menu(query: types.CallbackQuery, state: FSMContext):
     chat_id = json.loads(query.data)["value"]
     chat = await client.get_chat_by_id(chat_id)
     user = (await vk.users.get([str(chat.response.vk_id)]))[0]
     full_name = f"{user.first_name} {user.last_name}"
+    await state.set_data(
+        data={
+            "active_chat": chat.response.id,
+        },
+    )
     await query.message.edit_text(
         f"Диалог с {full_name}",
         reply_markup=dialog_menu(chat_id),
@@ -280,6 +291,29 @@ async def _dialogs_show_history(query: types.CallbackQuery):
     )
     await query.message.edit_text(messages, reply_markup=back_to_dialog_menu(chat_id))
     await query.answer()
+
+
+@dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "write"}))
+async def _dialogs_ask_message(query: types.CallbackQuery):
+    await States.input_message.set()
+    await query.message.edit_text("Введите текст сообщения")
+    await query.answer()
+
+
+@dp.message_handler(state=States.input_message)
+async def _send_message_to_vk(message: types.Message, state: FSMContext):
+    text = message.text
+    data = await state.get_data()
+    chat = await client.get_chat_by_id(data.get("active_chat"))
+    await vk.messages.send(user_id=chat.response.vk_id, random_id=0, message=text)
+
+    await message.delete()
+
+    await state.finish()
+    await message.answer(
+        "Сообщение отправлено",
+        reply_markup=back_to_dialog_menu(data.get("active_chat")),
+    )
 
 
 @dp.callback_query_handler(CallbackFilter({"block": "list", "action": "init"}))
