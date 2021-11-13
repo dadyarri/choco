@@ -1,11 +1,10 @@
+import json
 import logging
-import os
 
 from pydantic import ValidationError
 from vkbottle import Bot
 from vkbottle.bot import Message
 from vkbottle_types.events import GroupEventType, MarketOrderNew
-from vkbottle_types.objects import MarketOrder
 
 from utils.client import ChocoManagerClient
 from utils.core import (
@@ -35,7 +34,23 @@ async def send_user_message_to_admins(message: Message):
         tg_msg = "**Новое сообщение от {0} {1}**:\n{2}".format(
             first_name, last_name, message.text
         )
-        await send_message_to_telegram(tg_msg)
+        tg_markup = {
+            "inline_keyboard": [
+                [
+                    {
+                        "text": "Открыть",
+                        "callback_data": json.dumps(
+                            {
+                                "block": "dialogs",
+                                "action": "select",
+                                "value": chat.response.id,
+                            }
+                        ),
+                    },
+                ],
+            ],
+        }
+        await send_message_to_telegram(tg_msg, tg_markup)
 
         if message.attachments is not None:
             for attach in message.attachments:
