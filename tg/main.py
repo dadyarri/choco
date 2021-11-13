@@ -316,6 +316,16 @@ async def _send_message_to_vk(message: types.Message, state: FSMContext):
     )
 
 
+@dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "disable"}))
+async def _dialogs_disable(query: types.CallbackQuery):
+    chat_id = json.loads(query.data)["value"]
+    await client.disable_chat(chat_id)
+    chats = await client.get_all_chats()
+    await query.message.edit_text(
+        "Чат отключен", reply_markup=await active_chats(vk, chats.response.items)
+    )
+
+
 @dp.callback_query_handler(CallbackFilter({"block": "list", "action": "init"}))
 async def _show_list(query: types.CallbackQuery):
     await query.message.edit_text(
