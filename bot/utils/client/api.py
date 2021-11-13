@@ -1,12 +1,21 @@
+import logging
 import os
 from typing import Optional
 
 import aiohttp
 
-from utils.client.models import GetAllGoodsResponse, BaseGoodResponse
+from utils.client.models import (
+    GetAllGoodsResponse,
+    BaseGoodResponse,
+    GetAllChatsResponse,
+    BaseChatResponse,
+)
 
 
 class ChocoManagerClient:
+    def __init__(self):
+        pass
+
     @staticmethod
     def _get_api_host():
         if os.getenv("ENV") == "DEV":
@@ -110,4 +119,20 @@ class ChocoManagerClient:
                     "market_id": market_id,
                 },
             )
+        )
+
+    async def get_all_chats(self, page: int = 0) -> GetAllChatsResponse:
+        page_ = await self._make_get_request("chats", {"page": page})
+        return GetAllChatsResponse(**page_)
+
+    async def get_chat_by_id(self, chat_id: int):
+        resp = await self._make_get_request(f"chats/id/{chat_id}")
+        return BaseChatResponse(**resp)
+
+    async def get_chat_by_vk_id(self, vk_id: int):
+        return BaseChatResponse(**await self._make_get_request(f"chats/vk_id/{vk_id}"))
+
+    async def create_chat(self, vk_id: int):
+        return BaseChatResponse(
+            **await self._make_post_request("chats/create", {"vk_id": vk_id})
         )

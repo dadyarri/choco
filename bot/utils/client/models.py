@@ -12,6 +12,12 @@ class Good(BaseModel):
     market_id: Optional[int]
 
 
+class Chat(BaseModel):
+    id: int
+    vk_id: int
+    is_active: bool
+
+
 class BaseResponseModel(BaseModel):
     response: str
 
@@ -20,10 +26,23 @@ class BaseGoodResponse(BaseModel):
     response: Good
 
 
+class BaseChatResponse(BaseModel):
+    response: Chat
+
+
 class GetAllGoodsResponseModel(BaseModel):
     count: int
     items: list[Good]
 
 
+class GetAllChatsResponseModel(BaseModel):
+    count: int
+    items: list[Chat]
+
+
 class GetAllGoodsResponse(BaseModel):
     response: GetAllGoodsResponseModel
+
+
+class GetAllChatsResponse(BaseModel):
+    response: GetAllChatsResponseModel
