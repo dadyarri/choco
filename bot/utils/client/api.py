@@ -138,11 +138,9 @@ class ChocoManagerClient:
         )
 
     async def enable_chat(self, chat_id: int):
-        return BaseChatResponse(
-            **await self._make_post_request(f"chats/{chat_id}/enable")
-        )
+        resp = await self._make_post_request(f"chats/{chat_id}/enable")
+        return BaseChatResponse(**resp)
 
     async def disable_chat(self, chat_id: int):
-        return BaseChatResponse(
-            **await self._make_post_request(f"chats/{chat_id}/disable")
-        )
+        resp = await self._make_post_request(f"chats/{chat_id}/disable")
+        return BaseChatResponse(**resp)
