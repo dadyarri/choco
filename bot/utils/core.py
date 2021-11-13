@@ -7,6 +7,12 @@ def get_vk_token():
     return os.getenv("VK_TOKEN")
 
 
+def get_tg_token() -> str:
+    if os.getenv("ENV") == "DEV":
+        return os.getenv("TG_TOKEN_DEV")
+    return os.getenv("TG_TOKEN")
+
+
 def get_admins_ids():
     return list(map(int, os.getenv("ADMINS_IDS").split(",")))
 
