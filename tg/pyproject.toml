@@ -6,7 +6,7 @@ authors = ["Daniil <dadyarri@gmail.com>"]
 license = "Propreitary"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 aiogram = "^2.11.2"
 vkbottle = "^3.0.2"
 pydantic = "^1.8.2"
