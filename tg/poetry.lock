@@ -110,6 +110,23 @@ optional = false
 python-versions = ">=3.7,<4.0"
 
 [[package]]
+name = "client"
+version = "1.5.0"
+description = ""
+category = "main"
+optional = false
+python-versions = "^3.9"
+develop = false
+
+[package.dependencies]
+aiohttp = "^3.8.0"
+pydantic = "^1.8.2"
+
+[package.source]
+type = "directory"
+url = "../client"
+
+[[package]]
 name = "frozenlist"
 version = "1.2.0"
 description = "A list-like structure which implements collections.abc.MutableSequence"
@@ -224,8 +241,8 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.8"
-content-hash = "7b8d330850f3824c76655685cd311d579fef83b662dbcdebd3fb710af42bda45"
+python-versions = "^3.9"
+content-hash = "4722d31df37757bad13c523cf3f40e44b004ac169e7c429c1c2d061e287b96d6"
 
 [metadata.files]
 aiogram = [
@@ -334,6 +351,7 @@ choicelib = [
     {file = "choicelib-0.1.4-py3-none-any.whl", hash = "sha256:2b600bd875201e31d3467ce7ed068558152db9c2a306886745ddf20b0ef270ff"},
     {file = "choicelib-0.1.4.tar.gz", hash = "sha256:fef2ed7252db1a49d3e75170f37ad0af1d76dc5bf7a748e16ebe141d463998fb"},
 ]
+client = []
 frozenlist = [
     {file = "frozenlist-1.2.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:977a1438d0e0d96573fd679d291a1542097ea9f4918a8b6494b06610dfeefbf9"},
     {file = "frozenlist-1.2.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:a8d86547a5e98d9edd47c432f7a14b0c5592624b496ae9880fb6332f34af1edc"},
