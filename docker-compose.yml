@@ -21,7 +21,9 @@ services:
 
   api:
     container_name: choco_api
-    build: ./api
+    build:
+      context: .
+      dockerfile: api/Dockerfile
     expose:
       - 8080
     ports:
