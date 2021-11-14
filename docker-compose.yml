@@ -29,7 +29,9 @@ services:
     ports:
       - "8080:8000"
     env_file: .env
-    command: gunicorn api.main:app
+    environment:
+      PYTHONPATH: api
+    command: uvicorn api.main:app --host choco.api
     volumes:
       - ./api:/code/api
     links:
@@ -47,6 +49,8 @@ services:
       context: .
       dockerfile: bot/Dockerfile
     env_file: .env
+    environment:
+      PYTHONPATH: bot
     command: python /code/bot/main.py
     links:
       - api
@@ -63,6 +67,8 @@ services:
       context: .
       dockerfile: tg/Dockerfile
     env_file: .env
+    environment:
+      PYTHONPATH: tg
     command: python /code/tg/main.py
     volumes:
       - ./tg:/code/tg
