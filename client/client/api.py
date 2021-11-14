@@ -1,10 +1,9 @@
-import logging
 import os
 from typing import Optional
 
 import aiohttp
 
-from utils.client.models import (
+from .models import (
     GetAllGoodsResponse,
     BaseGoodResponse,
     GetAllChatsResponse,
