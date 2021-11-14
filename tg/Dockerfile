@@ -7,11 +7,13 @@ RUN pip install poetry
 
 # Copy Poetry's files
 WORKDIR /code
-COPY poetry.lock pyproject.toml /code/
+COPY tg/poetry.lock tg/pyproject.toml /code/tg/
+
+ADD client /code/client
 
 # Install deps
-RUN poetry config virtualenvs.create false \
+RUN cd tg && poetry config virtualenvs.create false \
  && poetry install --no-dev --no-interaction
 
 # Copy sources
-COPY . /code/tg
+COPY ./tg /code/tg

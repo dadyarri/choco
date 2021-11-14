@@ -55,7 +55,9 @@ services:
 
   telegram:
     container_name: choco_tg
-    build: ./tg
+    build:
+      context: .
+      dockerfile: tg/Dockerfile
     env_file: .env
     command: python /code/tg/main.py
     volumes:
