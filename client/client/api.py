@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Optional
 
@@ -28,6 +29,7 @@ class ChocoManagerClient:
         async with aiohttp.ClientSession() as session:
             url = self._get_request_url(endpoint)
             async with session.get(url, params=params) as resp:
+                logging.debug(resp)
                 result = await resp.json()
             await session.close()
 
@@ -37,6 +39,7 @@ class ChocoManagerClient:
         async with aiohttp.ClientSession() as session:
             url = self._get_request_url(endpoint)
             async with session.post(url, params=params) as resp:
+                logging.debug(resp)
                 result = await resp.json()
             await session.close()
 
