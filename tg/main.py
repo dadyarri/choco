@@ -9,9 +9,9 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import CommandStart, Command
 from aiogram.dispatcher.filters.filters import AndFilter, OrFilter
 from aiogram.dispatcher.filters.state import StatesGroup, State
+from client import ChocoManagerClient
 from vkbottle import API
 
-from utils.client import ChocoManagerClient
 from utils.core import get_tg_token, is_float, round_leftover, generate_post_message
 from utils.filters import IsAdmin, CallbackFilter
 from utils.keyboards import (
