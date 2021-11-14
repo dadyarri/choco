@@ -1,12 +1,12 @@
 import json
 import logging
 
+from client import ChocoManagerClient
 from pydantic import ValidationError
 from vkbottle import Bot
 from vkbottle.bot import Message
 from vkbottle_types.events import GroupEventType, MarketOrderNew
 
-from utils.client import ChocoManagerClient
 from utils.core import (
     get_vk_token,
     get_admins_ids,
