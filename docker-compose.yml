@@ -41,7 +41,9 @@ services:
 
   vkontakte:
     container_name: choco_vk
-    build: ./bot
+    build:
+      context: .
+      dockerfile: bot/Dockerfile
     env_file: .env
     command: python /code/bot/main.py
     links:
@@ -62,6 +64,8 @@ services:
     command: python /code/tg/main.py
     volumes:
       - ./tg:/code/tg
+    depends_on:
+      - api
     networks:
       - net
 
