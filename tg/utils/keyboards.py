@@ -3,8 +3,7 @@ import json
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from vkbottle import API
 
-from utils.client import Good
-from utils.client.models import Chat
+from client.models import Good, Chat
 
 
 def back_markup():

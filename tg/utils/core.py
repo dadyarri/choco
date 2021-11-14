@@ -1,7 +1,7 @@
 import os
 from typing import Union
 
-from utils.client import ChocoManagerClient
+from client import ChocoManagerClient
 
 
 def get_tg_token() -> str:
