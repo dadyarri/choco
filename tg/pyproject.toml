@@ -9,8 +9,6 @@ license = "Propreitary"
 python = "^3.9"
 aiogram = "^2.11.2"
 vkbottle = "^3.0.2"
-pydantic = "^1.8.2"
-aiohttp = "^3.8.0"
 client = {path = "../client"}
 
 [tool.poetry.dev-dependencies]
