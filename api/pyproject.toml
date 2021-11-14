@@ -12,6 +12,7 @@ asyncpg = "^0.24.0"
 gunicorn = "^20.1.0"
 aerich = "^0.5.8"
 toml = "^0.10.2"
+client = {path = "../client"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
