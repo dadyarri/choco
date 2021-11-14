@@ -9,6 +9,7 @@ python = "^3.9"
 vkbottle = "^3.0.2"
 aiohttp = "^3.7.4"
 sentry-sdk = "^1.4.3"
+client = {path = "../client"}
 
 [tool.poetry.dev-dependencies]
 
