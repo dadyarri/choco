@@ -11,8 +11,8 @@ from fastapi import FastAPI
 from starlette import status
 from tortoise.contrib.fastapi import register_tortoise
 
-from database.core.init import TORTOISE_ORM
-from database.services import goods, chats
+from .database.core.init import TORTOISE_ORM
+from .database.services import goods, chats
 
 logging.basicConfig(level="DEBUG")
 version = toml.load("pyproject.toml")["tool"]["poetry"]["version"]
