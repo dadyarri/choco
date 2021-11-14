@@ -15,7 +15,7 @@ from .database.core.init import TORTOISE_ORM
 from .database.services import goods, chats
 
 logging.basicConfig(level="DEBUG")
-version = toml.load("pyproject.toml")["tool"]["poetry"]["version"]
+version = "1.5.0"
 tags_metadata = [
     {"name": "products", "description": "Управление остатками и ценами товара"},
     {"name": "chats", "description": "Управление чатами"},
