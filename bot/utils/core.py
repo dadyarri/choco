@@ -32,7 +32,7 @@ async def send_message_to_telegram(
                 "https://api.telegram.org/bot{0}/sendMessage".format(token),
                 params={
                     "chat_id": chat,
-                    "text": message,
+                    "text": message.replace("-", "\\-"),
                     "parse_mode": "MarkdownV2",
                     "reply_markup": json.dumps(markup),
                 },
