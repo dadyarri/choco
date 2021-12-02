@@ -37,14 +37,16 @@ async def send_message_to_telegram(
     chats = os.getenv("SEND_IDS")
     async with aiohttp.ClientSession() as session:
         for chat in chats.split(","):
+            params = {
+                "chat_id": chat,
+                "text": escape_md(message),
+                "parse_mode": "MarkdownV2",
+            }
+            if markup is not None:
+                params["reply_markup"] = json.dumps(markup)
             resp = await session.post(
                 "https://api.telegram.org/bot{0}/sendMessage".format(token),
-                params={
-                    "chat_id": chat,
-                    "text": escape_md(message),
-                    "parse_mode": "MarkdownV2",
-                    "reply_markup": json.dumps(markup),
-                },
+                params=params,
             )
             logging.debug(await resp.json())
 
