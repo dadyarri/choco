@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 from typing import Optional
 
 import aiohttp
@@ -20,6 +21,14 @@ def get_admins_ids():
     return list(map(int, os.getenv("ADMINS_IDS").split(",")))
 
 
+def escape_md(message):
+    re.sub(
+        pattern=re.compile(r"([_*\[\]()~`>#+\-=|{}.!\\])"),
+        repl=r"\\\1",
+        string=message,
+    )
+
+
 async def send_message_to_telegram(
     message: str,
     markup: Optional[dict[str, list[list[dict[str, str]]]]] = None,
@@ -32,7 +41,7 @@ async def send_message_to_telegram(
                 "https://api.telegram.org/bot{0}/sendMessage".format(token),
                 params={
                     "chat_id": chat,
-                    "text": message.replace("-", "\\-"),
+                    "text": escape_md(message),
                     "parse_mode": "MarkdownV2",
                     "reply_markup": json.dumps(markup),
                 },
