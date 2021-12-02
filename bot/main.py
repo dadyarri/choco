@@ -55,7 +55,11 @@ async def send_user_message_to_admins(message: Message):
         if message.attachments is not None:
             for attach in message.attachments:
                 if attach.photo is not None:
-                    await send_photo_to_telegram(attach.photo.sizes[-1].url)
+                    await send_photo_to_telegram(
+                        attach.photo.sizes[-1].url,
+                        first_name=first_name,
+                        last_name=last_name,
+                    )
                 if attach.market is not None:
                     await send_photo_to_telegram(
                         attach.market.thumb_photo,
@@ -100,8 +104,12 @@ async def new_order(order: MarketOrderNew):
     )
 
     for item in order.object.preview_order_items:
-        item_object = await client.get_good_by_market_id(item.item_id)
-        await client.decrement_leftover(item_object.response.id, item.quantity)
+        try:
+            item_object = await client.get_good_by_market_id(item.item_id)
+        except ValidationError:
+            logging.debug("Item not found")
+        else:
+            await client.decrement_leftover(item_object.response.id, item.quantity)
 
     await send_message_to_telegram(
         f"Новый заказ от {customer[0].last_name} {customer[0].first_name}:\n{order_items}\nОстатки обновлены."
