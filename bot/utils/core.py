@@ -21,8 +21,8 @@ def get_admins_ids():
     return list(map(int, os.getenv("ADMINS_IDS").split(",")))
 
 
-def escape_md(message):
-    re.sub(
+def escape_md(message: str) -> str:
+    return re.sub(
         pattern=re.compile(r"([_*\[\]()~`>#+\-=|{}.!\\])"),
         repl=r"\\\1",
         string=message,
