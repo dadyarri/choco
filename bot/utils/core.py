@@ -37,7 +37,7 @@ async def send_message_to_telegram(
                     "reply_markup": json.dumps(markup),
                 },
             )
-            logging.debug(resp.json())
+            logging.debug(await resp.json())
 
 
 async def send_photo_to_telegram(photo_url: str, **kwargs):
