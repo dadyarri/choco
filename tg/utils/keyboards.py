@@ -5,6 +5,8 @@ from vkbottle import API
 
 from client.models import Good, Chat
 
+from utils.core import abbreviate_name
+
 
 def back_markup():
     kb = InlineKeyboardMarkup()
@@ -55,7 +57,7 @@ def list_goods(goods: list[Good], page: int):
 
         buttons[-1].append(
             InlineKeyboardButton(
-                text=good.name,
+                text=abbreviate_name(good.name),
                 callback_data=json.dumps(
                     {
                         "block": "leftovers",
