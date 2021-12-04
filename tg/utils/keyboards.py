@@ -220,7 +220,18 @@ def dialog_menu(chat_id: int):
         ),
     )
 
-    buttons[-1].append(disable)
+    read = InlineKeyboardButton(
+        "Прочитать",
+        callback_data=json.dumps(
+            {
+                "block": "dialogs",
+                "action": "read",
+                "value": chat_id,
+            },
+        ),
+    )
+
+    buttons[-1].extend([disable, read])
 
     buttons.append([])
     back = InlineKeyboardButton(
