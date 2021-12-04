@@ -1,4 +1,5 @@
 import os
+import re
 from typing import Union
 
 from client import ChocoManagerClient
@@ -38,3 +39,14 @@ async def get_all_goods():
         if leftover := round_leftover(item.leftover):
             result.append(f"{item.name} x{leftover} ({item.retail_price}₽)")
     return result
+
+
+def abbreviate_name(name: str) -> str:
+    abbr = re.sub("молочный", "Мол.", name, re.IGNORECASE)
+    abbr = re.sub("т[её]мный", "Т.", abbr, re.IGNORECASE)
+    abbr = re.sub("мармелад", "Мар.", abbr, re.IGNORECASE)
+    abbr = re.sub("белый", "Б.", abbr, re.IGNORECASE)
+    abbr = re.sub("масса", "М.", abbr, re.IGNORECASE)
+    abbr = re.sub("паста", "П.", abbr, re.IGNORECASE)
+    abbr = re.sub("шоколад", "Ш.", abbr, re.IGNORECASE)
+    return abbr
