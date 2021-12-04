@@ -43,7 +43,12 @@ class States(StatesGroup):
     input_message = State()
 
 
-@dp.message_handler(OrFilter(AndFilter(CommandStart(), IsAdmin(True)), Command("menu")))
+@dp.message_handler(
+    OrFilter(
+        AndFilter(CommandStart(), IsAdmin(True)),
+        Command("menu"),
+    ),
+)
 async def _main_menu(message: types.Message):
     await message.answer("Добро пожаловать", reply_markup=main_menu_markup())
 
@@ -277,6 +282,21 @@ async def _dialog_menu(query: types.CallbackQuery, state: FSMContext):
         reply_markup=dialog_menu(chat_id),
     )
     await query.answer()
+
+
+@dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "read"}))
+async def _dialogs_show_history(query: types.CallbackQuery):
+    chat_id = json.loads(query.data)["value"]
+    chat = await client.get_chat_by_id(chat_id)
+    await vk.messages.mark_as_read(
+        mark_conversation_as_read=True,
+        peer_id=chat.response.vk_id,
+    )
+    await vk.messages.mark_as_answered_conversation(
+        peer_id=chat.response.vk_id,
+        group_id=os.getenv("VK_GROUP"),
+    )
+    await query.answer("Диалог отмечен прочитанным")
 
 
 @dp.callback_query_handler(
