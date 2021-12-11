@@ -14,7 +14,7 @@ from .database.core.init import TORTOISE_ORM
 from .database.services import goods, chats
 
 logging.basicConfig(level="DEBUG")
-version = "1.5.0"
+version = "1.5.1"
 tags_metadata = [
     {"name": "products", "description": "Управление остатками и ценами товара"},
     {"name": "chats", "description": "Управление чатами"},
