@@ -84,7 +84,7 @@ async def change_good_wholesale_price(good_id: int, new_price: int):
 async def change_good_retail_price(good_id: int, new_price: int):
     async with in_transaction():
         good = await models.Good.get(id=good_id)
-        new_good = await good.update_from_dict({"wholesale_price": new_price})
+        new_good = await good.update_from_dict({"retail_price": new_price})
         await new_good.save()
         return new_good
 
