@@ -1,9 +1,10 @@
 import json
 import logging
+import os
 
 from client import ChocoManagerClient
 from pydantic import ValidationError
-from vkbottle import Bot
+from vkbottle import Bot, API
 from vkbottle.bot import Message
 from vkbottle_types.events import GroupEventType, MarketOrderNew
 
@@ -17,6 +18,7 @@ from utils.core import (
 logging.basicConfig(level="DEBUG")
 
 bot = Bot(token=get_vk_token())
+vk = API(token=os.getenv("VK_USER_TOKEN"))
 client = ChocoManagerClient()
 
 
@@ -86,6 +88,8 @@ async def new_order(order: MarketOrderNew):
         f"- {item.title} {item.quantity} x {item.price.text} = {item.quantity * int(item.price.amount) / 100} ₽"
         for item in order.object.preview_order_items
     )
+    # FIXME: Временное решение, пока в VKbottle не появятся необходимые поля
+    order_info = await vk.request("market.getOrderById", {"order_id": order.object.id})
     customer = await order.ctx_api.users.get([str(order.object.user_id)])
 
     await order.ctx_api.messages.send(
@@ -94,12 +98,6 @@ async def new_order(order: MarketOrderNew):
             f"Здравствуйте. Вы заказали {order.object.items_count} товар(ов) на сумму {order.object.total_price.text}:\n"
             f"{order_items}"
         ),
-        random_id=0,
-    )
-
-    await order.ctx_api.messages.send(
-        user_id=order.object.user_id,
-        message="Укажите адрес доставки, номер телефона и удобное время получения заказа.",
         random_id=0,
     )
 
@@ -114,6 +112,20 @@ async def new_order(order: MarketOrderNew):
     await send_message_to_telegram(
         f"Новый заказ от {customer[0].last_name} {customer[0].first_name}:\n{order_items}\nОстатки обновлены."
     )
+
+    if not (delivery := order_info["response"]["order"]["delivery"]):
+        await order.ctx_api.messages.send(
+            user_id=order.object.user_id,
+            message="Укажите адрес доставки, номер телефона и удобное время получения заказа.",
+            random_id=0,
+        )
+    else:
+        await send_message_to_telegram(
+            f"""\
+        Адрес: {delivery['address']};
+        Телефон: {order_info['response']['order']['recipient']['phone']}
+        Имя: {order_info['response']['order']['recipient']['name']}"""
+        )
 
 
 if __name__ == "__main__":
