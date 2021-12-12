@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import textwrap
 
 from client import ChocoManagerClient
 from pydantic import ValidationError
@@ -121,10 +122,12 @@ async def new_order(order: MarketOrderNew):
         )
     else:
         await send_message_to_telegram(
-            f"""\
+            textwrap.dedent(
+                f"""\
         Адрес: {delivery['address']};
         Телефон: {order_info['response']['order']['recipient']['phone']}
         Имя: {order_info['response']['order']['recipient']['name']}"""
+            )
         )
 
 

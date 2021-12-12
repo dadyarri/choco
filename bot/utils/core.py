@@ -25,7 +25,7 @@ def escape_md(message: str) -> str:
     return re.sub(
         pattern=re.compile(r"([_\[\]()~`>#+\-=|{}.!\\])"),
         repl=r"\\\1",
-        string=message.replace("\t", ""),
+        string=message,
     )
 
 
