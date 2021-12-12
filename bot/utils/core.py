@@ -23,7 +23,7 @@ def get_admins_ids():
 
 def escape_md(message: str) -> str:
     return re.sub(
-        pattern=re.compile(r"([_*\[\]()~`>#+\-=|{}.!\\])"),
+        pattern=re.compile(r"([_\[\]()~`>#+\-=|{}.!\\])"),
         repl=r"\\\1",
         string=message,
     )
