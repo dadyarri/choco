@@ -1,9 +1,11 @@
 import json
 import logging
 import os
+import re
 import textwrap
 
 from client import ChocoManagerClient
+from geopy import HereV7
 from pydantic import ValidationError
 from vkbottle import Bot, API
 from vkbottle.bot import Message
@@ -121,14 +123,28 @@ async def new_order(order: MarketOrderNew):
             random_id=0,
         )
     else:
-        await send_message_to_telegram(
-            textwrap.dedent(
-                f"""\
-        Адрес: {delivery['address']};
-        Телефон: {order_info['response']['order']['recipient']['phone']}
-        Имя: {order_info['response']['order']['recipient']['name']}"""
+        geolocator = HereV7(os.getenv("HERE_TOKEN"))
+        regexp = re.compile(r"(\w+), (\w+), Улица, дом: (\w+), (\d+), .+")
+        parse_result = re.findall(regexp, delivery["address"])[0]
+        if parse_result:
+            parsed_address = " ".join(parse_result)
+            location = geolocator.geocode(parsed_address)
+            await send_message_to_telegram(
+                textwrap.dedent(
+                    f"""\
+                    Адрес: {delivery['address']};
+                    Телефон: {order_info['response']['order']['recipient']['phone']}
+                    Имя: {order_info['response']['order']['recipient']['name']}"""
+                )
             )
-        )
+            if location:
+                await send_message_to_telegram(
+                    textwrap.dedent(
+                        f"""https://yandex.ru/maps/20682/furmanov/?mode=routes&rtext=\
+                        {os.getenv("HOME_LATITUDE")},{os.getenv("HOME_LONGITUDE")}~{location.latitude},\
+                        {location.longitude}"""
+                    )
+                )
 
 
 if __name__ == "__main__":
