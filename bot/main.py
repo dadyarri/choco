@@ -129,26 +129,33 @@ async def new_order(order: MarketOrderNew):
         if parse_result:
             parsed_address = " ".join(parse_result)
             location = geolocator.geocode(parsed_address)
+            if location:
+                route_link = re.sub(
+                    "[\n ]",
+                    "",
+                    f"https://yandex.ru/maps/20682/furmanov/?mode=routes&rtext=\
+                        {os.getenv('HOME_LATITUDE')},{os.getenv('HOME_LONGITUDE')}~{location.latitude},\
+                        {location.longitude}",
+                )
+                tg_markup = {
+                    "inline_keyboard": [
+                        [
+                            {
+                                "text": "Маршрут в Я. Картах",
+                                "url": route_link,
+                            },
+                        ],
+                    ],
+                }
             await send_message_to_telegram(
                 textwrap.dedent(
                     f"""\
-                    Адрес: {delivery['address']};
-                    Телефон: {order_info['response']['order']['recipient']['phone']}
-                    Имя: {order_info['response']['order']['recipient']['name']}"""
-                )
+                                Адрес: {delivery['address']};
+                                Телефон: {order_info['response']['order']['recipient']['phone']}
+                                Имя: {order_info['response']['order']['recipient']['name']}"""
+                ),
+                tg_markup if location else None,
             )
-            if location:
-                await send_message_to_telegram(
-                    textwrap.dedent(
-                        f"""https://yandex.ru/maps/20682/furmanov/?mode=routes&rtext=\
-                        {os.getenv("HOME_LATITUDE")},{os.getenv("HOME_LONGITUDE")}~{location.latitude},\
-                        {location.longitude}""".replace(
-                            "\n", ""
-                        ).replace(
-                            " ", ""
-                        )
-                    )
-                )
 
 
 if __name__ == "__main__":
