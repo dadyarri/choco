@@ -142,7 +142,7 @@ async def new_order(order: MarketOrderNew):
                     textwrap.dedent(
                         f"""https://yandex.ru/maps/20682/furmanov/?mode=routes&rtext=\
                         {os.getenv("HOME_LATITUDE")},{os.getenv("HOME_LONGITUDE")}~{location.latitude},\
-                        {location.longitude}"""
+                        {location.longitude}""".replace("\n", "").replace(" ", "")
                     )
                 )
 
