@@ -5,8 +5,8 @@ description = ""
 authors = ["Daniil <dadyarri@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-vkbottle = "^3.0.2"
+python = "^3.10"
+vkbottle = "^4.1"
 aiohttp = "^3.7.4"
 sentry-sdk = "^1.4.3"
 client = {path = "../client"}
