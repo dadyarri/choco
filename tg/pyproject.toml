@@ -6,9 +6,9 @@ authors = ["Daniil <dadyarri@gmail.com>"]
 license = "Propreitary"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-aiogram = "^2.11.2"
-vkbottle = "^3.0.2"
+python = "^3.10"
+aiogram = "^2.18"
+vkbottle = "^4.1"
 client = {path = "../client"}
 
 [tool.poetry.dev-dependencies]
