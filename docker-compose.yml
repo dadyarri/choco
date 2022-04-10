@@ -31,6 +31,7 @@ services:
     env_file: .env
     environment:
       PYTHONPATH: api
+    restart: always
     command: uvicorn api.main:app --host choco.api
     volumes:
       - ./api:/code/api
