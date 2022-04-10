@@ -13,7 +13,7 @@ ADD client /code/client
 
 # Install deps
 RUN cd api && poetry config virtualenvs.create false
-RUN cd api && poetry install --no-dev --no-interaction
+RUN poetry install --no-dev --no-interaction
 
 # Copy sources
 COPY ./tg /code/tg
