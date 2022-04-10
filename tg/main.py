@@ -1,4 +1,3 @@
-import hashlib
 import json
 import logging
 import os
@@ -67,18 +66,24 @@ async def _manage_leftovers(query: types.InlineQuery):
     goods = await client.get_all_goods()
     choices = [g.name for g in goods.response.items]
     logging.debug(f"{choices=}")
-    search_results = process.extract(text, choices)
+    search_results = process.extract(text, choices, limit=5)
     logging.debug(f"{search_results=}")
     items = []
     for result in search_results:
-        items.append(
-            types.InlineQueryResultArticle(
-                id=hashlib.md5(result[0].encode()).hexdigest(),
-                title=result[0],
-                description="",
-                input_message_content=types.InputTextMessageContent(result[0]),
-            ),
-        )
+        item = next(filter(lambda y: y.name == result[0], goods.response.items), None)
+        desc = f"Цена: {item.retail_price}/{item.wholesale_price}₽\nОстаток: {round_leftover(item.leftover)} шт."
+        if item:
+            items.append(
+                types.InlineQueryResultArticle(
+                    id=item.id,
+                    title=result[0],
+                    description=desc,
+                    input_message_content=types.InputTextMessageContent(
+                        f"<b>{item.name}</b>\n{desc}",
+                        parse_mode="html",
+                    ),
+                ),
+            )
 
     await query.answer(results=items, cache_time=10)
 
