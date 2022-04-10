@@ -64,12 +64,12 @@ async def _main_menu_callback(query: types.CallbackQuery):
 @dp.inline_handler()
 async def _manage_leftovers(query: types.InlineQuery):
     text = query.query or ""
-    logging.info(f"Inline query: {text}")
+    logging.debug(f"Inline query: {text}")
     goods = await client.get_all_goods()
     choices = [g.name for g in goods.response.items]
-    logging.info(f"{choices=}")
+    logging.debug(f"{choices=}")
     search_results = process.extract(text, choices)
-    logging.info(f"{search_results=}")
+    logging.debug(f"{search_results=}")
     items = []
     for result in search_results:
         items.append(
