@@ -60,7 +60,7 @@ async def _main_menu_callback(query: types.CallbackQuery):
 
 
 @dp.inline_handler()
-async def _manage_leftovers(query: types.InlineQuery):
+async def _search_goods(query: types.InlineQuery):
     text = query.query or ""
     logging.debug(f"Inline query: {text}")
     goods = await client.get_all_goods()
