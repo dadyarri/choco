@@ -89,11 +89,6 @@ def manage_leftovers(is_float: bool):
         )
 
     buttons.append([])
-    buttons[-1].append(
-        InlineKeyboardButton(
-            "Назад", callback_data=json.dumps({"block": "leftovers", "action": "init"})
-        )
-    )
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
