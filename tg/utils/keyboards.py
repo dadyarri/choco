@@ -49,7 +49,7 @@ def main_menu_markup():
     return kb
 
 
-def manage_leftovers(is_float: bool):
+def manage_leftovers(is_float: bool, item_id: int):
     buttons = [[]]
 
     buttons[-1].extend(
@@ -57,13 +57,13 @@ def manage_leftovers(is_float: bool):
             InlineKeyboardButton(
                 "+",
                 callback_data=json.dumps(
-                    {"block": "leftovers", "action": "plus", "value": 1}
+                    {"block": "leftovers", "action": "plus", "value": 1, "id": item_id}
                 ),
             ),
             InlineKeyboardButton(
                 "-",
                 callback_data=json.dumps(
-                    {"block": "leftovers", "action": "minus", "value": 1}
+                    {"block": "leftovers", "action": "minus", "value": 1, "id": item_id}
                 ),
             ),
         ]
@@ -76,13 +76,13 @@ def manage_leftovers(is_float: bool):
                 InlineKeyboardButton(
                     "-0.3",
                     callback_data=json.dumps(
-                        {"block": "leftovers", "action": "minus", "value": 0.3}
+                        {"block": "leftovers", "action": "minus", "value": 0.3, "id": item_id}
                     ),
                 ),
                 InlineKeyboardButton(
                     "-0.8",
                     callback_data=json.dumps(
-                        {"block": "leftovers", "action": "minus", "value": 0.8}
+                        {"block": "leftovers", "action": "minus", "value": 0.8, "id": item_id}
                     ),
                 ),
             ]
