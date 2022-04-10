@@ -1,3 +1,4 @@
+import hashlib
 import json
 import logging
 import os
@@ -10,6 +11,7 @@ from aiogram.dispatcher.filters import CommandStart, Command
 from aiogram.dispatcher.filters.filters import AndFilter, OrFilter
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from client import ChocoManagerClient
+from thefuzz import process
 from vkbottle import API
 
 from utils.core import get_tg_token, is_float, round_leftover, generate_post_message
@@ -59,13 +61,27 @@ async def _main_menu_callback(query: types.CallbackQuery):
     await query.answer()
 
 
-@dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "init"}))
-async def _manage_leftovers(query: types.CallbackQuery):
-    goods = await client.get_all_goods(page=1)
-    await query.message.edit_text(
-        "Управление остатками", reply_markup=list_goods(goods.response.items, page=1)
-    )
-    await query.answer()
+@dp.inline_handler()
+async def _manage_leftovers(query: types.InlineQuery):
+    text = query.query or ""
+    logging.info(f"Inline query: {text}")
+    goods = await client.get_all_goods()
+    choices = [g.name for g in goods.response.items]
+    logging.info(f"{choices=}")
+    search_results = process.extract(text, choices)
+    logging.info(f"{search_results=}")
+    items = []
+    for result in search_results:
+        items.append(
+            types.InlineQueryResultArticle(
+                id=hashlib.md5(result[0].encode()).hexdigest(),
+                title=result[0],
+                description="",
+                input_message_content=types.InputTextMessageContent(result[0]),
+            ),
+        )
+
+    await query.answer(results=items, cache_time=10)
 
 
 @dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "backward"}))
