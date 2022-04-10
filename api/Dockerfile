@@ -12,8 +12,8 @@ COPY api/poetry.lock api/pyproject.toml /code/api/
 ADD client /code/client
 
 # Install deps
-RUN cd api && poetry config virtualenvs.create false \
- && poetry install --no-dev --no-interaction
+RUN cd api && poetry config virtualenvs.create false
+RUN cd api && poetry install --no-dev --no-interaction
 
 # Copy sources
 COPY ./api /code/api

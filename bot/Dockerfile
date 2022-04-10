@@ -12,8 +12,8 @@ COPY bot/poetry.lock bot/pyproject.toml /code/bot/
 ADD client /code/client
 
 # Install deps
-RUN cd bot && poetry config virtualenvs.create false \
- && poetry install --no-dev --no-interaction
+RUN cd api && poetry config virtualenvs.create false
+RUN cd api && poetry install --no-dev --no-interaction
 
 # Copy sources
 COPY ./bot /code/bot
