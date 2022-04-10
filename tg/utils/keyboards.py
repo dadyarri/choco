@@ -24,7 +24,7 @@ def main_menu_markup():
     kb.insert(
         InlineKeyboardButton(
             text="Остатки",
-            callback_data=json.dumps({"block": "leftovers", "action": "init"}),
+            switch_inline_query_current_chat="",
         ),
     )
     kb.insert(
