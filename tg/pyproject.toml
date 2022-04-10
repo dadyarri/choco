@@ -10,6 +10,7 @@ python = "^3.10"
 aiogram = "^2.18"
 vkbottle = "^4.1"
 client = {path = "../client"}
+thefuzz = "^0.19.0"
 
 [tool.poetry.dev-dependencies]
 
