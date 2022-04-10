@@ -18,7 +18,6 @@ from utils.core import get_tg_token, is_float, round_leftover, generate_post_mes
 from utils.filters import IsAdmin, CallbackFilter
 from utils.keyboards import (
     main_menu_markup,
-    list_goods,
     manage_leftovers,
     back_markup,
     active_chats,
