@@ -1,5 +1,3 @@
-import logging
-
 from tortoise.transactions import in_transaction
 
 from database import models
