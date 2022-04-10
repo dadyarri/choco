@@ -13,6 +13,7 @@ gunicorn = "^20.1.0"
 aerich = "^0.5.8"
 toml = "^0.10.2"
 client = {path = "../client"}
+uvicorn = {extras = ["standard"], version = "^0.17.6"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
