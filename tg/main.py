@@ -82,96 +82,38 @@ async def _search_goods(query: types.InlineQuery):
                         f"<b>{item.name}</b>\n{desc}",
                         parse_mode="html",
                     ),
+                    reply_markup=manage_leftovers(is_float(item.leftover), item.id)
                 ),
             )
 
     await query.answer(results=items, cache_time=10)
 
 
-@dp.callback_query_handler(
-    CallbackFilter({"block": "leftovers", "action": "select_product"})
-)
-async def _manage_leftovers_select_product(query: types.CallbackQuery):
-    product_id = json.loads(query.data)["value"]
-    product = await client.get_good_by_id(product_id)
-    await storage.set_data(
-        chat=query.message.chat.id,
-        user=query.from_user.id,
-        data={"product_id": product_id},
-    )
-    await query.message.edit_text(
-        (
-            f"Товар: {product.response.name}\n"
-            f"Розничная цена: {product.response.retail_price}₽\n"
-            f"Оптовая цена: {product.response.wholesale_price}₽\n"
-            f"Остаток: {round_leftover(product.response.leftover)} шт."
-        ),
-        reply_markup=manage_leftovers(is_float(product.response.leftover)),
-    )
-    await query.answer()
-
-
 @dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "plus"}))
 async def _manage_leftovers_plus(query: types.CallbackQuery):
-    data = await storage.get_data(
-        chat=query.message.chat.id,
-        user=query.from_user.id,
-    )
-    value = json.loads(query.data)["value"]
-    product_id = data["product_id"]
+    payload = json.loads(query.data)
+    value = payload["value"]
+    product_id = payload["id"]
     resp = await client.increment_leftover(product_id, value)
     if resp.response.market_id:
-        product = await user_vk.market.get_by_id(
-            [f"-{os.getenv('VK_GROUP')}_{resp.response.market_id}"]
-        )
         await user_vk.market.edit(
             -int(os.getenv("VK_GROUP")),
             resp.response.market_id,
-            name=product.items[0].title,
-            description=product.items[0].description,
-            category_id=product.items[0].category.id,
             stock_amount=resp.response.leftover,
         )
-    await query.message.edit_text(
-        (
-            f"Товар: {resp.response.name}\n"
-            f"Розничная цена: {resp.response.retail_price}₽\n"
-            f"Оптовая цена: {resp.response.wholesale_price}₽\n"
-            f"Остаток: {round_leftover(resp.response.leftover)} шт."
-        ),
-        reply_markup=manage_leftovers(is_float(resp.response.leftover)),
-    )
     await query.answer(f"Продукту {resp.response.name} добавлено {value} кг.")
 
 
 @dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "minus"}))
 async def _manage_leftovers_minus(query: types.CallbackQuery):
-    data = await storage.get_data(
-        chat=query.message.chat.id,
-        user=query.from_user.id,
-    )
-    value = json.loads(query.data)["value"]
-    product_id = data["product_id"]
+    payload = json.loads(query.data)
+    value = payload["value"]
+    product_id = payload["id"]
     resp = await client.decrement_leftover(product_id, value)
-    await query.message.edit_text(
-        (
-            f"Товар: {resp.response.name}\n"
-            f"Розничная цена: {resp.response.retail_price}₽\n"
-            f"Оптовая цена: {resp.response.wholesale_price}₽\n"
-            f"Остаток: {round_leftover(resp.response.leftover)} шт."
-        ),
-        reply_markup=manage_leftovers(is_float(resp.response.leftover)),
-    )
     if resp.response.market_id:
-        product = await user_vk.market.get_by_id(
-            [f"-{os.getenv('VK_GROUP')}_{resp.response.market_id}"]
-        )
         await user_vk.market.edit(
             -int(os.getenv("VK_GROUP")),
             resp.response.market_id,
-            name=product.items[0].title,
-            description=product.items[0].description,
-            category_id=product.items[0].category.id,
             stock_amount=resp.response.leftover,
         )
     await query.answer(f"У продукта {resp.response.name} убрано {value} кг.")
