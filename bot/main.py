@@ -87,8 +87,9 @@ async def new_order(order: MarketOrderNew):
     Когда поступает новый заказ, прислать пользователю его содержимое и спросить данные для доставки.
     Отправить содержимое заказа и количество товара в наличии (из нашей базы) в телеграм.
     """
+    # TODO: ловлю ошибку запихивания ивента в модели пидантика
     order_items = "\n".join(
-        f"- {item.title} {item.quantity} x {item.price.text} = {item.quantity * int(item.price.amount) / 100} ₽"
+        f"- {item.title.encode('UTF-8')} {item.quantity} x {item.price.text} = {item.quantity * int(item.price.amount) / 100} ₽"
         for item in order.object.preview_order_items
     )
     # FIXME: Временное решение, пока в VKbottle не появятся необходимые поля
