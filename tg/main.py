@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import re
 
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -33,10 +32,6 @@ user_vk.API_VERSION = "5.140"
 client = ChocoManagerClient()
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
-
-
-def extract_chat_id(msg: str) -> int:
-    return int(re.search(r"\?sel=(\d+)", msg)[1])
 
 
 class States(StatesGroup):
