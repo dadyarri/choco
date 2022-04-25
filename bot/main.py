@@ -5,11 +5,12 @@ import re
 import textwrap
 
 from client import ChocoManagerClient
+from ftfy import fix_text
 from geopy import HereV7
 from pydantic import ValidationError
 from vkbottle import Bot, API
 from vkbottle.bot import Message
-from vkbottle_types.events import GroupEventType, MarketOrderNew
+from vkbottle_types.events import GroupEventType
 
 from utils.core import (
     get_vk_token,
@@ -81,33 +82,35 @@ async def send_user_message_to_admins(message: Message):
                         )
 
 
-@bot.on.raw_event(GroupEventType.MARKET_ORDER_NEW, dataclass=MarketOrderNew)
-async def new_order(order: MarketOrderNew):
+# Ёбаный вк без предупреждения поменял схему апшики, все сломалось
+@bot.on.raw_event(GroupEventType.MARKET_ORDER_NEW, dataclass=dict)
+async def new_order(order: dict):
     """
     Когда поступает новый заказ, прислать пользователю его содержимое и спросить данные для доставки.
     Отправить содержимое заказа и количество товара в наличии (из нашей базы) в телеграм.
     """
     # TODO: ловлю ошибку запихивания ивента в модели пидантика
+    logging.info(order['object']['preview_order_items'][0]['title'])
     order_items = "\n".join(
-        f"- {item.title.encode('UTF-8')} {item.quantity} x {item.price.text} = {item.quantity * int(item.price.amount) / 100} ₽"
-        for item in order.object.preview_order_items
+        f"- {fix_text(item['title'])} {item['quantity']} x {int(item['price']['amount']) / 100} ₽ = {item['quantity'] * int(item['price']['amount']) / 100} ₽"
+        for item in order['object']['preview_order_items']
     )
     # FIXME: Временное решение, пока в VKbottle не появятся необходимые поля
-    order_info = await vk.request("market.getOrderById", {"order_id": order.object.id})
-    customer = await order.ctx_api.users.get([str(order.object.user_id)])
+    order_info = await vk.request("market.getOrderById", {"order_id": order['object']['id']})
+    customer = await vk.users.get([str(order['object']['user_id'])])
 
-    await order.ctx_api.messages.send(
-        user_id=order.object.user_id,
+    await bot.api.messages.send(
+        user_id=order['object']['user_id'],
         message=(
-            f"Здравствуйте. Вы заказали {order.object.items_count} товар(ов) на сумму {order.object.total_price.text}:\n"
+            f"Здравствуйте. Вы заказали {order['object']['items_count']} товар(ов) на сумму {order['object']['total_price']['text']}:\n"
             f"{order_items}"
         ),
         random_id=0,
     )
 
-    for item in order.object.preview_order_items:
+    for item in order['object']['preview_order_items']:
         try:
-            item_object = await client.get_good_by_market_id(item.item_id)
+            item_object = await client.get_good_by_market_id(item['item_id'])
         except ValidationError:
             logging.debug("Item not found")
         else:
@@ -118,8 +121,8 @@ async def new_order(order: MarketOrderNew):
     )
 
     if not (delivery := order_info["response"]["order"]["delivery"]):
-        await order.ctx_api.messages.send(
-            user_id=order.object.user_id,
+        await vk.messages.send(
+            user_id=order['object']['user_id'],
             message="Укажите адрес доставки, номер телефона и удобное время получения заказа.",
             random_id=0,
         )
