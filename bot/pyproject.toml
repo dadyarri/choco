@@ -11,6 +11,7 @@ aiohttp = "^3.7.4"
 sentry-sdk = "^1.4.3"
 client = {path = "../client"}
 geopy = "^2.2.0"
+ftfy = "^6.1.1"
 
 [tool.poetry.dev-dependencies]
 
