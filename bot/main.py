@@ -96,7 +96,8 @@ async def new_order(order: dict):
         for item in order['object']['preview_order_items']
     )
     # FIXME: Временное решение, пока в VKbottle не появятся необходимые поля
-    order_info = await vk.request("market.getOrderById", {"order_id": order['object']['id']})
+    order_info = await vk.request("market.getOrderById",
+                                  {"order_id": order['object']['id'], "user_id": order['object']['user_id'], }, )
     customer = await vk.users.get([str(order['object']['user_id'])])
 
     await bot.api.messages.send(
@@ -128,8 +129,11 @@ async def new_order(order: dict):
         )
     else:
         geolocator = HereV7(os.getenv("HERE_TOKEN"))
-        regexp = re.compile(r"(\w+), (\w+), Улица, дом: (\w+), (\d+), .+")
-        parse_result = re.findall(regexp, delivery["address"])[0]
+        regexp = re.compile(r"(\w+), (\w+), Улица, дом: (\w+),* *(\d+)*")
+        try:
+            parse_result = re.findall(regexp, delivery["address"])[0]
+        except IndexError:
+            parse_result = None
         if parse_result:
             parsed_address = " ".join(parse_result)
             location = geolocator.geocode(parsed_address)
