@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "choco-tg"
-version = "1.8.0"
+version = "1.8.1"
 description = "Telegram side of chocoInformer bot"
 authors = ["Daniil <dadyarri@gmail.com>"]
 license = "Propreitary"
