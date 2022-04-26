@@ -12,9 +12,7 @@ def get_tg_token() -> str:
 
 
 def is_float(leftover: float) -> bool:
-    if leftover - int(leftover) == 0:
-        return False
-    return True
+    return leftover - int(leftover) != 0
 
 
 def round_leftover(leftover: float) -> Union[float, int]:
