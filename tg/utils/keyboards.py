@@ -50,47 +50,47 @@ def main_menu_markup():
 
 
 def manage_leftovers(is_float: bool, item_id: int):
-    buttons = [[]]
-
-    buttons[-1].extend(
-        [
-            InlineKeyboardButton(
-                "+",
-                callback_data=json.dumps(
-                    {"block": "leftovers", "action": "plus", "value": 1, "id": item_id}
-                ),
-            ),
-            InlineKeyboardButton(
-                "-",
-                callback_data=json.dumps(
-                    {"block": "leftovers", "action": "minus", "value": 1, "id": item_id}
-                ),
-            ),
-        ]
+    kb = InlineKeyboardMarkup()
+    kb.add(
+        InlineKeyboardButton(
+            "+",
+            callback_data=json.dumps({"b": "lo", "a": "p", "v": 1, "id": item_id}),
+        ),
+        InlineKeyboardButton(
+            "-",
+            callback_data=json.dumps({"b": "lo", "a": "m", "v": 1, "id": item_id}),
+        ),
     )
-
     if is_float:
-        buttons.append([])
-        buttons[-1].extend(
-            [
-                InlineKeyboardButton(
-                    "-0.3",
-                    callback_data=json.dumps(
-                        {"block": "leftovers", "action": "minus", "value": 0.3, "id": item_id}
-                    ),
+        kb.row()
+        kb.insert(
+            InlineKeyboardButton(
+                "-0.3",
+                callback_data=json.dumps(
+                    {
+                        "b": "lo",
+                        "a": "m",
+                        "v": 0.3,
+                        "id": item_id,
+                    }
                 ),
-                InlineKeyboardButton(
-                    "-0.8",
-                    callback_data=json.dumps(
-                        {"block": "leftovers", "action": "minus", "value": 0.8, "id": item_id}
-                    ),
+            ),
+        )
+        kb.insert(
+            InlineKeyboardButton(
+                "-0.8",
+                callback_data=json.dumps(
+                    {
+                        "b": "lo",
+                        "a": "m",
+                        "v": 0.8,
+                        "id": item_id,
+                    }
                 ),
-            ]
+            ),
         )
 
-    buttons.append([])
-
-    return InlineKeyboardMarkup(inline_keyboard=buttons)
+    return kb
 
 
 async def active_chats(api: API, chats: list[Chat], page: int = 0):
