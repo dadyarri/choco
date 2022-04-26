@@ -115,7 +115,7 @@ async def new_order(order: dict):
         except ValidationError:
             logging.debug("Item not found")
         else:
-            await client.decrement_leftover(item_object.response.id, item.quantity)
+            await client.decrement_leftover(item_object.response.id, item['quantity'])
 
     await send_message_to_telegram(
         f"Новый заказ от {customer[0].last_name} {customer[0].first_name}:\n{order_items}\nОстатки обновлены."
