@@ -85,10 +85,10 @@ async def _search_goods(query: types.InlineQuery):
     await query.answer(results=items, cache_time=10)
 
 
-@dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "plus"}))
+@dp.callback_query_handler(CallbackFilter({"b": "lo", "a": "p"}))
 async def _manage_leftovers_plus(query: types.CallbackQuery):
     payload = json.loads(query.data)
-    value = payload["value"]
+    value = payload["v"]
     product_id = payload["id"]
     resp = await client.increment_leftover(product_id, value)
     if resp.response.market_id:
@@ -100,7 +100,7 @@ async def _manage_leftovers_plus(query: types.CallbackQuery):
     await query.answer(f"Продукту {resp.response.name} добавлено {value} кг.")
 
 
-@dp.callback_query_handler(CallbackFilter({"block": "leftovers", "action": "minus"}))
+@dp.callback_query_handler(CallbackFilter({"b": "lo", "a": "m"}))
 async def _manage_leftovers_minus(query: types.CallbackQuery):
     payload = json.loads(query.data)
     value = payload["value"]
