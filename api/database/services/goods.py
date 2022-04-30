@@ -32,6 +32,7 @@ async def create_good(
     retail_price: int,
     leftover: float,
     market_id: int,
+    is_by_weight: bool,
 ):
     async with in_transaction():
         return await models.Good.create(
@@ -40,6 +41,7 @@ async def create_good(
             retail_price=retail_price,
             leftover=leftover,
             market_id=market_id,
+            is_by_weight=is_by_weight,
         )
 
 

@@ -229,6 +229,7 @@ async def create_goods(
     retail_price: int,
     leftover: float,
     market_id: int = None,
+    is_by_weight: bool = False,
 ):
     """
     POST create new good
@@ -238,11 +239,17 @@ async def create_goods(
     :param retail_price: retail price (for customers)
     :param leftover: leftover
     :param market_id: ID of market card in VK
+    :param is_by_weight: is good sells by weight
     :return: dict
     """
     return {
         "response": await goods.create_good(
-            name, wholesale_price, retail_price, leftover, market_id
+            name,
+            wholesale_price,
+            retail_price,
+            leftover,
+            market_id,
+            is_by_weight,
         )
     }
 
