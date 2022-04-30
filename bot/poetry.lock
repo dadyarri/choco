@@ -108,7 +108,7 @@ typing-extensions = ">=4.0.1,<5.0.0"
 
 [[package]]
 name = "client"
-version = "1.5.1"
+version = "1.6.0"
 description = ""
 category = "main"
 optional = false
@@ -273,7 +273,7 @@ typing_extensions = "*"
 
 [[package]]
 name = "vkbottle"
-version = "4.2.2"
+version = "4.3.0"
 description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
 category = "main"
 optional = false
@@ -291,7 +291,7 @@ watchgod = ">=0.7,<0.9"
 
 [[package]]
 name = "vkbottle-types"
-version = "5.131.146.1"
+version = "5.131.146.2.post1"
 description = "Types for vkbottle"
 category = "main"
 optional = false
@@ -641,12 +641,12 @@ vbml = [
     {file = "vbml-1.1.post1.tar.gz", hash = "sha256:59e852b35b2c4d3f8e7d927ab2e0a9dde753f3427ab9a61aca7ed2f4d3986f3c"},
 ]
 vkbottle = [
-    {file = "vkbottle-4.2.2-py3-none-any.whl", hash = "sha256:2bb9dbbe49c18bc43b1ed7f085d776bc4182ea4b6d8fee6dd66f7a11bd2cea7a"},
-    {file = "vkbottle-4.2.2.tar.gz", hash = "sha256:64505aa749135201259884627e71ad877ed6a07f624d0284afc78a49c8db7171"},
+    {file = "vkbottle-4.3.0-py3-none-any.whl", hash = "sha256:c66cc4418c94628dc2cf4b0d88552f6047dd4f0b6a560c355ae47efe53898e52"},
+    {file = "vkbottle-4.3.0.tar.gz", hash = "sha256:ffff6780498b6707bfd99323490b9b5d539530d319bfc9c6035228e16439cb31"},
 ]
 vkbottle-types = [
-    {file = "vkbottle-types-5.131.146.1.tar.gz", hash = "sha256:28dbff9ec244dc11e1ad903f2934daa7b2ce100a7af1c2ccd84f8f53ba7780d5"},
-    {file = "vkbottle_types-5.131.146.1-py3-none-any.whl", hash = "sha256:b6255d128330f3ec66ae53dda64dec06e7b48227947786ce6bc030374bcd09e2"},
+    {file = "vkbottle-types-5.131.146.2.post1.tar.gz", hash = "sha256:ae21f3a3d28da79fc864262e69527b946076d5e83a78f5bbde5c4ffc2c6a0289"},
+    {file = "vkbottle_types-5.131.146.2.post1-py3-none-any.whl", hash = "sha256:cf7bf93c128c1d9dee686c552adf3c80c06ae8e3245dc391838c977e1e7a03e7"},
 ]
 watchgod = [
     {file = "watchgod-0.8.2-py3-none-any.whl", hash = "sha256:2f3e8137d98f493ff58af54ea00f4d1433a6afe2ed08ab331a657df468c6bfce"},

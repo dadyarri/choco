@@ -45,6 +45,16 @@ class ChocoManagerClient:
 
         return result
 
+    async def _make_put_request(self, endpoint: str, params: dict = None):
+        async with aiohttp.ClientSession() as session:
+            url = self._get_request_url(endpoint)
+            async with session.put(url, params=params) as resp:
+                logging.debug(resp)
+                result = await resp.json()
+            await session.close()
+
+        return result
+
     async def get_all_goods(self, page: int = 0):
         page_ = await self._make_get_request("goods/", {"page": page})
         return GetAllGoodsResponse(**page_)
@@ -102,6 +112,11 @@ class ChocoManagerClient:
             )
         )
 
+    async def invert_by_weight(self, good_id: int):
+        return BaseGoodResponse(
+            **await self._make_put_request(f"goods/{good_id}/invert_by_weight")
+        )
+
     async def create_good(
         self,
         name: str,
@@ -109,6 +124,7 @@ class ChocoManagerClient:
         retail_price: int,
         leftover: float,
         market_id: Optional[int] = None,
+        is_by_weight: bool = False,
     ):
         return BaseGoodResponse(
             **await self._make_post_request(
@@ -119,6 +135,7 @@ class ChocoManagerClient:
                     "retail_price": retail_price,
                     "leftover": leftover,
                     "market_id": market_id,
+                    "is_by_weight": is_by_weight,
                 },
             )
         )

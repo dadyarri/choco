@@ -32,6 +32,7 @@ async def create_good(
     retail_price: int,
     leftover: float,
     market_id: int,
+    is_by_weight: bool,
 ):
     async with in_transaction():
         return await models.Good.create(
@@ -40,6 +41,7 @@ async def create_good(
             retail_price=retail_price,
             leftover=leftover,
             market_id=market_id,
+            is_by_weight=is_by_weight,
         )
 
 
@@ -91,5 +93,14 @@ async def change_good_market_id(goods_id: int, market_id: int):
     async with in_transaction():
         good = await models.Good.get(id=goods_id)
         new_good = await good.update_from_dict({"market_id": market_id})
+        await new_good.save()
+        return new_good
+
+
+async def invert_good_by_weight(goods_id: int):
+    async with in_transaction():
+        good = await models.Good.get(id=goods_id)
+        new_by_weight = not good.is_by_weight
+        new_good = await good.update_from_dict({"is_by_weight": new_by_weight})
         await new_good.save()
         return new_good

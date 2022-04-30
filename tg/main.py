@@ -12,7 +12,7 @@ from client import ChocoManagerClient
 from thefuzz import process
 from vkbottle import API
 
-from utils.core import get_tg_token, is_float, round_leftover, generate_post_message
+from utils.core import get_tg_token, round_leftover, generate_post_message
 from utils.filters import IsAdmin, CallbackFilter
 from utils.keyboards import (
     main_menu_markup,
@@ -65,8 +65,13 @@ async def _search_goods(query: types.InlineQuery):
     logging.debug(f"{search_results=}")
     items = []
     for result in search_results:
-        item = next(filter(lambda y: y.name == result[0] and y.id not in [i.id for i in items], goods.response.items),
-                    None)
+        item = next(
+            filter(
+                lambda y: y.name == result[0] and y.id not in [i.id for i in items],
+                goods.response.items,
+            ),
+            None,
+        )
         desc = f"Цена: {item.retail_price}/{item.wholesale_price}₽\nОстаток: {round_leftover(item.leftover)} шт."
         if item:
             items.append(
@@ -78,7 +83,7 @@ async def _search_goods(query: types.InlineQuery):
                         f"<b>{item.name}</b>\n{desc}",
                         parse_mode="html",
                     ),
-                    reply_markup=manage_leftovers(is_float(item.leftover), item.id)
+                    reply_markup=manage_leftovers(item.is_by_weight, item.id),
                 ),
             )
 
@@ -103,7 +108,7 @@ async def _manage_leftovers_plus(query: types.CallbackQuery):
 @dp.callback_query_handler(CallbackFilter({"b": "lo", "a": "m"}))
 async def _manage_leftovers_minus(query: types.CallbackQuery):
     payload = json.loads(query.data)
-    value = payload["value"]
+    value = payload["v"]
     product_id = payload["id"]
     resp = await client.decrement_leftover(product_id, value)
     if resp.response.market_id:

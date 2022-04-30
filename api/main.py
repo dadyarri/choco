@@ -202,6 +202,21 @@ async def set_retail_price(goods_id: int, value: int):
     return {"response": await goods.change_good_retail_price(goods_id, value)}
 
 
+@app.put(
+    "/goods/{goods_id}/invert_by_weight",
+    response_model=BaseGoodResponse,
+    tags=["products"],
+)
+async def invert_by_weight(goods_id: int):
+    """
+    PUT invert good by its id
+
+    :param goods_id: ID of good
+    :return: dict
+    """
+    return {"response": await goods.invert_good_by_weight(goods_id)}
+
+
 @app.post(
     "/goods/create",
     status_code=status.HTTP_201_CREATED,
@@ -214,6 +229,7 @@ async def create_goods(
     retail_price: int,
     leftover: float,
     market_id: int = None,
+    is_by_weight: bool = False,
 ):
     """
     POST create new good
@@ -223,11 +239,17 @@ async def create_goods(
     :param retail_price: retail price (for customers)
     :param leftover: leftover
     :param market_id: ID of market card in VK
+    :param is_by_weight: is good sells by weight
     :return: dict
     """
     return {
         "response": await goods.create_good(
-            name, wholesale_price, retail_price, leftover, market_id
+            name,
+            wholesale_price,
+            retail_price,
+            leftover,
+            market_id,
+            is_by_weight,
         )
     }
 
