@@ -112,6 +112,11 @@ class ChocoManagerClient:
             )
         )
 
+    async def invert_by_weight(self, good_id: int):
+        return BaseGoodResponse(
+            **await self._make_put_request(f"goods/{good_id}/invert_by_weight")
+        )
+
     async def create_good(
         self,
         name: str,
