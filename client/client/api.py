@@ -45,6 +45,16 @@ class ChocoManagerClient:
 
         return result
 
+    def _make_put_request(self, endpoint: str, params: dict = None):
+        async with aiohttp.ClientSession() as session:
+            url = self._get_request_url(endpoint)
+            async with session.put(url, params=params) as resp:
+                logging.debug(resp)
+                result = await resp.json()
+            await session.close()
+
+        return result
+
     async def get_all_goods(self, page: int = 0):
         page_ = await self._make_get_request("goods/", {"page": page})
         return GetAllGoodsResponse(**page_)
