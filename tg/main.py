@@ -108,7 +108,7 @@ async def _manage_leftovers_plus(query: types.CallbackQuery):
 @dp.callback_query_handler(CallbackFilter({"b": "lo", "a": "m"}))
 async def _manage_leftovers_minus(query: types.CallbackQuery):
     payload = json.loads(query.data)
-    value = payload["value"]
+    value = payload["v"]
     product_id = payload["id"]
     resp = await client.decrement_leftover(product_id, value)
     if resp.response.market_id:
