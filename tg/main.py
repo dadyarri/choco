@@ -65,8 +65,13 @@ async def _search_goods(query: types.InlineQuery):
     logging.debug(f"{search_results=}")
     items = []
     for result in search_results:
-        item = next(filter(lambda y: y.name == result[0] and y.id not in [i.id for i in items], goods.response.items),
-                    None)
+        item = next(
+            filter(
+                lambda y: y.name == result[0] and y.id not in [i.id for i in items],
+                goods.response.items,
+            ),
+            None,
+        )
         desc = f"Цена: {item.retail_price}/{item.wholesale_price}₽\nОстаток: {round_leftover(item.leftover)} шт."
         if item:
             items.append(
