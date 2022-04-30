@@ -45,7 +45,7 @@ class ChocoManagerClient:
 
         return result
 
-    def _make_put_request(self, endpoint: str, params: dict = None):
+    async def _make_put_request(self, endpoint: str, params: dict = None):
         async with aiohttp.ClientSession() as session:
             url = self._get_request_url(endpoint)
             async with session.put(url, params=params) as resp:
