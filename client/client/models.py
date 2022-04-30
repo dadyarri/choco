@@ -10,6 +10,7 @@ class Good(BaseModel):
     retail_price: int
     leftover: float
     market_id: Optional[int]
+    is_by_weight: bool
 
 
 class Chat(BaseModel):
