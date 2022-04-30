@@ -124,6 +124,7 @@ class ChocoManagerClient:
         retail_price: int,
         leftover: float,
         market_id: Optional[int] = None,
+        is_by_weight: bool = False,
     ):
         return BaseGoodResponse(
             **await self._make_post_request(
@@ -134,6 +135,7 @@ class ChocoManagerClient:
                     "retail_price": retail_price,
                     "leftover": leftover,
                     "market_id": market_id,
+                    "is_by_weight": is_by_weight,
                 },
             )
         )
