@@ -93,3 +93,12 @@ async def change_good_market_id(goods_id: int, market_id: int):
         new_good = await good.update_from_dict({"market_id": market_id})
         await new_good.save()
         return new_good
+
+
+async def invert_good_by_weight(goods_id: int):
+    async with in_transaction():
+        good = await models.Good.get(id=goods_id)
+        new_by_weight = not good.is_by_weight
+        new_good = await good.update_from_dict({"is_by_weight": new_by_weight})
+        await new_good.save()
+        return new_good
