@@ -8,6 +8,7 @@ class Good(Model):
     retail_price = fields.IntField()
     leftover = fields.FloatField()
     market_id = fields.IntField(null=True)
+    is_by_weight = fields.BooleanField(default=False)
 
 
 class Chat(Model):
