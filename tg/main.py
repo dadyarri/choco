@@ -83,7 +83,7 @@ async def _search_goods(query: types.InlineQuery):
                         f"<b>{item.name}</b>\n{desc}",
                         parse_mode="html",
                     ),
-                    reply_markup=manage_leftovers(is_float(item.leftover), item.id)
+                    reply_markup=manage_leftovers(item.is_by_weight, item.id),
                 ),
             )
 
