@@ -12,7 +12,7 @@ from client import ChocoManagerClient
 from thefuzz import process
 from vkbottle import API
 
-from utils.core import get_tg_token, is_float, round_leftover, generate_post_message
+from utils.core import get_tg_token, round_leftover, generate_post_message
 from utils.filters import IsAdmin, CallbackFilter
 from utils.keyboards import (
     main_menu_markup,
