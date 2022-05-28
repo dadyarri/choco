@@ -120,7 +120,7 @@ async def _manage_leftovers_minus(query: types.CallbackQuery):
     await query.answer(f"У продукта {resp.response.name} убрано {value} кг.")
 
 
-@dp.callback_query_handler(CallbackFilter({"block": "update_post", "action": "init"}))
+@dp.callback_query_handler(CallbackFilter({"block": "update", "action": "init"}))
 async def _update_post(query: types.CallbackQuery):
     vk_group = -int(os.getenv("VK_GROUP"))
 
