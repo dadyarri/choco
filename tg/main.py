@@ -11,7 +11,7 @@ from aiogram.dispatcher.filters.filters import AndFilter, OrFilter
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from client import ChocoManagerClient
 from thefuzz import process
-from vkbottle import API
+from vkbottle import API, VKAPIError
 
 from utils.core import get_tg_token, round_leftover, generate_post_message
 from utils.filters import IsAdmin, CallbackFilter
@@ -146,11 +146,14 @@ async def _update_post(query: types.CallbackQuery):
     resp = await client.get_all_goods()
     for item in resp.response.items:
         if item.market_id:
-            await user_vk.market.edit(
-                -int(os.getenv("VK_GROUP")),
-                item.market_id,
-                stock_amount=round(item.leftover),
-            )
+            try:
+                await user_vk.market.edit(
+                    -int(os.getenv("VK_GROUP")),
+                    item.market_id,
+                    stock_amount=round(item.leftover),
+                )
+            except VKAPIError as e:
+                logging.error(f"VK API Error [{e.code}]: {e.description}")
             await asyncio.sleep(1)
 
     await query.message.edit_text("Пост обновлён!", reply_markup=main_menu_markup())
