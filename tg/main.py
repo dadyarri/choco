@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 import os
@@ -150,6 +151,7 @@ async def _update_post(query: types.CallbackQuery):
                 item.market_id,
                 stock_amount=round(item.leftover),
             )
+            await asyncio.sleep(0.25)
 
     await query.message.edit_text("Пост обновлён!", reply_markup=main_menu_markup())
 
