@@ -78,6 +78,19 @@ def manage_leftovers(is_float: bool, item_id: int):
         )
         kb.insert(
             InlineKeyboardButton(
+                "-0.5",
+                callback_data=json.dumps(
+                    {
+                        "b": "lo",
+                        "a": "m",
+                        "v": 0.5,
+                        "id": item_id,
+                    }
+                ),
+            ),
+        )
+        kb.insert(
+            InlineKeyboardButton(
                 "-0.8",
                 callback_data=json.dumps(
                     {
