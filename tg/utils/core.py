@@ -24,18 +24,23 @@ def round_leftover(leftover: float) -> Union[float, int]:
     return res
 
 
-async def generate_post_message():
-    result = await get_all_goods()
+async def generate_post_message(verbose: bool = False):
+    result = await get_all_goods(verbose)
     return "\n".join(result)
 
 
-async def get_all_goods():
+async def get_all_goods(verbose: bool):
     client = ChocoManagerClient()
     resp = await client.get_all_goods()
     result = []
     for item in resp.response.items:
         if leftover := round_leftover(item.leftover):
-            result.append(f"{item.name} x{leftover} ({item.retail_price}₽)")
+            if verbose:
+                result.append(f"""{item.name} {'(на развес)' if item.is_by_weight else ''}
+                В наличии: {item.leftover} {'кг.' if item.is_by_weight else 'шт.'}
+                Цена: {item.retail_price}₽\n""")
+            else:
+                result.append(f"{item.name} x{leftover} ({item.retail_price}₽)")
     return result
 
 
