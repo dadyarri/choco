@@ -8,7 +8,7 @@ license = "Propreitary"
 [tool.poetry.dependencies]
 python = "^3.10"
 aiogram = "^2.18"
-vkbottle = "^4.1"
+vkbottle = "^4.3.2"
 client = {path = "../client"}
 thefuzz = "^0.19.0"
 
