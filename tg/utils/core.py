@@ -36,9 +36,9 @@ async def get_all_goods(verbose: bool):
     for item in resp.response.items:
         if leftover := round_leftover(item.leftover):
             if verbose:
-                result.append(f"""{item.name} {'(на развес)' if item.is_by_weight else ''}
-                В наличии: {item.leftover} {'кг.' if item.is_by_weight else 'шт.'}
-                Цена: {item.retail_price}₽\n""")
+                result.append(f"{item.name} {'(на развес)' if item.is_by_weight else ''}\n"
+                              f"&#12288&#12288&#12288&#12288В наличии: {item.leftover} {'кг.' if item.is_by_weight else 'шт.'}\n"
+                              f"&#12288&#12288&#12288&#12288Цена: {item.retail_price}₽\n")
             else:
                 result.append(f"{item.name} x{leftover} ({item.retail_price}₽)")
     return result
