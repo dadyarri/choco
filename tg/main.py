@@ -147,7 +147,7 @@ async def _update_post(query: types.CallbackQuery):
         if item.market_id:
             await user_vk.market.edit(
                 -int(os.getenv("VK_GROUP")),
-                resp.response.market_id,
+                item.market_id,
                 stock_amount=round(item.leftover),
             )
 
