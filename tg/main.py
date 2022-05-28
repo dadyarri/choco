@@ -130,7 +130,7 @@ async def _update_post(query: types.CallbackQuery):
     await user_vk.wall.delete(vk_group, post_id)
 
     await query.message.edit_text("Генерация текста...")
-    message_ = await generate_post_message()
+    message_ = await generate_post_message(True)
 
     await query.message.edit_text("Публикация поста...")
     resp = await user_vk.wall.post(
@@ -263,7 +263,7 @@ async def _dialogs_disable(query: types.CallbackQuery):
 @dp.callback_query_handler(CallbackFilter({"block": "list", "action": "init"}))
 async def _show_list(query: types.CallbackQuery):
     await query.message.edit_text(
-        await generate_post_message(), reply_markup=back_markup()
+        await generate_post_message(False), reply_markup=back_markup()
     )
     await query.answer()
 
