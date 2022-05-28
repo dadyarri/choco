@@ -140,6 +140,17 @@ async def _update_post(query: types.CallbackQuery):
         close_comments=True,
     )
     await user_vk.wall.pin(resp.post_id, vk_group)
+
+    await query.message.edit_text("Синхронизация остатков...")
+    resp = await client.get_all_goods()
+    for item in resp.response.items:
+        if item.market_id:
+            await user_vk.market.edit(
+                -int(os.getenv("VK_GROUP")),
+                resp.response.market_id,
+                stock_amount=round(item.leftover),
+            )
+
     await query.message.edit_text("Пост обновлён!", reply_markup=main_menu_markup())
 
 
