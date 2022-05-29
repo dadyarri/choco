@@ -142,21 +142,29 @@ async def _update_post(query: types.CallbackQuery):
     )
     await user_vk.wall.pin(resp.post_id, vk_group)
 
-    await query.message.edit_text("Синхронизация остатков...")
     resp = await client.get_all_goods()
-    for item in resp.response.items:
-        if item.market_id:
-            try:
-                await user_vk.market.edit(
-                    -int(os.getenv("VK_GROUP")),
-                    item.market_id,
-                    stock_amount=round(item.leftover),
-                )
-            except VKAPIError as e:
-                logging.error(f"VK API Error [{e.code}]: {e.description}")
-            await asyncio.sleep(1)
+    goods = [good for good in resp.response.items if good.market_id]
+    amount_of_goods = len(goods)
+    processed = 0
+    await query.message.edit_text(
+        f"Синхронизация остатков... [{processed}/{amount_of_goods}]"
+    )
+    for item in goods:
+        try:
+            await user_vk.market.edit(
+                -int(os.getenv("VK_GROUP")),
+                item.market_id,
+                stock_amount=round(item.leftover),
+            )
+        except VKAPIError as e:
+            logging.error(f"VK API Error [{e.code}]: {e.description}")
+        processed += 1
+        await query.message.edit_text(
+            f"Синхронизация остатков... [{processed}/{amount_of_goods}]"
+        )
+        await asyncio.sleep(1)
 
-    await query.message.edit_text("Пост обновлён!", reply_markup=main_menu_markup())
+    await query.message.edit_text("Обновлено!", reply_markup=main_menu_markup())
 
 
 @dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "init"}))
