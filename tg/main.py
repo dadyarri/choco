@@ -258,7 +258,7 @@ async def _dialogs_ask_message(query: types.CallbackQuery):
     await query.answer()
 
 
-@dp.message_handler(state=States.input_message, command="cancel")
+@dp.message_handler(state=States.input_message, commands=["cancel"])
 async def _cancel_send_message_to_vk(message: types.Message, state: FSMContext):
     await state.finish()
     await message.edit_text("Отправка отменена", reply_markup=main_menu_markup())
