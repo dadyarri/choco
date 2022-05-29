@@ -254,8 +254,14 @@ async def _dialogs_show_history(query: types.CallbackQuery):
 @dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "write"}))
 async def _dialogs_ask_message(query: types.CallbackQuery):
     await States.input_message.set()
-    await query.message.edit_text("Введите текст сообщения")
+    await query.message.edit_text("Введите текст сообщения\n/cancel для отмены")
     await query.answer()
+
+
+@dp.message_handler(state=States.input_message, command="cancel")
+async def _cancel_send_message_to_vk(message: types.Message, state: FSMContext):
+    await state.finish()
+    await message.edit_text("Отправка отменена", reply_markup=main_menu_markup())
 
 
 @dp.message_handler(state=States.input_message)
