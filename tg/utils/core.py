@@ -45,8 +45,8 @@ async def get_all_goods(verbose: bool):
 
                 result.append(
                     f"{item.name}{by_weight_postfix}\n"
-                    f"\tВ наличии: {leftover_text}\n"
-                    f"\tЦена: {item.retail_price}₽\n"
+                    f"\u2000\u2000\u2000\u2000В наличии: {leftover_text}\n"
+                    f"\u2000\u2000\u2000\u2000Цена: {item.retail_price}₽\n"
                 )
             else:
                 result.append(f"{item.name} x{leftover} ({item.retail_price}₽)")
