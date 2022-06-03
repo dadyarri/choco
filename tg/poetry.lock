@@ -238,7 +238,7 @@ typing_extensions = "*"
 
 [[package]]
 name = "vkbottle"
-version = "4.3.2"
+version = "4.3.3"
 description = "Homogenic! Customizable asynchronous VK API framework implementing comfort and speed"
 category = "main"
 optional = false
@@ -251,12 +251,12 @@ choicelib = ">=0.1.5,<0.2.0"
 pydantic = ">=1.8.2,<2.0.0"
 typing-extensions = ">=4.0.1,<5.0.0"
 vbml = ">=1.1.post1,<2.0"
-vkbottle-types = ">=5.131.134,<6.0.0"
+vkbottle-types = ">=5.131.146.3,<6.0.0.0"
 watchgod = ">=0.7,<0.9"
 
 [[package]]
 name = "vkbottle-types"
-version = "5.131.146.2.post1"
+version = "5.131.146.3"
 description = "Types for vkbottle"
 category = "main"
 optional = false
@@ -594,12 +594,12 @@ vbml = [
     {file = "vbml-1.1.post1.tar.gz", hash = "sha256:59e852b35b2c4d3f8e7d927ab2e0a9dde753f3427ab9a61aca7ed2f4d3986f3c"},
 ]
 vkbottle = [
-    {file = "vkbottle-4.3.2-py3-none-any.whl", hash = "sha256:21bea49a6c94476649fb3f66f9a49358d26f03d64af595bfbd6f717e34329383"},
-    {file = "vkbottle-4.3.2.tar.gz", hash = "sha256:71ca15371ac4de72ea1a0858878872ff8128f74b3d6fe24dd4157ec8b950f669"},
+    {file = "vkbottle-4.3.3-py3-none-any.whl", hash = "sha256:f73bc7e21f2929d65434c050db6db8e51f865da43a92c49c261117b92faf8812"},
+    {file = "vkbottle-4.3.3.tar.gz", hash = "sha256:abc41929cf1ec7c499a163133429f4753647518012a9e3a717247405a2f2c2be"},
 ]
 vkbottle-types = [
-    {file = "vkbottle-types-5.131.146.2.post1.tar.gz", hash = "sha256:ae21f3a3d28da79fc864262e69527b946076d5e83a78f5bbde5c4ffc2c6a0289"},
-    {file = "vkbottle_types-5.131.146.2.post1-py3-none-any.whl", hash = "sha256:cf7bf93c128c1d9dee686c552adf3c80c06ae8e3245dc391838c977e1e7a03e7"},
+    {file = "vkbottle-types-5.131.146.3.tar.gz", hash = "sha256:577177b1c628f451515f5f37d9d427ad5c893cc22a6508c09ae55e2926adca28"},
+    {file = "vkbottle_types-5.131.146.3-py3-none-any.whl", hash = "sha256:46ace565cc7d4bde8ea2284f0ca1bfc8bfdf90430c347df058852fd545358e02"},
 ]
 watchgod = [
     {file = "watchgod-0.8.2-py3-none-any.whl", hash = "sha256:2f3e8137d98f493ff58af54ea00f4d1433a6afe2ed08ab331a657df468c6bfce"},
