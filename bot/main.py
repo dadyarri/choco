@@ -90,18 +90,23 @@ async def new_order(order: dict):
     Отправить содержимое заказа и количество товара в наличии (из нашей базы) в телеграм.
     """
     # TODO: ловлю ошибку запихивания ивента в модели пидантика
-    logging.info(order['object']['preview_order_items'][0]['title'])
+    logging.info(order["object"]["preview_order_items"][0]["title"])
     order_items = "\n".join(
         f"- {fix_text(item['title'])} {item['quantity']} x {int(item['price']['amount']) / 100} ₽ = {item['quantity'] * int(item['price']['amount']) / 100} ₽"
-        for item in order['object']['preview_order_items']
+        for item in order["object"]["preview_order_items"]
     )
     # FIXME: Временное решение, пока в VKbottle не появятся необходимые поля
-    order_info = await vk.request("market.getOrderById",
-                                  {"order_id": order['object']['id'], "user_id": order['object']['user_id'], }, )
-    customer = await vk.users.get([str(order['object']['user_id'])])
+    order_info = await vk.request(
+        "market.getOrderById",
+        {
+            "order_id": order["object"]["id"],
+            "user_id": order["object"]["user_id"],
+        },
+    )
+    customer = await vk.users.get([str(order["object"]["user_id"])])
 
     await bot.api.messages.send(
-        user_id=order['object']['user_id'],
+        user_id=order["object"]["user_id"],
         message=(
             f"Здравствуйте. Вы заказали {order['object']['items_count']} товар(ов) на сумму {order['object']['total_price']['text']}:\n"
             f"{order_items}"
@@ -109,21 +114,27 @@ async def new_order(order: dict):
         random_id=0,
     )
 
-    for item in order['object']['preview_order_items']:
+    for item in order["object"]["preview_order_items"]:
         try:
-            item_object = await client.get_good_by_market_id(item['item_id'])
+            item_object = await client.get_good_by_market_id(item["item_id"])
         except ValidationError:
             logging.debug("Item not found")
         else:
-            await client.decrement_leftover(item_object.response.id, item['quantity'])
+            await client.decrement_leftover(item_object.response.id, item["quantity"])
+
+    if order["object"]["comment"] is not None:
+        comment = f"\nКомментарий покупателя: {order['object']['comment']}"
+    else:
+        comment = ""
 
     await send_message_to_telegram(
         f"Новый заказ от {customer[0].last_name} {customer[0].first_name}:\n{order_items}\nОстатки обновлены."
+        f"{comment}"
     )
 
     if not (delivery := order_info["response"]["order"]["delivery"]):
         await vk.messages.send(
-            user_id=order['object']['user_id'],
+            user_id=order["object"]["user_id"],
             message="Укажите адрес доставки, номер телефона и удобное время получения заказа.",
             random_id=0,
         )
