@@ -140,7 +140,8 @@ async def _update_post(query: types.CallbackQuery):
         from_group=True,
         close_comments=True,
     )
-    await user_vk.wall.pin(resp.post_id, vk_group)
+    post_id = resp.post_id
+    await user_vk.wall.pin(post_id, vk_group)
 
     resp = await client.get_all_goods()
     goods = [good for good in resp.response.items if good.market_id]
@@ -164,8 +165,10 @@ async def _update_post(query: types.CallbackQuery):
         )
         await asyncio.sleep(1)
 
-    await query.message.edit_text("Обновлено!", reply_markup=main_menu_markup())
-
+    await query.message.edit_text(
+        f"Обновлено!\nСсылка на пост: https://vk.com/public{os.getenv('VK_GROUP')}?w=wall{vk_group}_{post_id}",
+        reply_markup=main_menu_markup(),
+    )
 
 @dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "init"}))
 async def _dialogs(query: types.CallbackQuery):
