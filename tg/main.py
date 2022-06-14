@@ -163,12 +163,13 @@ async def _update_post(query: types.CallbackQuery):
         await query.message.edit_text(
             f"Синхронизация остатков... [{processed}/{amount_of_goods}]"
         )
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.333333)
 
     await query.message.edit_text(
         f"Обновлено!\nСсылка на пост: https://vk.com/public{os.getenv('VK_GROUP')}?w=wall{vk_group}_{post_id}",
         reply_markup=main_menu_markup(),
     )
+
 
 @dp.callback_query_handler(CallbackFilter({"block": "dialogs", "action": "init"}))
 async def _dialogs(query: types.CallbackQuery):
