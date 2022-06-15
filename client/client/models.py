@@ -97,3 +97,18 @@ class GetAllChatsResponse(BaseModel):
 class GetAllOrdersResponseModel(BaseModel):
     count: int
     items: list[Order]
+
+
+class GetAllOrderCitiesResponseModel(BaseModel):
+    count: int
+    items: list[OrderCity]
+
+
+class GetAllOrdersStatesResponseModel(BaseModel):
+    count: int
+    items: list[OrderState]
+
+
+class GetAllOrdersSourcesResponseModel(BaseModel):
+    count: int
+    items: list[OrderSource]
