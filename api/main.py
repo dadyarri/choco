@@ -5,7 +5,7 @@ from client.models import (
     GetAllGoodsResponse,
     BaseChatResponse,
     GetAllChatsResponse,
-    GetAllOrdersResponseModel,
+    GetAllOrdersResponseModel, BaseOrderResponse, Order,
 )
 from fastapi import FastAPI
 from starlette import status
@@ -313,7 +313,10 @@ async def get_list_of_orders(page: int = 0):
 
 
 @app.post("/orders", response_model=BaseOrderResponse, tags=["orders"])
-
+async def create_order(order: Order):
+    return {
+        "response": await orders.create_order(order),
+    }
 
 register_tortoise(
     app,
