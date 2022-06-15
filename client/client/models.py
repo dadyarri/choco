@@ -60,6 +60,22 @@ class BaseChatResponse(BaseModel):
     response: Chat
 
 
+class BaseOrderResponse(BaseModel):
+    response: Order
+
+
+class BaseOrderCityResponse(BaseModel):
+    response: OrderCity
+
+
+class BaseOrderStateResponse(BaseModel):
+    response: OrderState
+
+
+class BaseOrderSourceResponse(BaseModel):
+    response: OrderSource
+
+
 class GetAllGoodsResponseModel(BaseModel):
     count: int
     items: list[Good]
