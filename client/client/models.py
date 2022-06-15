@@ -19,6 +19,35 @@ class Chat(BaseModel):
     is_active: bool
 
 
+class OrderSource(BaseModel):
+    id: int
+    name: str
+
+
+class OrderState(BaseModel):
+    id: int
+    name: str
+
+
+class OrderCity(BaseModel):
+    id: int
+    name: str
+
+
+class Order(Model):
+    id: int
+    source: OrderSource
+    state: OrderState
+    city: OrderCity
+
+
+class OrderItems(Model):
+    id: int
+    order_id: Order
+    good_id: Good
+    quantity: int
+
+
 class BaseResponseModel(BaseModel):
     response: str
 
@@ -47,3 +76,8 @@ class GetAllGoodsResponse(BaseModel):
 
 class GetAllChatsResponse(BaseModel):
     response: GetAllChatsResponseModel
+
+
+class GetAllOrdersResponseModel(BaseModel):
+    count: int
+    items: list[Order]
