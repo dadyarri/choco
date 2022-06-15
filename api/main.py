@@ -5,11 +5,13 @@ from client.models import (
     GetAllGoodsResponse,
     BaseChatResponse,
     GetAllChatsResponse,
+    GetAllOrdersResponseModel,
 )
 from fastapi import FastAPI
 from starlette import status
 from tortoise.contrib.fastapi import register_tortoise
 
+from database.services import orders
 from .database.core.init import TORTOISE_ORM
 from .database.services import goods, chats
 
@@ -18,6 +20,7 @@ version = "1.5.1"
 tags_metadata = [
     {"name": "products", "description": "Управление остатками и ценами товара"},
     {"name": "chats", "description": "Управление чатами"},
+    {"name": "orders", "description": "Управление заказами"},
 ]
 app = FastAPI(
     title="ChocoManager API",
@@ -298,6 +301,18 @@ async def enable_chat(chat_id: int):
 @app.post("/chats/{chat_id}/disable", response_model=BaseChatResponse, tags=["chats"])
 async def disable_chat(chat_id: int):
     return {"response": await chats.set_activity(chat_id, False)}
+
+
+@app.get("/orders", response_model=GetAllOrdersResponseModel, tags=["orders"])
+async def get_list_of_orders(page: int = 0):
+    items = await orders.fetch_all_orders(page)
+    return {
+        "count": len(items),
+        "items": items,
+    }
+
+
+@app.post("/orders", response_model=BaseOrderResponse, tags=["orders"])
 
 
 register_tortoise(
