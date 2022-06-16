@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Optional
+from typing import Optional, List
 
 import aiohttp
 
@@ -8,7 +8,7 @@ from .models import (
     GetAllGoodsResponse,
     BaseGoodResponse,
     GetAllChatsResponse,
-    BaseChatResponse,
+    BaseChatResponse, Order, BaseOrderResponse, GetAllOrdersResponseModel,
 )
 
 
@@ -49,6 +49,26 @@ class ChocoManagerClient:
         async with aiohttp.ClientSession() as session:
             url = self._get_request_url(endpoint)
             async with session.put(url, params=params) as resp:
+                logging.debug(resp)
+                result = await resp.json()
+            await session.close()
+
+        return result
+
+    async def _make_patch_request(self, endpoint: str, params: dict = None):
+        async with aiohttp.ClientSession() as session:
+            url = self._get_request_url(endpoint)
+            async with session.patch(url, params=params) as resp:
+                logging.debug(resp)
+                result = await resp.json()
+            await session.close()
+
+        return result
+
+    async def _make_delete_request(self, endpoint: str, params: dict = None):
+        async with aiohttp.ClientSession() as session:
+            url = self._get_request_url(endpoint)
+            async with session.delete(url, params=params) as resp:
                 logging.debug(resp)
                 result = await resp.json()
             await session.close()
@@ -165,3 +185,7 @@ class ChocoManagerClient:
         return BaseChatResponse(
             **await self._make_post_request(f"chats/{chat_id}/disable")
         )
+
+    async def get_all_orders(self, page: int = 0):
+        query = await self._make_get_request("orders", {"page": page})
+        return GetAllOrdersResponseModel(**query)
