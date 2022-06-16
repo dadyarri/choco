@@ -112,3 +112,16 @@ class GetAllOrdersStatesResponseModel(BaseModel):
 class GetAllOrdersSourcesResponseModel(BaseModel):
     count: int
     items: list[OrderSource]
+
+
+class OrderedGood(BaseModel):
+    good: Good
+    quantity: int
+
+
+class OrderFull(BaseModel):
+    id: int
+    source: OrderSource
+    state: OrderState
+    city: OrderCity
+    items: list[OrderedGood]
