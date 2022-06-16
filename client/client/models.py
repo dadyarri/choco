@@ -34,14 +34,14 @@ class OrderCity(BaseModel):
     name: str
 
 
-class Order(Model):
+class Order(BaseModel):
     id: int
     source: OrderSource
     state: OrderState
     city: OrderCity
 
 
-class OrderItems(Model):
+class OrderItems(BaseModel):
     id: int
     order_id: Order
     good_id: Good
