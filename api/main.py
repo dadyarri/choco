@@ -22,6 +22,9 @@ tags_metadata = [
     {"name": "products", "description": "Управление остатками и ценами товара"},
     {"name": "chats", "description": "Управление чатами"},
     {"name": "orders", "description": "Управление заказами"},
+    {"name": "order-cities", "description": "Управление городами заказов"},
+    {"name": "order-sources", "description": "Управление источниками заказов"},
+    {"name": "order-states", "description": "Управление статусами заказов"},
 ]
 app = FastAPI(
     title="ChocoManager API",
@@ -334,77 +337,77 @@ async def update_order(order: Order):
     }
 
 
-@app.get("/orderCities", response_model=List[OrderCity], tags=["orders"])
+@app.get("/orderCities", response_model=List[OrderCity], tags=["order-cities"])
 async def get_order_cities(page: int = 0):
     return await order_cities.fetch_all_orders_cities(page)
 
 
-@app.post("/orderCities", response_model=OrderCity, tags=["orders"])
+@app.post("/orderCities", response_model=OrderCity, tags=["order-cities"])
 async def create_order_city(order_city: OrderCity):
     return await order_cities.create_order_city(order_city)
 
 
-@app.get("/orderCities/{id}", response_model=OrderCity, tags=["orders"])
+@app.get("/orderCities/{id}", response_model=OrderCity, tags=["order-cities"])
 async def get_order_city_by_id(id: int):
     return await order_cities.get_order_city_by_id(id)
 
 
-@app.patch("/orderCities", response_model=OrderCity, tags=["orders"])
+@app.patch("/orderCities", response_model=OrderCity, tags=["order-cities"])
 async def update_order_city(order_city: OrderCity):
     return await order_cities.update_order_city(order_city)
 
 
-@app.delete("/orderCities/{id}", response_model=OrderCity, tags=["orders"])
+@app.delete("/orderCities/{id}", response_model=OrderCity, tags=["order-cities"])
 async def delete_order_city(id: int):
     return await order_cities.delete_order_city(id)
 
 
-@app.get("/orderStates", response_model=List[OrderState], tags=["orders"])
+@app.get("/orderStates", response_model=List[OrderState], tags=["order-states"])
 async def get_order_states(page: int = 0):
     return await order_states.fetch_all_orders_states(page)
 
 
-@app.post("/orderStates", response_model=OrderState, tags=["orders"])
+@app.post("/orderStates", response_model=OrderState, tags=["order-states"])
 async def create_order_state(order_state: OrderState):
     return await order_states.create_order_state(order_state)
 
 
-@app.get("/orderStates/{id}", response_model=OrderState, tags=["orders"])
+@app.get("/orderStates/{id}", response_model=OrderState, tags=["order-states"])
 async def get_order_state_by_id(id: int):
     return await order_states.get_order_state_by_id(id)
 
 
-@app.patch("/orderStates", response_model=OrderState, tags=["orders"])
+@app.patch("/orderStates", response_model=OrderState, tags=["order-states"])
 async def update_order_state(order_state: OrderState):
     return await order_states.update_order_state(order_state)
 
 
-@app.delete("/orderStates/{id}", response_model=OrderState, tags=["orders"])
+@app.delete("/orderStates/{id}", response_model=OrderState, tags=["order-states"])
 async def delete_order_state(id: int):
     return await order_states.delete_order_state(id)
 
 
-@app.get("/orderSources", response_model=List[OrderSource], tags=["orders"])
+@app.get("/orderSources", response_model=List[OrderSource], tags=["order-sources"])
 async def get_order_sources(page: int = 0):
     return await order_sources.fetch_all_orders_sources(page)
 
 
-@app.post("/orderSources", response_model=OrderSource, tags=["orders"])
+@app.post("/orderSources", response_model=OrderSource, tags=["order-sources"])
 async def create_order_source(order_source: OrderSource):
     return await order_sources.create_order_source(order_source)
 
 
-@app.get("/orderSources/{id}", response_model=OrderSource, tags=["orders"])
+@app.get("/orderSources/{id}", response_model=OrderSource, tags=["order-sources"])
 async def get_order_source_by_id(id: int):
     return await order_sources.get_order_source_by_id(id)
 
 
-@app.patch("/orderSources", response_model=OrderSource, tags=["orders"])
+@app.patch("/orderSources", response_model=OrderSource, tags=["order-sources"])
 async def update_order_source(order_source: OrderSource):
     return await order_sources.update_order_source(order_source)
 
 
-@app.delete("/orderSources/{id}", response_model=OrderSource, tags=["orders"])
+@app.delete("/orderSources/{id}", response_model=OrderSource, tags=["order-sources"])
 async def delete_order_source(id: int):
     return await order_sources.delete_order_source(id)
 
