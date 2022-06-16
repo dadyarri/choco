@@ -6,7 +6,7 @@ from client.models import (
     GetAllGoodsResponse,
     BaseChatResponse,
     GetAllChatsResponse,
-    GetAllOrdersResponseModel, BaseOrderResponse, Order, OrderCity, OrderState, OrderSource,
+    GetAllOrdersResponseModel, BaseOrderResponse, Order, OrderCity, OrderState, OrderSource, Good,
 )
 from fastapi import FastAPI
 from starlette import status
@@ -25,6 +25,7 @@ tags_metadata = [
     {"name": "order-cities", "description": "Управление городами заказов"},
     {"name": "order-sources", "description": "Управление источниками заказов"},
     {"name": "order-states", "description": "Управление статусами заказов"},
+    {"name": "order-items", "description": "Управление содержимым заказов"},
 ]
 app = FastAPI(
     title="ChocoManager API",
@@ -410,6 +411,11 @@ async def update_order_source(order_source: OrderSource):
 @app.delete("/orderSources/{id}", response_model=OrderSource, tags=["order-sources"])
 async def delete_order_source(id: int):
     return await order_sources.delete_order_source(id)
+
+
+@app.put("/orderItems/{order_id}", response_model=OrderFull, tags=["order-items"])
+async def add_item_to_order(order_id: int, item: Good, quantity: int):
+    return await order_items.add_item_to_order(order_id, item, quantity)
 
 
 register_tortoise(
