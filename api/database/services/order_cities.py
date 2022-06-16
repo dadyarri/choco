@@ -17,7 +17,7 @@ async def fetch_all_orders_cities(page) -> list[models.OrderCity]:
         )
 
 
-async def create_order(order_city: OrderCity) -> models.OrderCity:
+async def create_order_city(order_city: OrderCity) -> models.OrderCity:
     async with in_transaction():
         return await models.OrderCity.create(name=order_city.name)
 
