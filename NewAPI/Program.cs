@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v2.0.0",
         Title = "ChocoManager API",
-        Description = "API for internal set of tools for online-shop https://vk.com/choco_furmanov"
+        Description = "API для внутреннего набора утилит интернет-магазина https://vk.com/choco_furmanov"
     });
 });
 
