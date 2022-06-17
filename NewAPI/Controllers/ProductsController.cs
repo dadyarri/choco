@@ -44,6 +44,6 @@ public class ProductsController : ControllerBase
         var created = _db.Products.Add(product);
         await _db.SaveChangesAsync();
 
-        return created.Entity;
+        return Created("/api/v2/Products", created.Entity);
     }
 }
