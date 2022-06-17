@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NewAPI.Data;
@@ -17,6 +18,9 @@ builder.Services.AddSwaggerGen(options =>
         Title = "ChocoManager API",
         Description = "API для внутреннего набора утилит интернет-магазина https://vk.com/choco_furmanov"
     });
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 var connectionString = builder.Configuration.GetConnectionString("Default");
