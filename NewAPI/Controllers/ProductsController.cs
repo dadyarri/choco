@@ -26,13 +26,18 @@ public class ProductsController : ControllerBase
     /// <summary>
     /// Получение всех доступных товаров
     /// </summary>
+    /// <param name="parameters">Параметры пагинации</param>
     /// <response code="200">Данные успешно получены</response>
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<Product>>> GetAllProducts()
+    public async Task<ActionResult<List<Product>>> GetAllProducts([FromQuery] PagingParameters parameters)
     {
-        return await _db.Products.ToListAsync();
+        return await _db.Products
+            .OrderBy(p => p.Id)
+            .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+            .Take(parameters.PageSize)
+            .ToListAsync();
     }
 
     /// <summary>
