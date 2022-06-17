@@ -6,6 +6,9 @@ using NewAPI.Models;
 
 namespace NewAPI.Controllers;
 
+/// <summary>
+/// Работа с отдельными элементами коллекции товаров
+/// </summary>
 [ApiController]
 [Route("/api/v2/[controller]")]
 public class ProductController : ControllerBase
@@ -13,12 +16,21 @@ public class ProductController : ControllerBase
     private readonly ApplicationContext _db;
     private readonly ILogger<ProductController> _logger;
 
+    /// <summary>
+    /// Конструктор контроллера
+    /// </summary>
+    /// <param name="context">Автоматически добавляемый контекст базы данных</param>
+    /// <param name="logger">Автоматически добавляемый логгер</param>
     public ProductController(ApplicationContext context, ILogger<ProductController> logger)
     {
         _db = context;
         _logger = logger;
     }
 
+    /// <summary>
+    /// Получение товара по идентификатору
+    /// </summary>
+    /// <param name="id">Идентификатор товара</param>
     [HttpGet("{id:int}")]
     [Produces("application/json")]
     public async Task<ActionResult<Product>> GetProductById(int id)
@@ -33,6 +45,10 @@ public class ProductController : ControllerBase
         return product;
     }
 
+    /// <summary>
+    /// Получение товара по идентификатору в магазине ВК
+    /// </summary>
+    /// <param name="marketId">Идентификатор товара в магазине ВК</param>
     [HttpGet("market/{marketId:int}")]
     [Produces("application/json")]
     public async Task<ActionResult<Product>> GetProductByMarketId(int marketId)
@@ -47,6 +63,11 @@ public class ProductController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Обновление товара
+    /// </summary>
+    /// <param name="id">Идентификатор товара</param>
+    /// <param name="product">Запрос в формате JSON PATCH, обновляющий ресурс</param>
     [HttpPatch("{id:int}")]
     [Produces("application/json")]
     public async Task<ActionResult<Product>> UpdateProduct(int id, [FromBody] JsonPatchDocument<Product>? product)
@@ -65,6 +86,11 @@ public class ProductController : ControllerBase
         return Ok(entity);
     }
 
+    /// <summary>
+    /// Удаление товара
+    /// </summary>
+    /// <param name="id">Идентификатор товара</param>
+    /// <returns></returns>
     [HttpDelete("{id:int}")]
     [Produces("application/json")]
     public async Task<ActionResult> DeleteProduct(int id)
