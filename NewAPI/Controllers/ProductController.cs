@@ -31,8 +31,12 @@ public class ProductController : ControllerBase
     /// Получение товара по идентификатору
     /// </summary>
     /// <param name="id">Идентификатор товара</param>
+    /// <response code="200">Товар найден</response>
+    /// <response code="404">Товар не найден</response>
     [HttpGet("{id:int}")]
     [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Product>> GetProductById(int id)
     {
         var product = await _db.Products.FindAsync(id);
@@ -49,8 +53,12 @@ public class ProductController : ControllerBase
     /// Получение товара по идентификатору в магазине ВК
     /// </summary>
     /// <param name="marketId">Идентификатор товара в магазине ВК</param>
+    /// <response code="200">Товар найден</response>
+    /// <response code="404">Товар не найден</response>
     [HttpGet("market/{marketId:int}")]
     [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Product>> GetProductByMarketId(int marketId)
     {
         try
@@ -68,8 +76,14 @@ public class ProductController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор товара</param>
     /// <param name="product">Запрос в формате JSON PATCH, обновляющий ресурс</param>
+    /// <response code="400">Тело запроса не передано или не валидно</response>
+    /// <response code="404">Товар не найден</response>
+    /// <response code="200">Товар изменён</response>
     [HttpPatch("{id:int}")]
     [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Product>> UpdateProduct(int id, [FromBody] JsonPatchDocument<Product>? product)
     {
         if (product == null) return BadRequest(product);
@@ -90,9 +104,12 @@ public class ProductController : ControllerBase
     /// Удаление товара
     /// </summary>
     /// <param name="id">Идентификатор товара</param>
-    /// <returns></returns>
+    /// <response code="404">Товар не найден</response>
+    /// <response code="204">Товар удалён</response>
     [HttpDelete("{id:int}")]
     [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteProduct(int id)
     {
         var entity = await _db.Products.FindAsync(id);

@@ -26,8 +26,10 @@ public class ProductsController : ControllerBase
     /// <summary>
     /// Получение всех доступных товаров
     /// </summary>
+    /// <response code="200">Данные успешно получены</response>
     [HttpGet]
     [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Product>>> GetAllProducts()
     {
         return await _db.Products.ToListAsync();
@@ -37,8 +39,10 @@ public class ProductsController : ControllerBase
     /// Создание товара
     /// </summary>
     /// <param name="product">Модель товара</param>
+    /// <response code="201">Ресурс успешно создан</response>
     [HttpPost]
     [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<Product>> CreateProduct(Product product)
     {
         var created = _db.Products.Add(product);
