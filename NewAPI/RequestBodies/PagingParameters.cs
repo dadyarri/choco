@@ -1,4 +1,4 @@
-namespace NewAPI.Models;
+namespace NewAPI.RequestBodies;
 
 /// <summary>
 /// Параметры пагинации

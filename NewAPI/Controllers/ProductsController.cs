@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewAPI.Data;
 using NewAPI.Models;
+using NewAPI.RequestBodies;
 
 namespace NewAPI.Controllers;
 
