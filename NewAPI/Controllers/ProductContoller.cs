@@ -20,6 +20,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [Produces("application/json")]
     public async Task<ActionResult<Product>> GetProductById(int id)
     {
         var product = await _db.Products.FindAsync(id);
@@ -33,6 +34,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("market/{marketId:int}")]
+    [Produces("application/json")]
     public async Task<ActionResult<Product>> GetProductByMarketId(int marketId)
     {
         try
@@ -46,6 +48,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPatch("{id:int}")]
+    [Produces("application/json")]
     public async Task<ActionResult<Product>> UpdateProduct(int id, [FromBody] JsonPatchDocument<Product>? product)
     {
         if (product == null) return BadRequest(product);
@@ -63,6 +66,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Produces("application/json")]
     public async Task<ActionResult> DeleteProduct(int id)
     {
         var entity = await _db.Products.FindAsync(id);

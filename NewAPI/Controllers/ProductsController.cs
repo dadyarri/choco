@@ -17,12 +17,14 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
+    [Produces("application/json")]
     public async Task<ActionResult<List<Product>>> GetAllProducts()
     {
         return await _db.Products.ToListAsync();
     }
 
     [HttpPost]
+    [Produces("application/json")]
     public async Task<ActionResult<Product>> CreateProduct(Product product)
     {
         var created = _db.Products.Add(product);
