@@ -6,13 +6,13 @@ from client.models import (
     GetAllGoodsResponse,
     BaseChatResponse,
     GetAllChatsResponse,
-    GetAllOrdersResponseModel, BaseOrderResponse, Order, OrderCity, OrderState, OrderSource, Good,
+    GetAllOrdersResponseModel, BaseOrderResponse, Order, OrderCity, OrderState, OrderSource, Good, OrderFull,
 )
 from fastapi import FastAPI
 from starlette import status
 from tortoise.contrib.fastapi import register_tortoise
 
-from database.services import orders, order_cities, order_states, order_sources
+from database.services import orders, order_cities, order_states, order_sources, order_items
 from .database.core.init import TORTOISE_ORM
 from .database.services import goods, chats
 
