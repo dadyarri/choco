@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NewAPI.Data;
 using NewAPI.Models;
 using NewAPI.RequestBodies;
+using Npgsql;
 
 namespace NewAPI.Controllers.Auth;
 
@@ -40,7 +41,21 @@ public class AuthController : ControllerBase
         };
 
         await _db.Users.AddAsync(user);
-        await _db.SaveChangesAsync();
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (Microsoft.EntityFrameworkCore.DbUpdateException ex) when
+            (ex.InnerException is PostgresException exception)
+        {
+            return exception.SqlState switch
+            {
+                PostgresErrorCodes.UniqueViolation => Conflict(user),
+                _ => Problem(exception.MessageText)
+            };
+        }
+
         return Created("/api/v2/Auth", user);
     }
 
