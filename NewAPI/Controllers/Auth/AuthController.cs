@@ -6,17 +6,28 @@ using NewAPI.RequestBodies;
 
 namespace NewAPI.Controllers.Auth;
 
+/// <summary>
+/// Работа с пользователями (регистрация/авторизация/аутентификация...)
+/// </summary>
 [ApiController]
 [Route("api/v2/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly ApplicationContext _db;
 
+    /// <summary>
+    /// Конструктор контроллера
+    /// </summary>
+    /// <param name="context">Автоматически добавляемый контекст базы данных</param>
     public AuthController(ApplicationContext context)
     {
         _db = context;
     }
 
+    /// <summary>
+    /// Регистрация пользователя
+    /// </summary>
+    /// <param name="body">Тело запроса с именем пользователя и паролем</param>
     [HttpPost]
     public async Task<ActionResult<User>> Register(UserParameters body)
     {
