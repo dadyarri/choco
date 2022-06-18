@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NewAPI.Data;
 using NewAPI.Models;
 using NewAPI.RequestBodies;
+using NewAPI.Responses;
+using Newtonsoft.Json;
 
 namespace NewAPI.Controllers;
 
@@ -32,13 +33,26 @@ public class ProductsController : ControllerBase
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<Product>>> GetAllProducts([FromQuery] PagingParameters parameters)
+    public async Task<ActionResult<Paged<Product>>> GetAllProducts([FromQuery] PagingParameters parameters)
     {
-        return await _db.Products
-            .OrderBy(p => p.Id)
-            .Skip((parameters.PageNumber - 1) * parameters.PageSize)
-            .Take(parameters.PageSize)
-            .ToListAsync();
+        var queryResults = _db.Products.OrderBy(p => p.Id);
+
+        Paged<Product> products =
+            await Paged<Product>.ToPaged(queryResults, parameters.PageNumber, parameters.PageSize);
+
+        var metadata = new
+        {
+            products.TotalCount,
+            products.PageSize,
+            products.CurrentPage,
+            products.TotalPages,
+            products.HasPrevious,
+            products.HasNext
+        };
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+        return Ok(products);
     }
 
     /// <summary>
