@@ -53,7 +53,7 @@ public class AuthController : ControllerBase
         {
             await _db.SaveChangesAsync();
         }
-        catch (Microsoft.EntityFrameworkCore.DbUpdateException ex) when
+        catch (DbUpdateException ex) when
             (ex.InnerException is PostgresException exception)
         {
             return exception.SqlState switch
