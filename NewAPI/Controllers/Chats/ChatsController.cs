@@ -33,7 +33,7 @@ public class ChatsController : ControllerBase
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<Paged<Chat>>> GetAllProducts([FromQuery] PagingParameters parameters)
+    public async Task<ActionResult<Paged<Chat>>> GetAllChats([FromQuery] PagingParameters parameters)
     {
         var queryResults = _db.Chats.OrderBy(p => p.Id);
 
@@ -63,7 +63,7 @@ public class ChatsController : ControllerBase
     [HttpPost]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult<Chat>> CreateProduct(Chat chat)
+    public async Task<ActionResult<Chat>> CreateChat(Chat chat)
     {
         var created = _db.Chats.Add(chat);
         await _db.SaveChangesAsync();
