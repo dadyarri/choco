@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -38,6 +39,7 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="body">Тело запроса с именем пользователя и паролем</param>
     [HttpPost("Register")]
+    [AllowAnonymous]
     public async Task<ActionResult<User>> Register(UserParameters body)
     {
         CreatePasswordHash(body.Password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -74,6 +76,7 @@ public class AuthController : ControllerBase
 
 
     [HttpPost("Login")]
+    [AllowAnonymous]
     public async Task<ActionResult<string>> Login(UserParameters body)
     {
         var user = await _db.Users.SingleOrDefaultAsync(u => u.Username.Equals(body.Username));
