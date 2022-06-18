@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "NewAPI": {
+    "api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -19,7 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "NewAPI Production": {
+    "api Production": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
