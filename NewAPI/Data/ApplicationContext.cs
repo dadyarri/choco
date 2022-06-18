@@ -16,4 +16,5 @@ public class ApplicationContext : DbContext
     public DbSet<OrderSource> OrderSources => Set<OrderSource>();
     public DbSet<OrderState> OrderStates => Set<OrderState>();
     public DbSet<Product> Products => Set<Product>();
+    public DbSet<User> Users => Set<User>();
 }
