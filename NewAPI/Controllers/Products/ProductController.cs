@@ -1,9 +1,11 @@
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewAPI.Data;
 using NewAPI.Models;
+using NewAPI.Responses;
 
 namespace NewAPI.Controllers.Products;
 
@@ -47,7 +49,12 @@ public class ProductController : ControllerBase
 
         if (product is null)
         {
-            return NotFound(id);
+            return NotFound(new Error
+            {
+                Code = (int)HttpStatusCode.NotFound,
+                Message = "Product with this id was not found",
+                Data = id
+            });
         }
 
         return product;
@@ -74,7 +81,12 @@ public class ProductController : ControllerBase
         }
         catch (InvalidOperationException)
         {
-            return NotFound(marketId);
+            return NotFound(new Error
+            {
+                Code = (int)HttpStatusCode.NotFound,
+                Message = "Chat with this marketId was not found",
+                Data = marketId
+            });
         }
     }
 
@@ -96,13 +108,23 @@ public class ProductController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Product>> UpdateProduct(int id, [FromBody] JsonPatchDocument<Product>? product)
     {
-        if (product == null) return BadRequest(product);
+        if (product == null)
+            return BadRequest(new Error
+            {
+                Code = (int)HttpStatusCode.BadRequest,
+                Message = "Product was not passed"
+            });
 
         var entity = await _db.Products.FindAsync(id);
 
         if (entity == null)
         {
-            return NotFound(id);
+            return NotFound(new Error
+            {
+                Code = (int)HttpStatusCode.NotFound,
+                Message = "Product with this id was not found",
+                Data = id
+            });
         }
 
         product.ApplyTo(entity, ModelState);
@@ -129,7 +151,12 @@ public class ProductController : ControllerBase
 
         if (entity is null)
         {
-            return NotFound(id);
+            return NotFound(new Error
+            {
+                Code = (int)HttpStatusCode.NotFound,
+                Message = "Product with this id was not found",
+                Data = id
+            });
         }
 
         _db.Products.Remove(entity);

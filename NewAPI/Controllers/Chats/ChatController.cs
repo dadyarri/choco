@@ -1,9 +1,11 @@
+using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewAPI.Data;
 using NewAPI.Models;
+using NewAPI.Responses;
 
 namespace NewAPI.Controllers.Chats;
 
@@ -44,7 +46,12 @@ public class ChatController : ControllerBase
 
         if (chat is null)
         {
-            return NotFound(id);
+            return NotFound(new Error
+            {
+                Code = (int)HttpStatusCode.NotFound,
+                Message = "Chat with this id was not found",
+                Data = id
+            });
         }
 
         return chat;
@@ -71,7 +78,12 @@ public class ChatController : ControllerBase
         }
         catch (InvalidOperationException)
         {
-            return NotFound(vkId);
+            return NotFound(new Error
+            {
+                Code = (int)HttpStatusCode.NotFound,
+                Message = "Chat with this vkId was not found",
+                Data = vkId
+            });
         }
     }
 
@@ -93,13 +105,23 @@ public class ChatController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Product>> UpdateChat(int id, [FromBody] JsonPatchDocument<Chat>? chat)
     {
-        if (chat == null) return BadRequest(chat);
+        if (chat == null)
+            return BadRequest(new Error
+            {
+                Code = (int)HttpStatusCode.BadRequest,
+                Message = "Chat was not passed",
+            });
 
         var entity = await _db.Chats.FindAsync(id);
 
         if (entity == null)
         {
-            return NotFound(id);
+            return NotFound(new Error
+            {
+                Code = (int)HttpStatusCode.NotFound,
+                Message = "Chat with this id was not found",
+                Data = id
+            });
         }
 
         chat.ApplyTo(entity, ModelState);
@@ -126,7 +148,12 @@ public class ChatController : ControllerBase
 
         if (entity is null)
         {
-            return NotFound(id);
+            return NotFound(new Error
+            {
+                Code = (int)HttpStatusCode.NotFound,
+                Message = "Chat with this id was not found",
+                Data = id
+            });
         }
 
         _db.Chats.Remove(entity);
