@@ -4,8 +4,15 @@ using Microsoft.Extensions.Options;
 
 namespace api.Data;
 
+/// <summary>
+/// Форматтер тела PATCH запроса
+/// </summary>
 public class ApplicationJpif
 {
+    /// <summary>
+    /// Получает форматтер тела PATCH запроса
+    /// </summary>
+    /// <returns></returns>
     public static NewtonsoftJsonInputFormatter GetJsonPatchInputFormatter()
     {
         var builder = new ServiceCollection()
