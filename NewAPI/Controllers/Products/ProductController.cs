@@ -33,11 +33,13 @@ public class ProductController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор товара</param>
     /// <response code="200">Товар найден</response>
+    /// <response code="401">Ошибка авторизации</response>
     /// <response code="404">Товар не найден</response>
     [Authorize]
     [HttpGet("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Product>> GetProductById(int id)
     {
@@ -56,11 +58,13 @@ public class ProductController : ControllerBase
     /// </summary>
     /// <param name="marketId">Идентификатор товара в магазине ВК</param>
     /// <response code="200">Товар найден</response>
+    /// <response code="401">Ошибка авторизации</response>
     /// <response code="404">Товар не найден</response>
     [Authorize]
     [HttpGet("market/{marketId:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Product>> GetProductByMarketId(int marketId)
     {
@@ -80,6 +84,7 @@ public class ProductController : ControllerBase
     /// <param name="id">Идентификатор товара</param>
     /// <param name="product">Запрос в формате JSON PATCH, обновляющий ресурс</param>
     /// <response code="400">Тело запроса не передано или не валидно</response>
+    /// <response code="401">Ошибка авторизации</response>
     /// <response code="404">Товар не найден</response>
     /// <response code="200">Товар изменён</response>
     [Authorize]
@@ -87,6 +92,7 @@ public class ProductController : ControllerBase
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Product>> UpdateProduct(int id, [FromBody] JsonPatchDocument<Product>? product)
     {
@@ -108,12 +114,14 @@ public class ProductController : ControllerBase
     /// Удаление товара
     /// </summary>
     /// <param name="id">Идентификатор товара</param>
-    /// <response code="404">Товар не найден</response>
     /// <response code="204">Товар удалён</response>
+    /// <response code="401">Ошибка авторизации</response>
+    /// <response code="404">Товар не найден</response>
     [Authorize]
     [HttpDelete("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteProduct(int id)
     {

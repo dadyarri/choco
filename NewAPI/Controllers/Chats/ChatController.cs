@@ -30,11 +30,13 @@ public class ChatController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор чата</param>
     /// <response code="200">Чат найден</response>
+    /// <response code="401">Ошибка авторизации</response>
     /// <response code="404">Чат не найден</response>
     [Authorize]
     [HttpGet("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Chat>> GetChatById(int id)
     {
@@ -53,11 +55,13 @@ public class ChatController : ControllerBase
     /// </summary>
     /// <param name="vkId">Идентификатор чата в ВК</param>
     /// <response code="200">Чат найден</response>
+    /// <response code="401">Ошибка авторизации</response>
     /// <response code="404">Чат не найден</response>
     [Authorize]
     [HttpGet("vk/{vkId:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Chat>> GetChatByVkId(int vkId)
     {
@@ -76,14 +80,16 @@ public class ChatController : ControllerBase
     /// </summary>
     /// <param name="id">Идентификатор чата</param>
     /// <param name="chat">Запрос в формате JSON PATCH, обновляющий ресурс</param>
-    /// <response code="400">Тело запроса не передано или не валидно</response>
-    /// <response code="404">Чат не найден</response>
     /// <response code="200">Чат изменён</response>
+    /// <response code="400">Тело запроса не передано или не валидно</response>
+    /// <response code="401">Ошибка авторизации</response>
+    /// <response code="404">Чат не найден</response>
     [Authorize]
     [HttpPatch("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Product>> UpdateChat(int id, [FromBody] JsonPatchDocument<Chat>? chat)
     {
@@ -105,12 +111,14 @@ public class ChatController : ControllerBase
     /// Удаление чата
     /// </summary>
     /// <param name="id">Идентификатор чата</param>
-    /// <response code="404">Чат не найден</response>
     /// <response code="204">Чат удалён</response>
+    /// <response code="401">Ошибка авторизации</response>
+    /// <response code="404">Чат не найден</response>
     [Authorize]
     [HttpDelete("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> DeleteChat(int id)
     {

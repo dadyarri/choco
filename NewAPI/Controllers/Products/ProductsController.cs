@@ -31,10 +31,12 @@ public class ProductsController : ControllerBase
     /// </summary>
     /// <param name="parameters">Параметры пагинации</param>
     /// <response code="200">Данные успешно получены</response>
+    /// <response code="401">Ошибка авторизации</response>
     [HttpGet]
     [Authorize]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Paged<Product>>> GetAllProducts([FromQuery] PagingParameters parameters)
     {
         var queryResults = _db.Products.OrderBy(p => p.Id);
@@ -62,10 +64,12 @@ public class ProductsController : ControllerBase
     /// </summary>
     /// <param name="product">Модель товара</param>
     /// <response code="201">Ресурс успешно создан</response>
+    /// <response code="401">Ошибка авторизации</response>
     [HttpPost]
     [Authorize]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Product>> CreateProduct(Product product)
     {
         var created = _db.Products.Add(product);

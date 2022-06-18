@@ -31,10 +31,12 @@ public class ChatsController : ControllerBase
     /// </summary>
     /// <param name="parameters">Параметры пагинации</param>
     /// <response code="200">Данные успешно получены</response>
+    /// <response code="401">Ошибка авторизации</response>
     [HttpGet]
     [Authorize]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Paged<Chat>>> GetAllChats([FromQuery] PagingParameters parameters)
     {
         var queryResults = _db.Chats.OrderBy(p => p.Id);
@@ -62,10 +64,12 @@ public class ChatsController : ControllerBase
     /// </summary>
     /// <param name="chat">Модель чата</param>
     /// <response code="201">Ресурс успешно создан</response>
+    /// <response code="401">Ошибка авторизации</response>
     [HttpPost]
     [Authorize]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Chat>> CreateChat(Chat chat)
     {
         var created = _db.Chats.Add(chat);
