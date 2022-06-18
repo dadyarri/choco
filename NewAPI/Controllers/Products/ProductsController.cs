@@ -5,7 +5,7 @@ using NewAPI.RequestBodies;
 using NewAPI.Responses;
 using Newtonsoft.Json;
 
-namespace NewAPI.Controllers;
+namespace NewAPI.Controllers.Products;
 
 /// <summary>
 /// Работа с коллекцией товаров

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NewAPI.Data;
 using NewAPI.Models;
 
-namespace NewAPI.Controllers;
+namespace NewAPI.Controllers.Products;
 
 /// <summary>
 /// Работа с отдельными элементами коллекции товаров
