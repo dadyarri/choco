@@ -1,4 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
@@ -58,7 +59,12 @@ public class AuthController : ControllerBase
         {
             return exception.SqlState switch
             {
-                PostgresErrorCodes.UniqueViolation => Conflict(user),
+                PostgresErrorCodes.UniqueViolation => Conflict(new Error
+                {
+                    Code = (int)HttpStatusCode.Conflict,
+                    Message = "User already exist",
+                    Data = body.Username
+                }),
                 _ => Problem(exception.MessageText)
             };
         }
@@ -76,7 +82,7 @@ public class AuthController : ControllerBase
         {
             return BadRequest(new Error
             {
-                Code = 400,
+                Code = (int)HttpStatusCode.BadRequest,
                 Message = "User was not found",
                 Data = body.Username
             });
@@ -86,7 +92,7 @@ public class AuthController : ControllerBase
         {
             return BadRequest(new Error
             {
-                Code = 400,
+                Code = (int)HttpStatusCode.BadRequest,
                 Message = "Wrong password"
             });
         }
