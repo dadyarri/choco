@@ -22,7 +22,7 @@ services:
   api:
     container_name: new_api
     build:
-      context: NewAPI
+      context: api
       dockerfile: Dockerfile
     expose:
       - 80
