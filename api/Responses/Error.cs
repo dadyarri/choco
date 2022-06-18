@@ -1,4 +1,4 @@
-namespace NewAPI.Responses;
+namespace api.Responses;
 
 public class Error
 {

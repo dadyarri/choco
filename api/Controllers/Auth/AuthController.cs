@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using NewAPI.Data;
-using NewAPI.Models;
-using NewAPI.RequestBodies;
-using NewAPI.Responses;
+using api.Data;
+using api.Models;
+using api.RequestBodies;
+using api.Responses;
 using Npgsql;
 
-namespace NewAPI.Controllers.Auth;
+namespace api.Controllers.Auth;
 
 /// <summary>
 /// Работа с пользователями (регистрация/авторизация/аутентификация...)

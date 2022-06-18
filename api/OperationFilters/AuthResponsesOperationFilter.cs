@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace NewAPI.OperationFilters;
+namespace api.OperationFilters;
 
 public class AuthResponsesOperationFilter : IOperationFilter
 {

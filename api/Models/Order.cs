@@ -1,4 +1,4 @@
-namespace NewAPI.Models;
+namespace api.Models;
 
 /// <summary>
 /// Модель, представляющая заказ пользователя

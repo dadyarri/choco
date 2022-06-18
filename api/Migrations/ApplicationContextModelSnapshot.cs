@@ -3,12 +3,12 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NewAPI.Data;
+using api.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace NewAPI.Migrations
+namespace api.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
     partial class ApplicationContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace NewAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("NewAPI.Models.Chat", b =>
+            modelBuilder.Entity("api.Models.Chat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,7 +41,7 @@ namespace NewAPI.Migrations
                     b.ToTable("Chats");
                 });
 
-            modelBuilder.Entity("NewAPI.Models.Order", b =>
+            modelBuilder.Entity("api.Models.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,7 +69,7 @@ namespace NewAPI.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("NewAPI.Models.OrderCity", b =>
+            modelBuilder.Entity("api.Models.OrderCity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,7 +86,7 @@ namespace NewAPI.Migrations
                     b.ToTable("OrderCities");
                 });
 
-            modelBuilder.Entity("NewAPI.Models.OrderedProduct", b =>
+            modelBuilder.Entity("api.Models.OrderedProduct", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,7 +112,7 @@ namespace NewAPI.Migrations
                     b.ToTable("OrderedProducts");
                 });
 
-            modelBuilder.Entity("NewAPI.Models.OrderSource", b =>
+            modelBuilder.Entity("api.Models.OrderSource", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -129,7 +129,7 @@ namespace NewAPI.Migrations
                     b.ToTable("OrderSources");
                 });
 
-            modelBuilder.Entity("NewAPI.Models.OrderState", b =>
+            modelBuilder.Entity("api.Models.OrderState", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -146,7 +146,7 @@ namespace NewAPI.Migrations
                     b.ToTable("OrderStates");
                 });
 
-            modelBuilder.Entity("NewAPI.Models.Product", b =>
+            modelBuilder.Entity("api.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,7 +178,7 @@ namespace NewAPI.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("NewAPI.Models.User", b =>
+            modelBuilder.Entity("api.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -206,21 +206,21 @@ namespace NewAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("NewAPI.Models.Order", b =>
+            modelBuilder.Entity("api.Models.Order", b =>
                 {
-                    b.HasOne("NewAPI.Models.OrderCity", "City")
+                    b.HasOne("api.Models.OrderCity", "City")
                         .WithMany()
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NewAPI.Models.OrderSource", "Source")
+                    b.HasOne("api.Models.OrderSource", "Source")
                         .WithMany()
                         .HasForeignKey("SourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NewAPI.Models.OrderState", "State")
+                    b.HasOne("api.Models.OrderState", "State")
                         .WithMany()
                         .HasForeignKey("StateId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -233,15 +233,15 @@ namespace NewAPI.Migrations
                     b.Navigation("State");
                 });
 
-            modelBuilder.Entity("NewAPI.Models.OrderedProduct", b =>
+            modelBuilder.Entity("api.Models.OrderedProduct", b =>
                 {
-                    b.HasOne("NewAPI.Models.Order", "Order")
+                    b.HasOne("api.Models.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NewAPI.Models.Product", "Product")
+                    b.HasOne("api.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)

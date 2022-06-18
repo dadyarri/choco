@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace NewAPI.Responses;
+namespace api.Responses;
 
 /// <summary>
 /// Постраничный список

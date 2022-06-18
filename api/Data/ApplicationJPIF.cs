@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 
-namespace NewAPI.Data;
+namespace api.Data;
 
 public class ApplicationJpif
 {

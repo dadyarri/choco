@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NewAPI.Data;
-using NewAPI.Models;
-using NewAPI.Responses;
+using api.Data;
+using api.Models;
+using api.Responses;
 
-namespace NewAPI.Controllers.Products;
+namespace api.Controllers.Products;
 
 /// <summary>
 /// Работа с отдельными элементами коллекции товаров

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using NewAPI.Models;
+using api.Models;
 
-namespace NewAPI.Data;
+namespace api.Data;
 
 /// <summary>
 /// Контекст базы данных

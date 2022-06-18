@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NewAPI.Data;
-using NewAPI.Models;
-using NewAPI.RequestBodies;
-using NewAPI.Responses;
+using api.Data;
+using api.Models;
+using api.RequestBodies;
+using api.Responses;
 using Newtonsoft.Json;
 
-namespace NewAPI.Controllers.Chats;
+namespace api.Controllers.Chats;
 
 /// <summary>
 /// Работа с коллекцией чатов

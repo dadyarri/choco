@@ -1,4 +1,4 @@
-namespace NewAPI.RequestBodies;
+namespace api.RequestBodies;
 
 public class UserParameters
 {

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace NewAPI.Migrations
+namespace api.Migrations
 {
     public partial class RenameFields : Migration
     {

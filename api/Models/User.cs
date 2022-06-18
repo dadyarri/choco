@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace NewAPI.Models;
+namespace api.Models;
 
 public class User
 {
