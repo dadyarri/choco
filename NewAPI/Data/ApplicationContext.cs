@@ -55,4 +55,13 @@ public class ApplicationContext : DbContext
     /// Коллекция пользователей
     /// </summary>
     public DbSet<User> Users => Set<User>();
+
+    /// <summary>
+    /// Операции, выполняемые при создании таблиц
+    /// </summary>
+    /// <param name="builder"></param>
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.Entity<User>(entity => { entity.HasIndex(e => e.Username).IsUnique(); });
+    }
 }
