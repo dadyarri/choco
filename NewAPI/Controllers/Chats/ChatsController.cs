@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewAPI.Data;
 using NewAPI.Models;
@@ -31,6 +32,7 @@ public class ChatsController : ControllerBase
     /// <param name="parameters">Параметры пагинации</param>
     /// <response code="200">Данные успешно получены</response>
     [HttpGet]
+    [Authorize]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<Paged<Chat>>> GetAllChats([FromQuery] PagingParameters parameters)
@@ -61,6 +63,7 @@ public class ChatsController : ControllerBase
     /// <param name="chat">Модель чата</param>
     /// <response code="201">Ресурс успешно создан</response>
     [HttpPost]
+    [Authorize]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<ActionResult<Chat>> CreateChat(Chat chat)

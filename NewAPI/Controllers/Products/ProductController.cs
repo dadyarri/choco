@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,7 @@ public class ProductController : ControllerBase
     /// <param name="id">Идентификатор товара</param>
     /// <response code="200">Товар найден</response>
     /// <response code="404">Товар не найден</response>
+    [Authorize]
     [HttpGet("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -55,6 +57,7 @@ public class ProductController : ControllerBase
     /// <param name="marketId">Идентификатор товара в магазине ВК</param>
     /// <response code="200">Товар найден</response>
     /// <response code="404">Товар не найден</response>
+    [Authorize]
     [HttpGet("market/{marketId:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -79,6 +82,7 @@ public class ProductController : ControllerBase
     /// <response code="400">Тело запроса не передано или не валидно</response>
     /// <response code="404">Товар не найден</response>
     /// <response code="200">Товар изменён</response>
+    [Authorize]
     [HttpPatch("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -106,6 +110,7 @@ public class ProductController : ControllerBase
     /// <param name="id">Идентификатор товара</param>
     /// <response code="404">Товар не найден</response>
     /// <response code="204">Товар удалён</response>
+    [Authorize]
     [HttpDelete("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,7 @@ public class ChatController : ControllerBase
     /// <param name="id">Идентификатор чата</param>
     /// <response code="200">Чат найден</response>
     /// <response code="404">Чат не найден</response>
+    [Authorize]
     [HttpGet("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -52,6 +54,7 @@ public class ChatController : ControllerBase
     /// <param name="vkId">Идентификатор чата в ВК</param>
     /// <response code="200">Чат найден</response>
     /// <response code="404">Чат не найден</response>
+    [Authorize]
     [HttpGet("vk/{vkId:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -76,6 +79,7 @@ public class ChatController : ControllerBase
     /// <response code="400">Тело запроса не передано или не валидно</response>
     /// <response code="404">Чат не найден</response>
     /// <response code="200">Чат изменён</response>
+    [Authorize]
     [HttpPatch("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -103,6 +107,7 @@ public class ChatController : ControllerBase
     /// <param name="id">Идентификатор чата</param>
     /// <response code="404">Чат не найден</response>
     /// <response code="204">Чат удалён</response>
+    [Authorize]
     [HttpDelete("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
