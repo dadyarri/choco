@@ -28,6 +28,7 @@ public class AuthController : ControllerBase
     /// Конструктор контроллера
     /// </summary>
     /// <param name="context">Автоматически добавляемый контекст базы данных</param>
+    /// <param name="configuration">Автоматически добавляемая конфигурация проекта</param>
     public AuthController(ApplicationContext context, IConfiguration configuration)
     {
         _db = context;
@@ -38,8 +39,15 @@ public class AuthController : ControllerBase
     /// Регистрация пользователя
     /// </summary>
     /// <param name="body">Тело запроса с именем пользователя и паролем</param>
-    [HttpPost("Register")]
+    /// <response code="201">Пользователь создан</response>
+    /// <response code="409">Конфликт (пользователь с таким именем уже есть)</response>
+    /// <response code="500">Ошибка сервера</response>
     [AllowAnonymous]
+    [HttpPost("Register")]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<User>> Register(UserParameters body)
     {
         CreatePasswordHash(body.Password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -75,8 +83,16 @@ public class AuthController : ControllerBase
     }
 
 
-    [HttpPost("Login")]
+    /// <summary>
+    /// Аутентификация пользователя и генерация JWT
+    /// </summary>
+    /// <param name="body">Логин и пароль пользователя</param>
+    /// <response code="200">Токен сгенерирован</response>
+    /// <response code="400">Невалидные данные (имя пользователя/пароль)</response>
     [AllowAnonymous]
+    [HttpPost("Login")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<string>> Login(UserParameters body)
     {
         var user = await _db.Users.SingleOrDefaultAsync(u => u.Username.Equals(body.Username));
