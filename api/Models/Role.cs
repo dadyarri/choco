@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace api.Models;
 
 /// <summary>
@@ -9,14 +11,15 @@ public class Role
     /// Идентификатор роли
     /// </summary>
     public int Id { get; set; }
-    
+
     /// <summary>
     /// Название роли
     /// </summary>
     public string Name { get; set; }
-    
+
     /// <summary>
     /// Список пользователей с ролью
     /// </summary>
+    [JsonIgnore]
     public List<User> Users { get; set; }
 }

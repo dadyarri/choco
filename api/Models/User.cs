@@ -10,8 +10,9 @@ public class User
     /// <summary>
     /// Идентификатор пользователя
     /// </summary>
+    [JsonIgnore]
     public int Id { get; set; }
-    
+
     /// <summary>
     /// Имя пользователя
     /// </summary>
@@ -20,12 +21,14 @@ public class User
     /// <summary>
     /// Хеш пароля пользователя
     /// </summary>
-    [JsonIgnore] public byte[] PasswordHash { get; set; }
+    [JsonIgnore]
+    public byte[] PasswordHash { get; set; }
 
     /// <summary>
     /// Соль пароля пользователя
     /// </summary>
-    [JsonIgnore] public byte[] PasswordSalt { get; set; }
+    [JsonIgnore]
+    public byte[] PasswordSalt { get; set; }
 
     /// <summary>
     /// Список ролей пользователя
