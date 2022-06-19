@@ -52,6 +52,11 @@ public class ApplicationContext : DbContext
     public DbSet<Product> Products => Set<Product>();
 
     /// <summary>
+    /// Коллекция товаров
+    /// </summary>
+    public DbSet<Role> Roles => Set<Role>();
+
+    /// <summary>
     /// Коллекция пользователей
     /// </summary>
     public DbSet<User> Users => Set<User>();

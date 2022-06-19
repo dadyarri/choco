@@ -26,4 +26,9 @@ public class User
     /// Соль пароля пользователя
     /// </summary>
     [JsonIgnore] public byte[] PasswordSalt { get; set; }
+
+    /// <summary>
+    /// Список ролей пользователя
+    /// </summary>
+    public List<Role> Roles { get; set; }
 }
