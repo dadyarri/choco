@@ -10,6 +10,7 @@ using api.Data;
 using api.Models;
 using api.RequestBodies;
 using api.Responses;
+using Newtonsoft.Json;
 using Npgsql;
 
 namespace api.Controllers.Auth;
@@ -119,11 +120,51 @@ public class AuthController : ControllerBase
         return Ok(GenerateToken(user));
     }
 
+    /// <summary>
+    /// Получение информации о текущем пользователе
+    /// </summary>
+    /// <response code="200">Данные получены</response>
+    /// <response code="401">Пользователь не авторизован</response>
+    [Authorize]
+    [HttpGet("Whoami")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<User> Whoami()
+    {
+        var user = GetCurrentUser();
+
+        if (user is not null)
+        {
+            return Ok(user);
+        }
+
+        return Unauthorized(new Error
+        {
+            Code = (int)HttpStatusCode.Unauthorized,
+            Message = "User is not authorized"
+        });
+    }
+
+    private User? GetCurrentUser()
+    {
+        if (HttpContext.User.Identity is not ClaimsIdentity identity) return null;
+        var userClaims = identity.Claims;
+        return new User
+        {
+            Username = userClaims.First(c => c.Type == ClaimTypes.Name).Value,
+            Roles = JsonConvert.DeserializeObject<List<Role>>(userClaims.First(c => c.Type == ClaimTypes.Role).Value)
+        };
+    }
+
     private string GenerateToken(User user)
     {
+        
+        _db.Entry(user).Collection(u => u.Roles).Load();
+        
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name, user.Username)
+            new(ClaimTypes.Name, user.Username),
+            new(ClaimTypes.Role, JsonConvert.SerializeObject(user.Roles))
         };
 
         var key = new SymmetricSecurityKey(
