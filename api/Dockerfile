@@ -1,19 +1,21 @@
-FROM python:3.10-slim
+﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
 
-# System deps
-RUN apt-get update && apt-get install -y -qq git gcc
-# Download and install poetry
-RUN pip install poetry
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+COPY ["api.csproj", "./"]
+RUN dotnet restore "api.csproj"
+COPY . .
+WORKDIR "/src/"
+RUN dotnet build "api.csproj" -c Release -o /app/build
 
-# Copy Poetry's files
-WORKDIR /code
-COPY api/poetry.lock api/pyproject.toml /code/api/
+FROM build AS publish
+RUN dotnet publish "api.csproj" -c Release -o /app/publish
 
-ADD client /code/client
-
-# Install deps
-RUN cd api && poetry config virtualenvs.create false
-RUN cd api && poetry install --no-dev --no-interaction
-
-# Copy sources
-COPY ./api /code/api
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENV ASPNETCORE_ENVIRONMENT Development
+ENTRYPOINT ["dotnet", "api.dll"]

@@ -1,0 +1,6 @@
+[*.cs]
+dotnet_diagnostic.CS8618.severity = none
+dotnet_diagnostic.CS8602.severity = none
+
+[Migrations/*.cs]
+dotnet_diagnostic.CS1591.severity = none

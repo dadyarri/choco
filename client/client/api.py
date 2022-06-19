@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Optional
+from typing import Optional, List
 
 import aiohttp
 
@@ -9,6 +9,12 @@ from .models import (
     BaseGoodResponse,
     GetAllChatsResponse,
     BaseChatResponse,
+    Order,
+    BaseOrderResponse,
+    GetAllOrdersResponseModel,
+    OrderCity,
+    OrderState,
+    OrderSource,
 )
 
 
@@ -49,6 +55,26 @@ class ChocoManagerClient:
         async with aiohttp.ClientSession() as session:
             url = self._get_request_url(endpoint)
             async with session.put(url, params=params) as resp:
+                logging.debug(resp)
+                result = await resp.json()
+            await session.close()
+
+        return result
+
+    async def _make_patch_request(self, endpoint: str, params: dict = None):
+        async with aiohttp.ClientSession() as session:
+            url = self._get_request_url(endpoint)
+            async with session.patch(url, params=params) as resp:
+                logging.debug(resp)
+                result = await resp.json()
+            await session.close()
+
+        return result
+
+    async def _make_delete_request(self, endpoint: str, params: dict = None):
+        async with aiohttp.ClientSession() as session:
+            url = self._get_request_url(endpoint)
+            async with session.delete(url, params=params) as resp:
                 logging.debug(resp)
                 result = await resp.json()
             await session.close()
@@ -164,4 +190,96 @@ class ChocoManagerClient:
     async def disable_chat(self, chat_id: int):
         return BaseChatResponse(
             **await self._make_post_request(f"chats/{chat_id}/disable")
+        )
+
+    async def get_all_orders(self, page: int = 0):
+        query = await self._make_get_request("orders", {"page": page})
+        return GetAllOrdersResponseModel(**query)
+
+    async def create_order(
+        self, source: OrderSource, state: OrderState, city: OrderCity
+    ):
+        return BaseOrderResponse(
+            **await self._make_post_request(
+                "orders/create",
+                {"source": source, "state": state, "city": city},
+            )
+        )
+
+    async def get_order_by_id(self, order_id: int):
+        return BaseOrderResponse(
+            **await self._make_get_request(f"orders/id/{order_id}")
+        )
+
+    async def update_order(self, order: Order):
+        return BaseOrderResponse(
+            **await self._make_patch_request(f"orders/{order.id}", {"order": order})
+        )
+
+    async def get_order_cities(self):
+        return [
+            OrderCity(**city) for city in await self._make_get_request("orderCities")
+        ]
+
+    async def create_order_city(self, name: str):
+        return OrderCity(**await self._make_post_request("orderCities", {"name": name}))
+
+    async def get_order_city_by_id(self, city_id: int):
+        return OrderCity(**await self._make_get_request(f"orderCities/{city_id}"))
+
+    async def update_order_city(self, city: OrderCity):
+        return OrderCity(
+            **await self._make_patch_request(f"orderCities/{city.id}", {"city": city})
+        )
+
+    async def delete_order_city(self, city_id: int):
+        return OrderCity(**await self._make_delete_request(f"orderCities/{city_id}"))
+
+    async def get_order_states(self):
+        return [
+            OrderState(**state) for state in await self._make_get_request("orderStates")
+        ]
+
+    async def create_order_state(self, name: str):
+        return OrderState(
+            **await self._make_post_request("orderStates", {"name": name})
+        )
+
+    async def get_order_state_by_id(self, state_id: int):
+        return OrderState(**await self._make_get_request(f"orderStates/{state_id}"))
+
+    async def update_order_state(self, state: OrderState):
+        return OrderState(
+            **await self._make_patch_request(
+                f"orderStates/{state.id}", {"order_state": state}
+            )
+        )
+
+    async def delete_order_state(self, state_id: int):
+        return OrderState(**await self._make_delete_request(f"orderStates/{state_id}"))
+
+    async def get_order_sources(self):
+        return [
+            OrderSource(**source)
+            for source in await self._make_get_request("orderSources")
+        ]
+
+    async def create_order_source(self, name: str):
+        return OrderSource(
+            **await self._make_post_request("orderSources", {"name": name})
+        )
+
+    async def get_order_source_by_id(self, source_id: int):
+        return OrderSource(**await self._make_get_request(f"orderSources/{source_id}"))
+
+    async def update_order_source(self, source: OrderSource):
+        return OrderSource(
+            **await self._make_patch_request(
+                f"orderSources/{source.id}", {"order_source": source}
+            )
+        )
+
+    async def delete_order_source(self, source_id: int):
+        return OrderSource(
+            **await self._make_delete_request(f"orderSources/{source_id}")
         )

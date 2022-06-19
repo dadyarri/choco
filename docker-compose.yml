@@ -20,21 +20,17 @@ services:
       - net
 
   api:
-    container_name: choco_api
+    container_name: new_api
     build:
-      context: .
-      dockerfile: api/Dockerfile
+      context: api
+      dockerfile: Dockerfile
     expose:
-      - 8080
+      - 80
+      - 443
     ports:
-      - "8080:8000"
-    env_file: .env
-    environment:
-      PYTHONPATH: api
+      - "8080:80"
+      - "7351:443"
     restart: always
-    command: uvicorn api.main:app --host choco.api
-    volumes:
-      - ./api:/code/api
     links:
       - postgres
     depends_on:
