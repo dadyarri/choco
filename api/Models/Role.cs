@@ -10,6 +10,7 @@ public class Role
     /// <summary>
     /// Идентификатор роли
     /// </summary>
+    [JsonIgnore]
     public int Id { get; set; }
 
     /// <summary>
