@@ -10,7 +10,6 @@ using api.Data;
 using api.Models;
 using api.RequestBodies;
 using api.Responses;
-using Newtonsoft.Json;
 using Npgsql;
 
 namespace api.Controllers.Auth;
@@ -129,7 +128,7 @@ public class AuthController : ControllerBase
     [HttpGet("Whoami")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<User> Whoami()
+    public ActionResult<UserResponse> Whoami()
     {
         var user = GetCurrentUser();
 
@@ -145,26 +144,22 @@ public class AuthController : ControllerBase
         });
     }
 
-    private User? GetCurrentUser()
+    private UserResponse? GetCurrentUser()
     {
         if (HttpContext.User.Identity is not ClaimsIdentity identity) return null;
         var userClaims = identity.Claims;
-        return new User
+        return new UserResponse
         {
-            Username = userClaims.First(c => c.Type == ClaimTypes.Name).Value,
-            Roles = JsonConvert.DeserializeObject<List<Role>>(userClaims.First(c => c.Type == ClaimTypes.Role).Value)
+            Username = userClaims.First(c => c.Type == ClaimTypes.Name).Value
         };
     }
 
     private string GenerateToken(User user)
     {
         
-        _db.Entry(user).Collection(u => u.Roles).Load();
-        
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, user.Username),
-            new(ClaimTypes.Role, JsonConvert.SerializeObject(user.Roles))
         };
 
         var key = new SymmetricSecurityKey(
