@@ -1,11 +1,11 @@
 using System.Reflection;
 using System.Text;
+using api.Data;
+using api.OperationFilters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using api.Data;
-using api.OperationFilters;
 
 var builder = WebApplication.CreateBuilder(args);
 
