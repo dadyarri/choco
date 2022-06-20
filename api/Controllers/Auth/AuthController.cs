@@ -162,6 +162,14 @@ public class AuthController : ControllerBase
             new(ClaimTypes.Name, user.Username),
         };
 
+        var rolesOfUser = _db.Roles.Where(
+            r => r.Users.Any(u => u.Id == user.Id));
+
+        foreach (var role in rolesOfUser)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role.Name));
+        }
+
         var key = new SymmetricSecurityKey(
             System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("Security:Token").Value));
 
