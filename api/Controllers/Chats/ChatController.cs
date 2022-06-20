@@ -34,7 +34,7 @@ public class ChatController : ControllerBase
     /// <response code="200">Чат найден</response>
     /// <response code="401">Ошибка авторизации</response>
     /// <response code="404">Чат не найден</response>
-    [Authorize]
+    [Authorize(Roles="Administrator")]
     [HttpGet("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -64,7 +64,7 @@ public class ChatController : ControllerBase
     /// <response code="200">Чат найден</response>
     /// <response code="401">Ошибка авторизации</response>
     /// <response code="404">Чат не найден</response>
-    [Authorize]
+    [Authorize(Roles="Administrator")]
     [HttpGet("vk/{vkId:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -96,7 +96,7 @@ public class ChatController : ControllerBase
     /// <response code="400">Тело запроса не передано или не валидно</response>
     /// <response code="401">Ошибка авторизации</response>
     /// <response code="404">Чат не найден</response>
-    [Authorize]
+    [Authorize(Roles="Administrator")]
     [HttpPatch("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -136,7 +136,7 @@ public class ChatController : ControllerBase
     /// <response code="204">Чат удалён</response>
     /// <response code="401">Ошибка авторизации</response>
     /// <response code="404">Чат не найден</response>
-    [Authorize]
+    [Authorize(Roles="Administrator")]
     [HttpDelete("{id:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

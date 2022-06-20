@@ -33,7 +33,7 @@ public class ChatsController : ControllerBase
     /// <response code="200">Данные успешно получены</response>
     /// <response code="401">Ошибка авторизации</response>
     [HttpGet]
-    [Authorize]
+    [Authorize(Roles="Administrator")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -66,7 +66,7 @@ public class ChatsController : ControllerBase
     /// <response code="201">Ресурс успешно создан</response>
     /// <response code="401">Ошибка авторизации</response>
     [HttpPost]
-    [Authorize]
+    [Authorize(Roles="Administrator")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
