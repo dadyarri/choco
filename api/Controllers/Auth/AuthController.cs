@@ -176,10 +176,8 @@ public class AuthController : ControllerBase
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
         var token = new JwtSecurityToken(
-            issuer: _configuration.GetSection("Security:Issuer").Value,
-            audience: _configuration.GetSection("Security:Audience").Value,
             claims: claims,
-            expires: DateTime.Now.AddDays(1),
+            expires: DateTime.Now.AddMinutes(10),
             signingCredentials: credentials
         );
 
