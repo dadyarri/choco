@@ -69,7 +69,7 @@ public class ProductController : ControllerBase
     /// <response code="404">Товар не найден</response>
     [Authorize(Roles="Administrator")]
     [Produces("application/json")]
-    [HttpGet("market/{marketId:int}")]
+    [HttpGet("Market/{marketId:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

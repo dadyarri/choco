@@ -65,7 +65,7 @@ public class ChatController : ControllerBase
     /// <response code="401">Ошибка авторизации</response>
     /// <response code="404">Чат не найден</response>
     [Authorize(Roles="Administrator")]
-    [HttpGet("vk/{vkId:int}")]
+    [HttpGet("Vk/{vkId:int}")]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
