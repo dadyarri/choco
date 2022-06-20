@@ -162,16 +162,22 @@ public class AuthController : ControllerBase
             new(ClaimTypes.Name, user.Username),
         };
 
+        var rolesOfUser = _db.Roles.Where(
+            r => r.Users.Any(u => u.Id == user.Id));
+
+        foreach (var role in rolesOfUser)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role.Name));
+        }
+
         var key = new SymmetricSecurityKey(
             System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("Security:Token").Value));
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
         var token = new JwtSecurityToken(
-            issuer: _configuration.GetSection("Security:Issuer").Value,
-            audience: _configuration.GetSection("Security:Audience").Value,
             claims: claims,
-            expires: DateTime.Now.AddDays(1),
+            expires: DateTime.Now.AddMinutes(10),
             signingCredentials: credentials
         );
 
