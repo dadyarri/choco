@@ -1,18 +1,36 @@
 import React, {Component} from 'react';
 import {v4 as uuid} from 'uuid';
-import {GiWeight} from "react-icons/gi";
 import axios from "axios";
+import {GiCancel, GiCheckMark, GiClockwork} from "react-icons/gi";
+import {TbReplace} from "react-icons/tb";
 
 export class Shipments extends Component {
     static displayName = Shipments.name;
 
     constructor(props) {
         super(props);
-        this.state = {products: [], loading: true};
+        this.state = {shipments: [], loading: true};
     }
 
     componentDidMount() {
         this.populateShipmentsData();
+    }
+
+    static getShipmentItemStatusIcon(status) {
+        switch (status) {
+            case "Получено": {
+                return <GiCheckMark/>
+            }
+            case "Ожидается": {
+                return <GiClockwork/>
+            }
+            case "Заменено": {
+                return <TbReplace/>
+            }
+            case "Отменено": {
+                return <GiCancel/>
+            }
+        }
     }
 
     static renderShipmentsTable(shipments) {
@@ -20,17 +38,21 @@ export class Shipments extends Component {
             <table className="table table-striped" aria-labelledby="tableLabel">
                 <thead>
                 <tr>
-                    <th>Название</th>
-                    <th>Цена</th>
-                    <th>Остаток</th>
+                    <th>Дата</th>
+                    <th>Содержимое заказа</th>
                 </tr>
                 </thead>
                 <tbody>
                 {shipments.map(shipment =>
                     <tr key={uuid()}>
-                        <td>{shipment.name} {shipment.isByWeight ? <GiWeight/> : null}</td>
-                        <td>{shipment.wholesalePrice} ({shipment.retailPrice}) &#8381;</td>
-                        <td>{shipment.leftover} {shipment.isByWeight ? 'кг.' : 'шт.'}</td>
+                        <td>{shipment.date}</td>
+                        <td>
+                            <ul>
+                                {shipment.shipmentItems.map(item =>
+                                    <li key={uuid()}>{item.product.name} x{item.amount} {this.getShipmentItemStatusIcon(item.status.name)}</li>
+                                )}
+                            </ul>
+                        </td>
                     </tr>
                 )}
                 </tbody>
@@ -41,7 +63,7 @@ export class Shipments extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Загрузка...</em></p>
-            : Shipments.renderShipmentsTable(this.state.products);
+            : Shipments.renderShipmentsTable(this.state.shipments);
 
         return (
             <div>
@@ -52,10 +74,8 @@ export class Shipments extends Component {
     }
 
     async populateShipmentsData() {
-        await axios.get("https://localhost:7157/products")
+        await axios.get("https://localhost:7157/shipments")
             .then((response) =>
-                this.setState({products: response.data, loading: false}
-                )
-            );
+                this.setState({shipments: response.data, loading: false}))
     }
 }
