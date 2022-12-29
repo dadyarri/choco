@@ -58,6 +58,7 @@ export class Shipments extends Component {
                 <tr>
                     <th>Дата</th>
                     <th>Содержимое заказа</th>
+                    <th>Итог</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -70,6 +71,9 @@ export class Shipments extends Component {
                                     <li key={uuid()}>{item.product.name} x{item.amount} {this.getShipmentItemStatusIcon(item.status.name)}</li>
                                 )}
                             </ul>
+                        </td>
+                        <td>
+                            {shipment.shipmentItems.reduce((sum, item) => sum + item.product.wholesalePrice * item.amount, 0)} &#8381;
                         </td>
                     </tr>
                 )}
