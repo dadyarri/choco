@@ -22,6 +22,7 @@ export class Warehouse extends Component {
                 <tr>
                     <th>Название</th>
                     <th>Цена</th>
+                    <th>Остаток</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,6 +30,7 @@ export class Warehouse extends Component {
                     <tr key={uuid()}>
                         <td>{product.name} {product.isByWeight ? <GiWeight/> : null}</td>
                         <td>{product.wholesalePrice} ({product.retailPrice}) &#8381;</td>
+                        <td>{product.leftover} {product.isByWeight ? 'кг.' : 'шт.'}</td>
                     </tr>
                 )}
                 </tbody>
