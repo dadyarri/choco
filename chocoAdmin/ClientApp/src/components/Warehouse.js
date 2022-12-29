@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {v4 as uuid} from 'uuid';
-import {FaWeight} from "react-icons/fa";
+import {GiWeight} from "react-icons/gi";
 import axios from "axios";
 
 export class Warehouse extends Component {
@@ -27,7 +27,7 @@ export class Warehouse extends Component {
                 <tbody>
                 {products.map(product =>
                     <tr key={uuid()}>
-                        <td>{product.name} {product.isByWeight ? <FaWeight/> : null}</td>
+                        <td>{product.name} {product.isByWeight ? <GiWeight/> : null}</td>
                         <td>{product.wholesalePrice} ({product.retailPrice}) &#8381;</td>
                     </tr>
                 )}
