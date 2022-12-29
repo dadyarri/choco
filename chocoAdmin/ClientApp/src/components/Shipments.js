@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {v4 as uuid} from 'uuid';
 import axios from "axios";
-import {GiCancel, GiCheckMark, GiClockwork} from "react-icons/gi";
-import {TbReplace} from "react-icons/tb";
+import {GiCancel, GiCheckMark, GiClockwork, GiSandsOfTime} from "react-icons/gi";
+import {TbReplace, TbTruckDelivery} from "react-icons/tb";
+import {HiDocumentMagnifyingGlass} from "react-icons/hi2";
 
 export class Shipments extends Component {
     static displayName = Shipments.name;
@@ -32,6 +33,23 @@ export class Shipments extends Component {
             }
         }
     }
+    
+    static getShipmentStatusIcon(status) {
+        switch (status) {
+            case "Получено": {
+                return <GiCheckMark/>
+            }
+            case "Доставляется": {
+                return <TbTruckDelivery/>
+            }
+            case "Ожидается": {
+                return <GiSandsOfTime/>
+            }
+            case "В работе": {
+                return <HiDocumentMagnifyingGlass/>
+            }
+        }
+    }
 
     static renderShipmentsTable(shipments) {
         return (
@@ -45,7 +63,7 @@ export class Shipments extends Component {
                 <tbody>
                 {shipments.map(shipment =>
                     <tr key={uuid()}>
-                        <td>{shipment.date}</td>
+                        <td>{shipment.date} {this.getShipmentStatusIcon(shipment.status.name)}</td>
                         <td>
                             <ul>
                                 {shipment.shipmentItems.map(item =>
