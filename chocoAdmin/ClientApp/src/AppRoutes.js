@@ -2,6 +2,7 @@ import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import {Warehouse} from "./components/Warehouse";
+import {Shipments} from "./components/Shipments";
 
 const AppRoutes = [
   {
@@ -14,7 +15,7 @@ const AppRoutes = [
   },
   {
     path: '/shipments',
-    element: <FetchData />
+    element: <Shipments />
   },
   {
     path: '/warehouse',
