@@ -31,6 +31,9 @@ export class Shipments extends Component {
             case "Отменено": {
                 return <GiCancel/>
             }
+            default: {
+                return null
+            }
         }
     }
     
@@ -47,6 +50,9 @@ export class Shipments extends Component {
             }
             case "В работе": {
                 return <HiDocumentMagnifyingGlass/>
+            }
+            default: {
+                return null
             }
         }
     }
