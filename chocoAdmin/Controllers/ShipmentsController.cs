@@ -19,11 +19,11 @@ public class ShipmentsController : ControllerBase
     public async Task<ActionResult> GetAllShipments()
     {
         return Ok(await _db.Shipments
+            .Include(s => s.Status)
             .Include(s => s.ShipmentItems)
             .ThenInclude(si => si.Product)
             .Include(s => s.ShipmentItems)
             .ThenInclude(si => si.Status)
-            .Include(s => s.Status)
             .ToListAsync());
     }
 }
