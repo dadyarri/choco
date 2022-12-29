@@ -7,4 +7,6 @@ public class AppDbContext: DbContext
 {
     public DbSet<Product> Products => Set<Product>();
     public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
+    
+    public AppDbContext(DbContextOptions<AppDbContext> contextOptions) : base(contextOptions) {}
 }
