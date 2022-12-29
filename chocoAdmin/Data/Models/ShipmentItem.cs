@@ -1,6 +1,6 @@
 namespace choco.Data.Models;
 
-public class ShipmentItem: BaseModel<Guid>
+public class ShipmentItem: BaseModel
 {
     public Shipment Shipment { get; set; }
     public Product Product { get; set; }
