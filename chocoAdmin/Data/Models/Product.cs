@@ -29,4 +29,9 @@ public class Product: BaseModel
     /// Флаг, указывающий на то, должен ли товар продаваться "на развес"
     /// </summary>
     public bool IsByWeight { get; set; }
+    
+    /// <summary>
+    /// Количество товара, оставшегося на складе
+    /// </summary>
+    public double Leftover { get; set; }
 }
