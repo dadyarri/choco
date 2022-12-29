@@ -6,7 +6,7 @@ namespace choco.Controllers;
 
 [Controller]
 [Route("[controller]")]
-public class ShipmentsController: ControllerBase
+public class ShipmentsController : ControllerBase
 {
     private readonly AppDbContext _db;
 
@@ -18,7 +18,11 @@ public class ShipmentsController: ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetAllShipments()
     {
-        return Ok(await _db.Shipments.ToListAsync());
+        return Ok(await _db.Shipments
+            .Include(s => s.ShipmentItems)
+            .ThenInclude(si => si.Product)
+            .Include(s => s.ShipmentItems)
+            .ThenInclude(si => si.Status)
+            .ToListAsync());
     }
-    
 }
