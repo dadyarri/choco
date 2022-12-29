@@ -23,6 +23,7 @@ public class ShipmentsController : ControllerBase
             .ThenInclude(si => si.Product)
             .Include(s => s.ShipmentItems)
             .ThenInclude(si => si.Status)
+            .Include(s => s.Status)
             .ToListAsync());
     }
 }
