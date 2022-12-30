@@ -27,18 +27,18 @@ export class CreateShipment extends Component {
                                 render={arrayHelpers => (
                                     <div className={"m-3"}>
                                         {values.products.map((product, index) => (
-                                            <div className={"d-flex align-items-center m-3"} key={uuid()}>
-                                                <div key={uuid()}>
-                                                    <div key={uuid()} className={"form-group m-3"}>
-                                                        <Label for={`productsName[${index}]Input`}>Название продукта</Label>
+                                            <div className={"d-flex align-items-center m-3"}>
+                                                <div>
+                                                    <div className={"form-group m-3"}>
+                                                        <Label for={`productsName${index}Input`}>Название продукта</Label>
                                                         <Field name={`products[${index}].name`}
                                                                id={`productsName[${index}]Input`}
                                                                className={"form-control"}/>
                                                     </div>
-                                                    <div key={uuid()} className={"form-group m-3"}>
-                                                        <Label for={`productsAmount[${index}]Input`}>Количество</Label>
+                                                    <div className={"form-group m-3"}>
+                                                        <Label for={`productsAmount${index}Input`}>Количество</Label>
                                                         <Field name={`products[${index}].amount`}
-                                                               id={`productsAmount[${index}]Input`}
+                                                               id={`productsAmount${index}Input`}
                                                                className={"form-control"}
                                                                type={"number"}
                                                         />
