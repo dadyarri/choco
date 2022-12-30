@@ -3,6 +3,7 @@ import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
 import {Warehouse} from "./components/Warehouse";
 import {Shipments} from "./components/Shipments";
+import {CreateShipment} from "./components/CreateShipment";
 
 const AppRoutes = [
   {
@@ -19,7 +20,7 @@ const AppRoutes = [
   },
   {
     path: '/shipments/new',
-    element: <Counter />
+    element: <CreateShipment />
   },
   {
     path: '/warehouse',
