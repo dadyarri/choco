@@ -13,8 +13,8 @@ export class CreateShipment extends Component {
             <div>
                 <h1>Создание поставки</h1>
                 <Formik initialValues={{date: ''}} onSubmit={values => console.log(values)}>
-                    <Form>
-                        <div className={"form-group"}>
+                    <Form style={{maxWidth: 400, margin: 20}}>
+                        <div className={"form-group m-3"}>
                             <Field type={"date"} name={"date"} className={"form-control"}/>
                         </div>
                         <button type="submit" className={"btn btn-success"}>
