@@ -95,12 +95,14 @@ export class Shipments extends Component {
         return (
             <div>
                 <h1 id="tableLabel">Поставки</h1>
+                <button className={"btn btn-primary"} onClick={() => this.populateShipmentsData()}>Обновить</button>
                 {contents}
             </div>
         );
     }
 
     async populateShipmentsData() {
+        console.log("tick");
         await axios.get("https://localhost:7157/shipments")
             .then((response) =>
                 this.setState({shipments: response.data, loading: false}))
