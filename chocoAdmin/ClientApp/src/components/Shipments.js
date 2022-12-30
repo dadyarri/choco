@@ -4,6 +4,7 @@ import axios from "axios";
 import {GiCancel, GiCheckMark, GiClockwork, GiSandsOfTime} from "react-icons/gi";
 import {TbTruckDelivery} from "react-icons/tb";
 import {HiDocumentMagnifyingGlass} from "react-icons/hi2";
+import {Link} from "react-router-dom";
 
 export class Shipments extends Component {
     static displayName = Shipments.name;
@@ -95,7 +96,10 @@ export class Shipments extends Component {
         return (
             <div>
                 <h1 id="tableLabel">Поставки</h1>
-                <button className={"btn btn-primary"} onClick={() => this.populateShipmentsData()}>Обновить</button>
+                <div className={"btn-group"}>
+                    <button className={"btn btn-primary"} onClick={() => this.populateShipmentsData()}>Обновить</button>
+                    <Link className={"btn btn-success"} to={"/shipments/new"} >Создать</Link>
+                </div>
                 {contents}
             </div>
         );
