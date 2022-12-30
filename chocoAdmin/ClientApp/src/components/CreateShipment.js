@@ -1,17 +1,27 @@
 import React, {Component} from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 export class CreateShipment extends Component {
     static displayName = CreateShipment.name;
 
     constructor(props) {
         super(props);
-        this.state = {currentCount: 0};
     }
 
     render() {
         return (
             <div>
                 <h1>Создание поставки</h1>
+                <Formik initialValues={{date: ''}} onSubmit={values => console.log(values)}>
+                    <Form>
+                        <div className={"form-group"}>
+                            <Field type={"date"} name={"date"} className={"form-control"}/>
+                        </div>
+                        <button type="submit" className={"btn btn-success"}>
+                            Сохранить
+                        </button>
+                    </Form>
+                </Formik>
             </div>
         );
     }
