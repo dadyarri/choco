@@ -18,6 +18,10 @@ const AppRoutes = [
     element: <Shipments />
   },
   {
+    path: '/shipments/new',
+    element: <Counter />
+  },
+  {
     path: '/warehouse',
     element: <Warehouse />
   }
