@@ -39,6 +39,7 @@ export class CreateShipment extends Component {
                                                                as={"select"}
                                                                key={`arrayOfProductsNameInput${index}`}
                                                         >
+                                                            <option key={"arrayOfProductsDefaultOption"} defaultChecked>-- Выберите товар --</option>
                                                             {this.state.products.map((product) => (
                                                                 <option value={product.id} key={product.id}>{product.name}</option>
                                                             ))}
