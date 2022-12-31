@@ -106,7 +106,6 @@ export class Shipments extends Component {
     }
 
     async populateShipmentsData() {
-        console.log("tick");
         await axios.get("https://localhost:7157/shipments")
             .then((response) =>
                 this.setState({shipments: response.data, loading: false}))
