@@ -20,56 +20,69 @@ export class CreateShipment extends Component {
                         <Form style={{maxWidth: 400, margin: 20}} key={"productForm"}>
                             <div className={"form-group m-3"} key={"shipmentDateInputGroup"}>
                                 <Label for={"dateInput"} key={"shipmentDateLabel"}>Дата поставки</Label>
-                                <Field type={"date"} name={"date"} id={"dateInput"} className={"form-control"} key={"shipmentDateInput"}/>
+                                <Field type={"date"} name={"date"} id={"dateInput"} className={"form-control"}
+                                       key={"shipmentDateInput"}/>
                             </div>
-
-                            <FieldArray
-                                name={"products"}
-                                key={"arrayOfProducts"}
-                                render={arrayHelpers => (
-                                    <div className={"m-3"}>
-                                        {values.products.map((product, index) => (
-                                            <div className={"d-flex align-items-center m-3"} key={`arrayOfProductsParentBlock_${index}`}>
-                                                <div key={"arrayOfProductsInnerBlock"}>
-                                                    <div className={"form-group m-3"} key={`arrayOfProductsNameInputGroup_${index}`}>
-                                                        <Label for={`productsName${index}Input`} key={`arrayOfProductsNameLabel_${index}`}>Название продукта</Label>
-                                                        <Field name={`products[${index}].name`}
-                                                               id={`productsName[${index}]Input`}
-                                                               className={"form-control-sm"}
-                                                               as={"select"}
-                                                               key={`arrayOfProductsNameInput${index}`}
-                                                        >
-                                                            <option key={"arrayOfProductsDefaultOption"} defaultChecked>-- Выберите товар --</option>
-                                                            {this.state.products.map((product) => (
-                                                                <option value={product.id} key={product.id}>{product.name}</option>
-                                                            ))}
-                                                        </Field>
+                            <div className={"form-group m-3"}>
+                                <Label for={"arrayOfProducts"} key={"arrayOfProductsLabel"}>Товары, входящие в
+                                    поставку</Label>
+                                <FieldArray
+                                    name={"products"}
+                                    key={"arrayOfProducts"}
+                                    id={"arrayOfProducts"}
+                                    render={arrayHelpers => (
+                                        <div className={"m-3"}>
+                                            {values.products.map((product, index) => (
+                                                <div className={"d-flex align-items-center m-3"}
+                                                     key={`arrayOfProductsParentBlock_${index}`}>
+                                                    <div key={"arrayOfProductsInnerBlock"}>
+                                                        <div className={"form-group m-3"}
+                                                             key={`arrayOfProductsNameInputGroup_${index}`}>
+                                                            <Label for={`productsName${index}Input`}
+                                                                   key={`arrayOfProductsNameLabel_${index}`}>Название
+                                                                продукта</Label>
+                                                            <Field name={`products[${index}].name`}
+                                                                   id={`productsName[${index}]Input`}
+                                                                   className={"form-control-sm"}
+                                                                   as={"select"}
+                                                                   key={`arrayOfProductsNameInput${index}`}
+                                                            >
+                                                                <option key={"arrayOfProductsDefaultOption"}
+                                                                        defaultChecked>-- Выберите товар --
+                                                                </option>
+                                                                {this.state.products.map((product) => (
+                                                                    <option value={product.id}
+                                                                            key={product.id}>{product.name}</option>
+                                                                ))}
+                                                            </Field>
+                                                        </div>
+                                                        <div className={"form-group m-3"}
+                                                             key={`arrayOfProductsAmountInputGroup_${index}`}>
+                                                            <Label for={`productsAmount${index}Input`}
+                                                                   key={`arrayOfProductAmountLabel_${index}`}>Количество</Label>
+                                                            <Field name={`products[${index}].amount`}
+                                                                   id={`productsAmount${index}Input`}
+                                                                   className={"form-control form-control-sm"}
+                                                                   type={"number"}
+                                                                   key={`arrayOfProductsAmountInput_${index}`}
+                                                            />
+                                                        </div>
                                                     </div>
-                                                    <div className={"form-group m-3"} key={`arrayOfProductsAmountInputGroup_${index}`}>
-                                                        <Label for={`productsAmount${index}Input`} key={`arrayOfProductAmountLabel_${index}`}>Количество</Label>
-                                                        <Field name={`products[${index}].amount`}
-                                                               id={`productsAmount${index}Input`}
-                                                               className={"form-control form-control-sm"}
-                                                               type={"number"}
-                                                               key={`arrayOfProductsAmountInput_${index}`}
-                                                        />
-                                                    </div>
+                                                    <button type={"button"} onClick={() => arrayHelpers.remove(index)}
+                                                            className={"btn btn-danger"} style={{maxHeight: 40}}
+                                                            key={`arrayOfProductsRemoveButton_${index}`}
+                                                    >-
+                                                    </button>
                                                 </div>
-                                                <button type={"button"} onClick={() => arrayHelpers.remove(index)}
-                                                        className={"btn btn-danger"} style={{maxHeight: 40}}
-                                                        key={`arrayOfProductsRemoveButton_${index}`}
-                                                >-
-                                                </button>
-                                            </div>
-                                        ))}
-                                        <button type={"button"}
-                                                onClick={() => arrayHelpers.push({name: '', amount: ''})}
-                                                className={"btn btn-primary"}
-                                        >+ Добавить товар
-                                        </button>
-                                    </div>
-                                )}
-                            />
+                                            ))}
+                                            <button type={"button"}
+                                                    onClick={() => arrayHelpers.push({name: '', amount: ''})}
+                                                    className={"btn btn-primary"}
+                                            >+ Добавить товар
+                                            </button>
+                                        </div>
+                                    )}
+                                /></div>
 
                             <button type="submit" className={"btn btn-success"}>
                                 Сохранить
@@ -80,7 +93,7 @@ export class CreateShipment extends Component {
             </div>
         );
     }
-    
+
     async getProductsList() {
         await axios.get("https://localhost:7157/products")
             .then((response) =>
