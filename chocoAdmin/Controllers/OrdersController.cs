@@ -16,12 +16,14 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetAllShipments()
+    public async Task<ActionResult> GetAllOrders()
     {
         return Ok(await _db.Orders
-            .Include(s => s.Status)
-            .Include(s => s.OrderItems)
-            .ThenInclude(si => si.Product)
+            .Include(o => o.Status)
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .Include(o => o.Address)
+            .ThenInclude(a => a.City)
             .ToListAsync());
     }
 }
