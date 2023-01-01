@@ -182,7 +182,7 @@ export class CreateOrder extends Component {
     }
 
     async getCitiesList() {
-        await axios.get("https://localhost:7157/cities")
+        await axios.get("https://localhost:7157/orderCities")
             .then((response) =>
                 this.setState({cities: response.data}
                 )
