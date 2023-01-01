@@ -14,25 +14,8 @@ export class Orders extends Component {
         this.state = {shipments: [], loading: true};
     }
 
-    componentDidMount() {
-        this.populateOrdersData();
-    }
-
-    static getShipmentItemStatusIcon(status) {
-        switch (status) {
-            case "Получено": {
-                return <GiCheckMark/>
-            }
-            case "Ожидается": {
-                return <GiClockwork/>
-            }
-            case "Отменено": {
-                return <GiCancel/>
-            }
-            default: {
-                return null
-            }
-        }
+    async componentDidMount() {
+        await this.populateOrdersData();
     }
 
     static getOrderStatusIcon(status) {
