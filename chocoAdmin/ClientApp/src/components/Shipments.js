@@ -69,7 +69,7 @@ export class Shipments extends Component {
                     <tbody>
                     {shipments.map(shipment =>
                         <tr key={uuid()}>
-                            <td>{shipment.date} {this.getShipmentStatusIcon(shipment.status.name)}</td>
+                            <td>{new Date(shipment.date).toLocaleDateString("ru-RU")} {this.getShipmentStatusIcon(shipment.status.name)}</td>
                             <td>
                                 <ul>
                                     {shipment.shipmentItems.map(item =>

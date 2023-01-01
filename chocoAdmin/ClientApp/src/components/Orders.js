@@ -63,13 +63,14 @@ export class Orders extends Component {
                     <tr>
                         <th>Дата</th>
                         <th>Содержимое заказа</th>
+                        <th>Адрес</th>
                         <th>Итог</th>
                     </tr>
                     </thead>
                     <tbody>
                     {orders.map(order =>
                         <tr key={uuid()}>
-                            <td>{order.date} {this.getOrderStatusIcon(order.status.name)}</td>
+                            <td>{new Date(order.date).toLocaleDateString("ru-RU")} {this.getOrderStatusIcon(order.status.name)}</td>
                             <td>
                                 <ul>
                                     {order.orderItems.map(item =>
@@ -77,6 +78,7 @@ export class Orders extends Component {
                                     )}
                                 </ul>
                             </td>
+                            <td>г. {order.address.city.name}, {order.address.street}, {order.address.building}</td>
                             <td>
                                 {order.orderItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)} &#8381;
                             </td>
