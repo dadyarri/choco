@@ -12,7 +12,7 @@ export class CreateOrder extends Component {
         products: Yup.array().of(
             Yup.object().shape({
                 name: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
-                amount: Yup.number().required("Количество товара обязательно!").positive("Количество товара не может быть меньше единицы")
+                amount: Yup.number().required("Количество товара обязательно!").positive("Количество товара не может быть меньше или равно нулю")
             })
         ),
         address: Yup.object().shape({
