@@ -8,6 +8,7 @@ export class CreateOrder extends Component {
     static displayName = CreateOrder.name;
     validationSchema = Yup.object().shape({
         date: Yup.date().required("Обязательно укажите дату заказа"),
+        status: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать статус заказа обязательно!"),
         products: Yup.array().of(
             Yup.object().shape({
                 name: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
@@ -18,7 +19,7 @@ export class CreateOrder extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {products: this.getProductsList()};
+        this.state = {products: this.getProductsList(), orderStatuses: []};
     }
 
     render() {
@@ -26,7 +27,7 @@ export class CreateOrder extends Component {
             <div>
                 <h1>Создание заказа</h1>
                 <Formik
-                    initialValues={{date: '', products: []}}
+                    initialValues={{date: '', status: '', products: []}}
                     onSubmit={values => console.log(values)}
                     validationSchema={this.validationSchema}
                 >
@@ -37,6 +38,25 @@ export class CreateOrder extends Component {
                                 <Field type={"date"} name={"date"} id={"dateInput"} className={"form-control"}
                                        key={"shipmentDateInput"}/>
                                 <ErrorMessage name="date"/>
+                            </div>
+                            <div className={"form-group m-3 d-flex flex-column"}>
+                                <Label for={"ordersState"}>Статус заказа</Label>
+                                <Field name={`status`}
+                                       id={`orderState`}
+                                       className={"form-select"}
+                                       as={"select"}
+                                       key={`orderStateInput`}
+                                >
+                                    <option key={"orderStateDefaultOption"}
+                                            defaultChecked>-- Выберите статус заказа --
+                                    </option>
+                                    {this.state.orderStatuses.map((os) => (
+                                        <option value={os.id}
+                                                key={os.id}>{os.name}</option>
+                                    ))}
+                                </Field>
+                                <ErrorMessage name={"status"}/>
+                                
                             </div>
                             <div className={"form-group m-3"}>
                                 <Label for={"arrayOfProducts"} key={"arrayOfProductsLabel"}>Товары, входящие в
@@ -58,7 +78,7 @@ export class CreateOrder extends Component {
                                                                 продукта</Label>
                                                             <Field name={`products[${index}].name`}
                                                                    id={`productsName[${index}]Input`}
-                                                                   className={"form-control-sm"}
+                                                                   className={"form-select-sm"}
                                                                    as={"select"}
                                                                    key={`arrayOfProductsNameInput${index}`}
                                                             >
@@ -116,6 +136,13 @@ export class CreateOrder extends Component {
         await axios.get("https://localhost:7157/products")
             .then((response) =>
                 this.setState({products: response.data}
+                )
+            );
+    }
+    async getOrderStatusesList() {
+        await axios.get("https://localhost:7157/orderStatuses")
+            .then((response) =>
+                this.setState({orderStatuses: response.data}
                 )
             );
     }
