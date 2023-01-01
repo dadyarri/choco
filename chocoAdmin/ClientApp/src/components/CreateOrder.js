@@ -19,7 +19,12 @@ export class CreateOrder extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {products: this.getProductsList(), orderStatuses: []};
+        this.state = {products: [], orderStatuses: []};
+    }
+
+    async componentDidMount() {
+        await this.getOrderStatusesList()
+        await this.getProductsList()
     }
 
     render() {
@@ -56,7 +61,6 @@ export class CreateOrder extends Component {
                                     ))}
                                 </Field>
                                 <ErrorMessage name={"status"}/>
-                                
                             </div>
                             <div className={"form-group m-3"}>
                                 <Label for={"arrayOfProducts"} key={"arrayOfProductsLabel"}>Товары, входящие в
@@ -139,6 +143,7 @@ export class CreateOrder extends Component {
                 )
             );
     }
+
     async getOrderStatusesList() {
         await axios.get("https://localhost:7157/orderStatuses")
             .then((response) =>
