@@ -4,6 +4,7 @@ import {Shipments} from "./components/Shipments";
 import {CreateShipment} from "./components/CreateShipment";
 import {Orders} from "./components/Orders";
 import {CreateOrder} from "./components/CreateOrder";
+import {CreateProduct} from "./components/CreateProduct";
 
 const AppRoutes = [
   {
@@ -29,6 +30,10 @@ const AppRoutes = [
   {
     path: '/warehouse',
     element: <Warehouse />
+  },
+  {
+    path: '/warehouse/new',
+    element: <CreateProduct />
   }
 ];
 
