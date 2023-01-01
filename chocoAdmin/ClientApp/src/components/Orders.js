@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {v4 as uuid} from 'uuid';
 import axios from "axios";
-import {GiCancel, GiCheckMark, GiClockwork, GiSandsOfTime} from "react-icons/gi";
+import {GiCheckMark, GiSandsOfTime} from "react-icons/gi";
 import {TbTruckDelivery} from "react-icons/tb";
-import {HiDocumentMagnifyingGlass} from "react-icons/hi2";
 import {Link} from "react-router-dom";
 
 export class Orders extends Component {
