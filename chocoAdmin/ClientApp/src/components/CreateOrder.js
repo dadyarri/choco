@@ -14,17 +14,23 @@ export class CreateOrder extends Component {
                 name: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
                 amount: Yup.number().required("Количество товара обязательно!").positive("Количество товара не может быть меньше единицы")
             })
-        )
+        ),
+        address: Yup.object().shape({
+            city: Yup.string().uuid("Неверный формат идентификатора").required("Выбрать город обязательно"),
+            street: Yup.string(),
+            building: Yup.string()
+        })
     })
 
     constructor(props) {
         super(props);
-        this.state = {products: [], orderStatuses: []};
+        this.state = {products: [], orderStatuses: [], cities: []};
     }
 
     async componentDidMount() {
         await this.getOrderStatusesList()
         await this.getProductsList()
+        await this.getCitiesList()
     }
 
     render() {
@@ -32,7 +38,7 @@ export class CreateOrder extends Component {
             <div>
                 <h1>Создание заказа</h1>
                 <Formik
-                    initialValues={{date: '', status: '', products: []}}
+                    initialValues={{date: '', status: '', products: [], address: {city: '', street: '', building: ''}}}
                     onSubmit={values => console.log(values)}
                     validationSchema={this.validationSchema}
                 >
@@ -125,6 +131,29 @@ export class CreateOrder extends Component {
                                         </div>
                                     )}
                                 /></div>
+                            <div className={"form-group m-3"}>
+                                <Label for={"city"}>Город</Label>
+                                <Field name={`address.city`}
+                                       id={"city"}
+                                       className={"form-select"}
+                                       as={"select"}
+                                >
+                                    <option defaultChecked>-- Выберите город --
+                                    </option>
+                                    {this.state.cities.map((city) => (
+                                        <option value={city.id}
+                                                key={city.id}>{city.name}</option>
+                                    ))}
+                                </Field>
+                            </div>
+                            <div className={"form-group m-3"}>
+                                <Label for={"street"}>Улица</Label>
+                                <Field id={"street"} name={"address.street"} className={"form-control"}/>
+                            </div>
+                            <div className={"form-group m-3"}>
+                                <Label for={"building"}>Дом/Строение</Label>
+                                <Field id={"building"} name={"address.building"} className={"form-control"}/>
+                            </div>
 
                             <button type="submit" className={"btn btn-success"}>
                                 Сохранить
@@ -148,6 +177,14 @@ export class CreateOrder extends Component {
         await axios.get("https://localhost:7157/orderStatuses")
             .then((response) =>
                 this.setState({orderStatuses: response.data}
+                )
+            );
+    }
+
+    async getCitiesList() {
+        await axios.get("https://localhost:7157/cities")
+            .then((response) =>
+                this.setState({cities: response.data}
                 )
             );
     }
