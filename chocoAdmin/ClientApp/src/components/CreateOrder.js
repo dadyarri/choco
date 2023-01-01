@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 export class CreateOrder extends Component {
     static displayName = CreateOrder.name;
     validationSchema = Yup.object().shape({
-        date: Yup.date().required("Обязательно укажите дату поставки"),
+        date: Yup.date().required("Обязательно укажите дату заказа"),
         products: Yup.array().of(
             Yup.object().shape({
                 name: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
@@ -33,14 +33,14 @@ export class CreateOrder extends Component {
                     {({values, errors, touched}) => (
                         <Form style={{maxWidth: 400, margin: 20}} key={"productForm"}>
                             <div className={"form-group m-3"} key={"shipmentDateInputGroup"}>
-                                <Label for={"dateInput"} key={"shipmentDateLabel"}>Дата поставки</Label>
+                                <Label for={"dateInput"} key={"shipmentDateLabel"}>Дата заказа</Label>
                                 <Field type={"date"} name={"date"} id={"dateInput"} className={"form-control"}
                                        key={"shipmentDateInput"}/>
                                 <ErrorMessage name="date"/>
                             </div>
                             <div className={"form-group m-3"}>
                                 <Label for={"arrayOfProducts"} key={"arrayOfProductsLabel"}>Товары, входящие в
-                                    поставку</Label>
+                                    заказ</Label>
                                 <FieldArray
                                     name={"products"}
                                     key={"arrayOfProducts"}
