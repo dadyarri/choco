@@ -1,9 +1,8 @@
-import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
-import { Home } from "./components/Home";
+import {Home} from "./components/Home";
 import {Warehouse} from "./components/Warehouse";
 import {Shipments} from "./components/Shipments";
 import {CreateShipment} from "./components/CreateShipment";
+import {Orders} from "./components/Orders";
 
 const AppRoutes = [
   {
@@ -12,7 +11,7 @@ const AppRoutes = [
   },
   {
     path: '/orders',
-    element: <Counter />
+    element: <Orders />
   },
   {
     path: '/shipments',
