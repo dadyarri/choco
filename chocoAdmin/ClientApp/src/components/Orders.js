@@ -37,17 +37,14 @@ export class Orders extends Component {
 
     static getOrderStatusIcon(status) {
         switch (status) {
-            case "Получено": {
+            case "Выполнен": {
                 return <GiCheckMark/>
             }
             case "Доставляется": {
                 return <TbTruckDelivery/>
             }
-            case "Ожидается": {
+            case "Обрабатывается": {
                 return <GiSandsOfTime/>
-            }
-            case "В работе": {
-                return <HiDocumentMagnifyingGlass/>
             }
             default: {
                 return null
