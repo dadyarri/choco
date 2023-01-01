@@ -50,7 +50,7 @@ export class CreateOrder extends Component {
                                        key={"shipmentDateInput"}/>
                                 <ErrorMessage name="date"/>
                             </div>
-                            <div className={"form-group m-3 d-flex flex-column"}>
+                            <div className={"form-group m-3"}>
                                 <Label for={"ordersState"}>Статус заказа</Label>
                                 <Field name={`status`}
                                        id={`orderState`}
