@@ -9,9 +9,9 @@ export class CreateOrder extends Component {
     validationSchema = Yup.object().shape({
         date: Yup.date().required("Обязательно укажите дату заказа"),
         status: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать статус заказа обязательно!"),
-        products: Yup.array().of(
+        orderItems: Yup.array().of(
             Yup.object().shape({
-                name: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
+                id: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
                 amount: Yup.number().required("Количество товара обязательно!").positive("Количество товара не может быть меньше или равно нулю")
             })
         ),
@@ -32,14 +32,21 @@ export class CreateOrder extends Component {
         await this.getProductsList()
         await this.getCitiesList()
     }
+    
+    async createOrder(values) {
+        
+    }
 
     render() {
         return (
             <div>
                 <h1>Создание заказа</h1>
                 <Formik
-                    initialValues={{date: '', status: '', products: [], address: {city: '', street: '', building: ''}}}
-                    onSubmit={values => console.log(values)}
+                    initialValues={{date: '', status: '', orderItems: [], address: {city: '', street: '', building: ''}}}
+                    onSubmit={async values => {
+                        console.log(values)
+                        await this.createOrder(values)
+                    }}
                     validationSchema={this.validationSchema}
                 >
                     {({values, errors, touched}) => (
@@ -72,12 +79,12 @@ export class CreateOrder extends Component {
                                 <Label for={"arrayOfProducts"} key={"arrayOfProductsLabel"}>Товары, входящие в
                                     заказ</Label>
                                 <FieldArray
-                                    name={"products"}
+                                    name={"orderItems"}
                                     key={"arrayOfProducts"}
                                     id={"arrayOfProducts"}
                                     render={arrayHelpers => (
                                         <div className={"m-3"}>
-                                            {values.products.map((product, index) => (
+                                            {values.orderItems.map((product, index) => (
                                                 <div className={"d-flex align-items-center m-3"}
                                                      key={`arrayOfProductsParentBlock_${index}`}>
                                                     <div key={"arrayOfProductsInnerBlock"}>
@@ -86,7 +93,7 @@ export class CreateOrder extends Component {
                                                             <Label for={`productsName${index}Input`}
                                                                    key={`arrayOfProductsNameLabel_${index}`}>Название
                                                                 продукта</Label>
-                                                            <Field name={`products[${index}].name`}
+                                                            <Field name={`orderItems[${index}].id`}
                                                                    id={`productsName[${index}]Input`}
                                                                    className={"form-select-sm"}
                                                                    as={"select"}
@@ -100,20 +107,20 @@ export class CreateOrder extends Component {
                                                                             key={product.id}>{product.name}</option>
                                                                 ))}
                                                             </Field>
-                                                            <ErrorMessage name={`products[${index}].name`}/>
+                                                            <ErrorMessage name={`orderItems[${index}].name`}/>
 
                                                         </div>
                                                         <div className={"form-group m-3"}
                                                              key={`arrayOfProductsAmountInputGroup_${index}`}>
                                                             <Label for={`productsAmount${index}Input`}
                                                                    key={`arrayOfProductAmountLabel_${index}`}>Количество</Label>
-                                                            <Field name={`products[${index}].amount`}
+                                                            <Field name={`orderItems[${index}].amount`}
                                                                    id={`productsAmount${index}Input`}
                                                                    className={"form-control form-control-sm"}
                                                                    type={"number"}
                                                                    key={`arrayOfProductsAmountInput_${index}`}
                                                             />
-                                                            <ErrorMessage name={`products[${index}].amount`}/>
+                                                            <ErrorMessage name={`orderItems[${index}].amount`}/>
                                                         </div>
                                                     </div>
                                                     <button type={"button"} onClick={() => arrayHelpers.remove(index)}
@@ -124,7 +131,7 @@ export class CreateOrder extends Component {
                                                 </div>
                                             ))}
                                             <button type={"button"}
-                                                    onClick={() => arrayHelpers.push({name: '', amount: ''})}
+                                                    onClick={() => arrayHelpers.push({id: '', amount: ''})}
                                                     className={"btn btn-primary"}
                                             >+ Добавить товар
                                             </button>
