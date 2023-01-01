@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace choco.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class address : Migration
+    public partial class Address : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,28 +18,8 @@ namespace choco.Data.Migrations
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
-            migrationBuilder.AddColumn<Guid>(
-                name: "CityId",
-                table: "Orders",
-                type: "uuid",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
             migrationBuilder.CreateTable(
-                name: "OrderAddress",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Street = table.Column<string>(type: "text", nullable: false),
-                    Building = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderAddress", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrderCity",
+                name: "OrderCities",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -47,7 +27,27 @@ namespace choco.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderCity", x => x.Id);
+                    table.PrimaryKey("PK_OrderCities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderAddresses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CityId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Street = table.Column<string>(type: "text", nullable: false),
+                    Building = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderAddresses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderAddresses_OrderCities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "OrderCities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -56,23 +56,15 @@ namespace choco.Data.Migrations
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_CityId",
-                table: "Orders",
+                name: "IX_OrderAddresses_CityId",
+                table: "OrderAddresses",
                 column: "CityId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Orders_OrderAddress_AddressId",
+                name: "FK_Orders_OrderAddresses_AddressId",
                 table: "Orders",
                 column: "AddressId",
-                principalTable: "OrderAddress",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Orders_OrderCity_CityId",
-                table: "Orders",
-                column: "CityId",
-                principalTable: "OrderCity",
+                principalTable: "OrderAddresses",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -81,33 +73,21 @@ namespace choco.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Orders_OrderAddress_AddressId",
-                table: "Orders");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Orders_OrderCity_CityId",
+                name: "FK_Orders_OrderAddresses_AddressId",
                 table: "Orders");
 
             migrationBuilder.DropTable(
-                name: "OrderAddress");
+                name: "OrderAddresses");
 
             migrationBuilder.DropTable(
-                name: "OrderCity");
+                name: "OrderCities");
 
             migrationBuilder.DropIndex(
                 name: "IX_Orders_AddressId",
                 table: "Orders");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Orders_CityId",
-                table: "Orders");
-
             migrationBuilder.DropColumn(
                 name: "AddressId",
-                table: "Orders");
-
-            migrationBuilder.DropColumn(
-                name: "CityId",
                 table: "Orders");
         }
     }

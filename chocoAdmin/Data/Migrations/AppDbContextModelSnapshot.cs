@@ -31,9 +31,6 @@ namespace choco.Data.Migrations
                     b.Property<Guid>("AddressId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CityId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
@@ -43,8 +40,6 @@ namespace choco.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
-
-                    b.HasIndex("CityId");
 
                     b.HasIndex("StatusId");
 
@@ -61,13 +56,18 @@ namespace choco.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("CityId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrderAddress");
+                    b.HasIndex("CityId");
+
+                    b.ToTable("OrderAddresses");
                 });
 
             modelBuilder.Entity("choco.Data.Models.OrderCity", b =>
@@ -82,7 +82,7 @@ namespace choco.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("OrderCity");
+                    b.ToTable("OrderCities");
                 });
 
             modelBuilder.Entity("choco.Data.Models.OrderItem", b =>
@@ -257,12 +257,6 @@ namespace choco.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("choco.Data.Models.OrderCity", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("choco.Data.Models.OrderStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
@@ -271,9 +265,18 @@ namespace choco.Data.Migrations
 
                     b.Navigation("Address");
 
-                    b.Navigation("City");
-
                     b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("choco.Data.Models.OrderAddress", b =>
+                {
+                    b.HasOne("choco.Data.Models.OrderCity", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("choco.Data.Models.OrderItem", b =>
