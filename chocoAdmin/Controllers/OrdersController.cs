@@ -66,7 +66,7 @@ public class OrdersController : ControllerBase
                 City = await _db.OrderCities.FindAsync(body.Address.City),
                 Street = body.Address.Street
             },
-            OrderItems = await findOrderItems(body.OrderItems),
+            OrderItems = await FindOrderItems(body.OrderItems),
             Status = await _db.OrderStatuses.FindAsync(body.Status)
         };
         await _db.Orders.AddAsync(order);
@@ -74,7 +74,7 @@ public class OrdersController : ControllerBase
         return Created("/api/Orders", order);
     }
 
-    private async Task<List<OrderItem>> findOrderItems(List<CreateOrderItemsRequestBody> source)
+    private async Task<List<OrderItem>> FindOrderItems(List<CreateOrderItemsRequestBody> source)
     {
         var items = new List<OrderItem>();
         foreach (var sourceItem in source)
