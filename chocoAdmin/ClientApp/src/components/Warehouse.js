@@ -57,7 +57,7 @@ export class Warehouse extends Component {
     }
 
     async populateProductsData() {
-        await axios.get("https://localhost:7157/products")
+        await axios.get("/products")
             .then((response) =>
                 this.setState({products: response.data, loading: false}
                 )

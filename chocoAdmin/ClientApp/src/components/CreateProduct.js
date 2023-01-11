@@ -87,7 +87,7 @@ export class CreateProduct extends Component {
     }
 
     async getCategoriesList() {
-        await axios.get("https://localhost:7157/productCategories")
+        await axios.get("/productCategories")
             .then((response) =>
                 this.setState({categories: response.data}
                 )
