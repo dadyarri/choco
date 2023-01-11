@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace choco.Controllers;
 
-[Controller]
+[ApiController]
 [Route("[controller]")]
 public class OrdersController : ControllerBase
 {
@@ -52,6 +52,21 @@ public class OrdersController : ControllerBase
         order.Deleted = true;
         await _db.SaveChangesAsync();
         return NoContent();
+    }
+
+    [HttpPut]
+    public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrderRequestBody body)
+    {
+        var orderStatus = await _db.OrderStatuses.FindAsync(body.Status);
+        var order = await _db.Orders.FindAsync(body.OrderId);
+        
+        if (orderStatus == null) return NotFound();
+        if (order == null) return NotFound();
+
+        order.Status = orderStatus;
+        await _db.SaveChangesAsync();
+
+        return Ok();
     }
 
     [HttpPost]
