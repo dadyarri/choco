@@ -113,7 +113,7 @@ export class CreateShipment extends Component {
     }
 
     async getProductsList() {
-        await axios.get("/products")
+        await axios.get("/api/products")
             .then((response) =>
                 this.setState({products: response.data}
                 )

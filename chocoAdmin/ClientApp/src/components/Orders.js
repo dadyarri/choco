@@ -87,7 +87,7 @@ export class Orders extends Component {
     }
 
     async populateOrdersData() {
-        await axios.get("/orders")
+        await axios.get("/api/orders")
             .then((response) =>
                 this.setState({shipments: response.data, loading: false}))
     }
