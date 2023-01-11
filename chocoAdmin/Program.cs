@@ -1,23 +1,15 @@
 using choco.Data;
+using choco.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Default");
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
-
-builder.Services.AddCors(options =>
+builder.Services.AddControllersWithViews(options =>
 {
-    options.AddPolicy("CORSPolicy",
-        cors =>
-        {
-            cors
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .WithOrigins("https://localhost:44413");
-        });
+    options.UseGeneralRoutePrefix("api");
 });
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 var app = builder.Build();
 
@@ -29,7 +21,6 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseCors("CORSPolicy");
 
 using (var scope = app.Services.CreateScope())
 {
