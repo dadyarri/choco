@@ -1,14 +1,20 @@
 using choco.Data;
 using choco.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Default");
 
-builder.Services.AddControllersWithViews(options =>
-{
-    options.UseGeneralRoutePrefix("api");
-});
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Warning)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+builder.Services.AddControllersWithViews(options => { options.UseGeneralRoutePrefix("api"); });
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
 var app = builder.Build();
@@ -39,5 +45,6 @@ app.MapControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapFallbackToFile("index.html");
+app.UseSerilogRequestLogging();
 
 app.Run();
