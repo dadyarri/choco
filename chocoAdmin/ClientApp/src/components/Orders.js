@@ -38,11 +38,18 @@ export class Orders extends Component {
 
     async deleteConfirm(itemId) {
         let button = $(`.btn.btn-danger[data-item-id="${itemId}"]`);
-
-        if (button.attr("aria-pressed") === false || button.attr("aria-pressed") === undefined) {
+        let clickCount = parseInt(button.attr("data-clicked"));
+        
+        clickCount += 1
+        button.attr("data-clicked", clickCount);
+        
+        if (clickCount === 1) {
             button.attr("aria-pressed", true);
-        } else {
-            console.log("deleted");
+            setTimeout(() => {
+                button.attr("aria-pressed", false);
+                button.attr("data-clicked", 0);
+            }, 3000)
+        } else if (clickCount === 2) {
             await axios.delete(`/api/orders/${itemId}`)
             await this.populateOrdersData();
         }
@@ -78,12 +85,15 @@ export class Orders extends Component {
                             </td>
                             <td>
                                 <div className="btn-group">
-                                    <button className={"btn btn-primary"} title={"Просмотреть детали"}><HiEye/>
+                                    <button className={"btn btn-primary"} title={"Просмотреть детали"} type={"button"}><HiEye/>
                                     </button>
-                                    <button className={"btn btn-success"} title={"Редактировать"}><HiPencil/>
+                                    <button className={"btn btn-success"} title={"Редактировать"} type={"button"}><HiPencil/>
                                     </button>
                                     <button className={"btn btn-danger"} title={"Удалить"} data-bs-toggle="button"
                                             data-item-id={order.id}
+                                            data-clicked={0}
+                                            aria-pressed={"false"}
+                                            type={"button"}
                                             onClick={() => this.deleteConfirm(order.id)}><HiOutlineTrash/>
                                     </button>
                                 </div>
