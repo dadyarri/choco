@@ -16,3 +16,7 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+.btn.btn-danger[data-bs-toggle="button"][aria-pressed="true"]::after {
+  content: " Удалить?"
+}
