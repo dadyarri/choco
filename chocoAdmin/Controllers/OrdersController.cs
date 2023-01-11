@@ -29,6 +29,18 @@ public class OrdersController : ControllerBase
             .ToListAsync());
     }
 
+    [HttpDelete("{orderId:guid}")]
+    public async Task<ActionResult> DeleteOrder(Guid orderId)
+    {
+        var order = await _db.Orders.FindAsync(orderId);
+        if (order == null) return NotFound();
+        
+        order.Deleted = true;
+        await _db.SaveChangesAsync();
+        return NoContent();
+
+    }
+
     [HttpPost]
     public async Task<ActionResult> CreateOrder([FromBody] CreateOrderRequestBody body)
     {
