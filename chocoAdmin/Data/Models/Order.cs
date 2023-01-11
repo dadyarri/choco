@@ -6,4 +6,5 @@ public class Order: BaseModel
     public OrderStatus Status { get; set; }
     public List<OrderItem> OrderItems { get; set; }
     public OrderAddress Address { get; set; }
+    public bool Deleted { get; set; }
 }
