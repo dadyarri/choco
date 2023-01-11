@@ -148,8 +148,12 @@ export class Orders extends Component {
                             orderItems: editData.orderItems,
                             status: editData.status.id
                         }}
-                                onSubmit={(values) => {
-                                    console.log(values);
+                                onSubmit={async (values) => {
+                                    values.orderId = editData.id;
+                                    await axios.put(`/api/orders`, values);
+                                    this.closeEditModal();
+                                    await this.populateOrdersData();
+                                    
                                 }}>
                             {({values}) => (
                                 <Form>
