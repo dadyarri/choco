@@ -29,16 +29,29 @@ public class OrdersController : ControllerBase
             .ToListAsync());
     }
 
+    [HttpGet("{orderId:guid}")]
+    public async Task<ActionResult> GetOrderById(Guid orderId)
+    {
+        var order = await _db.Orders.Where(o => o.Id == orderId)
+            .Include(o => o.Address)
+            .ThenInclude(a => a.City)
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .Include(o => o.Status)
+            .FirstOrDefaultAsync();
+        if (order == null) return NotFound();
+        return Ok(order);
+    }
+
     [HttpDelete("{orderId:guid}")]
     public async Task<ActionResult> DeleteOrder(Guid orderId)
     {
         var order = await _db.Orders.FindAsync(orderId);
         if (order == null) return NotFound();
-        
+
         order.Deleted = true;
         await _db.SaveChangesAsync();
         return NoContent();
-
     }
 
     [HttpPost]
