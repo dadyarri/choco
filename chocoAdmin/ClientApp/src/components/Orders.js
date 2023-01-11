@@ -4,10 +4,10 @@ import axios from "axios";
 import {GiCheckMark, GiSandsOfTime} from "react-icons/gi";
 import {TbTruckDelivery} from "react-icons/tb";
 import {Link} from "react-router-dom";
-import {HiEye, HiOutlineTrash, HiPencil} from "react-icons/hi2";
+import {HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import $ from "jquery";
 import {Button, FormGroup, Input, Label, List, Modal, ModalBody, ModalHeader} from "reactstrap";
-import {Field, Formik, Form} from "formik";
+import {Field, Form, Formik} from "formik";
 
 export class Orders extends Component {
     static displayName = Orders.name;
@@ -102,10 +102,7 @@ export class Orders extends Component {
                             </td>
                             <td>
                                 <div className="btn-group">
-                                    <button className={"btn btn-primary"} title={"Просмотреть детали"} type={"button"}>
-                                        <HiEye/>
-                                    </button>
-                                    <button className={"btn btn-success"} title={"Редактировать"} type={"button"}
+                                    <button className={"btn btn-primary"} title={"Редактировать"} type={"button"}
                                             onClick={() => this.openEditModal(order.id)}
                                     >
                                         <HiPencil/>
