@@ -4,6 +4,8 @@ import axios from "axios";
 import {GiCheckMark, GiSandsOfTime} from "react-icons/gi";
 import {TbTruckDelivery} from "react-icons/tb";
 import {Link} from "react-router-dom";
+import {HiEye, HiOutlineTrash, HiPencil} from "react-icons/hi2";
+import $ from "jquery";
 
 export class Orders extends Component {
     static displayName = Orders.name;
@@ -17,7 +19,7 @@ export class Orders extends Component {
         await this.populateOrdersData();
     }
 
-    static getOrderStatusIcon(status) {
+    getOrderStatusIcon(status) {
         switch (status) {
             case "Выполнен": {
                 return <GiCheckMark/>
@@ -34,7 +36,19 @@ export class Orders extends Component {
         }
     }
 
-    static renderOrdersTable(orders) {
+    async deleteConfirm(itemId) {
+        let button = $(`.btn.btn-danger[data-item-id="${itemId}"]`);
+
+        if (button.attr("aria-pressed") === false || button.attr("aria-pressed") === undefined) {
+            button.attr("aria-pressed", true);
+        } else {
+            console.log("deleted");
+            await axios.delete(`/api/orders/${itemId}`)
+            await this.populateOrdersData();
+        }
+    }
+
+    renderOrdersTable(orders) {
         return (
             <div className={"table-responsive-md"}>
                 <table className="table table-striped" aria-labelledby="tableLabel">
@@ -44,11 +58,12 @@ export class Orders extends Component {
                         <th>Содержимое заказа</th>
                         <th>Адрес</th>
                         <th>Итог</th>
+                        <th>Действия</th>
                     </tr>
                     </thead>
                     <tbody>
                     {orders.map(order =>
-                        <tr key={uuid()}>
+                        (!order.deleted && <tr key={uuid()}>
                             <td>{new Date(order.date).toLocaleDateString("ru-RU")} {this.getOrderStatusIcon(order.status.name)}</td>
                             <td>
                                 <ul>
@@ -57,11 +72,23 @@ export class Orders extends Component {
                                     )}
                                 </ul>
                             </td>
-                            <td>г. {order.address.city.name}, {order.address.street}, {order.address.building}</td>
+                            <td>г.&nbsp;{order.address.city.name}, {order.address.street}, {order.address.building}</td>
                             <td>
-                                {order.orderItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)} &#8381;
+                                {order.orderItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
                             </td>
-                        </tr>
+                            <td>
+                                <div className="btn-group">
+                                    <button className={"btn btn-primary"} title={"Просмотреть детали"}><HiEye/>
+                                    </button>
+                                    <button className={"btn btn-success"} title={"Редактировать"}><HiPencil/>
+                                    </button>
+                                    <button className={"btn btn-danger"} title={"Удалить"} data-bs-toggle="button"
+                                            data-item-id={order.id}
+                                            onClick={() => this.deleteConfirm(order.id)}><HiOutlineTrash/>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>)
                     )}
                     </tbody>
                 </table>
@@ -72,7 +99,7 @@ export class Orders extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Загрузка...</em></p>
-            : Orders.renderOrdersTable(this.state.shipments);
+            : this.renderOrdersTable(this.state.shipments);
 
         return (
             <div>
