@@ -6,18 +6,29 @@ import {TbTruckDelivery} from "react-icons/tb";
 import {Link} from "react-router-dom";
 import {HiEye, HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import $ from "jquery";
+import {Button, FormGroup, Input, Label, List, Modal, ModalBody, ModalHeader} from "reactstrap";
+import {Field, Formik, Form} from "formik";
 
 export class Orders extends Component {
     static displayName = Orders.name;
 
     constructor(props) {
         super(props);
-        this.state = {shipments: [], loading: true};
+        this.state = {
+            orders: [],
+            loading: true,
+            isEditModalOpened: false,
+            editModalData: this.orderSchema,
+            orderStatuses: []
+        };
     }
 
     async componentDidMount() {
         await this.populateOrdersData();
+        await this.populateOrdersStatuesesData();
     }
+
+    orderSchema = {date: '', address: {city: {name: ''}, building: '', street: ''}, status: {id: ''}};
 
     getOrderStatusIcon(status) {
         switch (status) {
@@ -39,10 +50,10 @@ export class Orders extends Component {
     async deleteConfirm(itemId) {
         let button = $(`.btn.btn-danger[data-item-id="${itemId}"]`);
         let clickCount = parseInt(button.attr("data-clicked"));
-        
+
         clickCount += 1
         button.attr("data-clicked", clickCount);
-        
+
         if (clickCount === 1) {
             button.attr("aria-pressed", true);
             setTimeout(() => {
@@ -53,6 +64,12 @@ export class Orders extends Component {
             await axios.delete(`/api/orders/${itemId}`)
             await this.populateOrdersData();
         }
+    }
+
+    async openEditModal(itemId) {
+        await axios.get(`/api/orders/${itemId}`).then(response => {
+            this.setState({isEditModalOpened: true, editModalData: response.data});
+        });
     }
 
     renderOrdersTable(orders) {
@@ -85,9 +102,13 @@ export class Orders extends Component {
                             </td>
                             <td>
                                 <div className="btn-group">
-                                    <button className={"btn btn-primary"} title={"Просмотреть детали"} type={"button"}><HiEye/>
+                                    <button className={"btn btn-primary"} title={"Просмотреть детали"} type={"button"}>
+                                        <HiEye/>
                                     </button>
-                                    <button className={"btn btn-success"} title={"Редактировать"} type={"button"}><HiPencil/>
+                                    <button className={"btn btn-success"} title={"Редактировать"} type={"button"}
+                                            onClick={() => this.openEditModal(order.id)}
+                                    >
+                                        <HiPencil/>
                                     </button>
                                     <button className={"btn btn-danger"} title={"Удалить"} data-bs-toggle="button"
                                             data-item-id={order.id}
@@ -106,26 +127,89 @@ export class Orders extends Component {
         );
     }
 
+    closeEditModal = () => {
+        this.setState({
+            isEditModalOpened: false,
+            editModalData: this.orderSchema
+        });
+    };
+
     render() {
         let contents = this.state.loading
             ? <p><em>Загрузка...</em></p>
-            : this.renderOrdersTable(this.state.shipments);
+            : this.renderOrdersTable(this.state.orders);
+
+        const editData = this.state.editModalData;
 
         return (
-            <div>
-                <h1 id="tableLabel">Заказы</h1>
-                <div className={"btn-group"}>
-                    <button className={"btn btn-primary"} onClick={() => this.populateOrdersData()}>Обновить</button>
-                    <Link className={"btn btn-success"} to={"/orders/new"}>Создать</Link>
+            <>
+                <Modal isOpen={this.state.isEditModalOpened}>
+                    <ModalHeader toggle={this.closeEditModal}>Редактирование заказа</ModalHeader>
+                    <ModalBody>
+                        <Formik initialValues={{
+                            date: editData.date,
+                            orderItems: editData.orderItems,
+                            status: editData.status.id
+                        }}
+                                onSubmit={(values) => {
+                                    console.log(values);
+                                }}>
+                            {({values}) => (
+                                <Form>
+                                    <FormGroup>
+                                        <Label>Дата заказа</Label>
+                                        <Field as={Input} disabled name={"date"}/>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label>Содержимое заказа</Label>
+                                        <List>
+                                            {values.orderItems.map((item) => (
+                                                <li key={item.id}>{item.product.name} x{item.amount}</li>
+                                            ))}
+                                        </List>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label>Статус заказа</Label>
+                                        <Field as={Input} type={"select"} name={"status"}>
+                                            {this.state.orderStatuses.map((os) => (
+                                                <option key={os.id} value={os.id}>{os.name}</option>
+                                            ))}
+                                        </Field>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label>Адрес</Label>
+                                        <Field as={Input} disabled name={"address"}
+                                               value={`г. ${editData.address.city.name}, ${editData.address.street}, ${editData.address.building}`}/>
+                                    </FormGroup>
+                                    <Button color={"success"} type={"submit"}>Сохранить</Button>
+                                </Form>
+                            )}
+                        </Formik>
+                    </ModalBody>
+                </Modal>
+                <div>
+                    <h1 id="tableLabel">Заказы</h1>
+                    <div className={"btn-group"}>
+                        <button className={"btn btn-primary"} onClick={() => this.populateOrdersData()}>Обновить
+                        </button>
+                        <Link className={"btn btn-success"} to={"/orders/new"}>Создать</Link>
+                    </div>
+                    {contents}
                 </div>
-                {contents}
-            </div>
+            </>
         );
     }
 
     async populateOrdersData() {
         await axios.get("/api/orders")
             .then((response) =>
-                this.setState({shipments: response.data, loading: false}))
+                this.setState({orders: response.data, loading: false}));
+    }
+
+    async populateOrdersStatuesesData() {
+        await axios.get("/api/orderStatuses")
+            .then((response) =>
+                this.setState({orderStatuses: response.data})
+            );
     }
 }
