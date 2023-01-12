@@ -13,7 +13,8 @@ export const CreateShipment = () => {
                 name: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
                 amount: Yup.number().required("Количество товара обязательно!").positive("Количество товара не может быть меньше единицы")
             })
-        )
+        ),
+        status: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать статус обязательно!")
     })
 
     const getProductsList = async () => {
@@ -22,19 +23,27 @@ export const CreateShipment = () => {
                 setProducts(response.data)
             );
     }
+    const getShipmentStatusesList = async () => {
+        await axios.get("/api/shipmentStatuses")
+            .then((response) =>
+                setShipmentStatuses(response.data)
+            );
+    }
 
     const [products, setProducts] = useState([]);
+    const [shipmentStatuses, setShipmentStatuses] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         getProductsList();
+        getShipmentStatusesList();
     }, [])
 
     return (
         <div>
             <h1>Создание поставки</h1>
             <Formik
-                initialValues={{date: '', products: []}}
+                initialValues={{date: '', products: [], status: ''}}
                 onSubmit={async values => {
                     await axios.post("/orders", values)
                         .then((_) => navigate("/shipments"))
@@ -158,6 +167,24 @@ export const CreateShipment = () => {
                                     </div>
                                 )}
                             /></div>
+
+                        <div className="form-group m-3">
+                            <Label for={"statusInput"}>Статус поставки</Label>
+                            <Field type={"select"}
+                                   name={"status"}
+                                   as={Input}
+                                   invalid={errors.status && touched.status}
+                                   valid={!errors.status && touched.status}>
+                                <option defaultChecked>-- Выберите статус --
+                                </option>
+                                {shipmentStatuses.map((product) => (
+                                    <option value={product.id}
+                                            key={product.id}>{product.name}</option>
+                                ))}
+                            </Field>
+                            {errors.status && touched.status ?
+                                <FormFeedback>{errors.status}</FormFeedback> : null}
+                        </div>
 
                         <button type="submit" className={"btn btn-success"}>
                             Сохранить
