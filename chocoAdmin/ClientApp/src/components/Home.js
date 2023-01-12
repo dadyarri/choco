@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import axios from "axios";
 import StatsByCityChart from "./Charts/StatsByCityChart";
-import {TotalIncomes} from "./Charts/TotalIncomes";
+import {CompareIncomes} from "./Charts/CompareIncomes";
+import {IncomesChart} from "./Charts/IncomesChart";
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -14,22 +15,35 @@ export class Home extends Component {
         )
     }
 
-    getTotalIncomes = async () => {
-        await axios.get("/api/Stats/CompareIncome").then(
+    getTotalIncomesFor2Months = async () => {
+        await axios.get("/api/Stats/TotalIncomes/2").then(
             (response) => {
-                this.setState({compareIncomes: response.data.incomeInfos})
+                this.setState({incomesFor2: response.data})
+            }
+        )
+    }
+
+    getTotalIncomesFor10Months = async () => {
+        await axios.get("/api/Stats/TotalIncomes/10").then(
+            (response) => {
+                this.setState({incomesFor10: response.data})
             }
         )
     }
 
     constructor(props) {
         super(props);
-        this.state = {statsByCity: [], compareIncomes: [{total: 0}, {total: 0}]};
+        this.state = {
+            statsByCity: [],
+            incomesFor2: [{total: 0}, {total: 0}],
+            incomesFor10: [{dateInfo: '', total: 0}, {dateInfo: '', total: 0}]
+        };
     }
 
     async componentDidMount() {
         await this.getStatsByCity();
-        await this.getTotalIncomes();
+        await this.getTotalIncomesFor2Months();
+        await this.getTotalIncomesFor10Months();
     }
 
     render() {
@@ -45,7 +59,12 @@ export class Home extends Component {
 
                     <div className={"col"}>
                         <h5>Общие продажи</h5>
-                        <TotalIncomes data={this.state.compareIncomes}/>
+                        <CompareIncomes data={this.state.incomesFor2}/>
+                    </div>
+
+                    <div className={"col"}>
+                        <h5>Сравнение продаж</h5>
+                        <IncomesChart data={this.state.incomesFor10}/>
                     </div>
                 </div>
             </div>
