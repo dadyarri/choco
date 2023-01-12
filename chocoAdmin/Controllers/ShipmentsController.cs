@@ -44,6 +44,17 @@ public class ShipmentsController : ControllerBase
         return Created("/api/Shipments", shipment);
     }
     
+    [HttpDelete("{orderId:guid}")]
+    public async Task<ActionResult> DeleteShipment(Guid orderId)
+    {
+        var shipment = await _db.Shipments.FindAsync(orderId);
+        if (shipment == null) return NotFound();
+
+        shipment.Deleted = true;
+        await _db.SaveChangesAsync();
+        return NoContent();
+    }
+    
     private async Task<List<ShipmentItem>> FindOrderItems(List<CreateShipmentItemsRequestBody> source)
     {
         var items = new List<ShipmentItem>();
