@@ -37,14 +37,16 @@ export class Home extends Component {
             <div>
                 <h1>Статистика</h1>
 
-                <div>
-                    <h5>Продажи по городам</h5>
-                    <StatsByCityChart data={this.state.statsByCity}/>
-                </div>
-                
-                <div>
-                    <h5>Общие продажи</h5>
-                    <TotalIncomes data={this.state.compareIncomes}/>
+                <div className="row">
+                    <div className={"col"}>
+                        <h5>Продажи по городам</h5>
+                        <StatsByCityChart data={this.state.statsByCity}/>
+                    </div>
+
+                    <div className={"col"}>
+                        <h5>Общие продажи</h5>
+                        <TotalIncomes data={this.state.compareIncomes}/>
+                    </div>
                 </div>
             </div>
         );
