@@ -37,7 +37,7 @@ public class StatsController : ControllerBase
             .GroupBy(o => o.item.Product)
             .Select(g => new { name = g.Key.Name, value = g.Count() })
             .Take(10)
-            .OrderBy(g => g.value)
+            .OrderByDescending(g => g.value)
             .ToListAsync();
         return Ok(data);
     }
