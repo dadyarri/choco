@@ -1,10 +1,12 @@
 using choco.Data;
+using choco.Data.Models;
+using choco.RequestBodies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace choco.Controllers;
 
-[Controller]
+[ApiController]
 [Route("[controller]")]
 public class ShipmentsController : ControllerBase
 {
@@ -24,5 +26,36 @@ public class ShipmentsController : ControllerBase
             .ThenInclude(si => si.Product)
             .Include(s => s.ShipmentItems)
             .ToListAsync());
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> CreateShipment([FromBody] CreateShipmentRequestBody body)
+    {
+        var shipment = new Shipment
+        {
+            Date = body.Date,
+            ShipmentItems = await FindOrderItems(body.ShipmentItems),
+            Status = body.Status
+        };
+
+        await _db.Shipments.AddAsync(shipment);
+        await _db.SaveChangesAsync();
+        
+        return Created("/api/Shipments", shipment);
+    }
+    
+    private async Task<List<ShipmentItem>> FindOrderItems(List<CreateShipmentItemsRequestBody> source)
+    {
+        var items = new List<ShipmentItem>();
+        foreach (var sourceItem in source)
+        {
+            items.Add(new ShipmentItem
+            {
+                Amount = sourceItem.Amount,
+                Product = await _db.Products.FindAsync(sourceItem.Id)
+            });
+        }
+
+        return items;
     }
 }
