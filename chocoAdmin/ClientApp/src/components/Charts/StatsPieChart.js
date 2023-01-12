@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import {PieChart, Pie, Sector, ResponsiveContainer, Cell} from 'recharts';
+import React, {PureComponent} from 'react';
+import {Cell, Pie, PieChart, Sector} from 'recharts';
 
 const renderActiveShape = (props) => {
     const RADIAN = Math.PI / 180;
@@ -47,7 +47,7 @@ const renderActiveShape = (props) => {
     );
 };
 
-export default class StatsByCityChart extends PureComponent {
+export default class StatsPieChart extends PureComponent {
     state = {
         activeIndex: 0,
     };
@@ -71,7 +71,7 @@ export default class StatsByCityChart extends PureComponent {
                     cx="50%"
                     cy="50%"
                     innerRadius={40}
-                    outerRadius={60}
+                    outerRadius={50}
                     fill="#8884d8"
                     dataKey="value"
                     onMouseEnter={this.onPieEnter}
