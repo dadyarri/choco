@@ -1,22 +1,33 @@
 import React, {Component} from 'react';
 import {v4 as uuid} from 'uuid';
 import axios from "axios";
-import {GiCancel, GiCheckMark, GiClockwork, GiSandsOfTime} from "react-icons/gi";
+import {GiCheckMark, GiSandsOfTime} from "react-icons/gi";
 import {TbTruckDelivery} from "react-icons/tb";
 import {HiDocumentMagnifyingGlass, HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import {Link} from "react-router-dom";
 import $ from "jquery";
+import {Button, FormGroup, Input, Label, List, Modal, ModalBody, ModalHeader} from "reactstrap";
+import {Field, Form, Formik} from "formik";
 
 export class Shipments extends Component {
     static displayName = Shipments.name;
+    
+    shipmentSchema = {date: '', status: {name: '', id: ''}, shipmentItems: [], deleted: false, id: ''}
 
     constructor(props) {
         super(props);
-        this.state = {shipments: [], loading: true};
+        this.state = {
+            shipments: [],
+            loading: true,
+            isEditModalOpened: false,
+            editModalData: this.shipmentSchema,
+            shipmentStatuses: []
+        };
     }
 
-    componentDidMount() {
-        this.populateShipmentsData();
+    async componentDidMount() {
+        await this.populateShipmentsData();
+        await this.populateShipmentStatusesData();
     }
 
     getShipmentStatusIcon(status) {
@@ -57,6 +68,19 @@ export class Shipments extends Component {
             await this.populateShipmentsData();
         }
     }
+
+    async openEditModal(itemId) {
+        await axios.get(`/api/shipments/${itemId}`).then(response => {
+            this.setState({isEditModalOpened: true, editModalData: response.data});
+        });
+    }
+
+    closeEditModal = () => {
+        this.setState({
+            isEditModalOpened: false,
+            editModalData: this.shipmentSchema
+        });
+    };
 
     renderShipmentsTable(shipments) {
         return (
@@ -113,15 +137,62 @@ export class Shipments extends Component {
             ? <p><em>Загрузка...</em></p>
             : this.renderShipmentsTable(this.state.shipments);
 
+        const editData = this.state.editModalData;
+
         return (
-            <div>
-                <h1 id="tableLabel">Поставки</h1>
-                <div className={"btn-group"}>
-                    <button className={"btn btn-primary"} onClick={() => this.populateShipmentsData()}>Обновить</button>
-                    <Link className={"btn btn-success"} to={"/shipments/new"}>Создать</Link>
+            <>
+                <Modal isOpen={this.state.isEditModalOpened}>
+                    <ModalHeader toggle={this.closeEditModal}>Редактирование поставки</ModalHeader>
+                    <ModalBody>
+                        <Formik initialValues={{
+                            date: editData.date,
+                            shipmentItems: editData.shipmentItems,
+                            status: editData.status.id
+                        }}
+                                onSubmit={async (values) => {
+                                    values.shipmentId = editData.id;
+                                    await axios.put(`/api/shipments`, values);
+                                    this.closeEditModal();
+                                    await this.populateShipmentsData();
+                                }}>
+                            {({values}) => (
+                                <Form>
+                                    <FormGroup>
+                                        <Label>Дата поставки</Label>
+                                        <Field as={Input} disabled name={"date"}/>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label>Содержимое поставки</Label>
+                                        <List>
+                                            {values.shipmentItems.map((item) => (
+                                                <li key={item.id}>{item.product.name} x{item.amount}</li>
+                                            ))}
+                                        </List>
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label>Статус заказа</Label>
+                                        <Field as={Input} type={"select"} name={"status"}>
+                                            {this.state.shipmentStatuses.map((os) => (
+                                                <option key={os.id} value={os.id}>{os.name}</option>
+                                            ))}
+                                        </Field>
+                                    </FormGroup>
+                                    <Button color={"success"} type={"submit"}>Сохранить</Button>
+                                </Form>
+                            )}
+                        </Formik>
+                    </ModalBody>
+                </Modal>
+                <div>
+                    <h1 id="tableLabel">Поставки</h1>
+                    <div className={"btn-group"}>
+                        <button className={"btn btn-primary"} onClick={() => this.populateShipmentsData()}>Обновить
+                        </button>
+                        <Link className={"btn btn-success"} to={"/shipments/new"}>Создать</Link>
+                    </div>
+                    {contents}
                 </div>
-                {contents}
-            </div>
+            </>
         );
     }
 
@@ -129,5 +200,11 @@ export class Shipments extends Component {
         await axios.get("/api/shipments")
             .then((response) =>
                 this.setState({shipments: response.data, loading: false}))
+    }
+
+    async populateShipmentStatusesData() {
+        await axios.get("/api/shipmentStatuses")
+            .then((response) =>
+                this.setState({shipmentStatuses: response.data}))
     }
 }
