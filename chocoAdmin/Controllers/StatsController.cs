@@ -46,6 +46,7 @@ public class StatsController : ControllerBase
             
             incomeInfo.Add(new IncomeInfo
             {
+                Index = -delta,
                 DateInfo = $"{date.Month}/{date.Year}",
                 Total = income
             });

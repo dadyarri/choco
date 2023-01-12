@@ -9,4 +9,5 @@ public class IncomeInfo
 {
     public string DateInfo { get; set; }
     public int Total { get; set; }
+    public int Index { get; set; }
 }
