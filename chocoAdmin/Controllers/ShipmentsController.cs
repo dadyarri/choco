@@ -55,6 +55,33 @@ public class ShipmentsController : ControllerBase
         return NoContent();
     }
     
+    [HttpGet("{shipmentId:guid}")]
+    public async Task<ActionResult> GetShipmentById(Guid shipmentId)
+    {
+        var order = await _db.Shipments.Where(s => s.Id == shipmentId)
+            .Include(s => s.Status)
+            .Include(s => s.ShipmentItems)
+            .ThenInclude(si => si.Product)
+            .FirstOrDefaultAsync();
+        if (order == null) return NotFound();
+        return Ok(order);
+    }
+    
+    [HttpPut]
+    public async Task<ActionResult> UpdateShipment([FromBody] UpdateShipmentRequestBody body)
+    {
+        var orderStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
+        var order = await _db.Shipments.FindAsync(body.ShipmentId);
+        
+        if (orderStatus == null) return NotFound();
+        if (order == null) return NotFound();
+
+        order.Status = orderStatus;
+        await _db.SaveChangesAsync();
+
+        return Ok();
+    }
+    
     private async Task<List<ShipmentItem>> FindOrderItems(List<CreateShipmentItemsRequestBody> source)
     {
         var items = new List<ShipmentItem>();
