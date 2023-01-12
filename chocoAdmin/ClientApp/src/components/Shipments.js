@@ -17,23 +17,6 @@ export class Shipments extends Component {
     componentDidMount() {
         this.populateShipmentsData();
     }
-
-    static getShipmentItemStatusIcon(status) {
-        switch (status) {
-            case "Получено": {
-                return <GiCheckMark/>
-            }
-            case "Ожидается": {
-                return <GiClockwork/>
-            }
-            case "Отменено": {
-                return <GiCancel/>
-            }
-            default: {
-                return null
-            }
-        }
-    }
     
     static getShipmentStatusIcon(status) {
         switch (status) {
@@ -73,7 +56,7 @@ export class Shipments extends Component {
                             <td>
                                 <ul>
                                     {shipment.shipmentItems.map(item =>
-                                        <li key={uuid()}>{item.product.name} x{item.amount} {this.getShipmentItemStatusIcon(item.status.name)}</li>
+                                        <li key={uuid()}>{item.product.name} x{item.amount}</li>
                                     )}
                                 </ul>
                             </td>
