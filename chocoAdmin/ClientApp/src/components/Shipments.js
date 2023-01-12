@@ -3,8 +3,9 @@ import {v4 as uuid} from 'uuid';
 import axios from "axios";
 import {GiCancel, GiCheckMark, GiClockwork, GiSandsOfTime} from "react-icons/gi";
 import {TbTruckDelivery} from "react-icons/tb";
-import {HiDocumentMagnifyingGlass} from "react-icons/hi2";
+import {HiDocumentMagnifyingGlass, HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import {Link} from "react-router-dom";
+import $ from "jquery";
 
 export class Shipments extends Component {
     static displayName = Shipments.name;
@@ -17,8 +18,8 @@ export class Shipments extends Component {
     componentDidMount() {
         this.populateShipmentsData();
     }
-    
-    static getShipmentStatusIcon(status) {
+
+    getShipmentStatusIcon(status) {
         switch (status) {
             case "Получено": {
                 return <GiCheckMark/>
@@ -38,7 +39,26 @@ export class Shipments extends Component {
         }
     }
 
-    static renderShipmentsTable(shipments) {
+    async deleteConfirm(itemId) {
+        let button = $(`.btn.btn-danger[data-item-id="${itemId}"]`);
+        let clickCount = parseInt(button.attr("data-clicked"));
+
+        clickCount += 1
+        button.attr("data-clicked", clickCount);
+
+        if (clickCount === 1) {
+            button.attr("aria-pressed", true);
+            setTimeout(() => {
+                button.attr("aria-pressed", false);
+                button.attr("data-clicked", 0);
+            }, 3000)
+        } else if (clickCount === 2) {
+            await axios.delete(`/api/shipments/${itemId}`)
+            await this.populateShipmentsData();
+        }
+    }
+
+    renderShipmentsTable(shipments) {
         return (
             <div className={"table-responsive-md"}>
                 <table className="table table-striped" aria-labelledby="tableLabel">
@@ -47,11 +67,12 @@ export class Shipments extends Component {
                         <th>Дата</th>
                         <th>Содержимое заказа</th>
                         <th>Итог</th>
+                        <th>Действия</th>
                     </tr>
                     </thead>
                     <tbody>
                     {shipments.map(shipment =>
-                        <tr key={uuid()}>
+                        (!shipment.deleted ? <tr key={uuid()}>
                             <td>{new Date(shipment.date).toLocaleDateString("ru-RU")} {this.getShipmentStatusIcon(shipment.status.name)}</td>
                             <td>
                                 <ul>
@@ -63,7 +84,23 @@ export class Shipments extends Component {
                             <td>
                                 {shipment.shipmentItems.reduce((sum, item) => sum + item.product.wholesalePrice * item.amount, 0)} &#8381;
                             </td>
-                        </tr>
+                            <td>
+                                <div className="btn-group">
+                                    <button className={"btn btn-primary"} title={"Редактировать"} type={"button"}
+                                            onClick={() => this.openEditModal(shipment.id)}
+                                    >
+                                        <HiPencil/>
+                                    </button>
+                                    <button className={"btn btn-danger"} title={"Удалить"} data-bs-toggle="button"
+                                            data-item-id={shipment.id}
+                                            data-clicked={0}
+                                            aria-pressed={"false"}
+                                            type={"button"}
+                                            onClick={() => this.deleteConfirm(shipment.id)}><HiOutlineTrash/>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr> : null)
                     )}
                     </tbody>
                 </table>
@@ -74,14 +111,14 @@ export class Shipments extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Загрузка...</em></p>
-            : Shipments.renderShipmentsTable(this.state.shipments);
+            : this.renderShipmentsTable(this.state.shipments);
 
         return (
             <div>
                 <h1 id="tableLabel">Поставки</h1>
                 <div className={"btn-group"}>
                     <button className={"btn btn-primary"} onClick={() => this.populateShipmentsData()}>Обновить</button>
-                    <Link className={"btn btn-success"} to={"/shipments/new"} >Создать</Link>
+                    <Link className={"btn btn-success"} to={"/shipments/new"}>Создать</Link>
                 </div>
                 {contents}
             </div>
