@@ -67,6 +67,16 @@ export class Home extends Component {
                         <IncomesChart data={this.state.incomesFor10}/>
                     </div>
                 </div>
+                
+                <div className="row">
+                    <div className="col">
+                        <h5>Самые продаваемые сорта</h5>
+                    </div>
+                    
+                    <div className="col">
+                        <h5>Продажи по категориям</h5>
+                    </div>
+                </div>
             </div>
         );
     }
