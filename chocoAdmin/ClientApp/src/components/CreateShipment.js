@@ -3,6 +3,7 @@ import {Field, FieldArray, Form, Formik} from 'formik';
 import {FormFeedback, Input, Label} from "reactstrap";
 import axios from "axios";
 import * as Yup from 'yup';
+import {useNavigate} from "react-router-dom";
 
 export const CreateShipment = () => {
     const validationSchema = Yup.object().shape({
@@ -23,6 +24,7 @@ export const CreateShipment = () => {
     }
 
     const [products, setProducts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         getProductsList();
@@ -33,7 +35,10 @@ export const CreateShipment = () => {
             <h1>Создание поставки</h1>
             <Formik
                 initialValues={{date: '', products: []}}
-                onSubmit={values => console.log(values)}
+                onSubmit={async values => {
+                    await axios.post("/orders", values)
+                        .then((_) => navigate("/shipments"))
+                }}
                 validationSchema={validationSchema}
             >
                 {({values, errors, touched}) => (
