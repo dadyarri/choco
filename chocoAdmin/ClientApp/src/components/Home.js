@@ -3,6 +3,7 @@ import axios from "axios";
 import StatsByCityChart from "./Charts/StatsByCityChart";
 import {CompareIncomes} from "./Charts/CompareIncomes";
 import {IncomesChart} from "./Charts/IncomesChart";
+import {TopProducts} from "./Charts/TopProducts";
 
 export class Home extends Component {
     static displayName = Home.name;
@@ -11,6 +12,14 @@ export class Home extends Component {
         await axios.get("/api/Stats/ByCity").then(
             (response) => {
                 this.setState({statsByCity: response.data})
+            }
+        )
+    }
+    
+    getTopProducts = async () => {
+        await axios.get("/api/Stats/TopProducts").then(
+            (response) => {
+                this.setState({topProducts: response.data})
             }
         )
     }
@@ -36,7 +45,8 @@ export class Home extends Component {
         this.state = {
             statsByCity: [],
             incomesFor2: [{total: 0}, {total: 0}],
-            incomesFor10: [{dateInfo: '', total: 0}, {dateInfo: '', total: 0}]
+            incomesFor10: [{dateInfo: '', total: 0}, {dateInfo: '', total: 0}],
+            topProducts: [{name: '', value: 0}]
         };
     }
 
@@ -44,6 +54,7 @@ export class Home extends Component {
         await this.getStatsByCity();
         await this.getTotalIncomesFor2Months();
         await this.getTotalIncomesFor10Months();
+        await this.getTopProducts();
     }
 
     render() {
@@ -71,6 +82,7 @@ export class Home extends Component {
                 <div className="row">
                     <div className="col">
                         <h5>Самые продаваемые сорта</h5>
+                        <TopProducts data={this.state.topProducts}/>
                     </div>
                     
                     <div className="col">
