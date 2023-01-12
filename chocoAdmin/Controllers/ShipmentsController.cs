@@ -35,7 +35,7 @@ public class ShipmentsController : ControllerBase
         {
             Date = body.Date,
             ShipmentItems = await FindOrderItems(body.ShipmentItems),
-            Status = body.Status
+            Status = await _db.ShipmentStatuses.FindAsync(body.Status)
         };
 
         await _db.Shipments.AddAsync(shipment);
