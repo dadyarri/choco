@@ -42,6 +42,22 @@ public class StatsController : ControllerBase
         return Ok(data);
     }
 
+    [HttpGet("Categories")]
+    public async Task<ActionResult> GetCategories()
+    {
+        var data = await _db.Orders
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .ThenInclude(p => p.Category)
+            .SelectMany(o => o.OrderItems, (order, item) => new { order, item })
+            .GroupBy(o => o.item.Product.Category)
+            .Select(g => new { name = g.Key.Name, value = g.Count() })
+            .Take(10)
+            .OrderBy(g => g.value)
+            .ToListAsync();
+        return Ok(data);
+    }
+
     [HttpGet("TotalIncomes/{months:int}")]
     public async Task<ActionResult> GetTotalIncomes(int months)
     {
