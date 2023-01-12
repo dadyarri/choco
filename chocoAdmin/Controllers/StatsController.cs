@@ -27,45 +27,30 @@ public class StatsController : ControllerBase
         return Ok(data);
     }
 
-    [HttpGet("CompareIncome")]
-    public async Task<ActionResult> GetIncomeInLastTwoMonths()
+    [HttpGet("TotalIncomes/{months:int}")]
+    public async Task<ActionResult> GetTotalIncomes(int months)
     {
-        var currentMonthDate = DateTime.Now;
-        var previousMonthDate = DateTime.Now.AddMonths(-1);
-
-        var currentMonthData = await _db.Orders
-            .Include(o => o.OrderItems)
-            .ThenInclude(oi => oi.Product)
-            .Where(o => o.Date.Month == currentMonthDate.Month &&
-                        o.Date.Year == currentMonthDate.Year).ToListAsync();
-
-        var currentMonthIncome =
-            currentMonthData.Sum(order => order.OrderItems.Sum(oi => oi.Product.RetailPrice * oi.Amount));
-
-        var previousMonthData = await _db.Orders
-            .Include(o => o.OrderItems)
-            .ThenInclude(oi => oi.Product)
-            .Where(o => o.Date.Month == previousMonthDate.Month &&
-                        o.Date.Year == previousMonthDate.Year).ToListAsync();
-
-        var previousMonthIncome =
-            previousMonthData.Sum(order => order.OrderItems.Sum(oi => oi.Product.RetailPrice * oi.Amount));
-
-        return Ok(new IncomesResponse
+        var incomeInfo = new List<IncomeInfo>();
+        
+        for (var delta = 0; delta > -months; delta--)
         {
-            IncomeInfos = new List<IncomeInfo>
+            var date = DateTime.Now.AddMonths(delta);
+            var data = await _db.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .Where(o => o.Date.Month == date.Month &&
+                            o.Date.Year == date.Year)
+                .ToListAsync();
+            
+            var income = data.Sum(order => order.OrderItems.Sum(oi => oi.Product.RetailPrice * oi.Amount));
+            
+            incomeInfo.Add(new IncomeInfo
             {
-                new()
-                {
-                    DateInfo = $"{currentMonthDate.Month}/{currentMonthDate.Year}",
-                    Total = currentMonthIncome
-                },
-                new()
-                {
-                    DateInfo = $"{previousMonthDate.Month}/{previousMonthDate.Year}",
-                    Total = previousMonthIncome
-                }
-            }
-        });
+                DateInfo = $"{date.Month}/{date.Year}",
+                Total = income
+            });
+        }
+
+        return Ok(incomeInfo);
     }
 }
