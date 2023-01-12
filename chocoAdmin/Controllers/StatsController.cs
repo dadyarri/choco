@@ -27,11 +27,26 @@ public class StatsController : ControllerBase
         return Ok(data);
     }
 
+    [HttpGet("TopProducts")]
+    public async Task<ActionResult> GetTopProducts()
+    {
+        var data = await _db.Orders
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .SelectMany(o => o.OrderItems, (order, item) => new { order, item })
+            .GroupBy(o => o.item.Product)
+            .Select(g => new { name = g.Key.Name, value = g.Count() })
+            .Take(10)
+            .OrderBy(g => g.value)
+            .ToListAsync();
+        return Ok(data);
+    }
+
     [HttpGet("TotalIncomes/{months:int}")]
     public async Task<ActionResult> GetTotalIncomes(int months)
     {
         var incomeInfo = new List<IncomeInfo>();
-        
+
         for (var delta = 0; delta > -months; delta--)
         {
             var date = DateTime.Now.AddMonths(delta);
@@ -41,9 +56,9 @@ public class StatsController : ControllerBase
                 .Where(o => o.Date.Month == date.Month &&
                             o.Date.Year == date.Year)
                 .ToListAsync();
-            
+
             var income = data.Sum(order => order.OrderItems.Sum(oi => oi.Product.RetailPrice * oi.Amount));
-            
+
             incomeInfo.Add(new IncomeInfo
             {
                 Index = -delta,
