@@ -1,10 +1,11 @@
 using choco.Data;
+using choco.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace choco.Controllers;
 
-[Controller]
+[ApiController]
 [Route("[controller]")]
 public class ProductCategoriesController : ControllerBase
 {
@@ -20,5 +21,14 @@ public class ProductCategoriesController : ControllerBase
     {
         return Ok(await _db.ProductCategories
             .ToListAsync());
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> CreateProductCategory([FromBody] ProductCategory body)
+    {
+        await _db.ProductCategories.AddAsync(body);
+        await _db.SaveChangesAsync();
+        
+        return Created("/ProductCategories", body);
     }
 }
