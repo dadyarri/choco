@@ -29,7 +29,7 @@ public class ProductsController: ControllerBase
         var product = new Product
         {
             Name = body.Name,
-            Category = await _db.ProductCategories.FindAsync(body.CategoryId),
+            Category = await _db.ProductCategories.FindAsync(body.Category),
             IsByWeight = body.IsByWeight,
             Leftover = body.Leftover,
             RetailPrice = body.RetailPrice,
