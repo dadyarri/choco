@@ -5,6 +5,7 @@ import {CreateShipment} from "./components/CreateShipment";
 import {Orders} from "./components/Orders";
 import {CreateOrder} from "./components/CreateOrder";
 import {CreateProduct} from "./components/CreateProduct";
+import {Categories} from "./components/Categories";
 
 const AppRoutes = [
   {
@@ -34,6 +35,10 @@ const AppRoutes = [
   {
     path: '/warehouse/new',
     element: <CreateProduct />
+  },
+  {
+    path: '/categories',
+    element: <Categories/>
   }
 ];
 
