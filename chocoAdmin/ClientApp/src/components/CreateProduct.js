@@ -40,7 +40,10 @@ export const CreateProduct = () => {
                     isByWeight: false,
                     leftover: 0
                 }}
-                onSubmit={values => console.log(values)}
+                onSubmit={async values => {
+                    await axios.post("/api/products", values);
+                    navigate("/warehouse");
+                }}
                 validationSchema={validationSchema}
             >
                 {({values, errors, touched}) => (
