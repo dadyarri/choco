@@ -6,6 +6,7 @@ import {Orders} from "./components/Orders";
 import {CreateOrder} from "./components/CreateOrder";
 import {CreateProduct} from "./components/CreateProduct";
 import {Categories} from "./components/Categories";
+import {CreateCategory} from "./components/CreateCategory";
 
 const AppRoutes = [
   {
@@ -39,6 +40,10 @@ const AppRoutes = [
   {
     path: '/categories',
     element: <Categories/>
+  },
+  {
+    path: '/categories/new',
+    element: <CreateCategory/>
   }
 ];
 
