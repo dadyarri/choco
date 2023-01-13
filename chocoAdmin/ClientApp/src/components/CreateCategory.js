@@ -22,7 +22,9 @@ export class CreateCategory extends Component {
                     initialValues={{
                         name: '',
                     }}
-                    onSubmit={values => console.log(values)}
+                    onSubmit={async values => {
+                        await axios.post("/api/productCategories", values);
+                    }}
                     validationSchema={this.validationSchema}
                 >
                     {({values, errors, touched}) => (
