@@ -3,11 +3,14 @@ import {ErrorMessage, Field, Form, Formik} from 'formik';
 import {FormFeedback, Input, Label} from "reactstrap";
 import axios from "axios";
 import * as Yup from 'yup';
+import {useNavigate} from "react-router-dom";
 
 export const CreateCategory = () => {
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Поле обязательно!")
     })
+    
+    const navigate = useNavigate();
 
     return (
         <div>
@@ -18,6 +21,7 @@ export const CreateCategory = () => {
                 }}
                 onSubmit={async values => {
                     await axios.post("/api/productCategories", values);
+                    navigate("/categories");
                 }}
                 validationSchema={validationSchema}
             >
