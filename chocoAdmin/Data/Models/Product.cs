@@ -34,4 +34,6 @@ public class Product: BaseModel
     /// Количество товара, оставшегося на складе
     /// </summary>
     public double Leftover { get; set; }
+
+    public bool Deleted { get; set; }
 }
