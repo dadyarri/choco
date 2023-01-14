@@ -6,7 +6,8 @@ import {Link} from "react-router-dom";
 import {ImWarning} from "react-icons/im";
 import {
     Button,
-    ButtonGroup, FormFeedback,
+    ButtonGroup,
+    FormFeedback,
     FormGroup,
     Input,
     InputGroup,
@@ -142,6 +143,10 @@ export class Warehouse extends Component {
         );
     }
 
+    exportImage = async () => {
+        await axios.get("/api/Export")
+    }
+
     render() {
         let contents = this.state.loading
             ? <p><em>Загрузка...</em></p>
@@ -173,7 +178,8 @@ export class Warehouse extends Component {
                                 <Form>
                                     <FormGroup>
                                         <Label>Название</Label>
-                                        <Field type={"text"} name={"name"} as={Input} valid={!errors.name && touched.name}
+                                        <Field type={"text"} name={"name"} as={Input}
+                                               valid={!errors.name && touched.name}
                                                invalid={errors.name && touched.name}/>
                                         {errors.name && touched.name ?
                                             <FormFeedback>{errors.name}</FormFeedback> : null}
@@ -201,11 +207,11 @@ export class Warehouse extends Component {
                                             {errors.retailPrice && touched.retailPrice ?
                                                 <FormFeedback>{errors.retailPrice}</FormFeedback> : null}
                                         </InputGroup>
-                                        
+
                                     </FormGroup>
                                     <FormGroup>
                                         <Label>Категория</Label>
-                                        <Field as={Input} type={"select"} name={"category"} 
+                                        <Field as={Input} type={"select"} name={"category"}
                                                valid={!errors.category && touched.category}
                                                invalid={errors.category && touched.category}>
                                             {this.state.productCategories.map((pc) => (
@@ -238,6 +244,7 @@ export class Warehouse extends Component {
                         <button className={"btn btn-primary"} onClick={() => this.populateProductsData()}>Обновить
                         </button>
                         <Link className={"btn btn-success"} to={"/warehouse/new"}>Создать</Link>
+                        <Button color={"info"} onClick={this.exportImage}>Экспорт в ВК</Button>
                     </div>
                     {contents}
                 </div>
