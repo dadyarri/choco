@@ -26,7 +26,10 @@ public class ProductsController: ControllerBase
     [HttpGet("{productId:guid}")]
     public async Task<ActionResult> GetProduct(Guid productId)
     {
-        var product = await _db.Products.FindAsync(productId);
+        var product = await _db.Products
+            .Where(p => p.Id == productId)
+            .Include(p => p.Category)
+            .FirstOrDefaultAsync();
 
         if (product == null) return NotFound();
         
