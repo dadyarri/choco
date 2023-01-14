@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {ErrorMessage, Field, Form, Formik} from 'formik';
+import React from 'react';
+import {Field, Form, Formik} from 'formik';
 import {FormFeedback, Input, Label} from "reactstrap";
 import axios from "axios";
 import * as Yup from 'yup';
