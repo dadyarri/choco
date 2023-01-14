@@ -22,7 +22,8 @@ public class StatsController : ControllerBase
         var data = await _db.Orders
             .Include(o => o.Address)
             .Include(o => o.Status)
-            .Where(o => !o.Deleted && o.Status.Name != "Отменён")
+            .Where(o => !o.Deleted && o.Status.Name != "Отменён" && o.Date.Month == DateTime.Now.Month &&
+                        o.Date.Year == DateTime.Now.Year)
             .GroupBy(o => o.Address.City)
             .Select(g => new { name = g.Key.Name, value = g.Count() })
             .ToListAsync();
@@ -34,7 +35,8 @@ public class StatsController : ControllerBase
     {
         var data = await _db.Orders
             .Include(o => o.Status)
-            .Where(o => !o.Deleted && o.Status.Name != "Отменён")
+            .Where(o => !o.Deleted && o.Status.Name != "Отменён" && o.Date.Month == DateTime.Now.Month &&
+                        o.Date.Year == DateTime.Now.Year)
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .SelectMany(o => o.OrderItems, (order, item) => new { order, item })
@@ -51,7 +53,8 @@ public class StatsController : ControllerBase
     {
         var data = await _db.Orders
             .Include(o => o.Status)
-            .Where(o => !o.Deleted && o.Status.Name != "Отменён")
+            .Where(o => !o.Deleted && o.Status.Name != "Отменён" && o.Date.Month == DateTime.Now.Month &&
+                        o.Date.Year == DateTime.Now.Year)
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .ThenInclude(p => p.Category)
