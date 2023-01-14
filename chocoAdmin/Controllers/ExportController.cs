@@ -21,10 +21,10 @@ public class ExportController : ControllerBase
         var products = await _db.Products.Where(p => p.Leftover > 0 && !p.Deleted).ToListAsync();
         SKData data;
 
-        const float xPadding = 50.0f;
-        const float yPadding = 50.0f;
+        const float xPadding = 25.0f;
+        const float yPadding = 25.0f;
 
-        var imageInfo = new SKImageInfo(600, 600);
+        var imageInfo = new SKImageInfo(700, 1000);
         using (var surface = SKSurface.Create(imageInfo))
         {
             var canvas = surface.Canvas;
@@ -40,8 +40,8 @@ public class ExportController : ControllerBase
 
             var yCoord = 0;
             var nameXCoord = 20;
-            var priceXCoord = 300;
-            var leftoverXCoord = 400;
+            var priceXCoord = 425;
+            var leftoverXCoord = 525;
 
             canvas.DrawText("Название", nameXCoord + xPadding + 5, yCoord + yPadding, paint);
             canvas.DrawText("Цена", priceXCoord + xPadding + 5, yCoord + yPadding, paint);
