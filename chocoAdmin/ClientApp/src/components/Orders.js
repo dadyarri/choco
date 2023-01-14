@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {v4 as uuid} from 'uuid';
 import axios from "axios";
-import {GiCheckMark, GiSandsOfTime} from "react-icons/gi";
+import {GiCancel, GiCheckMark, GiSandsOfTime} from "react-icons/gi";
 import {TbTruckDelivery} from "react-icons/tb";
 import {Link} from "react-router-dom";
 import {HiOutlineTrash, HiPencil} from "react-icons/hi2";
@@ -40,6 +40,9 @@ export class Orders extends Component {
             }
             case "Обрабатывается": {
                 return <GiSandsOfTime/>
+            }
+            case "Отменён": {
+                return <GiCancel/>
             }
             default: {
                 return null
