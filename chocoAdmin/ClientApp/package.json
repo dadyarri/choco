@@ -6,6 +6,7 @@
     "axios": "^1.2.2",
     "bootstrap": "^5.2.3",
     "formik": "^2.2.9",
+    "here-js-api": "^2.0.0",
     "http-proxy-middleware": "^2.0.6",
     "jquery": "^3.6.3",
     "merge": "^2.1.1",
