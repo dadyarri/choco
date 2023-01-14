@@ -3,6 +3,7 @@ import {v4 as uuid} from 'uuid';
 import {GiWeight} from "react-icons/gi";
 import axios from "axios";
 import {Link} from "react-router-dom";
+import {ImWarning} from "react-icons/im";
 
 export class Warehouse extends Component {
     static displayName = Warehouse.name;
@@ -28,10 +29,12 @@ export class Warehouse extends Component {
                 </thead>
                 <tbody>
                 {products.map(product =>
-                    <tr key={uuid()}>
+                    <tr key={uuid()} className={product.leftover < 0 ?
+                        "table-danger" : ""}>
                         <td>{product.name} {product.isByWeight ? <GiWeight/> : null}</td>
                         <td>{product.wholesalePrice} ({product.retailPrice}) &#8381;</td>
-                        <td>{product.leftover} {product.isByWeight ? 'кг.' : 'шт.'}</td>
+                        <td>{product.leftover} {product.isByWeight ? 'кг.' : 'шт.'} {product.leftover < 0 ?
+                            <ImWarning/> : null}</td>
                     </tr>
                 )}
                 </tbody>
@@ -49,7 +52,7 @@ export class Warehouse extends Component {
                 <h1 id="tableLabel">Склад</h1>
                 <div className={"btn-group"}>
                     <button className={"btn btn-primary"} onClick={() => this.populateProductsData()}>Обновить</button>
-                    <Link className={"btn btn-success"} to={"/warehouse/new"} >Создать</Link>
+                    <Link className={"btn btn-success"} to={"/warehouse/new"}>Создать</Link>
                 </div>
                 {contents}
             </div>
