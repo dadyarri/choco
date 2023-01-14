@@ -21,7 +21,8 @@ public class StatsController : ControllerBase
     {
         var data = await _db.Orders
             .Include(o => o.Address)
-            .Where(o => !o.Deleted)
+            .Include(o => o.Status)
+            .Where(o => !o.Deleted && o.Status.Name != "Отменён")
             .GroupBy(o => o.Address.City)
             .Select(g => new { name = g.Key.Name, value = g.Count() })
             .ToListAsync();
@@ -32,7 +33,8 @@ public class StatsController : ControllerBase
     public async Task<ActionResult> GetTopProducts()
     {
         var data = await _db.Orders
-            .Where(o => !o.Deleted)
+            .Include(o => o.Status)
+            .Where(o => !o.Deleted && o.Status.Name != "Отменён")
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .SelectMany(o => o.OrderItems, (order, item) => new { order, item })
@@ -48,7 +50,8 @@ public class StatsController : ControllerBase
     public async Task<ActionResult> GetCategories()
     {
         var data = await _db.Orders
-            .Where(o => !o.Deleted)
+            .Include(o => o.Status)
+            .Where(o => !o.Deleted && o.Status.Name != "Отменён")
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .ThenInclude(p => p.Category)
@@ -70,7 +73,8 @@ public class StatsController : ControllerBase
         {
             var date = DateTime.Now.AddMonths(delta);
             var data = await _db.Orders
-                .Where(o => !o.Deleted)
+                .Include(o => o.Status)
+                .Where(o => !o.Deleted && o.Status.Name != "Отменён")
                 .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)
                 .Where(o => o.Date.Month == date.Month &&
