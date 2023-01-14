@@ -31,19 +31,30 @@ public class ShipmentsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateShipment([FromBody] CreateShipmentRequestBody body)
     {
+        var shipmentItems = await FindShipmentItems(body.ShipmentItems);
+        var shipmentStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
+
+        if (shipmentStatus.Name == "Получено")
+        {
+            foreach (var item in shipmentItems)
+            {
+                item.Product.Leftover += item.Amount;
+            }
+        }
+
         var shipment = new Shipment
         {
             Date = body.Date,
-            ShipmentItems = await FindOrderItems(body.ShipmentItems),
-            Status = await _db.ShipmentStatuses.FindAsync(body.Status)
+            ShipmentItems = shipmentItems,
+            Status = shipmentStatus
         };
 
         await _db.Shipments.AddAsync(shipment);
         await _db.SaveChangesAsync();
-        
+
         return Created("/api/Shipments", shipment);
     }
-    
+
     [HttpDelete("{orderId:guid}")]
     public async Task<ActionResult> DeleteShipment(Guid orderId)
     {
@@ -54,7 +65,7 @@ public class ShipmentsController : ControllerBase
         await _db.SaveChangesAsync();
         return NoContent();
     }
-    
+
     [HttpGet("{shipmentId:guid}")]
     public async Task<ActionResult> GetShipmentById(Guid shipmentId)
     {
@@ -66,23 +77,36 @@ public class ShipmentsController : ControllerBase
         if (order == null) return NotFound();
         return Ok(order);
     }
-    
+
     [HttpPut]
     public async Task<ActionResult> UpdateShipment([FromBody] UpdateShipmentRequestBody body)
     {
         var orderStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
-        var order = await _db.Shipments.FindAsync(body.ShipmentId);
-        
+        var order = await _db.Shipments
+            .Where(s => s.Id == body.ShipmentId)
+            .Include(s => s.ShipmentItems)
+            .ThenInclude(si => si.Product)
+            .FirstOrDefaultAsync();
+
         if (orderStatus == null) return NotFound();
         if (order == null) return NotFound();
 
         order.Status = orderStatus;
+        
+        if (orderStatus.Name == "Получено")
+        {
+            foreach (var item in order.ShipmentItems)
+            {
+                item.Product.Leftover += item.Amount;
+            }
+        }
+        
         await _db.SaveChangesAsync();
 
         return Ok();
     }
-    
-    private async Task<List<ShipmentItem>> FindOrderItems(List<CreateShipmentItemsRequestBody> source)
+
+    private async Task<List<ShipmentItem>> FindShipmentItems(List<CreateShipmentItemsRequestBody> source)
     {
         var items = new List<ShipmentItem>();
         foreach (var sourceItem in source)
