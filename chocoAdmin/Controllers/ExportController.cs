@@ -46,13 +46,13 @@ public class ExportController : ControllerBase
             canvas.DrawText("Название", nameXCoord + xPadding + 5, yCoord + yPadding, paint);
             canvas.DrawText("Цена", priceXCoord + xPadding + 5, yCoord + yPadding, paint);
             canvas.DrawText("В наличии", leftoverXCoord + xPadding + 5, yCoord + yPadding, paint);
-            
+
             canvas.DrawLine(
                 new SKPoint(nameXCoord + xPadding - 1, yCoord + yPadding - 20),
                 new SKPoint(leftoverXCoord + xPadding + 106, yCoord + yPadding - 20),
                 paint
             );
-            
+
             canvas.DrawLine(
                 new SKPoint(nameXCoord + xPadding, yCoord + yPadding + 10),
                 new SKPoint(leftoverXCoord + xPadding + 105, yCoord + yPadding + 10),
@@ -64,33 +64,33 @@ public class ExportController : ControllerBase
                 yCoord += 30;
                 var unit = product.IsByWeight ? "кг." : "шт.";
                 canvas.DrawLine(
-                    new SKPoint(nameXCoord + xPadding, (yCoord + yPadding) + 5),
-                    new SKPoint(leftoverXCoord + xPadding + 105, (yCoord + yPadding + 5)),
+                    new SKPoint(nameXCoord + xPadding, yCoord + yPadding + 5),
+                    new SKPoint(leftoverXCoord + xPadding + 105, yCoord + yPadding + 5),
                     paint
                 );
                 canvas.DrawText(product.Name, nameXCoord + xPadding + 5, yCoord + yPadding, paint);
                 canvas.DrawText($"{product.RetailPrice}₽", priceXCoord + xPadding + 5, yCoord + yPadding, paint);
                 canvas.DrawText($"{product.Leftover} {unit}", leftoverXCoord + xPadding + 5, yCoord + yPadding, paint);
             }
-            
+
             canvas.DrawLine(
                 new SKPoint(nameXCoord + xPadding, 0 + yPadding - 20),
                 new SKPoint(nameXCoord + xPadding, yCoord + yPadding + 5),
                 paint
             );
-            
+
             canvas.DrawLine(
                 new SKPoint(priceXCoord + xPadding, 0 + yPadding - 20),
                 new SKPoint(priceXCoord + xPadding, yCoord + yPadding + 5),
                 paint
             );
-            
+
             canvas.DrawLine(
                 new SKPoint(leftoverXCoord + xPadding, 0 + yPadding - 20),
                 new SKPoint(leftoverXCoord + xPadding, yCoord + yPadding + 5),
                 paint
             );
-            
+
             canvas.DrawLine(
                 new SKPoint(leftoverXCoord + xPadding + 105, 0 + yPadding - 20),
                 new SKPoint(leftoverXCoord + xPadding + 105, yCoord + yPadding + 5),
