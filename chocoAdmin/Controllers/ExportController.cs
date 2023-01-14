@@ -98,7 +98,7 @@ public class ExportController : ControllerBase
             );
 
             var image = surface.Snapshot();
-            data = image.Encode(SKEncodedImageFormat.Jpeg, 80);
+            data = image.Encode(SKEncodedImageFormat.Jpeg, 100);
         }
 
         return File(data.ToArray(), "image/jpeg");
