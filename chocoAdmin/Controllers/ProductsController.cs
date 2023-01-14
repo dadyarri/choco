@@ -8,7 +8,7 @@ namespace choco.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductsController: ControllerBase
+public class ProductsController : ControllerBase
 {
     private readonly AppDbContext _db;
 
@@ -23,6 +23,24 @@ public class ProductsController: ControllerBase
         return Ok(await _db.Products.ToListAsync());
     }
 
+    [HttpPut]
+    public async Task<ActionResult> UpdateProduct([FromBody] UpdateProductRequestBody body)
+    {
+        var product = await _db.Products.FindAsync(body.ProductId);
+
+        if (product == null) return NotFound();
+
+        product.Category = await _db.ProductCategories.FindAsync(body.Category);
+        product.RetailPrice = body.RetailPrice;
+        product.WholesalePrice = body.WholesalePrice;
+        product.IsByWeight = body.IsByWeight;
+        product.Name = body.Name;
+
+        await _db.SaveChangesAsync();
+
+        return Ok(product);
+    }
+
     [HttpGet("{productId:guid}")]
     public async Task<ActionResult> GetProduct(Guid productId)
     {
@@ -32,7 +50,7 @@ public class ProductsController: ControllerBase
             .FirstOrDefaultAsync();
 
         if (product == null) return NotFound();
-        
+
         return Ok(product);
     }
 
@@ -42,7 +60,7 @@ public class ProductsController: ControllerBase
         var product = await _db.Products.FindAsync(productId);
 
         if (product == null) return NotFound();
-        
+
         return NoContent();
     }
 
@@ -58,11 +76,10 @@ public class ProductsController: ControllerBase
             RetailPrice = body.RetailPrice,
             WholesalePrice = body.WholesalePrice
         };
-        
+
         await _db.Products.AddAsync(product);
         await _db.SaveChangesAsync();
-        
+
         return Created("/Products", body);
     }
-    
 }
