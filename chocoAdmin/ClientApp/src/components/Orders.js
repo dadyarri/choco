@@ -8,12 +8,16 @@ import {HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import $ from "jquery";
 import {Button, FormGroup, Input, Label, List, Modal, ModalBody, ModalHeader} from "reactstrap";
 import {Field, Form, Formik} from "formik";
+import {FaMapMarkedAlt} from "react-icons/fa";
+import 'here-js-api/scripts/mapsjs-core';
+import 'here-js-api/scripts/mapsjs-service';
 
 export class Orders extends Component {
     static displayName = Orders.name;
 
     constructor(props) {
         super(props);
+        this.H = window.H;
         this.state = {
             orders: [],
             loading: true,
@@ -75,6 +79,31 @@ export class Orders extends Component {
         });
     }
 
+    plotRoute = async (address) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const lat = position.coords.latitude;
+                const long = position.coords.longitude;
+
+                const platform = new this.H.service.Platform({
+                    'apikey': process.env.REACT_APP_HERE_TOKEN
+                });
+                const service = platform.getSearchService();
+                service.geocode({
+                    q: address
+                }, (result) => {
+                    result.items.forEach((item) => {
+                        const url = `https://yandex.ru/maps/?mode=routes&rtext=${lat},${long}~${item.position.lat},${item.position.lng}`;
+                        window.open(url, "_blank");
+                    });
+                })
+
+            }, () => {
+                alert("Доступ к местоположению необходим для построения маршрута");
+            })
+        }
+    }
+
     renderOrdersTable(orders) {
         return (
             <div className={"table-responsive-md"}>
@@ -99,7 +128,13 @@ export class Orders extends Component {
                                     )}
                                 </ul>
                             </td>
-                            <td>г.&nbsp;{order.address.city.name}, {order.address.street}, {order.address.building}</td>
+                            <td>г.&nbsp;{order.address.city.name}, {order.address.street}, {order.address.building}&nbsp;
+                                <Button color={"success"} title={"Проложить маршрут"}
+                                        onClick={() =>
+                                            this.plotRoute(`г. ${order.address.city.name}, ${order.address.street}, ${order.address.building}`)}>
+                                    <FaMapMarkedAlt/>
+                                </Button>
+                            </td>
                             <td>
                                 {order.orderItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
                             </td>
@@ -156,7 +191,7 @@ export class Orders extends Component {
                                     await axios.put(`/api/orders`, values);
                                     this.closeEditModal();
                                     await this.populateOrdersData();
-                                    
+
                                 }}>
                             {({values}) => (
                                 <Form>
