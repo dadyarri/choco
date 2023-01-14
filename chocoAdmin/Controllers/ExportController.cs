@@ -1,4 +1,5 @@
 using choco.Data;
+using choco.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SkiaSharp;
@@ -16,9 +17,17 @@ public class ExportController : ControllerBase
         _db = db;
     }
 
+    [HttpGet]
     public async Task<ActionResult> ExportImage()
     {
         var products = await _db.Products.Where(p => p.Leftover > 0 && !p.Deleted).ToListAsync();
+        var data = GenerateImage(products);
+
+        return File(data.ToArray(), "image/jpeg");
+    }
+
+    private static SKData GenerateImage(List<Product> products)
+    {
         SKData data;
 
         const float xPadding = 25.0f;
@@ -101,6 +110,6 @@ public class ExportController : ControllerBase
             data = image.Encode(SKEncodedImageFormat.Jpeg, 100);
         }
 
-        return File(data.ToArray(), "image/jpeg");
+        return data;
     }
 }
