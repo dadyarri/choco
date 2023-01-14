@@ -23,6 +23,26 @@ public class ProductsController: ControllerBase
         return Ok(await _db.Products.ToListAsync());
     }
 
+    [HttpGet("{productId:guid}")]
+    public async Task<ActionResult> GetProduct(Guid productId)
+    {
+        var product = await _db.Products.FindAsync(productId);
+
+        if (product == null) return NotFound();
+        
+        return Ok(product);
+    }
+
+    [HttpDelete("{productId:guid}")]
+    public async Task<ActionResult> DeleteProduct(Guid productId)
+    {
+        var product = await _db.Products.FindAsync(productId);
+
+        if (product == null) return NotFound();
+        
+        return NoContent();
+    }
+
     [HttpPost]
     public async Task<ActionResult> CreateProduct([FromBody] CreateProductRequestBody body)
     {
