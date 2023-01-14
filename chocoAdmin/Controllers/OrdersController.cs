@@ -58,12 +58,25 @@ public class OrdersController : ControllerBase
     public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrderRequestBody body)
     {
         var orderStatus = await _db.OrderStatuses.FindAsync(body.Status);
-        var order = await _db.Orders.FindAsync(body.OrderId);
-        
+        var order = await _db.Orders
+            .Where(o => o.Id == body.OrderId)
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .FirstOrDefaultAsync();
+
         if (orderStatus == null) return NotFound();
         if (order == null) return NotFound();
 
         order.Status = orderStatus;
+
+        if (orderStatus.Name == "Выполнен")
+        {
+            foreach (var item in order.OrderItems)
+            {
+                item.Product.Leftover -= item.Amount;
+            }
+        }
+
         await _db.SaveChangesAsync();
 
         return Ok();
@@ -72,6 +85,17 @@ public class OrdersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateOrder([FromBody] CreateOrderRequestBody body)
     {
+        var orderItems = await FindOrderItems(body.OrderItems);
+        var orderStatus = await _db.OrderStatuses.FindAsync(body.Status);
+
+        if (orderStatus.Name == "Выполнен")
+        {
+            foreach (var item in orderItems)
+            {
+                item.Product.Leftover -= item.Amount;
+            }
+        }
+
         var order = new Order
         {
             Date = DateOnly.ParseExact(body.Date, "yyyy-mm-dd"),
@@ -81,8 +105,8 @@ public class OrdersController : ControllerBase
                 City = await _db.OrderCities.FindAsync(body.Address.City),
                 Street = body.Address.Street
             },
-            OrderItems = await FindOrderItems(body.OrderItems),
-            Status = await _db.OrderStatuses.FindAsync(body.Status)
+            OrderItems = orderItems,
+            Status = orderStatus
         };
         await _db.Orders.AddAsync(order);
         await _db.SaveChangesAsync();
