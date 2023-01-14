@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import {ImWarning} from "react-icons/im";
 import {
     Button,
-    ButtonGroup,
+    ButtonGroup, FormFeedback,
     FormGroup,
     Input,
     InputGroup,
@@ -19,6 +19,7 @@ import {
 import {HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import $ from "jquery";
 import {Field, Form, Formik} from "formik";
+import * as Yup from "yup";
 
 export class Warehouse extends Component {
     static displayName = Warehouse.name;
@@ -33,6 +34,15 @@ export class Warehouse extends Component {
             name: ''
         }
     };
+
+    validationSchema = Yup.object().shape({
+        name: Yup.string().required("Поле должно быть заполнено!"),
+        category: Yup.string().uuid("Неверный формат идентификатора").required("Поле должно быть заполнено!"),
+        retailPrice: Yup.number().required("Поле должно быть заполнено").min(1, "Цена не должна быть меньше 1"),
+        wholesalePrice: Yup.number().required("Поле должно быть заполнено").min(1, "Цена не должна быть меньше 1"),
+        isByWeight: Yup.bool(),
+        leftover: Yup.number()
+    });
 
     constructor(props) {
         super(props);
@@ -156,43 +166,65 @@ export class Warehouse extends Component {
                                 await axios.put(`/api/products`, values);
                                 this.closeEditModal();
                                 await this.populateProductsData();
-                            }}>
+                            }}
+                            validationSchema={this.validationSchema}
+                        >
                             {({values, errors, touched}) => (
                                 <Form>
                                     <FormGroup>
                                         <Label>Название</Label>
-                                        <Field type={"text"} name={"name"} as={Input}/>
+                                        <Field type={"text"} name={"name"} as={Input} valid={!errors.name && touched.name}
+                                               invalid={errors.name && touched.name}/>
+                                        {errors.name && touched.name ?
+                                            <FormFeedback>{errors.name}</FormFeedback> : null}
                                     </FormGroup>
                                     <FormGroup>
                                         <Label>Оптовая цена</Label>
                                         <InputGroup>
                                             <Field as={Input} type={"number"}
-                                                   name={"wholesalePrice"}/>
+                                                   name={"wholesalePrice"}
+                                                   valid={!errors.wholesalePrice && touched.wholesalePrice}
+                                                   invalid={errors.wholesalePrice && touched.wholesalePrice}/>
                                             <InputGroupText>&#8381;</InputGroupText>
+                                            {errors.wholesalePrice && touched.wholesalePrice ?
+                                                <FormFeedback>{errors.wholesalePrice}</FormFeedback> : null}
                                         </InputGroup>
                                     </FormGroup>
                                     <FormGroup>
                                         <Label>Розничная цена</Label>
                                         <InputGroup>
                                             <Field as={Input} type={"number"}
-                                                   name={"retailPrice"}/>
+                                                   name={"retailPrice"}
+                                                   valid={!errors.retailPrice && touched.retailPrice}
+                                                   invalid={errors.retailPrice && touched.retailPrice}/>
                                             <InputGroupText>&#8381;</InputGroupText>
+                                            {errors.retailPrice && touched.retailPrice ?
+                                                <FormFeedback>{errors.retailPrice}</FormFeedback> : null}
                                         </InputGroup>
+                                        
                                     </FormGroup>
                                     <FormGroup>
                                         <Label>Категория</Label>
-                                        <Field as={Input} type={"select"} name={"category"}>
+                                        <Field as={Input} type={"select"} name={"category"} 
+                                               valid={!errors.category && touched.category}
+                                               invalid={errors.category && touched.category}>
                                             {this.state.productCategories.map((pc) => (
                                                 <option key={pc.id} value={pc.id}>{pc.name}</option>
                                             ))}
                                         </Field>
+                                        {errors.category && touched.category ?
+                                            <FormFeedback>{errors.category}</FormFeedback> : null}
                                     </FormGroup>
                                     <FormGroup check>
                                         <Field type={"checkbox"} name={"isByWeight"}
                                                as={Input}
+                                               valid={!errors.isByWeight && touched.isByWeight}
+                                               invalid={errors.isByWeight && touched.isByWeight}
                                         />
                                         <Label for={"isByWeight"} check>На
                                             развес?</Label>
+                                        {errors.isByWeight && touched.isByWeight ?
+                                            <FormFeedback>{errors.isByWeight}</FormFeedback> : null}
                                     </FormGroup>
                                     <Button color={"success"} type={"submit"} className={"mt-3"}>Сохранить</Button>
                                 </Form>
