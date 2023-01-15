@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  admin:
+    build: chocoAdmin
+    ports:
+      - "443:443"
+      - "80:80"
+    container_name: admin
+    environment:
+      ASPNETCORE_HTTPS_POST: 443
+    depends_on:
+      - adminDb
+
+  adminDb:
+    image: postgres:15
+    container_name: adminDb
+    environment:
+      POSTGRES_USER: dadyarri
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: choco
+    volumes:
+      - coursePgData:/var/lib/postgresql/data
+    ports:
+      - "7232:5432"
+
+volumes:
+  coursePgData:
