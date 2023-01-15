@@ -5,15 +5,18 @@ services:
     ports:
       - "443:443"
       - "80:80"
-    container_name: admin
+    container_name: choco_admin
     environment:
       ASPNETCORE_HTTPS_POST: 443
     depends_on:
       - adminDb
+      - vkIntegration
+    networks:
+      - net
 
   adminDb:
     image: postgres:15
-    container_name: adminDb
+    container_name: choco_adminDb
     environment:
       POSTGRES_USER: dadyarri
       POSTGRES_PASSWORD: 1234
@@ -22,6 +25,23 @@ services:
       - coursePgData:/var/lib/postgresql/data
     ports:
       - "7232:5432"
+    networks:
+      - net
+        
+  vkIntegration:
+    container_name: choco_vkintegration
+    image: vkintegration
+    build: VkIntegration
+    env_file: VkIntegration/.env
+    environment:
+      PYTHONPATH: tg
+    command: python /code/main.py
+    networks:
+      - net
 
 volumes:
   coursePgData:
+    
+networks:
+  net:
+    driver: bridge
