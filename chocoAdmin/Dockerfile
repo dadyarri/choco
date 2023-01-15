@@ -12,16 +12,16 @@ RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash - \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
-COPY ["choco/choco.csproj", "choco/"]
-RUN dotnet restore "choco/choco.csproj"
+COPY ["chocoAdmin.csproj", "chocoAdmin/"]
+RUN dotnet restore "chocoAdmin/chocoAdmin.csproj"
+WORKDIR "/src/chocoAdmin"
 COPY . .
-WORKDIR "/src/choco"
-RUN dotnet build "choco.csproj" -c Release -o /app/build
+RUN dotnet build "chocoAdmin.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "choco.csproj" -c Release -o /app/publish
+RUN dotnet publish "chocoAdmin.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "choco.dll"]
+ENTRYPOINT ["dotnet", "chocoAdmin.dll"]
