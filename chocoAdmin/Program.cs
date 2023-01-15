@@ -1,3 +1,4 @@
+using choco.ApiClients.VkService;
 using choco.Data;
 using choco.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,11 @@ builder.Host.UseSerilog();
 
 builder.Services.AddControllersWithViews(options => { options.UseGeneralRoutePrefix("api"); });
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddHttpClient<VkServiceClient>(client =>
+{
+    client.BaseAddress = new Uri("");
+});
+builder.Services.AddSingleton<VkServiceClient>();
 
 var app = builder.Build();
 
