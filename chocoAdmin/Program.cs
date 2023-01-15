@@ -19,7 +19,7 @@ builder.Services.AddControllersWithViews(options => { options.UseGeneralRoutePre
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddHttpClient<VkServiceClient>(client =>
 {
-    client.BaseAddress = new Uri("");
+    client.BaseAddress = new Uri("vkIntegration");
 });
 builder.Services.AddSingleton<VkServiceClient>();
 
