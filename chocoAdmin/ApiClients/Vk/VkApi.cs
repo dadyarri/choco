@@ -9,33 +9,33 @@ public class VkApi
     public int OwnerId { get; set; }
     public string ApiVersion { get; init; }
 
-    public async Task<WallGetResult> WallGet(WallGetParams @params)
+    public async Task<BaseResponse<WallGetResult>> WallGet(WallGetParams @params)
     {
-        return new WallGetResult();
+        return new BaseResponse<WallGetResult>();
     }
 
-    public async Task WallDelete(WallDeleteParams @params)
+    public async Task<BaseResponse<WallDeleteResult>> WallDelete(WallDeleteParams @params)
     {
-        
+        return new BaseResponse<WallDeleteResult>();
     }
 
-    public async Task WallPost(WallPostParams @params)
+    public async Task<BaseResponse<BaseCodeResult>> WallPost(WallPostParams @params)
     {
-        
+        return new BaseResponse<BaseCodeResult>();
     }
 
-    public async Task WallPin(WallPinParams @params)
+    public async Task<BaseResponse<BaseCodeResult>> WallPin(WallPinParams @params)
     {
-        
+        return new BaseResponse<BaseCodeResult>();
     }
 
-    public async Task PhotosGetWallUploadServer(PhotosGetWallUploadServerParams @params)
+    public async Task<BaseResponse<PhotosGetWallUploadServerResult>> PhotosGetWallUploadServer(PhotosGetWallUploadServerParams @params)
     {
-        
+        return new BaseResponse<PhotosGetWallUploadServerResult>();
     }
 
-    public async Task MarketEdit()
+    public async Task<BaseResponse<BaseCodeResult>> MarketEdit(MarketEditParams @params)
     {
-        
+        return new BaseResponse<BaseCodeResult>();
     }
 }
