@@ -1,0 +1,7 @@
+from pydantic import BaseModel
+
+
+class ReplacePostRequestBody(BaseModel):
+    photo: str
+    text: str | None
+
