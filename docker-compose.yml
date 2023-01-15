@@ -16,7 +16,7 @@ services:
 
   adminDb:
     image: postgres:15
-    container_name: choco_adminDb
+    container_name: choco_database
     environment:
       POSTGRES_USER: dadyarri
       POSTGRES_PASSWORD: 1234
