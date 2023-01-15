@@ -1,3 +1,0 @@
-from EditProductRequestBody import EditProductRequestBody
-from ReplacePostRequestBody import ReplacePostRequestBody
-from UploadImageRequestBody import UploadImageRequestBody

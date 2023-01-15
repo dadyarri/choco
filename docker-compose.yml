@@ -35,7 +35,6 @@ services:
     env_file: VkIntegration/.env
     environment:
       PYTHONPATH: tg
-    command: python /code/main.py
     networks:
       - net
 
