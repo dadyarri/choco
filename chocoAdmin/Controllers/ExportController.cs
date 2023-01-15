@@ -1,3 +1,5 @@
+using choco.ApiClients.VkService;
+using choco.ApiClients.VkService.RequestBodies;
 using choco.Data;
 using choco.Data.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,19 +13,31 @@ namespace choco.Controllers;
 public class ExportController : ControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly VkServiceClient _vkServiceClient;
 
-    public ExportController(AppDbContext db)
+    public ExportController(AppDbContext db, VkServiceClient vkServiceClient)
     {
         _db = db;
+        _vkServiceClient = vkServiceClient;
     }
 
     [HttpGet]
     public async Task<ActionResult> ExportImage()
     {
         var products = await _db.Products.Where(p => p.Leftover > 0 && !p.Deleted).ToListAsync();
-        var data = GenerateImage(products);
+        var imageData = GenerateImage(products).ToArray();
+        await ReplacePost(imageData);
 
-        return File(data.ToArray(), "image/jpeg");
+        return File(imageData, "image/jpeg");
+    }
+
+    private async Task ReplacePost(byte[] imageData)
+    {
+        var attachmentId = await _vkServiceClient.UploadImage(imageData);
+        await _vkServiceClient.ReplacePost(new ReplacePostRequestBody
+        {
+            Photo = attachmentId
+        });
     }
 
     private static SKData GenerateImage(List<Product> products)
