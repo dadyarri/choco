@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.11"
 fastapi = "^0.89.1"
 uvicorn = "^0.20.0"
+vkbottle = "^4.3.12"
 
 
 [build-system]
