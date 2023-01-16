@@ -29,7 +29,9 @@ public class ReplacePostUtil
         const float xPadding = 25.0f;
         const float yPadding = 25.0f;
 
-        var imageInfo = new SKImageInfo(700, 1000);
+        var ySize = yPadding + 20 + 30 * products.Count;
+
+        var imageInfo = new SKImageInfo(700, (int)ySize);
         using (var surface = SKSurface.Create(imageInfo))
         {
             var canvas = surface.Canvas;
