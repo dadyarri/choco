@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {v4 as uuid} from 'uuid';
-import {GiWeight} from "react-icons/gi";
+import {GiCheckMark, GiWeight} from "react-icons/gi";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import {ImWarning} from "react-icons/im";
@@ -15,7 +15,7 @@ import {
     Label,
     Modal,
     ModalBody,
-    ModalHeader
+    ModalHeader, Toast, ToastBody, ToastHeader
 } from "reactstrap";
 import {HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import $ from "jquery";
@@ -51,7 +51,8 @@ export class Warehouse extends Component {
             products: [],
             loading: true,
             editModalData: this.productSchema,
-            productCategories: []
+            productCategories: [],
+            updateToastOpened: false
         };
     }
 
@@ -144,7 +145,9 @@ export class Warehouse extends Component {
     }
 
     exportImage = async () => {
-        await axios.get("/api/Export")
+        await axios.get("/api/Export").then(() => {
+            this.setState({updateToastOpened: true})
+        })
     }
 
     render() {
@@ -248,6 +251,14 @@ export class Warehouse extends Component {
                     </div>
                     {contents}
                 </div>
+                <Toast isOpen={this.state.updateToastOpened} style={{position: "fixed", bottom: 20, right: 20}}>
+                    <ToastHeader icon={<GiCheckMark/>} toggle={() => {this.setState({updateToastOpened: false})}}>
+                        Обновление поста
+                    </ToastHeader>
+                    <ToastBody>
+                        Пост успешно обновлён!
+                    </ToastBody>
+                </Toast>
             </>
         );
     }
