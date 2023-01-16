@@ -3,6 +3,7 @@ using choco.ApiClients.VkService.RequestBodies;
 using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
+using choco.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,6 +46,13 @@ public class ShipmentsController : ControllerBase
                 item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
             }
+            var imageData =
+                ReplacePostUtil.GenerateImage(
+                    await _db.Products
+                        .Where(p => p.Leftover > 0 && !p.Deleted)
+                        .ToListAsync()
+                ).ToArray();
+            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
         }
 
         var shipment = new Shipment
@@ -78,6 +86,13 @@ public class ShipmentsController : ControllerBase
                 item.Product.Leftover -= item.Amount;
                 await UpdateLeftoverInVk(item);
             }
+            var imageData =
+                ReplacePostUtil.GenerateImage(
+                    await _db.Products
+                        .Where(p => p.Leftover > 0 && !p.Deleted)
+                        .ToListAsync()
+                ).ToArray();
+            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
         }
         await _db.SaveChangesAsync();
         return NoContent();
@@ -117,6 +132,13 @@ public class ShipmentsController : ControllerBase
                 item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
             }
+            var imageData =
+                ReplacePostUtil.GenerateImage(
+                    await _db.Products
+                        .Where(p => p.Leftover > 0 && !p.Deleted)
+                        .ToListAsync()
+                ).ToArray();
+            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
         }
         
         await _db.SaveChangesAsync();
