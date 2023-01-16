@@ -1,3 +1,5 @@
+using choco.ApiClients.VkService;
+using choco.ApiClients.VkService.RequestBodies;
 using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
@@ -11,10 +13,12 @@ namespace choco.Controllers;
 public class OrdersController : ControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly VkServiceClient _vkServiceClient;
 
-    public OrdersController(AppDbContext db)
+    public OrdersController(AppDbContext db, VkServiceClient vkServiceClient)
     {
         _db = db;
+        _vkServiceClient = vkServiceClient;
     }
 
     [HttpGet]
@@ -46,10 +50,22 @@ public class OrdersController : ControllerBase
     [HttpDelete("{orderId:guid}")]
     public async Task<ActionResult> DeleteOrder(Guid orderId)
     {
-        var order = await _db.Orders.FindAsync(orderId);
+        var order = await _db.Orders
+            .Where(o => o.Id == orderId)
+            .Include(o => o.OrderItems)
+            .Include(o => o.Status)
+            .FirstOrDefaultAsync();
         if (order == null) return NotFound();
 
         order.Deleted = true;
+        if (order.Status.Name != "Отменён")
+        {
+            foreach (var item in order.OrderItems)
+            {
+                item.Product.Leftover += item.Amount;
+                await UpdateLeftoverInVk(item);
+            }
+        }
         await _db.SaveChangesAsync();
         return NoContent();
     }
@@ -69,11 +85,27 @@ public class OrdersController : ControllerBase
 
         order.Status = orderStatus;
 
-        if (orderStatus.Name == "Выполнен")
+        switch (orderStatus.Name)
         {
-            foreach (var item in order.OrderItems)
+            case "Обрабатывается":
             {
-                item.Product.Leftover -= item.Amount;
+                foreach (var item in order.OrderItems)
+                {
+                    item.Product.Leftover -= item.Amount;
+                    await UpdateLeftoverInVk(item);
+                }
+
+                break;
+            }
+            case "Отменён":
+            {
+                foreach (var item in order.OrderItems)
+                {
+                    item.Product.Leftover += item.Amount;
+                    await UpdateLeftoverInVk(item);
+                }
+
+                break;
             }
         }
 
@@ -88,11 +120,12 @@ public class OrdersController : ControllerBase
         var orderItems = await FindOrderItems(body.OrderItems);
         var orderStatus = await _db.OrderStatuses.FindAsync(body.Status);
 
-        if (orderStatus.Name == "Выполнен")
+        if (orderStatus.Name == "Обрабатывается")
         {
             foreach (var item in orderItems)
             {
                 item.Product.Leftover -= item.Amount;
+                await UpdateLeftoverInVk(item);
             }
         }
 
@@ -126,5 +159,17 @@ public class OrdersController : ControllerBase
         }
 
         return items;
+    }
+
+    private async Task UpdateLeftoverInVk(OrderItem item)
+    {
+        if (item.Product.MarketId != 0)
+        {
+            await _vkServiceClient.EditProduct(new EditProductRequestBody
+            {
+                MarketId = item.Product.MarketId,
+                Leftover = (int)item.Product.Leftover
+            });
+        }
     }
 }

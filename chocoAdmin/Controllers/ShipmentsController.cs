@@ -1,3 +1,5 @@
+using choco.ApiClients.VkService;
+using choco.ApiClients.VkService.RequestBodies;
 using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
@@ -11,10 +13,12 @@ namespace choco.Controllers;
 public class ShipmentsController : ControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly VkServiceClient _vkServiceClient;
 
-    public ShipmentsController(AppDbContext db)
+    public ShipmentsController(AppDbContext db, VkServiceClient vkServiceClient)
     {
         _db = db;
+        _vkServiceClient = vkServiceClient;
     }
 
     [HttpGet]
@@ -34,11 +38,12 @@ public class ShipmentsController : ControllerBase
         var shipmentItems = await FindShipmentItems(body.ShipmentItems);
         var shipmentStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
 
-        if (shipmentStatus.Name == "Получено")
+        if (shipmentStatus!.Name == "Получено")
         {
             foreach (var item in shipmentItems)
             {
                 item.Product.Leftover += item.Amount;
+                await UpdateLeftoverInVk(item);
             }
         }
 
@@ -55,13 +60,25 @@ public class ShipmentsController : ControllerBase
         return Created("/api/Shipments", shipment);
     }
 
-    [HttpDelete("{orderId:guid}")]
-    public async Task<ActionResult> DeleteShipment(Guid orderId)
+    [HttpDelete("{shipmentId:guid}")]
+    public async Task<ActionResult> DeleteShipment(Guid shipmentId)
     {
-        var shipment = await _db.Shipments.FindAsync(orderId);
+        var shipment = await _db.Shipments
+            .Where(s => s.Id == shipmentId)
+            .Include(s => s.ShipmentItems)
+            .Include(s => s.Status)
+            .FirstOrDefaultAsync();
         if (shipment == null) return NotFound();
 
         shipment.Deleted = true;
+        if (shipment.Status.Name == "Получено")
+        {
+            foreach (var item in shipment.ShipmentItems)
+            {
+                item.Product.Leftover -= item.Amount;
+                await UpdateLeftoverInVk(item);
+            }
+        }
         await _db.SaveChangesAsync();
         return NoContent();
     }
@@ -98,6 +115,7 @@ public class ShipmentsController : ControllerBase
             foreach (var item in order.ShipmentItems)
             {
                 item.Product.Leftover += item.Amount;
+                await UpdateLeftoverInVk(item);
             }
         }
         
@@ -119,5 +137,17 @@ public class ShipmentsController : ControllerBase
         }
 
         return items;
+    }
+    
+    private async Task UpdateLeftoverInVk(ShipmentItem item)
+    {
+        if (item.Product.MarketId != 0)
+        {
+            await _vkServiceClient.EditProduct(new EditProductRequestBody
+            {
+                MarketId = item.Product.MarketId,
+                Leftover = (int)item.Product.Leftover
+            });
+        }
     }
 }
