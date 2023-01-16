@@ -74,6 +74,7 @@ public class ShipmentsController : ControllerBase
         var shipment = await _db.Shipments
             .Where(s => s.Id == shipmentId)
             .Include(s => s.ShipmentItems)
+            .ThenInclude(si => si.Product)
             .Include(s => s.Status)
             .FirstOrDefaultAsync();
         if (shipment == null) return NotFound();
@@ -96,6 +97,39 @@ public class ShipmentsController : ControllerBase
         }
         await _db.SaveChangesAsync();
         return NoContent();
+    }
+
+    [HttpPut("{shipmentId:guid}")]
+    public async Task<ActionResult> RecoverDeletedShipment(Guid shipmentId)
+    {
+        var shipment = await _db.Shipments
+            .Where(o => o.Id == shipmentId)
+            .Include(o => o.ShipmentItems)
+            .ThenInclude(si => si.Product)
+            .Include(o => o.Status)
+            .FirstOrDefaultAsync();
+        if (shipment == null) return NotFound();
+        
+        shipment.Deleted = false;
+        if (shipment.Status.Name != "Отменён")
+        {
+            foreach (var item in shipment.ShipmentItems)
+            {
+                item.Product.Leftover -= item.Amount;
+                await UpdateLeftoverInVk(item);
+            }
+            var imageData =
+                ReplacePostUtil.GenerateImage(
+                    await _db.Products
+                        .Where(p => p.Leftover > 0 && !p.Deleted)
+                        .ToListAsync()
+                ).ToArray();
+            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+        }
+
+        await _db.SaveChangesAsync();
+
+        return Ok();
     }
 
     [HttpGet("{shipmentId:guid}")]

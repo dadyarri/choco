@@ -54,6 +54,7 @@ public class OrdersController : ControllerBase
         var order = await _db.Orders
             .Where(o => o.Id == orderId)
             .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
         if (order == null) return NotFound();
@@ -77,6 +78,39 @@ public class OrdersController : ControllerBase
 
         await _db.SaveChangesAsync();
         return NoContent();
+    }
+
+    [HttpPut("{orderId:guid}")]
+    public async Task<ActionResult> RecoverDeletedOrder(Guid orderId)
+    {
+        var order = await _db.Orders
+            .Where(o => o.Id == orderId)
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .Include(o => o.Status)
+            .FirstOrDefaultAsync();
+        if (order == null) return NotFound();
+        
+        order.Deleted = false;
+        if (order.Status.Name != "Отменён")
+        {
+            foreach (var item in order.OrderItems)
+            {
+                item.Product.Leftover -= item.Amount;
+                await UpdateLeftoverInVk(item);
+            }
+            var imageData =
+                ReplacePostUtil.GenerateImage(
+                    await _db.Products
+                        .Where(p => p.Leftover > 0 && !p.Deleted)
+                        .ToListAsync()
+                ).ToArray();
+            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+        }
+
+        await _db.SaveChangesAsync();
+
+        return Ok();
     }
 
     [HttpPut]
