@@ -145,7 +145,7 @@ export class Warehouse extends Component {
     }
 
     exportImage = async () => {
-        await axios.get("/api/Export").then(() => {
+        await axios.get("/api/Export/ReplaceImage").then(() => {
             this.setState({updateToastOpened: true})
         })
     }

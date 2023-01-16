@@ -19,12 +19,21 @@ public class ExportController : ControllerBase
         _vkServiceClient = vkServiceClient;
     }
 
-    [HttpGet]
-    public async Task<ActionResult> ExportImage()
+    [HttpGet("ReplacePost")]
+    public async Task<ActionResult> ReplacePost()
     {
         var products = await _db.Products.Where(p => p.Leftover > 0 && !p.Deleted).ToListAsync();
         var imageData = ReplacePostUtil.GenerateImage(products).ToArray();
         await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+
+        return Ok();
+    }
+
+    [HttpGet("Image")]
+    public async Task<ActionResult> ExportImage()
+    {
+        var products = await _db.Products.Where(p => p.Leftover > 0 && !p.Deleted).ToListAsync();
+        var imageData = ReplacePostUtil.GenerateImage(products).ToArray();
 
         return File(imageData, "image/jpeg");
     }
