@@ -30,6 +30,8 @@ services:
         
   vkIntegration:
     container_name: choco_vkintegration
+    ports:
+      - "5679:8080"
     image: vkintegration
     build: VkIntegration
     env_file: VkIntegration/.env
