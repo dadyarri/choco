@@ -39,7 +39,7 @@ public class ShipmentsController : ControllerBase
         var shipmentItems = await FindShipmentItems(body.ShipmentItems);
         var shipmentStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
 
-        if (shipmentStatus!.Name == "Получено")
+        if (shipmentStatus!.Name == "Выполнено")
         {
             foreach (var item in shipmentItems)
             {
@@ -75,7 +75,7 @@ public class ShipmentsController : ControllerBase
         if (shipment == null) return NotFound();
 
         shipment.Deleted = true;
-        if (shipment.Status.Name == "Получено")
+        if (shipment.Status.Name == "Выполнена")
         {
             foreach (var item in shipment.ShipmentItems)
             {
@@ -102,7 +102,7 @@ public class ShipmentsController : ControllerBase
         if (shipment == null) return NotFound();
 
         shipment.Deleted = false;
-        if (shipment.Status.Name != "Отменён")
+        if (shipment.Status.Name != "Отменена")
         {
             foreach (var item in shipment.ShipmentItems)
             {
@@ -138,14 +138,20 @@ public class ShipmentsController : ControllerBase
             .Where(s => s.Id == body.ShipmentId)
             .Include(s => s.ShipmentItems)
             .ThenInclude(si => si.Product)
+            .Include(s => s.Status)
             .FirstOrDefaultAsync();
 
         if (orderStatus == null) return NotFound();
         if (order == null) return NotFound();
 
+        if (!IsStatusChangingPossible(order.Status.Name, orderStatus.Name))
+        {
+            return Conflict();
+        }
+
         order.Status = orderStatus;
 
-        if (orderStatus.Name == "Получено")
+        if (orderStatus.Name == "Выполнена")
         {
             foreach (var item in order.ShipmentItems)
             {
@@ -197,5 +203,15 @@ public class ShipmentsController : ControllerBase
                     .ToListAsync()
             ).ToArray();
         await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+    }
+    
+    private bool IsStatusChangingPossible(string oldStatus, string newStatus)
+    {
+        return oldStatus == "Обрабатывается" && newStatus == "Доставляется" ||
+               oldStatus == "Доставляется" && newStatus == "Выполнен" ||
+               oldStatus == "Обрабатывается" && newStatus == "Отменён" ||
+               oldStatus == "Отменён" && newStatus == "Обрабатывается" ||
+               oldStatus == "Доставляется" && newStatus == "Отменён" ||
+               oldStatus == "Отменён" && newStatus == "Доставляется";
     }
 }
