@@ -29,10 +29,10 @@ namespace choco.Data.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("21ecdafc-dc56-4bb2-868f-0be776726713"), "Ожидается" },
-                    { new Guid("90786c29-b967-457f-afe6-714d92b5fffd"), "В работе" },
-                    { new Guid("9ba56286-f218-4a04-a682-9ded4613a33e"), "Доставляется" },
-                    { new Guid("d5c0799e-bd48-4e12-985b-502a05e72432"), "Получено" }
+                    { new Guid("21ecdafc-dc56-4bb2-868f-0be776726713"), "Обрабатывается" },
+                    { new Guid("90786c29-b967-457f-afe6-714d92b5fffd"), "Доставляется" },
+                    { new Guid("9ba56286-f218-4a04-a682-9ded4613a33e"), "Выполнена" },
+                    { new Guid("d5c0799e-bd48-4e12-985b-502a05e72432"), "Отменена" }
                 });
         }
 
