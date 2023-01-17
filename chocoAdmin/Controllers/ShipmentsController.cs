@@ -46,13 +46,8 @@ public class ShipmentsController : ControllerBase
                 item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
             }
-            var imageData =
-                ReplacePostUtil.GenerateImage(
-                    await _db.Products
-                        .Where(p => p.Leftover > 0 && !p.Deleted)
-                        .ToListAsync()
-                ).ToArray();
-            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+
+            await ReplacePost();
         }
 
         var shipment = new Shipment
@@ -87,14 +82,10 @@ public class ShipmentsController : ControllerBase
                 item.Product.Leftover -= item.Amount;
                 await UpdateLeftoverInVk(item);
             }
-            var imageData =
-                ReplacePostUtil.GenerateImage(
-                    await _db.Products
-                        .Where(p => p.Leftover > 0 && !p.Deleted)
-                        .ToListAsync()
-                ).ToArray();
-            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+
+            await ReplacePost();
         }
+
         await _db.SaveChangesAsync();
         return NoContent();
     }
@@ -109,7 +100,7 @@ public class ShipmentsController : ControllerBase
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
         if (shipment == null) return NotFound();
-        
+
         shipment.Deleted = false;
         if (shipment.Status.Name != "Отменён")
         {
@@ -118,13 +109,8 @@ public class ShipmentsController : ControllerBase
                 item.Product.Leftover -= item.Amount;
                 await UpdateLeftoverInVk(item);
             }
-            var imageData =
-                ReplacePostUtil.GenerateImage(
-                    await _db.Products
-                        .Where(p => p.Leftover > 0 && !p.Deleted)
-                        .ToListAsync()
-                ).ToArray();
-            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+
+            await ReplacePost();
         }
 
         await _db.SaveChangesAsync();
@@ -158,7 +144,7 @@ public class ShipmentsController : ControllerBase
         if (order == null) return NotFound();
 
         order.Status = orderStatus;
-        
+
         if (orderStatus.Name == "Получено")
         {
             foreach (var item in order.ShipmentItems)
@@ -166,15 +152,10 @@ public class ShipmentsController : ControllerBase
                 item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
             }
-            var imageData =
-                ReplacePostUtil.GenerateImage(
-                    await _db.Products
-                        .Where(p => p.Leftover > 0 && !p.Deleted)
-                        .ToListAsync()
-                ).ToArray();
-            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+
+            await ReplacePost();
         }
-        
+
         await _db.SaveChangesAsync();
 
         return Ok();
@@ -194,7 +175,7 @@ public class ShipmentsController : ControllerBase
 
         return items;
     }
-    
+
     private async Task UpdateLeftoverInVk(ShipmentItem item)
     {
         if (item.Product.MarketId != 0)
@@ -205,5 +186,16 @@ public class ShipmentsController : ControllerBase
                 Leftover = (int)item.Product.Leftover
             });
         }
+    }
+
+    private async Task ReplacePost()
+    {
+        var imageData =
+            ReplacePostUtil.GenerateImage(
+                await _db.Products
+                    .Where(p => p.Leftover > 0 && !p.Deleted)
+                    .ToListAsync()
+            ).ToArray();
+        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
     }
 }

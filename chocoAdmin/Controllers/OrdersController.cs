@@ -68,13 +68,7 @@ public class OrdersController : ControllerBase
                 await UpdateLeftoverInVk(item);
             }
 
-            var imageData =
-                ReplacePostUtil.GenerateImage(
-                    await _db.Products
-                        .Where(p => p.Leftover > 0 && !p.Deleted)
-                        .ToListAsync()
-                ).ToArray();
-            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+            await ReplacePost();
         }
 
         await _db.SaveChangesAsync();
@@ -106,13 +100,7 @@ public class OrdersController : ControllerBase
                 await UpdateLeftoverInVk(item);
             }
 
-            var imageData =
-                ReplacePostUtil.GenerateImage(
-                    await _db.Products
-                        .Where(p => p.Leftover > 0 && !p.Deleted)
-                        .ToListAsync()
-                ).ToArray();
-            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+            await ReplacePost();
         }
 
         await _db.SaveChangesAsync();
@@ -165,13 +153,7 @@ public class OrdersController : ControllerBase
             }
         }
 
-        var imageData =
-            ReplacePostUtil.GenerateImage(
-                await _db.Products
-                    .Where(p => p.Leftover > 0 && !p.Deleted)
-                    .ToListAsync()
-            ).ToArray();
-        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+        await ReplacePost();
 
         await _db.SaveChangesAsync();
 
@@ -197,13 +179,7 @@ public class OrdersController : ControllerBase
                 await UpdateLeftoverInVk(item);
             }
 
-            var imageData =
-                ReplacePostUtil.GenerateImage(
-                    await _db.Products
-                        .Where(p => p.Leftover > 0 && !p.Deleted)
-                        .ToListAsync()
-                ).ToArray();
-            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+            await ReplacePost();
         }
 
         var order = new Order
@@ -248,6 +224,16 @@ public class OrdersController : ControllerBase
                 Leftover = (int)item.Product.Leftover
             });
         }
+    }
+    private async Task ReplacePost()
+    {
+        var imageData =
+            ReplacePostUtil.GenerateImage(
+                await _db.Products
+                    .Where(p => p.Leftover > 0 && !p.Deleted)
+                    .ToListAsync()
+            ).ToArray();
+        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
     }
 
     private bool IsStatusChangingPossible(string oldStatus, string newStatus)
