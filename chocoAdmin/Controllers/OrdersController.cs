@@ -128,10 +128,16 @@ public class OrdersController : ControllerBase
             .Where(o => o.Id == body.OrderId)
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
+            .Include(o => o.Status)
             .FirstOrDefaultAsync();
 
         if (orderStatus == null) return NotFound();
         if (order == null) return NotFound();
+
+        if (!IsStatusChangingPossible(order.Status.Name, orderStatus.Name))
+        {
+            return Conflict($"{order.Status.Name} \u2192 {orderStatus.Name}");
+        }
 
         order.Status = orderStatus;
 
@@ -184,6 +190,7 @@ public class OrdersController : ControllerBase
             {
                 return Conflict();
             }
+
             foreach (var item in orderItems)
             {
                 item.Product.Leftover -= item.Amount;
@@ -241,5 +248,15 @@ public class OrdersController : ControllerBase
                 Leftover = (int)item.Product.Leftover
             });
         }
+    }
+
+    private bool IsStatusChangingPossible(string oldStatus, string newStatus)
+    {
+        return oldStatus == "Обрабатывается" && newStatus == "Доставляется" ||
+               oldStatus == "Доставляется" && newStatus == "Выполнен" ||
+               oldStatus == "Обрабатывается" && newStatus == "Отменён" ||
+               oldStatus == "Отменён" && newStatus == "Обрабатывается" ||
+               oldStatus == "Доставляется" && newStatus == "Отменён" ||
+               oldStatus == "Отменён" && newStatus == "Доставляется";
     }
 }
