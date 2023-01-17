@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {v4 as uuid} from 'uuid';
 import axios from "axios";
-import {GiCheckMark, GiSandsOfTime} from "react-icons/gi";
+import {GiCancel, GiCheckMark, GiSandsOfTime} from "react-icons/gi";
 import {TbTruckDelivery} from "react-icons/tb";
-import {HiDocumentMagnifyingGlass, HiOutlineTrash, HiPencil} from "react-icons/hi2";
+import {HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import {Link} from "react-router-dom";
 import $ from "jquery";
 import {Button, FormGroup, Input, Label, List, Modal, ModalBody, ModalHeader} from "reactstrap";
@@ -32,17 +32,17 @@ export class Shipments extends Component {
 
     getShipmentStatusIcon(status) {
         switch (status) {
-            case "Получено": {
+            case "Выполнена": {
                 return <GiCheckMark/>
             }
             case "Доставляется": {
                 return <TbTruckDelivery/>
             }
-            case "Ожидается": {
+            case "Обрабатывается": {
                 return <GiSandsOfTime/>
             }
-            case "В работе": {
-                return <HiDocumentMagnifyingGlass/>
+            case "Отменена": {
+                return <GiCancel/>
             }
             default: {
                 return null
