@@ -67,6 +67,7 @@ public class OrdersController : ControllerBase
                 item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
             }
+
             var imageData =
                 ReplacePostUtil.GenerateImage(
                     await _db.Products
@@ -90,15 +91,21 @@ public class OrdersController : ControllerBase
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
         if (order == null) return NotFound();
-        
+
         order.Deleted = false;
         if (order.Status.Name != "Отменён")
         {
+            if (order.OrderItems.Any(oi => oi.Product.Leftover < oi.Amount))
+            {
+                return Conflict();
+            }
+
             foreach (var item in order.OrderItems)
             {
                 item.Product.Leftover -= item.Amount;
                 await UpdateLeftoverInVk(item);
             }
+
             var imageData =
                 ReplacePostUtil.GenerateImage(
                     await _db.Products
@@ -151,7 +158,7 @@ public class OrdersController : ControllerBase
                 break;
             }
         }
-        
+
         var imageData =
             ReplacePostUtil.GenerateImage(
                 await _db.Products
@@ -173,12 +180,16 @@ public class OrdersController : ControllerBase
 
         if (orderStatus.Name == "Обрабатывается")
         {
+            if (orderItems.Any(oi => oi.Product.Leftover < oi.Amount))
+            {
+                return Conflict();
+            }
             foreach (var item in orderItems)
             {
                 item.Product.Leftover -= item.Amount;
                 await UpdateLeftoverInVk(item);
             }
-            
+
             var imageData =
                 ReplacePostUtil.GenerateImage(
                     await _db.Products
