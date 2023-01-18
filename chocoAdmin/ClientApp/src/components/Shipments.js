@@ -6,8 +6,9 @@ import {TbTruckDelivery} from "react-icons/tb";
 import {HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import {Link} from "react-router-dom";
 import $ from "jquery";
-import {Button, FormGroup, Input, Label, List, Modal, ModalBody, ModalHeader} from "reactstrap";
+import {Button, FormGroup, Input, Label, List, Modal, ModalBody, ModalHeader, Table} from "reactstrap";
 import {Field, Form, Formik} from "formik";
+import {FaTrashRestore} from "react-icons/fa";
 
 export class Shipments extends Component {
     static displayName = Shipments.name;
@@ -132,10 +133,51 @@ export class Shipments extends Component {
         );
     }
 
+    renderDeletedShipmentsTable = (shipments) => {
+        return <Table responsive={"md"} striped>
+            <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Содержимое поставки</th>
+                <th>Итог</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {shipments.map(shipment =>
+                (shipment.deleted && <tr key={uuid()}>
+                    <td>{new Date(shipment.date).toLocaleDateString("ru-RU")} {this.getShipmentStatusIcon(shipment.status.name)}</td>
+                    <td>
+                        <ul>
+                            {shipment.shipmentItems.map(item =>
+                                <li key={uuid()}>{item.product.name} x{item.amount}</li>
+                            )}
+                        </ul>
+                    </td>
+                    <td>
+                        {shipment.shipmentItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
+                    </td>
+                    <td>
+                        <button className={"btn btn-primary"} title={"Восстановить"} type={"button"}
+                                onClick={() => this.restoreDeleted(shipment.id)}
+                        >
+                            <FaTrashRestore/>
+                        </button>
+                    </td>
+                </tr>)
+            )}
+            </tbody>
+        </Table>
+    }
+
     render() {
         let contents = this.state.loading
             ? <p><em>Загрузка...</em></p>
             : this.renderShipmentsTable(this.state.shipments);
+        let deletedContents = this.state.loading
+            ? <p><em>Загрузка...</em></p>
+            : this.renderDeletedShipmentsTable(this.state.shipments);
+
 
         const editData = this.state.editModalData;
 
@@ -191,6 +233,9 @@ export class Shipments extends Component {
                         <Link className={"btn btn-success"} to={"/shipments/new"}>Создать</Link>
                     </div>
                     {contents}
+
+                    <h1>Удалённые поставки</h1>
+                    {deletedContents}
                 </div>
             </>
         );
@@ -206,5 +251,10 @@ export class Shipments extends Component {
         await axios.get("/api/shipmentStatuses")
             .then((response) =>
                 this.setState({shipmentStatuses: response.data}))
+    }
+
+    async restoreDeleted(id) {
+        await axios.put(`/api/shipments/${id}`);
+        await this.populateShipmentsData();
     }
 }
