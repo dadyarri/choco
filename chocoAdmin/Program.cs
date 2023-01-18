@@ -17,10 +17,6 @@ builder.Host.UseSerilog();
 
 builder.Services.AddControllersWithViews(options => { options.UseGeneralRoutePrefix("api"); });
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
-builder.Services.AddHttpClient<VkServiceClient>(client =>
-{
-    client.BaseAddress = new Uri("http://vkIntegration:5679");
-});
 builder.Services.AddSingleton<VkServiceClient>();
 
 var app = builder.Build();
