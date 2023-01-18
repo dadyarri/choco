@@ -6,9 +6,9 @@ import {TbTruckDelivery} from "react-icons/tb";
 import {Link} from "react-router-dom";
 import {HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import $ from "jquery";
-import {Button, FormGroup, Input, Label, List, Modal, ModalBody, ModalHeader} from "reactstrap";
+import {Button, FormGroup, Input, Label, List, Modal, ModalBody, ModalHeader, Table} from "reactstrap";
 import {Field, Form, Formik} from "formik";
-import {FaMapMarkedAlt} from "react-icons/fa";
+import {FaMapMarkedAlt, FaTrashRestore} from "react-icons/fa";
 import 'here-js-api/scripts/mapsjs-core';
 import 'here-js-api/scripts/mapsjs-service';
 
@@ -162,6 +162,46 @@ export class Orders extends Component {
         );
     }
 
+    renderDeletedOrdersTable = (orders) => {
+        return <Table responsive={"md"} striped>
+            <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Содержимое заказа</th>
+                <th>Адрес</th>
+                <th>Итог</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {orders.map(order =>
+                (order.deleted && <tr key={uuid()}>
+                    <td>{new Date(order.date).toLocaleDateString("ru-RU")} {this.getOrderStatusIcon(order.status.name)}</td>
+                    <td>
+                        <ul>
+                            {order.orderItems.map(item =>
+                                <li key={uuid()}>{item.product.name} x{item.amount}</li>
+                            )}
+                        </ul>
+                    </td>
+                    <td>г.&nbsp;{order.address.city.name}, {order.address.street}, {order.address.building}
+                    </td>
+                    <td>
+                        {order.orderItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
+                    </td>
+                    <td>
+                        <button className={"btn btn-primary"} title={"Восстановить"} type={"button"}
+                                onClick={() => this.restoreDeleted(order.id)}
+                        >
+                            <FaTrashRestore/>
+                        </button>
+                    </td>
+                </tr>)
+            )}
+            </tbody>
+        </Table>
+    }
+
     closeEditModal = () => {
         this.setState({
             isEditModalOpened: false,
@@ -173,6 +213,9 @@ export class Orders extends Component {
         let contents = this.state.loading
             ? <p><em>Загрузка...</em></p>
             : this.renderOrdersTable(this.state.orders);
+        let deletedContents = this.state.loading
+            ? <p><em>Загрузка...</em></p>
+            : this.renderDeletedOrdersTable(this.state.orders);
 
         const editData = this.state.editModalData;
 
@@ -234,6 +277,9 @@ export class Orders extends Component {
                         <Link className={"btn btn-success"} to={"/orders/new"}>Создать</Link>
                     </div>
                     {contents}
+
+                    <h1>Удалённые заказы</h1>
+                    {deletedContents}
                 </div>
             </>
         );
@@ -250,5 +296,10 @@ export class Orders extends Component {
             .then((response) =>
                 this.setState({orderStatuses: response.data})
             );
+    }
+
+    async restoreDeleted(id) {
+        await axios.put(`/api/orders/${id}`);
+        await this.populateOrdersData();
     }
 }
