@@ -38,7 +38,9 @@ services:
     environment:
       PYTHONPATH: tg
     networks:
-      - net
+      net:
+        aliases:
+          - "vkintegration.com"
 
 volumes:
   coursePgData:
