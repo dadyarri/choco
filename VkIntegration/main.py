@@ -15,6 +15,11 @@ user_vk = API(os.getenv("VK_TOKEN"))
 user_vk.API_VERSION = "5.140"
 
 
+@app.get("/ping")
+async def ping():
+    return {"message": "pong"}
+
+
 @app.post("/uploadImage")
 async def upload_image(photo: UploadFile) -> Response:
     uploader = PhotoWallUploader(generate_attachment_strings=True, api=user_vk)

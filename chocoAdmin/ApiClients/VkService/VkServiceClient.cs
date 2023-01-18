@@ -1,15 +1,14 @@
+using System.Net;
 using choco.ApiClients.VkService.RequestBodies;
 
 namespace choco.ApiClients.VkService;
 
 public class VkServiceClient
 {
-    private readonly HttpClient _httpClient;
-
-    public VkServiceClient(HttpClient httpClient)
+    private static HttpClient _httpClient => new()
     {
-        _httpClient = httpClient;
-    }
+        BaseAddress = new Uri("http://vkintegration.com:8080")
+    };
 
     public async Task<string> UploadImage(byte[] imageData)
     {
@@ -25,5 +24,11 @@ public class VkServiceClient
     public async Task ReplacePost(ReplacePostRequestBody body)
     {
         await _httpClient.PostAsync("/replacePost", new StringContent(body.ToString()!));
+    }
+
+    public async Task<bool> Ping()
+    {
+        var result = await _httpClient.GetAsync("ping");
+        return result.StatusCode == HttpStatusCode.OK;
     }
 }

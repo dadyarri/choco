@@ -37,4 +37,15 @@ public class ExportController : ControllerBase
 
         return File(imageData, "image/jpeg");
     }
+
+    [HttpGet("ping")]
+    public async Task<ActionResult> PingVkIntegration()
+    {
+        if (await _vkServiceClient.Ping())
+        {
+            return Ok();
+        }
+
+        return Problem();
+    }
 }
