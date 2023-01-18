@@ -1,12 +1,14 @@
 import os
 
 from fastapi import FastAPI
+from fastapi import Response
+from fastapi import UploadFile
+from fastapi.responses import JSONResponse
 from vkbottle import API
 from vkbottle import PhotoWallUploader
 
-from request_bodies import EditProductRequestBody
-from request_bodies import ReplacePostRequestBody
-from request_bodies import UploadImageRequestBody
+from request_bodies.EditProductRequestBody import EditProductRequestBody
+from request_bodies.ReplacePostRequestBody import ReplacePostRequestBody
 
 app = FastAPI()
 user_vk = API(os.getenv("VK_TOKEN"))
@@ -14,9 +16,9 @@ user_vk.API_VERSION = "5.140"
 
 
 @app.post("/uploadImage")
-async def upload_image(body: UploadImageRequestBody):
-    uploader = PhotoWallUploader(generate_attachment_strings=True)
-    return await uploader.upload(body.photo)
+async def upload_image(photo: UploadFile) -> Response:
+    uploader = PhotoWallUploader(generate_attachment_strings=True, api=user_vk)
+    return JSONResponse(content={"photo": await uploader.upload(photo.file.read())})
 
 
 @app.post("/editProduct")
@@ -28,10 +30,11 @@ async def edit_product(body: EditProductRequestBody):
         price=body.price,
         stock_amount=body.leftover,
     )
+    return JSONResponse(content={"message": "success"})
 
 
 @app.post("/replacePinned")
-async def replace_post(body: ReplacePostRequestBody):
+async def replace_post(body: ReplacePostRequestBody) -> Response:
     owner_id = -int(os.getenv("VK_GROUP"))
     last_post = await user_vk.wall.get(owner_id, count=1)
     post_id = last_post.items[0].id
@@ -45,3 +48,5 @@ async def replace_post(body: ReplacePostRequestBody):
     )
     post_id = resp.post_id
     await user_vk.wall.pin(post_id, owner_id)
+
+    return JSONResponse(content={"message": "success"})
