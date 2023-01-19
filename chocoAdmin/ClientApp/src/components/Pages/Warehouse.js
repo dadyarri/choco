@@ -21,6 +21,7 @@ import {HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import $ from "jquery";
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
+import {SlSocialVkontakte} from "react-icons/sl";
 
 export class Warehouse extends Component {
     static displayName = Warehouse.name;
@@ -137,6 +138,14 @@ export class Warehouse extends Component {
                                 >
                                     <HiOutlineTrash/>
                                 </Button>
+                                {product.marketId ? <Button
+                                    color={"primary"}
+                                    type={"button"}
+                                    title={"Открыть страницу товара в ВК"}
+                                    onClick={() => this.openVkPageOfProduct(product.marketId)}
+                                >
+                                    <SlSocialVkontakte/>
+                                </Button> : null}
                             </ButtonGroup>
                         </td>
                     </tr>
@@ -228,15 +237,15 @@ export class Warehouse extends Component {
                                             <FormFeedback>{errors.category}</FormFeedback> : null}
                                     </FormGroup>
 
-                                    <div className={"form-group m-3"}>
+                                    <FormGroup>
                                         <Label for={"nameInput"}>ИД товара в ВК</Label>
                                         <Field name={"marketId"} id={"marketIdInput"} as={Input}
                                                valid={!errors.marketId && touched.marketId}
                                                invalid={errors.marketId && touched.marketId}/>
                                         {errors.marketId && touched.marketId ?
                                             <FormFeedback>{errors.marketId}</FormFeedback> : null}
-                                    </div>
-                                    
+                                    </FormGroup>
+
                                     <FormGroup check>
                                         <Field type={"checkbox"} name={"isByWeight"}
                                                as={Input}
@@ -265,7 +274,9 @@ export class Warehouse extends Component {
                     {contents}
                 </div>
                 <Toast isOpen={this.state.updateToastOpened} style={{position: "fixed", bottom: 20, right: 20}}>
-                    <ToastHeader icon={<GiCheckMark/>} toggle={() => {this.setState({updateToastOpened: false})}}>
+                    <ToastHeader icon={<GiCheckMark/>} toggle={() => {
+                        this.setState({updateToastOpened: false})
+                    }}>
                         Обновление поста
                     </ToastHeader>
                     <ToastBody>
@@ -282,5 +293,12 @@ export class Warehouse extends Component {
                 this.setState({products: response.data, loading: false}
                 )
             );
+    }
+
+    async openVkPageOfProduct(marketId) {
+        await axios.get(`/api/vk/productUrl/${marketId}`).then((response) => {
+            let url = response.data.url;
+            window.open(url, "_blank");
+        })
     }
 }

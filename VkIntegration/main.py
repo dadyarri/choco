@@ -20,6 +20,11 @@ async def ping():
     return {"message": "pong"}
 
 
+@app.get("/productUrl/{market_id}")
+async def get_product_url(market_id: int) -> Response:
+    return JSONResponse(content={"url": f"https://vk.com/product-{os.getenv('VK_GROUP')}_{market_id}"})
+
+
 @app.post("/uploadImage")
 async def upload_image(photo: UploadFile) -> Response:
     uploader = PhotoWallUploader(generate_attachment_strings=True, api=user_vk)

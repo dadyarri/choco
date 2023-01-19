@@ -31,4 +31,10 @@ public class VkServiceClient
         var result = await _httpClient.GetAsync("ping");
         return result.StatusCode == HttpStatusCode.OK;
     }
+
+    public async Task<string> GetProductUrl(int marketId)
+    {
+        var result = await _httpClient.GetAsync($"/productUrl/{marketId}");
+        return await result.Content.ReadAsStringAsync();
+    }
 }
