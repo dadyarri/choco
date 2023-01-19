@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {ErrorMessage, Field, FieldArray, Form, Formik} from 'formik';
-import {Label} from "reactstrap";
+import {Field, FieldArray, Form, Formik} from 'formik';
+import {FormFeedback, Input, Label} from "reactstrap";
 import axios from "axios";
 import * as Yup from 'yup';
 import {useNavigate} from "react-router-dom";
@@ -61,8 +61,12 @@ export const CreateOrder = () => {
         ),
         address: Yup.object().shape({
             city: Yup.string().uuid("Неверный формат идентификатора").required("Выбрать город обязательно"),
-            street: Yup.string(),
-            building: Yup.string()
+            street: Yup.string().required("Обязательное поле!").test(
+                "no-short-names",
+                "Не стоит использовать сокращения топонимов, это снижает точность поиска маршрута",
+                (value) => !/^(ул|прт|пр-т|пр|прд|пр-д)\.? .*/gi.test(value)
+            ),
+            building: Yup.string().required("Обязательное поле!")
         })
     })
 
@@ -89,21 +93,25 @@ export const CreateOrder = () => {
                 }}
                 validationSchema={validationSchema}
             >
-                {({values}) => (
+                {({values, errors, touched}) => (
                     <Form style={{maxWidth: 400, margin: 20}} key={"productForm"}>
-                        <div className={"form-group m-3"} key={"shipmentDateInputGroup"}>
-                            <Label for={"dateInput"} key={"shipmentDateLabel"}>Дата заказа</Label>
-                            <Field type={"date"} name={"date"} id={"dateInput"} className={"form-control"}
-                                   key={"shipmentDateInput"}/>
-                            <ErrorMessage name="date"/>
+                        <div className={"form-group m-3"} key={"orderDateInputGroup"}>
+                            <Label for={"dateInput"} key={"orderDateLabel"}>Дата заказа</Label>
+                            <Field type={"date"} name={"date"} id={"dateInput"}
+                                   key={"orderDateInput"} as={Input} invalid={errors.date && touched.date}
+                                   valid={!errors.date && touched.date}/>
+                            {errors.date && touched.date ?
+                                <FormFeedback>{errors.date}</FormFeedback> : null}
                         </div>
                         <div className={"form-group m-3"}>
                             <Label for={"ordersState"}>Статус заказа</Label>
                             <Field name={`status`}
                                    id={`orderState`}
-                                   className={"form-select"}
-                                   as={"select"}
+                                   as={Input}
+                                   type={"select"}
                                    key={`orderStateInput`}
+                                   valid={!errors.status && touched.status}
+                                   invalid={errors.status && touched.status}
                             >
                                 <option key={"orderStateDefaultOption"}
                                         defaultChecked>-- Выберите статус заказа --
@@ -113,7 +121,8 @@ export const CreateOrder = () => {
                                             key={os.id}>{os.name}</option>
                                 ))}
                             </Field>
-                            <ErrorMessage name={"status"}/>
+                            {errors.status && touched.status ?
+                                <FormFeedback>{errors.status}</FormFeedback> : null}
                         </div>
                         <div className={"form-group m-3"}>
                             <Label for={"arrayOfProducts"} key={"arrayOfProductsLabel"}>Товары, входящие в
@@ -136,8 +145,23 @@ export const CreateOrder = () => {
                                                         <Field name={`orderItems[${index}].id`}
                                                                id={`productsName[${index}]Input`}
                                                                className={"form-select-sm"}
-                                                               as={"select"}
+                                                               as={Input}
+                                                               type={"select"}
                                                                key={`arrayOfProductsNameInput${index}`}
+                                                               valid={errors &&
+                                                                   errors.orderItems &&
+                                                                   errors.orderItems[index] &&
+                                                                   !errors.orderItems[index].id &&
+                                                                   touched && touched.orderItems &&
+                                                                   touched.orderItems[index] &&
+                                                                   touched.orderItems[index].id}
+                                                               invalid={errors &&
+                                                                   errors.orderItems &&
+                                                                   errors.orderItems[index] &&
+                                                                   errors.orderItems[index].id &&
+                                                                   touched && touched.orderItems &&
+                                                                   touched.orderItems[index] &&
+                                                                   touched.orderItems[index].id}
                                                         >
                                                             <option key={"arrayOfProductsDefaultOption"}
                                                                     defaultChecked>-- Выберите товар --
@@ -147,7 +171,14 @@ export const CreateOrder = () => {
                                                                         key={product.id}>{product.name}</option>
                                                             ))}
                                                         </Field>
-                                                        <ErrorMessage name={`orderItems[${index}].name`}/>
+                                                        {errors &&
+                                                        errors.orderItems &&
+                                                        errors.orderItems[index] &&
+                                                        errors.orderItems[index].id &&
+                                                        touched && touched.orderItems &&
+                                                        touched.orderItems[index] &&
+                                                        touched.orderItems[index].id ?
+                                                            <FormFeedback>{errors.orderItems[index].id}</FormFeedback> : null}
 
                                                     </div>
                                                     <div className={"form-group m-3"}
@@ -156,11 +187,33 @@ export const CreateOrder = () => {
                                                                key={`arrayOfProductAmountLabel_${index}`}>Количество</Label>
                                                         <Field name={`orderItems[${index}].amount`}
                                                                id={`productsAmount${index}Input`}
-                                                               className={"form-control form-control-sm"}
+                                                               as={Input}
+                                                               className={"form-control-sm"}
                                                                type={"number"}
                                                                key={`arrayOfProductsAmountInput_${index}`}
+                                                               valid={errors &&
+                                                                   errors.orderItems &&
+                                                                   errors.orderItems[index] &&
+                                                                   !errors.orderItems[index].amount &&
+                                                                   touched && touched.orderItems &&
+                                                                   touched.orderItems[index] &&
+                                                                   touched.orderItems[index].amount}
+                                                               invalid={errors &&
+                                                                   errors.orderItems &&
+                                                                   errors.orderItems[index] &&
+                                                                   errors.orderItems[index].amount &&
+                                                                   touched && touched.orderItems &&
+                                                                   touched.orderItems[index] &&
+                                                                   touched.orderItems[index].amount}
                                                         />
-                                                        <ErrorMessage name={`orderItems[${index}].amount`}/>
+                                                        {errors &&
+                                                        errors.orderItems &&
+                                                        errors.orderItems[index] &&
+                                                        errors.orderItems[index].amount &&
+                                                        touched && touched.orderItems &&
+                                                        touched.orderItems[index] &&
+                                                        touched.orderItems[index].amount ?
+                                                            <FormFeedback>{errors.orderItems[index].amount}</FormFeedback> : null}
                                                     </div>
                                                 </div>
                                                 <button type={"button"} onClick={() => arrayHelpers.remove(index)}
@@ -183,7 +236,10 @@ export const CreateOrder = () => {
                             <Field name={`address.city`}
                                    id={"city"}
                                    className={"form-select"}
-                                   as={"select"}
+                                   as={Input}
+                                   type={"select"}
+                                   valid={!errors.address?.city && touched.address?.city}
+                                   invalid={errors.address?.city && touched.address?.city}
                             >
                                 <option defaultChecked>-- Выберите город --
                                 </option>
@@ -192,14 +248,24 @@ export const CreateOrder = () => {
                                             key={city.id}>{city.name}</option>
                                 ))}
                             </Field>
+                            {errors.address?.city && touched.address?.city ?
+                                <FormFeedback>{errors.address?.city}</FormFeedback> : null}
                         </div>
                         <div className={"form-group m-3"}>
                             <Label for={"street"}>Улица</Label>
-                            <Field id={"street"} name={"address.street"} className={"form-control"}/>
+                            <Field id={"street"} name={"address.street"} as={Input}
+                                   valid={!errors.address?.street && touched.address?.street}
+                                   invalid={errors.address?.street && touched.address?.street}/>
+                            {errors.address?.street && touched.address?.street ?
+                                <FormFeedback>{errors.address.street}</FormFeedback> : null}
                         </div>
                         <div className={"form-group m-3"}>
                             <Label for={"building"}>Дом/Строение</Label>
-                            <Field id={"building"} name={"address.building"} className={"form-control"}/>
+                            <Field id={"building"} name={"address.building"} className={"form-control"} as={Input}
+                                   valid={!errors.address?.building && touched.address?.building}
+                                   invalid={errors.address?.building && touched.address?.building}/>
+                            {errors.address?.building && touched.address?.building ?
+                                <FormFeedback>{errors.address.building}</FormFeedback> : null}
                         </div>
 
                         <button type="submit" className={"btn btn-success"}>
