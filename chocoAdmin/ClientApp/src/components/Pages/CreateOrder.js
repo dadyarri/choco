@@ -4,12 +4,14 @@ import {Label} from "reactstrap";
 import axios from "axios";
 import * as Yup from 'yup';
 import {useNavigate} from "react-router-dom";
+import {ToastsList} from "../Parts/Toasts/ToastsList";
 
 export const CreateOrder = () => {
 
     const [products, setProducts] = useState([]);
     const [orderStatuses, setOrderStatuses] = useState([]);
     const [cities, setCities] = useState([]);
+    const [toasts, setToasts] = useState([]);
     const navigate = useNavigate();
     const getProductsList = async () => {
         await axios.get("/api/products")
@@ -35,6 +37,17 @@ export const CreateOrder = () => {
     const createOrder = (values) => {
         axios.post("/api/orders", values)
             .then((_) => navigate("/orders"))
+            .catch((error) => {
+                console.log("tock");
+                if (error.response && error.response.status === 409) {
+                    setToasts([...toasts, {
+                        id: toasts.length + 1,
+                        heading: "Ошибка создания заказа",
+                        body: "Недостаточно товара",
+                        color: "danger"
+                    }])
+                }
+            })
     }
 
     const validationSchema = Yup.object().shape({
@@ -58,10 +71,11 @@ export const CreateOrder = () => {
         getCitiesList();
         getOrderStatusesList();
     }, []);
-    
+
 
     return (
         <div>
+            <ToastsList toastList={toasts}/>
             <h1>Создание заказа</h1>
             <Formik
                 initialValues={{
