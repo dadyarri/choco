@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import axios from "axios";
-import StatsPieChart from "./Charts/StatsPieChart";
-import {CompareIncomes} from "./Charts/CompareIncomes";
-import {IncomesChart} from "./Charts/IncomesChart";
-import {TopProducts} from "./Charts/TopProducts";
 import {ResponsiveContainer} from "recharts";
+import StatsPieChart from "../Charts/StatsPieChart";
+import {CompareIncomes} from "../Charts/CompareIncomes";
+import {IncomesChart} from "../Charts/IncomesChart";
+import {TopProducts} from "../Charts/TopProducts";
 
 export class Home extends Component {
     static displayName = Home.name;

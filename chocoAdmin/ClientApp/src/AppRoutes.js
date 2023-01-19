@@ -1,12 +1,12 @@
-import {Home} from "./components/Home";
-import {Warehouse} from "./components/Warehouse";
-import {Shipments} from "./components/Shipments";
-import {CreateShipment} from "./components/CreateShipment";
-import {Orders} from "./components/Orders";
-import {CreateOrder} from "./components/CreateOrder";
-import {CreateProduct} from "./components/CreateProduct";
-import {Categories} from "./components/Categories";
-import {CreateCategory} from "./components/CreateCategory";
+import {Home} from "./components/Pages/Home";
+import {Orders} from "./components/Pages/Orders";
+import {CreateOrder} from "./components/Pages/CreateOrder";
+import {Shipments} from "./components/Pages/Shipments";
+import {CreateShipment} from "./components/Pages/CreateShipment";
+import {Warehouse} from "./components/Pages/Warehouse";
+import {CreateProduct} from "./components/Pages/CreateProduct";
+import {Categories} from "./components/Pages/Categories";
+import {CreateCategory} from "./components/Pages/CreateCategory";
 
 const AppRoutes = [
   {
