@@ -8,4 +8,5 @@ public class CreateProductRequestBody
     public double Leftover { get; set; }
     public int RetailPrice { get; set; }
     public int WholesalePrice { get; set; }
+    public int MarketId { get; set; }
 }

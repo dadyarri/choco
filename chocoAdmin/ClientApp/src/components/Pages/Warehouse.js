@@ -33,7 +33,8 @@ export class Warehouse extends Component {
         category: {
             id: '',
             name: ''
-        }
+        },
+        marketId: 0,
     };
 
     validationSchema = Yup.object().shape({
@@ -42,7 +43,8 @@ export class Warehouse extends Component {
         retailPrice: Yup.number().required("Поле должно быть заполнено").min(1, "Цена не должна быть меньше 1"),
         wholesalePrice: Yup.number().required("Поле должно быть заполнено").min(1, "Цена не должна быть меньше 1"),
         isByWeight: Yup.bool(),
-        leftover: Yup.number()
+        leftover: Yup.number(),
+        marketId: Yup.number()
     });
 
     constructor(props) {
@@ -167,7 +169,8 @@ export class Warehouse extends Component {
                                 name: editData.name,
                                 wholesalePrice: editData.wholesalePrice,
                                 retailPrice: editData.retailPrice,
-                                category: editData.category.id
+                                category: editData.category.id,
+                                marketId: editData.marketId
                             }}
                             onSubmit={async (values) => {
                                 values.productId = editData.id;
@@ -224,6 +227,16 @@ export class Warehouse extends Component {
                                         {errors.category && touched.category ?
                                             <FormFeedback>{errors.category}</FormFeedback> : null}
                                     </FormGroup>
+
+                                    <div className={"form-group m-3"}>
+                                        <Label for={"nameInput"}>ИД товара в ВК</Label>
+                                        <Field name={"marketId"} id={"marketIdInput"} as={Input}
+                                               valid={!errors.marketId && touched.marketId}
+                                               invalid={errors.marketId && touched.marketId}/>
+                                        {errors.marketId && touched.marketId ?
+                                            <FormFeedback>{errors.marketId}</FormFeedback> : null}
+                                    </div>
+                                    
                                     <FormGroup check>
                                         <Field type={"checkbox"} name={"isByWeight"}
                                                as={Input}

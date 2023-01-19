@@ -12,7 +12,8 @@ export const CreateProduct = () => {
         retailPrice: Yup.number().required("Поле должно быть заполнено").min(1, "Цена не должна быть меньше 1"),
         wholesalePrice: Yup.number().required("Поле должно быть заполнено").min(1, "Цена не должна быть меньше 1"),
         isByWeight: Yup.bool(),
-        leftover: Yup.number()
+        leftover: Yup.number(),
+        marketId: Yup.number()
     });
     const [categories, setCategories] = useState([])
     const navigate = useNavigate();
@@ -38,7 +39,8 @@ export const CreateProduct = () => {
                     retailPrice: '',
                     wholesalePrice: '',
                     isByWeight: false,
-                    leftover: 0
+                    leftover: 0,
+                    marketId: ''
                 }}
                 onSubmit={async values => {
                     await axios.post("/api/products", values);
@@ -92,6 +94,15 @@ export const CreateProduct = () => {
                                 {errors.wholesalePrice && touched.wholesalePrice ?
                                     <FormFeedback>{errors.wholesalePrice}</FormFeedback> : null}
                             </div>
+                        </div>
+
+                        <div className={"form-group m-3"}>
+                            <Label for={"nameInput"}>ИД товара в ВК</Label>
+                            <Field name={"marketId"} id={"marketIdInput"} as={Input}
+                                   valid={!errors.marketId && touched.marketId}
+                                   invalid={errors.marketId && touched.marketId}/>
+                            {errors.marketId && touched.marketId ?
+                                <FormFeedback>{errors.marketId}</FormFeedback> : null}
                         </div>
 
                         <div className="form-check m-3">

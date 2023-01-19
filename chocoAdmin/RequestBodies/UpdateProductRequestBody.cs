@@ -8,4 +8,5 @@ public class UpdateProductRequestBody
     public int RetailPrice { get; set; }
     public Guid Category { get; set; }
     public bool IsByWeight { get; set; }
+    public int MarketId { get; set; }
 }

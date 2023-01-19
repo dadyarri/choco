@@ -35,6 +35,7 @@ public class ProductsController : ControllerBase
         product.WholesalePrice = body.WholesalePrice;
         product.IsByWeight = body.IsByWeight;
         product.Name = body.Name;
+        product.MarketId = body.MarketId;
 
         await _db.SaveChangesAsync();
 
@@ -74,7 +75,8 @@ public class ProductsController : ControllerBase
             IsByWeight = body.IsByWeight,
             Leftover = body.Leftover,
             RetailPrice = body.RetailPrice,
-            WholesalePrice = body.WholesalePrice
+            WholesalePrice = body.WholesalePrice,
+            MarketId = body.MarketId
         };
 
         await _db.Products.AddAsync(product);
