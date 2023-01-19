@@ -20,3 +20,9 @@ code {
 .btn.btn-danger[data-bs-toggle="button"][aria-pressed="true"]::after {
   content: " Удалить?"
 }
+
+.toasts-list {
+  position: fixed;
+  top: 20px;
+  right: 10px
+}
