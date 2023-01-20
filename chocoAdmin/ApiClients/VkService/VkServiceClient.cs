@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Http.Headers;
 using choco.ApiClients.VkService.RequestBodies;
 
 namespace choco.ApiClients.VkService;
@@ -10,20 +11,31 @@ public class VkServiceClient
         BaseAddress = new Uri("http://vkintegration.com:8080")
     };
 
-    public async Task<string> UploadImage(byte[] imageData)
+    public async Task<string?> UploadImage(byte[] imageData)
     {
-        return (await _httpClient.PostAsync("/uploadImage", new ByteArrayContent(imageData)))
-            .Content.ToString()!;
+        var byteArrayContent = new ByteArrayContent(imageData);
+        byteArrayContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+        var response = await _httpClient.PostAsync("/uploadImage", byteArrayContent);
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        return null;
     }
 
     public async Task EditProduct(EditProductRequestBody body)
     {
-        await _httpClient.PostAsync("/editProduct", new StringContent(body.ToString()!));
+        var stringContent = new StringContent(body.ToString()!);
+        stringContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+        await _httpClient.PostAsync("/editProduct", stringContent);
     }
 
     public async Task ReplacePost(ReplacePostRequestBody body)
     {
-        await _httpClient.PostAsync("/replacePost", new StringContent(body.ToString()!));
+        var stringContent = new StringContent(body.ToString()!);
+        stringContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+        await _httpClient.PostAsync("/replacePinned", stringContent);
     }
 
     public async Task<bool> Ping()
