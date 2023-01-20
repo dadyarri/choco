@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {v4 as uuid} from 'uuid';
 import axios from "axios";
 import {GiCancel, GiCheckMark, GiSandsOfTime} from "react-icons/gi";
@@ -11,30 +11,25 @@ import {Field, Form, Formik} from "formik";
 import {FaMapMarkedAlt, FaTrashRestore} from "react-icons/fa";
 import 'here-js-api/scripts/mapsjs-core';
 import 'here-js-api/scripts/mapsjs-service';
+import {ToastsList} from "../Parts/Toasts/ToastsList";
 
-export class Orders extends Component {
-    static displayName = Orders.name;
+export const Orders = () => {
+    const Here = window.H;
+    const orderSchema = {date: '', address: {city: {name: ''}, building: '', street: ''}, status: {id: ''}};
 
-    constructor(props) {
-        super(props);
-        this.H = window.H;
-        this.state = {
-            orders: [],
-            loading: true,
-            isEditModalOpened: false,
-            editModalData: this.orderSchema,
-            orderStatuses: []
-        };
-    }
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [isEditModalOpened, setIsEditModalOpened] = useState(false);
+    const [editModalData, setEditModalData] = useState(orderSchema);
+    const [orderStatuses, setOrderStatuses] = useState([]);
+    const [toasts, setToasts] = useState([]);
+    
+    useEffect( () => {
+        populateOrdersStatuesesData();
+        populateOrdersData();
+    }, [])
 
-    async componentDidMount() {
-        await this.populateOrdersData();
-        await this.populateOrdersStatuesesData();
-    }
-
-    orderSchema = {date: '', address: {city: {name: ''}, building: '', street: ''}, status: {id: ''}};
-
-    getOrderStatusIcon(status) {
+    const getOrderStatusIcon = (status) => {
         switch (status) {
             case "Выполнен": {
                 return <GiCheckMark/>
@@ -54,7 +49,7 @@ export class Orders extends Component {
         }
     }
 
-    async deleteConfirm(itemId) {
+    const deleteConfirm = async (itemId) => {
         let button = $(`.btn.btn-danger[data-item-id="${itemId}"]`);
         let clickCount = parseInt(button.attr("data-clicked"));
 
@@ -69,42 +64,46 @@ export class Orders extends Component {
             }, 3000)
         } else if (clickCount === 2) {
             await axios.delete(`/api/orders/${itemId}`)
-            await this.populateOrdersData();
+            await populateOrdersData();
         }
     }
 
-    async openEditModal(itemId) {
+    const openEditModal = async (itemId) => {
         await axios.get(`/api/orders/${itemId}`).then(response => {
-            this.setState({isEditModalOpened: true, editModalData: response.data});
+            setEditModalData(response.data);
+            setIsEditModalOpened(true);
         });
     }
 
-    plotRoute = async (address) => {
+    const plotRoute = async (address) => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const lat = position.coords.latitude;
                 const long = position.coords.longitude;
 
-                const platform = new this.H.service.Platform({
+                const platform = new Here.service.Platform({
                     'apikey': process.env.REACT_APP_HERE_TOKEN
                 });
                 const service = platform.getSearchService();
                 service.geocode({
                     q: address
                 }, (result) => {
-                    result.items.forEach((item) => {
-                        const url = `https://yandex.ru/maps/?mode=routes&rtext=${lat},${long}~${item.position.lat},${item.position.lng}`;
-                        window.open(url, "_blank");
-                    });
+                    const url = `https://yandex.ru/maps/?mode=routes&rtext=${lat},${long}~${result.items[0].position.lat},${result.items[0].position.lng}`;
+                    window.open(url, "_blank");
                 })
 
             }, () => {
-                alert("Доступ к местоположению необходим для построения маршрута");
+                setToasts([toasts, {
+                    id: toasts.length + 1,
+                    heading: "Ошибка построения маршрута",
+                    body: "Доступ к местоположению необходим для построения маршрута",
+                    color: "danger"
+                }])
             })
         }
     }
 
-    renderOrdersTable(orders) {
+    const renderOrdersTable = (orders) => {
         return (
             <div className={"table-responsive-md"}>
                 <table className="table table-striped" aria-labelledby="tableLabel">
@@ -120,7 +119,7 @@ export class Orders extends Component {
                     <tbody>
                     {orders.map(order =>
                         (!order.deleted && <tr key={uuid()}>
-                            <td>{new Date(order.date).toLocaleDateString("ru-RU")} {this.getOrderStatusIcon(order.status.name)}</td>
+                            <td>{new Date(order.date).toLocaleDateString("ru-RU")} {getOrderStatusIcon(order.status.name)}</td>
                             <td>
                                 <ul>
                                     {order.orderItems.map(item =>
@@ -131,7 +130,7 @@ export class Orders extends Component {
                             <td>г.&nbsp;{order.address.city.name}, {order.address.street}, {order.address.building}&nbsp;
                                 <Button color={"success"} title={"Проложить маршрут"}
                                         onClick={() =>
-                                            this.plotRoute(`г. ${order.address.city.name}, ${order.address.street}, ${order.address.building}`)}>
+                                            plotRoute(`г. ${order.address.city.name}, ${order.address.street}, ${order.address.building}`)}>
                                     <FaMapMarkedAlt/>
                                 </Button>
                             </td>
@@ -141,7 +140,7 @@ export class Orders extends Component {
                             <td>
                                 <div className="btn-group">
                                     <button className={"btn btn-primary"} title={"Редактировать"} type={"button"}
-                                            onClick={() => this.openEditModal(order.id)}
+                                            onClick={() => openEditModal(order.id)}
                                     >
                                         <HiPencil/>
                                     </button>
@@ -150,7 +149,7 @@ export class Orders extends Component {
                                             data-clicked={0}
                                             aria-pressed={"false"}
                                             type={"button"}
-                                            onClick={() => this.deleteConfirm(order.id)}><HiOutlineTrash/>
+                                            onClick={() => deleteConfirm(order.id)}><HiOutlineTrash/>
                                     </button>
                                 </div>
                             </td>
@@ -162,7 +161,36 @@ export class Orders extends Component {
         );
     }
 
-    renderDeletedOrdersTable = (orders) => {
+    const populateOrdersData = async () => {
+        await axios.get("/api/orders")
+            .then((response) => {
+                setOrders(response.data);
+                setLoading(false);
+            })
+    }
+
+    const populateOrdersStatuesesData = async () => {
+        await axios.get("/api/orderStatuses")
+            .then((response) =>
+                setOrderStatuses(response.data)
+            );
+    }
+
+    const restoreDeleted = async (id) => {
+        await axios.put(`/api/orders/${id}`)
+            .then(async () => {
+                await populateOrdersData();
+            });
+    }
+
+
+
+    const closeEditModal = () => {
+        setIsEditModalOpened(false);
+        setEditModalData(orderSchema);
+    };
+
+    const renderDeletedOrdersTable = (orders) => {
         return <Table responsive={"md"} striped>
             <thead>
             <tr>
@@ -176,7 +204,7 @@ export class Orders extends Component {
             <tbody>
             {orders.map(order =>
                 (order.deleted && <tr key={uuid()}>
-                    <td>{new Date(order.date).toLocaleDateString("ru-RU")} {this.getOrderStatusIcon(order.status.name)}</td>
+                    <td>{new Date(order.date).toLocaleDateString("ru-RU")} {getOrderStatusIcon(order.status.name)}</td>
                     <td>
                         <ul>
                             {order.orderItems.map(item =>
@@ -191,7 +219,7 @@ export class Orders extends Component {
                     </td>
                     <td>
                         <button className={"btn btn-primary"} title={"Восстановить"} type={"button"}
-                                onClick={() => this.restoreDeleted(order.id)}
+                                onClick={() => restoreDeleted(order.id)}
                         >
                             <FaTrashRestore/>
                         </button>
@@ -202,27 +230,20 @@ export class Orders extends Component {
         </Table>
     }
 
-    closeEditModal = () => {
-        this.setState({
-            isEditModalOpened: false,
-            editModalData: this.orderSchema
-        });
-    };
-
-    render() {
-        let contents = this.state.loading
+    const render = () => {
+        let contents = loading
             ? <p><em>Загрузка...</em></p>
-            : this.renderOrdersTable(this.state.orders);
-        let deletedContents = this.state.loading
+            : renderOrdersTable(orders);
+        let deletedContents = loading
             ? <p><em>Загрузка...</em></p>
-            : this.renderDeletedOrdersTable(this.state.orders);
+            : renderDeletedOrdersTable(orders);
 
-        const editData = this.state.editModalData;
+        const editData = editModalData;
 
         return (
             <>
-                <Modal isOpen={this.state.isEditModalOpened}>
-                    <ModalHeader toggle={this.closeEditModal}>Редактирование заказа</ModalHeader>
+                <Modal isOpen={isEditModalOpened}>
+                    <ModalHeader toggle={closeEditModal}>Редактирование заказа</ModalHeader>
                     <ModalBody>
                         <Formik initialValues={{
                             date: editData.date,
@@ -231,9 +252,21 @@ export class Orders extends Component {
                         }}
                                 onSubmit={async (values) => {
                                     values.orderId = editData.id;
-                                    await axios.put(`/api/orders`, values);
-                                    this.closeEditModal();
-                                    await this.populateOrdersData();
+                                    await axios.put(`/api/orders`, values)
+                                        .then(async () => {
+                                            closeEditModal();
+                                            await populateOrdersData();
+                                        })
+                                        .catch((error) => {
+                                            if (error.response.status === 409) {
+                                                setToasts([...toasts, {
+                                                    id: toasts.length + 1,
+                                                    heading: "Ошибка редактирования заказа",
+                                                    body: `Переход ${error.response.data} невозможен`,
+                                                    color: "danger"
+                                                }]);
+                                            }
+                                        });
 
                                 }}>
                             {({values}) => (
@@ -253,7 +286,7 @@ export class Orders extends Component {
                                     <FormGroup>
                                         <Label>Статус заказа</Label>
                                         <Field as={Input} type={"select"} name={"status"}>
-                                            {this.state.orderStatuses.map((os) => (
+                                            {orderStatuses.map((os) => (
                                                 <option key={os.id} value={os.id}>{os.name}</option>
                                             ))}
                                         </Field>
@@ -272,7 +305,7 @@ export class Orders extends Component {
                 <div>
                     <h1 id="tableLabel">Заказы</h1>
                     <div className={"btn-group"}>
-                        <button className={"btn btn-primary"} onClick={() => this.populateOrdersData()}>Обновить
+                        <button className={"btn btn-primary"} onClick={() => populateOrdersData()}>Обновить
                         </button>
                         <Link className={"btn btn-success"} to={"/orders/new"}>Создать</Link>
                     </div>
@@ -281,25 +314,10 @@ export class Orders extends Component {
                     <h1>Удалённые заказы</h1>
                     {deletedContents}
                 </div>
+                <ToastsList toastList={toasts}/>
             </>
         );
     }
-
-    async populateOrdersData() {
-        await axios.get("/api/orders")
-            .then((response) =>
-                this.setState({orders: response.data, loading: false}));
-    }
-
-    async populateOrdersStatuesesData() {
-        await axios.get("/api/orderStatuses")
-            .then((response) =>
-                this.setState({orderStatuses: response.data})
-            );
-    }
-
-    async restoreDeleted(id) {
-        await axios.put(`/api/orders/${id}`);
-        await this.populateOrdersData();
-    }
+    
+    return render();
 }
