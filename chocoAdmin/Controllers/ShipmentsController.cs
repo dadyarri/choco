@@ -39,7 +39,7 @@ public class ShipmentsController : ControllerBase
         var shipmentItems = await FindShipmentItems(body.ShipmentItems);
         var shipmentStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
 
-        if (shipmentStatus!.Name == "Выполнено")
+        if (shipmentStatus!.Name == "Выполнена")
         {
             foreach (var item in shipmentItems)
             {
