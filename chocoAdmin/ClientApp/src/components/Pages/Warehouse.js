@@ -22,6 +22,7 @@ import $ from "jquery";
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {SlSocialVkontakte} from "react-icons/sl";
+import {ToastsList} from "../Parts/Toasts/ToastsList";
 
 export class Warehouse extends Component {
     static displayName = Warehouse.name;
@@ -55,7 +56,8 @@ export class Warehouse extends Component {
             loading: true,
             editModalData: this.productSchema,
             productCategories: [],
-            updateToastOpened: false
+            updateToastOpened: false,
+            toasts: []
         };
     }
 
@@ -156,9 +158,25 @@ export class Warehouse extends Component {
     }
 
     exportImage = async () => {
-        await axios.get("/api/Export/ReplaceImage").then(() => {
-            this.setState({updateToastOpened: true})
-        })
+        await axios.get("/api/Export/ReplacePost")
+            .then(() => {
+                this.setState({
+                    toasts: [...this.state.toasts, {
+                        id: this.state.toasts.length + 1, heading: "Обновление поста",
+                        body: "Пост успешно обновлён",
+                        color: "success"
+                    }]
+                })
+            })
+            .catch(() => {
+                this.setState({
+                    toasts: [...this.state.toasts, {
+                        id: this.state.toasts.length + 1, heading: "Обновление поста",
+                        body: "Ошибка загрузки изображения",
+                        color: "danger"
+                    }]
+                })
+            })
     }
 
     render() {
@@ -273,16 +291,7 @@ export class Warehouse extends Component {
                     </div>
                     {contents}
                 </div>
-                <Toast isOpen={this.state.updateToastOpened} style={{position: "fixed", bottom: 20, right: 20}}>
-                    <ToastHeader icon={<GiCheckMark/>} toggle={() => {
-                        this.setState({updateToastOpened: false})
-                    }}>
-                        Обновление поста
-                    </ToastHeader>
-                    <ToastBody>
-                        Пост успешно обновлён!
-                    </ToastBody>
-                </Toast>
+                <ToastsList toastList={this.state.toasts}/>
             </>
         );
     }
