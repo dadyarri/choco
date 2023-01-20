@@ -38,7 +38,6 @@ export const CreateOrder = () => {
         axios.post("/api/orders", values)
             .then((_) => navigate("/orders"))
             .catch((error) => {
-                console.log("tock");
                 if (error.response && error.response.status === 409) {
                     setToasts([...toasts, {
                         id: toasts.length + 1,
