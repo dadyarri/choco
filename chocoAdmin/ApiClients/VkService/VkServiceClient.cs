@@ -1,6 +1,8 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Text;
 using choco.ApiClients.VkService.RequestBodies;
+using choco.Exceptions;
 
 namespace choco.ApiClients.VkService;
 
@@ -32,15 +34,17 @@ public class VkServiceClient
 
     public async Task EditProduct(EditProductRequestBody body)
     {
-        var stringContent = new StringContent(body.ToString()!);
-        stringContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
-        await _httpClient.PostAsync("/editProduct", stringContent);
+        var stringContent = new StringContent(body.ToString(), Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync("/editProduct", stringContent);
+        if (response.StatusCode != HttpStatusCode.UnprocessableEntity)
+        {
+            throw new UpdatingProductException("Couldn't update product");
+        }
     }
 
     public async Task ReplacePost(ReplacePostRequestBody body)
     {
-        var stringContent = new StringContent(body.ToString()!);
-        stringContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+        var stringContent = new StringContent(body.ToString(), Encoding.UTF8, "application/json");
         await _httpClient.PostAsync("/replacePinned", stringContent);
     }
 
