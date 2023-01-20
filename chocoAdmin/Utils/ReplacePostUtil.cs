@@ -1,6 +1,7 @@
 using choco.ApiClients.VkService;
 using choco.ApiClients.VkService.RequestBodies;
 using choco.Data.Models;
+using choco.Exceptions;
 using SkiaSharp;
 
 namespace choco.Utils;
@@ -17,10 +18,17 @@ public class ReplacePostUtil
     public async Task ReplacePost(byte[] imageData)
     {
         var attachmentId = await _vkServiceClient.UploadImage(imageData);
-        await _vkServiceClient.ReplacePost(new ReplacePostRequestBody
+        if (attachmentId != null)
         {
-            Photo = attachmentId
-        });
+            await _vkServiceClient.ReplacePost(new ReplacePostRequestBody
+            {
+                Photo = attachmentId
+            });
+        }
+        else
+        {
+            throw new UploadingImageException("Couldn't upload image to server");
+        }
     }
     public static SKData GenerateImage(List<Product> products)
     {

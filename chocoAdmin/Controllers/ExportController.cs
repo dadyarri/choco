@@ -1,5 +1,6 @@
 using choco.ApiClients.VkService;
 using choco.Data;
+using choco.Exceptions;
 using choco.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,14 @@ public class ExportController : ControllerBase
     {
         var products = await _db.Products.Where(p => p.Leftover > 0 && !p.Deleted).ToListAsync();
         var imageData = ReplacePostUtil.GenerateImage(products).ToArray();
-        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+        try
+        {
+            await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+        }
+        catch (UploadingImageException e)
+        {
+            return Problem(e.Message);
+        }
 
         return Ok();
     }
