@@ -208,10 +208,10 @@ public class ShipmentsController : ControllerBase
     private bool IsStatusChangingPossible(string oldStatus, string newStatus)
     {
         return oldStatus == "Обрабатывается" && newStatus == "Доставляется" ||
-               oldStatus == "Доставляется" && newStatus == "Выполнен" ||
-               oldStatus == "Обрабатывается" && newStatus == "Отменён" ||
-               oldStatus == "Отменён" && newStatus == "Обрабатывается" ||
-               oldStatus == "Доставляется" && newStatus == "Отменён" ||
-               oldStatus == "Отменён" && newStatus == "Доставляется";
+               oldStatus == "Доставляется" && newStatus == "Выполнена" ||
+               oldStatus == "Обрабатывается" && newStatus == "Отменена" ||
+               oldStatus == "Отменена" && newStatus == "Обрабатывается" ||
+               oldStatus == "Доставляется" && newStatus == "Отменена" ||
+               oldStatus == "Отменена" && newStatus == "Доставляется";
     }
 }
