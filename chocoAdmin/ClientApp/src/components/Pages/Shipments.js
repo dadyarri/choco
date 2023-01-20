@@ -9,10 +9,11 @@ import $ from "jquery";
 import {Button, FormGroup, Input, Label, List, Modal, ModalBody, ModalHeader, Table} from "reactstrap";
 import {Field, Form, Formik} from "formik";
 import {FaTrashRestore} from "react-icons/fa";
+import {ToastsList} from "../Parts/Toasts/ToastsList";
 
 export class Shipments extends Component {
     static displayName = Shipments.name;
-    
+
     shipmentSchema = {date: '', status: {name: '', id: ''}, shipmentItems: [], deleted: false, id: ''}
 
     constructor(props) {
@@ -22,7 +23,8 @@ export class Shipments extends Component {
             loading: true,
             isEditModalOpened: false,
             editModalData: this.shipmentSchema,
-            shipmentStatuses: []
+            shipmentStatuses: [],
+            toasts: []
         };
     }
 
@@ -193,9 +195,24 @@ export class Shipments extends Component {
                         }}
                                 onSubmit={async (values) => {
                                     values.shipmentId = editData.id;
-                                    await axios.put(`/api/shipments`, values);
-                                    this.closeEditModal();
-                                    await this.populateShipmentsData();
+                                    await axios.put(`/api/shipments`, values)
+                                        .then(async () => {
+                                            this.closeEditModal();
+                                            await this.populateShipmentsData();
+                                        })
+                                        .catch((error) => {
+                                            if (error.response.status === 409) {
+                                                this.setState({
+                                                    toasts: [...this.state.toasts, {
+                                                        id: this.state.toasts.length + 1,
+                                                        heading: "Ошибка редактирования поставки",
+                                                        body: `Переход ${error.response.data} невозможен`,
+                                                        color: "danger"
+                                                    }]
+                                                });
+                                            }
+                                        });
+
                                 }}>
                             {({values}) => (
                                 <Form>
@@ -237,6 +254,7 @@ export class Shipments extends Component {
                     <h1>Удалённые поставки</h1>
                     {deletedContents}
                 </div>
+                <ToastsList toastList={this.state.toasts}/>
             </>
         );
     }
