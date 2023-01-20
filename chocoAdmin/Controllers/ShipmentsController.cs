@@ -146,7 +146,7 @@ public class ShipmentsController : ControllerBase
 
         if (!IsStatusChangingPossible(order.Status.Name, orderStatus.Name))
         {
-            return Conflict();
+            return Conflict($"{order.Status.Name} → {orderStatus.Name}");
         }
 
         order.Status = orderStatus;
