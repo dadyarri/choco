@@ -6,9 +6,15 @@ namespace choco.ApiClients.VkService;
 
 public class VkServiceClient
 {
+    private static bool isDevelopment = string.Equals(
+        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
+        "development",
+        StringComparison.InvariantCultureIgnoreCase
+    );
+
     private static HttpClient _httpClient => new()
     {
-        BaseAddress = new Uri("http://vkintegration.com:8080")
+        BaseAddress = new Uri(isDevelopment ? "http://localhost:5679" : "http://vkintegration.com:8080")
     };
 
     public async Task<string?> UploadImage(byte[] imageData)
