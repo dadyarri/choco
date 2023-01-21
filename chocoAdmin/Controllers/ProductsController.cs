@@ -1,3 +1,5 @@
+using choco.ApiClients.VkService;
+using choco.ApiClients.VkService.RequestBodies;
 using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
@@ -11,10 +13,12 @@ namespace choco.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly VkServiceClient _vkServiceClient;
 
-    public ProductsController(AppDbContext db)
+    public ProductsController(AppDbContext db, VkServiceClient vkServiceClient)
     {
         _db = db;
+        _vkServiceClient = vkServiceClient;
     }
 
     [HttpGet]
@@ -62,7 +66,41 @@ public class ProductsController : ControllerBase
 
         if (product == null) return NotFound();
 
+        product.Deleted = true;
+        await _db.SaveChangesAsync();
+
+        if (product.MarketId != 0)
+        {
+            await _vkServiceClient.EditProduct(new EditProductRequestBody
+            {
+                MarketId = product.MarketId,
+                IsDeleted = product.Deleted
+            });
+        }
+
         return NoContent();
+    }
+
+    [HttpPut("{productId:guid}")]
+    public async Task<ActionResult> RecoverProductFromDeleted(Guid productId)
+    {
+        var product = await _db.Products.FindAsync(productId);
+
+        if (product == null) return NotFound();
+
+        product.Deleted = false;
+        await _db.SaveChangesAsync();
+
+        if (product.MarketId != 0)
+        {
+            await _vkServiceClient.EditProduct(new EditProductRequestBody
+            {
+                MarketId = product.MarketId,
+                IsDeleted = product.Deleted
+            });
+        }
+
+        return Ok();
     }
 
     [HttpPost]

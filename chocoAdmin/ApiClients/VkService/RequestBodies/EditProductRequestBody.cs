@@ -12,4 +12,7 @@ public class EditProductRequestBody
     public int? Price { get; set; }
     [JsonPropertyName("leftover")]
     public int? Leftover { get; set; }
+    
+    [JsonPropertyName("deleted")]
+    public bool? IsDeleted { get; set; }
 }
