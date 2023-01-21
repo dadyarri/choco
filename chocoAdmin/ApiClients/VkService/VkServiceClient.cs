@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using choco.ApiClients.VkService.RequestBodies;
+using choco.ApiClients.VkService.Responses;
 using choco.Exceptions;
 
 namespace choco.ApiClients.VkService;
@@ -20,7 +21,7 @@ public class VkServiceClient
         BaseAddress = new Uri(isDevelopment ? "http://localhost:5679" : "http://vkintegration.com:8080")
     };
 
-    public async Task<string?> UploadImage(byte[] imageData)
+    public async Task<UploadFileResponse?> UploadImage(byte[] imageData)
     {
         var content = new MultipartFormDataContent();
         var streamContent = new StreamContent(new MemoryStream(imageData));
@@ -29,7 +30,7 @@ public class VkServiceClient
         var response = await _httpClient.PostAsync("/uploadImage", content);
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            return await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<UploadFileResponse>(await response.Content.ReadAsStringAsync());
         }
 
         return null;
@@ -49,7 +50,11 @@ public class VkServiceClient
     public async Task ReplacePost(ReplacePostRequestBody body)
     {
         var stringContent = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-        await _httpClient.PostAsync("/replacePinned", stringContent);
+        var result = await _httpClient.PostAsync("/replacePinned", stringContent);
+        if (result.StatusCode == HttpStatusCode.UnprocessableEntity)
+        {
+            throw new UpdatingPostException("Couldn't update post");
+        }
     }
 
     public async Task<bool> Ping()
