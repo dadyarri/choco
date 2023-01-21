@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {v4 as uuid} from 'uuid';
-import {GiCheckMark, GiWeight} from "react-icons/gi";
+import {GiWeight} from "react-icons/gi";
 import axios from "axios";
 import {Link} from "react-router-dom";
 import {ImWarning} from "react-icons/im";
@@ -15,7 +15,7 @@ import {
     Label,
     Modal,
     ModalBody,
-    ModalHeader, Toast, ToastBody, ToastHeader
+    ModalHeader
 } from "reactstrap";
 import {HiOutlineTrash, HiPencil} from "react-icons/hi2";
 import $ from "jquery";
