@@ -1,8 +1,7 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi import Response
-from fastapi import UploadFile
 from fastapi.responses import JSONResponse
 from vkbottle import API
 from vkbottle import PhotoWallUploader
@@ -26,9 +25,9 @@ async def get_product_url(market_id: int) -> Response:
 
 
 @app.post("/uploadImage")
-async def upload_image(photo: UploadFile) -> Response:
+async def upload_image(photo: UploadFile = File(...)) -> Response:
     uploader = PhotoWallUploader(generate_attachment_strings=True, api=user_vk)
-    return JSONResponse(content={"photo": await uploader.upload(photo.file.read())})
+    return JSONResponse(content={"photo": await uploader.upload(await photo.read())})
 
 
 @app.post("/editProduct")
