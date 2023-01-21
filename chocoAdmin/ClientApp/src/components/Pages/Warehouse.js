@@ -23,6 +23,7 @@ import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {SlSocialVkontakte} from "react-icons/sl";
 import {ToastsList} from "../Parts/Toasts/ToastsList";
+import {FaTrashRestore} from "react-icons/fa";
 
 export class Warehouse extends Component {
     static displayName = Warehouse.name;
@@ -84,6 +85,13 @@ export class Warehouse extends Component {
         }
     }
 
+    async restoreFromDeleted(itemId) {
+        await axios.put(`/api/products/${itemId}`)
+            .then(async () => {
+                await this.populateProductsData();
+            });
+    }
+
     async openEditModal(itemId) {
         await axios.get(`/api/products/${itemId}`).then(response => {
             this.setState({isEditModalOpened: true, editModalData: response.data});
@@ -113,12 +121,12 @@ export class Warehouse extends Component {
                 </thead>
                 <tbody>
                 {products.map(product =>
-                    <tr key={uuid()} className={product.leftover < 0 ?
+                    (!product.deleted && <tr key={uuid()} className={product.leftover < 0 ?
                         "table-danger" : ""}>
                         <td>{product.name} {product.isByWeight ? <GiWeight/> : null}</td>
                         <td>{product.wholesalePrice} ({product.retailPrice}) &#8381;</td>
                         <td>{product.leftover} {product.isByWeight ? 'кг.' : 'шт.'} {product.leftover < 0 ?
-                            <ImWarning/> : null}</td>
+                            <ImWarning title={"Количество товара опустилось ниже нуля"}/> : null}</td>
                         <td>
                             <ButtonGroup>
                                 <Button
@@ -150,7 +158,42 @@ export class Warehouse extends Component {
                                 </Button> : null}
                             </ButtonGroup>
                         </td>
-                    </tr>
+                    </tr>)
+                )}
+                </tbody>
+            </table>
+        );
+    }
+
+    renderDeletedProductsTable(products) {
+        return (
+            <table className="table table-striped" aria-labelledby="tableLabel">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Цена</th>
+                    <th>Остаток</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                {products.map(product =>
+                    (product.deleted && <tr key={uuid()} className={product.leftover < 0 ?
+                        "table-danger" : ""}>
+                        <td>{product.name} {product.isByWeight ? <GiWeight/> : null}</td>
+                        <td>{product.wholesalePrice} ({product.retailPrice}) &#8381;</td>
+                        <td>{product.leftover} {product.isByWeight ? 'кг.' : 'шт.'} {product.leftover < 0 ?
+                            <ImWarning title={"Количество товара опустилось ниже нуля"}/> : null}</td>
+                        <td>
+                            <Button
+                                type={"button"}
+                                color={"primary"}
+                                title={"Восстановить"}
+                                onClick={() => this.restoreFromDeleted(product.id)}>
+                                <FaTrashRestore/>
+                            </Button>
+                        </td>
+                    </tr>)
                 )}
                 </tbody>
             </table>
@@ -183,6 +226,9 @@ export class Warehouse extends Component {
         let contents = this.state.loading
             ? <p><em>Загрузка...</em></p>
             : this.renderProductsTable(this.state.products);
+        let deletedContents = this.state.loading
+            ? <p><em>Загрузка...</em></p>
+            : this.renderDeletedProductsTable(this.state.products);
 
         const editData = this.state.editModalData;
 
@@ -290,6 +336,13 @@ export class Warehouse extends Component {
                         <Button color={"info"} onClick={this.exportImage}>Экспорт в ВК</Button>
                     </div>
                     {contents}
+
+                    {this.state.products.some((el) => el.deleted) &&
+                        <div>
+                            <h1>Удалённые товары</h1>
+                            {deletedContents}
+                        </div>
+                    }
                 </div>
                 <ToastsList toastList={this.state.toasts}/>
             </>
