@@ -45,9 +45,11 @@ async def edit_product(body: EditProductRequestBody):
 @app.post("/replacePinned")
 async def replace_post(body: ReplacePostRequestBody) -> Response:
     owner_id = -int(os.getenv("VK_GROUP"))
-    last_post = await user_vk.wall.get(owner_id, count=1)
-    post_id = last_post.items[0].id
-    await user_vk.wall.delete(owner_id, post_id)
+    result = await user_vk.wall.get(owner_id, count=1)
+    if len(result.items) > 0:
+        post_id = result.items[0].id
+        await user_vk.wall.delete(owner_id, post_id)
+
     resp = await user_vk.wall.post(
         owner_id,
         message=body.text,
