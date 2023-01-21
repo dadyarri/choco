@@ -22,7 +22,7 @@ public class ReplacePostUtil
         {
             await _vkServiceClient.ReplacePost(new ReplacePostRequestBody
             {
-                Photo = attachmentId
+                Photo = attachmentId.Photo
             });
         }
         else
@@ -30,6 +30,7 @@ public class ReplacePostUtil
             throw new UploadingImageException("Couldn't upload image to server");
         }
     }
+
     public static SKData GenerateImage(List<Product> products)
     {
         SKData data;
