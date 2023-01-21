@@ -22,9 +22,11 @@ public class VkServiceClient
 
     public async Task<string?> UploadImage(byte[] imageData)
     {
-        var byteArrayContent = new ByteArrayContent(imageData);
-        byteArrayContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-        var response = await _httpClient.PostAsync("/uploadImage", byteArrayContent);
+        var content = new MultipartFormDataContent();
+        var streamContent = new StreamContent(new MemoryStream(imageData));
+        streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+        content.Add(streamContent, "photo", "upload.jpg");
+        var response = await _httpClient.PostAsync("/uploadImage", content);
         if (response.StatusCode == HttpStatusCode.OK)
         {
             return await response.Content.ReadAsStringAsync();
