@@ -19,9 +19,7 @@ COPY . .
 RUN dotnet build "chocoAdmin.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN apt-get update
-RUN apt-get install -y libfreetype6
-RUN apt-get install -y libfontconfig1
+RUN apt-get update && apt-get install -y libfreetype6 libfontconfig1
 RUN dotnet publish "chocoAdmin.csproj" -c Release -o /app/publish
 
 FROM base AS final
