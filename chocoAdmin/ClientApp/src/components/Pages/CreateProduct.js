@@ -40,7 +40,7 @@ export const CreateProduct = () => {
                     wholesalePrice: '',
                     isByWeight: false,
                     leftover: 0,
-                    marketId: ''
+                    marketId: 0
                 }}
                 onSubmit={async values => {
                     await axios.post("/api/products", values);
