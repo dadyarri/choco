@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {v4 as uuid} from 'uuid';
 import axios from "axios";
 import {GiCancel, GiCheckMark, GiSandsOfTime} from "react-icons/gi";
