@@ -51,7 +51,8 @@ public class ReplacePostUtil
                 IsAntialias = true,
                 Color = new SKColor(0, 0, 0),
                 TextSize = 20.0f,
-                Style = SKPaintStyle.Fill
+                Style = SKPaintStyle.Fill,
+                Typeface = SKTypeface.FromFamilyName("Roboto")
             };
 
             var yCoord = 0;

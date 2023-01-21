@@ -8,6 +8,8 @@ services:
     container_name: choco_admin
     environment:
       ASPNETCORE_HTTPS_POST: 443
+    volumes:
+      - "./chocoAdmin/Static:/usr/share/fonts"
     depends_on:
       - adminDb
       - vkIntegration
