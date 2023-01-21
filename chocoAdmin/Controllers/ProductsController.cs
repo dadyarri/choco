@@ -3,6 +3,7 @@ using choco.ApiClients.VkService.RequestBodies;
 using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
+using choco.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -78,6 +79,8 @@ public class ProductsController : ControllerBase
             });
         }
 
+        await ReplacePost();
+
         return NoContent();
     }
 
@@ -100,6 +103,8 @@ public class ProductsController : ControllerBase
             });
         }
 
+        await ReplacePost();
+
         return Ok();
     }
 
@@ -121,5 +126,16 @@ public class ProductsController : ControllerBase
         await _db.SaveChangesAsync();
 
         return Created("/Products", body);
+    }
+    
+    private async Task ReplacePost()
+    {
+        var imageData =
+            ReplacePostUtil.GenerateImage(
+                await _db.Products
+                    .Where(p => p.Leftover > 0 && !p.Deleted)
+                    .ToListAsync()
+            ).ToArray();
+        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
     }
 }
