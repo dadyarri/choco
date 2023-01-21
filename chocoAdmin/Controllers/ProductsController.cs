@@ -74,7 +74,7 @@ public class ProductsController : ControllerBase
             await _vkServiceClient.EditProduct(new EditProductRequestBody
             {
                 MarketId = product.MarketId,
-                IsDeleted = product.Deleted
+                Leftover = 0
             });
         }
 
@@ -96,7 +96,7 @@ public class ProductsController : ControllerBase
             await _vkServiceClient.EditProduct(new EditProductRequestBody
             {
                 MarketId = product.MarketId,
-                IsDeleted = product.Deleted
+                Leftover = (int)product.Leftover
             });
         }
 
