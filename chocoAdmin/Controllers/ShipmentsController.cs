@@ -106,7 +106,7 @@ public class ShipmentsController : ControllerBase
         {
             foreach (var item in shipment.ShipmentItems)
             {
-                item.Product.Leftover -= item.Amount;
+                item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
             }
 
