@@ -6,3 +6,4 @@ class EditProductRequestBody(BaseModel):
     name: str | None
     price: str | None
     leftover: int | None
+    deleted: bool | None

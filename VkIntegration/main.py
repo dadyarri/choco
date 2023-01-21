@@ -38,6 +38,7 @@ async def edit_product(body: EditProductRequestBody):
         name=body.name,
         price=body.price,
         stock_amount=body.leftover,
+        deleted=body.deleted
     )
     return JSONResponse(content={"message": "success"})
 
