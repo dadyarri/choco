@@ -25,7 +25,10 @@ public class ProductsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetAllProducts()
     {
-        return Ok(await _db.Products.ToListAsync());
+        return Ok(await _db.Products
+            .OrderBy(p => p.Name)
+            .ToListAsync()
+        );
     }
 
     [HttpPut]
@@ -127,7 +130,7 @@ public class ProductsController : ControllerBase
 
         return Created("/Products", body);
     }
-    
+
     private async Task ReplacePost()
     {
         var imageData =
