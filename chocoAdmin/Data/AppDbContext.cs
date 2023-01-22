@@ -8,9 +8,8 @@ public class AppDbContext : DbContext
     public DbSet<Product> Products => Set<Product>();
     public DbSet<ProductCategory> ProductCategories => Set<ProductCategory>();
     public DbSet<Shipment> Shipments => Set<Shipment>();
-    public DbSet<MovingStatus> ShipmentStatuses => Set<MovingStatus>();
+    public DbSet<MovingStatus> MovingStatuses => Set<MovingStatus>();
     public DbSet<Order> Orders => Set<Order>();
-    public DbSet<MovingStatus> OrderStatuses => Set<MovingStatus>();
     public DbSet<MovingItem> MovingItems => Set<MovingItem>();
     public DbSet<OrderCity> OrderCities => Set<OrderCity>();
     public DbSet<OrderAddress> OrderAddresses => Set<OrderAddress>();

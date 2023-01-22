@@ -111,7 +111,7 @@ public class OrdersController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrderRequestBody body)
     {
-        var orderStatus = await _db.OrderStatuses.FindAsync(body.Status);
+        var orderStatus = await _db.MovingStatuses.FindAsync(body.Status);
         var order = await _db.Orders
             .Where(o => o.Id == body.OrderId)
             .Include(o => o.Items)
@@ -164,7 +164,7 @@ public class OrdersController : ControllerBase
     public async Task<ActionResult> CreateOrder([FromBody] CreateOrderRequestBody body)
     {
         var items = await FindOrderItems(body.OrderItems);
-        var orderStatus = await _db.OrderStatuses.FindAsync(body.Status);
+        var orderStatus = await _db.MovingStatuses.FindAsync(body.Status);
 
         if (orderStatus.Name == "Обрабатывается")
         {

@@ -36,7 +36,7 @@ public class ShipmentsController : ControllerBase
     public async Task<ActionResult> CreateShipment([FromBody] CreateShipmentRequestBody body)
     {
         var items = await FindShipmentItems(body.ShipmentItems);
-        var shipmentStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
+        var shipmentStatus = await _db.MovingStatuses.FindAsync(body.Status);
 
         if (shipmentStatus!.Name == "Выполнена")
         {
@@ -132,7 +132,7 @@ public class ShipmentsController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateShipment([FromBody] UpdateShipmentRequestBody body)
     {
-        var orderStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
+        var orderStatus = await _db.MovingStatuses.FindAsync(body.Status);
         var order = await _db.Shipments
             .Where(s => s.Id == body.ShipmentId)
             .Include(s => s.Items)
