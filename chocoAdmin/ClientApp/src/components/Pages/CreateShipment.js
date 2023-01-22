@@ -43,7 +43,7 @@ export const CreateShipment = () => {
         <div>
             <h1>Создание поставки</h1>
             <Formik
-                initialValues={{date: '', shipmentItems: [], status: ''}}
+                initialValues={{date: '', items: [], status: ''}}
                 onSubmit={async values => {
                     await axios.post("/api/shipments", values)
                         .then((_) => navigate("/shipments"))
@@ -64,12 +64,12 @@ export const CreateShipment = () => {
                             <Label for={"arrayOfProducts"} key={"arrayOfProductsLabel"}>Товары, входящие в
                                 поставку</Label>
                             <FieldArray
-                                name={"shipmentItems"}
+                                name={"items"}
                                 key={"arrayOfProducts"}
                                 id={"arrayOfProducts"}
                                 render={arrayHelpers => (
                                     <div className={"m-3"}>
-                                        {values.shipmentItems.map((product, index) => (
+                                        {values.items.map((product, index) => (
                                             <div className={"d-flex align-items-center m-3"}
                                                  key={`arrayOfProductsParentBlock_${index}`}>
                                                 <div key={"arrayOfProductsInnerBlock"}>
@@ -78,23 +78,23 @@ export const CreateShipment = () => {
                                                         <Label for={`productsName${index}Input`}
                                                                key={`arrayOfProductsNameLabel_${index}`}>Название
                                                             продукта</Label>
-                                                        <Field name={`shipmentItems[${index}].id`}
+                                                        <Field name={`items[${index}].id`}
                                                                id={`productsName[${index}]Input`}
                                                                className={"form-control-sm"}
                                                                as={Input}
                                                                type={"select"}
                                                                valid={errors &&
-                                                                   errors.shipmentItems &&
+                                                                   errors.items &&
                                                                    errors.items[index] &&
                                                                    !errors.items[index].id &&
-                                                                   touched && touched.shipmentItems &&
+                                                                   touched && touched.items &&
                                                                    touched.items[index] &&
                                                                    touched.items[index].id}
                                                                invalid={errors &&
-                                                                   errors.shipmentItems &&
+                                                                   errors.items &&
                                                                    errors.items[index] &&
                                                                    errors.items[index].id &&
-                                                                   touched && touched.shipmentItems &&
+                                                                   touched && touched.items &&
                                                                    touched.items[index] &&
                                                                    touched.items[index].id}
                                                                key={`arrayOfProductsNameInput${index}`}
@@ -108,10 +108,10 @@ export const CreateShipment = () => {
                                                             ))}
                                                         </Field>
                                                         {errors &&
-                                                        errors.shipmentItems &&
+                                                        errors.items &&
                                                         errors.items[index] &&
                                                         errors.items[index].id &&
-                                                        touched && touched.shipmentItems &&
+                                                        touched && touched.items &&
                                                         touched.items[index] &&
                                                         touched.items[index].id ?
                                                             <FormFeedback>{errors.items[index].id}</FormFeedback> : null}
@@ -121,32 +121,32 @@ export const CreateShipment = () => {
                                                          key={`arrayOfProductsAmountInputGroup_${index}`}>
                                                         <Label for={`productsAmount${index}Input`}
                                                                key={`arrayOfProductAmountLabel_${index}`}>Количество</Label>
-                                                        <Field name={`shipmentItems[${index}].amount`}
+                                                        <Field name={`items[${index}].amount`}
                                                                id={`productsAmount${index}Input`}
                                                                className={"form-control-sm"}
                                                                type={"number"}
                                                                as={Input}
                                                                valid={errors &&
-                                                                   errors.shipmentItems &&
+                                                                   errors.items &&
                                                                    errors.items[index] &&
                                                                    !errors.items[index].amount &&
-                                                                   touched && touched.shipmentItems &&
+                                                                   touched && touched.items &&
                                                                    touched.items[index] &&
                                                                    touched.items[index].amount}
                                                                invalid={errors &&
-                                                                   errors.shipmentItems &&
+                                                                   errors.items &&
                                                                    errors.items[index] &&
                                                                    errors.items[index].amount &&
-                                                                   touched && touched.shipmentItems &&
+                                                                   touched && touched.items &&
                                                                    touched.items[index] &&
                                                                    touched.items[index].amount}
                                                                key={`arrayOfProductsAmountInput_${index}`}
                                                         />
                                                         {errors &&
-                                                        errors.shipmentItems &&
+                                                        errors.items &&
                                                         errors.items[index] &&
                                                         errors.items[index].amount &&
-                                                        touched && touched.shipmentItems &&
+                                                        touched && touched.items &&
                                                         touched.items[index] &&
                                                         touched.items[index].amount ?
                                                             <FormFeedback>{errors.items[index].amount}</FormFeedback> : null}

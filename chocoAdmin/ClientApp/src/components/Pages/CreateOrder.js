@@ -21,7 +21,7 @@ export const CreateOrder = () => {
     }
 
     const getOrderStatusesList = async () => {
-        await axios.get("/api/orderStatuses")
+        await axios.get("/api/movingStatuses")
             .then((response) =>
                 setOrderStatuses(response.data)
             );
@@ -52,7 +52,7 @@ export const CreateOrder = () => {
     const validationSchema = Yup.object().shape({
         date: Yup.date().required("Обязательно укажите дату заказа"),
         status: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать статус заказа обязательно!"),
-        orderItems: Yup.array().of(
+        items: Yup.array().of(
             Yup.object().shape({
                 id: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
                 amount: Yup.number().required("Количество товара обязательно!").positive("Количество товара не может быть меньше или равно нулю")
@@ -84,7 +84,7 @@ export const CreateOrder = () => {
                 initialValues={{
                     date: '',
                     status: '',
-                    orderItems: [],
+                    items: [],
                     address: {city: '', street: '', building: ''}
                 }}
                 onSubmit={values => {
@@ -127,12 +127,12 @@ export const CreateOrder = () => {
                             <Label for={"arrayOfProducts"} key={"arrayOfProductsLabel"}>Товары, входящие в
                                 заказ</Label>
                             <FieldArray
-                                name={"orderItems"}
+                                name={"items"}
                                 key={"arrayOfProducts"}
                                 id={"arrayOfProducts"}
                                 render={arrayHelpers => (
                                     <div className={"m-3"}>
-                                        {values.orderItems.map((product, index) => (
+                                        {values.items.map((product, index) => (
                                             <div className={"d-flex align-items-center m-3"}
                                                  key={`arrayOfProductsParentBlock_${index}`}>
                                                 <div key={"arrayOfProductsInnerBlock"}>
@@ -141,26 +141,26 @@ export const CreateOrder = () => {
                                                         <Label for={`productsName${index}Input`}
                                                                key={`arrayOfProductsNameLabel_${index}`}>Название
                                                             продукта</Label>
-                                                        <Field name={`orderItems[${index}].id`}
+                                                        <Field name={`items[${index}].id`}
                                                                id={`productsName[${index}]Input`}
                                                                className={"form-select-sm"}
                                                                as={Input}
                                                                type={"select"}
                                                                key={`arrayOfProductsNameInput${index}`}
                                                                valid={errors &&
-                                                                   errors.orderItems &&
-                                                                   errors.orderItems[index] &&
-                                                                   !errors.orderItems[index].id &&
-                                                                   touched && touched.orderItems &&
-                                                                   touched.orderItems[index] &&
-                                                                   touched.orderItems[index].id}
+                                                                   errors.items &&
+                                                                   errors.items[index] &&
+                                                                   !errors.items[index].id &&
+                                                                   touched && touched.items &&
+                                                                   touched.items[index] &&
+                                                                   touched.items[index].id}
                                                                invalid={errors &&
-                                                                   errors.orderItems &&
-                                                                   errors.orderItems[index] &&
-                                                                   errors.orderItems[index].id &&
-                                                                   touched && touched.orderItems &&
-                                                                   touched.orderItems[index] &&
-                                                                   touched.orderItems[index].id}
+                                                                   errors.items &&
+                                                                   errors.items[index] &&
+                                                                   errors.items[index].id &&
+                                                                   touched && touched.items &&
+                                                                   touched.items[index] &&
+                                                                   touched.items[index].id}
                                                         >
                                                             <option key={"arrayOfProductsDefaultOption"}
                                                                     defaultChecked>-- Выберите товар --
@@ -171,48 +171,48 @@ export const CreateOrder = () => {
                                                             ))}
                                                         </Field>
                                                         {errors &&
-                                                        errors.orderItems &&
-                                                        errors.orderItems[index] &&
-                                                        errors.orderItems[index].id &&
-                                                        touched && touched.orderItems &&
-                                                        touched.orderItems[index] &&
-                                                        touched.orderItems[index].id ?
-                                                            <FormFeedback>{errors.orderItems[index].id}</FormFeedback> : null}
+                                                        errors.items &&
+                                                        errors.items[index] &&
+                                                        errors.items[index].id &&
+                                                        touched && touched.items &&
+                                                        touched.items[index] &&
+                                                        touched.items[index].id ?
+                                                            <FormFeedback>{errors.items[index].id}</FormFeedback> : null}
 
                                                     </div>
                                                     <div className={"form-group m-3"}
                                                          key={`arrayOfProductsAmountInputGroup_${index}`}>
                                                         <Label for={`productsAmount${index}Input`}
                                                                key={`arrayOfProductAmountLabel_${index}`}>Количество</Label>
-                                                        <Field name={`orderItems[${index}].amount`}
+                                                        <Field name={`items[${index}].amount`}
                                                                id={`productsAmount${index}Input`}
                                                                as={Input}
                                                                className={"form-control-sm"}
                                                                type={"number"}
                                                                key={`arrayOfProductsAmountInput_${index}`}
                                                                valid={errors &&
-                                                                   errors.orderItems &&
-                                                                   errors.orderItems[index] &&
-                                                                   !errors.orderItems[index].amount &&
-                                                                   touched && touched.orderItems &&
-                                                                   touched.orderItems[index] &&
-                                                                   touched.orderItems[index].amount}
+                                                                   errors.items &&
+                                                                   errors.items[index] &&
+                                                                   !errors.items[index].amount &&
+                                                                   touched && touched.items &&
+                                                                   touched.items[index] &&
+                                                                   touched.items[index].amount}
                                                                invalid={errors &&
-                                                                   errors.orderItems &&
-                                                                   errors.orderItems[index] &&
-                                                                   errors.orderItems[index].amount &&
-                                                                   touched && touched.orderItems &&
-                                                                   touched.orderItems[index] &&
-                                                                   touched.orderItems[index].amount}
+                                                                   errors.items &&
+                                                                   errors.items[index] &&
+                                                                   errors.items[index].amount &&
+                                                                   touched && touched.items &&
+                                                                   touched.items[index] &&
+                                                                   touched.items[index].amount}
                                                         />
                                                         {errors &&
-                                                        errors.orderItems &&
-                                                        errors.orderItems[index] &&
-                                                        errors.orderItems[index].amount &&
-                                                        touched && touched.orderItems &&
-                                                        touched.orderItems[index] &&
-                                                        touched.orderItems[index].amount ?
-                                                            <FormFeedback>{errors.orderItems[index].amount}</FormFeedback> : null}
+                                                        errors.items &&
+                                                        errors.items[index] &&
+                                                        errors.items[index].amount &&
+                                                        touched && touched.items &&
+                                                        touched.items[index] &&
+                                                        touched.items[index].amount ?
+                                                            <FormFeedback>{errors.items[index].amount}</FormFeedback> : null}
                                                     </div>
                                                 </div>
                                                 <button type={"button"} onClick={() => arrayHelpers.remove(index)}
