@@ -27,21 +27,20 @@ public class ShipmentsController : ControllerBase
     {
         return Ok(await _db.Shipments
             .Include(s => s.Status)
-            .Include(s => s.ShipmentItems)
+            .Include(s => s.Items)
             .ThenInclude(si => si.Product)
-            .Include(s => s.ShipmentItems)
             .ToListAsync());
     }
 
     [HttpPost]
     public async Task<ActionResult> CreateShipment([FromBody] CreateShipmentRequestBody body)
     {
-        var shipmentItems = await FindShipmentItems(body.ShipmentItems);
-        var shipmentStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
+        var items = await FindShipmentItems(body.ShipmentItems);
+        var shipmentStatus = await _db.MovingStatuses.FindAsync(body.Status);
 
         if (shipmentStatus!.Name == "Выполнена")
         {
-            foreach (var item in shipmentItems)
+            foreach (var item in items)
             {
                 item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
@@ -53,7 +52,7 @@ public class ShipmentsController : ControllerBase
         var shipment = new Shipment
         {
             Date = body.Date,
-            ShipmentItems = shipmentItems,
+            Items = items,
             Status = shipmentStatus
         };
 
@@ -68,7 +67,7 @@ public class ShipmentsController : ControllerBase
     {
         var shipment = await _db.Shipments
             .Where(s => s.Id == shipmentId)
-            .Include(s => s.ShipmentItems)
+            .Include(s => s.Items)
             .ThenInclude(si => si.Product)
             .Include(s => s.Status)
             .FirstOrDefaultAsync();
@@ -77,7 +76,7 @@ public class ShipmentsController : ControllerBase
         shipment.Deleted = true;
         if (shipment.Status.Name == "Выполнена")
         {
-            foreach (var item in shipment.ShipmentItems)
+            foreach (var item in shipment.Items)
             {
                 item.Product.Leftover -= item.Amount;
                 await UpdateLeftoverInVk(item);
@@ -95,7 +94,7 @@ public class ShipmentsController : ControllerBase
     {
         var shipment = await _db.Shipments
             .Where(o => o.Id == shipmentId)
-            .Include(o => o.ShipmentItems)
+            .Include(o => o.Items)
             .ThenInclude(si => si.Product)
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
@@ -104,7 +103,7 @@ public class ShipmentsController : ControllerBase
         shipment.Deleted = false;
         if (shipment.Status.Name != "Отменена")
         {
-            foreach (var item in shipment.ShipmentItems)
+            foreach (var item in shipment.Items)
             {
                 item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
@@ -123,7 +122,7 @@ public class ShipmentsController : ControllerBase
     {
         var order = await _db.Shipments.Where(s => s.Id == shipmentId)
             .Include(s => s.Status)
-            .Include(s => s.ShipmentItems)
+            .Include(s => s.Items)
             .ThenInclude(si => si.Product)
             .FirstOrDefaultAsync();
         if (order == null) return NotFound();
@@ -133,10 +132,10 @@ public class ShipmentsController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateShipment([FromBody] UpdateShipmentRequestBody body)
     {
-        var orderStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
+        var orderStatus = await _db.MovingStatuses.FindAsync(body.Status);
         var order = await _db.Shipments
             .Where(s => s.Id == body.ShipmentId)
-            .Include(s => s.ShipmentItems)
+            .Include(s => s.Items)
             .ThenInclude(si => si.Product)
             .Include(s => s.Status)
             .FirstOrDefaultAsync();
@@ -153,7 +152,7 @@ public class ShipmentsController : ControllerBase
 
         if (orderStatus.Name == "Выполнена")
         {
-            foreach (var item in order.ShipmentItems)
+            foreach (var item in order.Items)
             {
                 item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
@@ -167,12 +166,12 @@ public class ShipmentsController : ControllerBase
         return Ok();
     }
 
-    private async Task<List<ShipmentItem>> FindShipmentItems(List<CreateShipmentItemsRequestBody> source)
+    private async Task<List<MovingItem>> FindShipmentItems(List<CreateShipmentItemsRequestBody> source)
     {
-        var items = new List<ShipmentItem>();
+        var items = new List<MovingItem>();
         foreach (var sourceItem in source)
         {
-            items.Add(new ShipmentItem
+            items.Add(new MovingItem
             {
                 Amount = sourceItem.Amount,
                 Product = await _db.Products.FindAsync(sourceItem.Id)
@@ -182,7 +181,7 @@ public class ShipmentsController : ControllerBase
         return items;
     }
 
-    private async Task UpdateLeftoverInVk(ShipmentItem item)
+    private async Task UpdateLeftoverInVk(MovingItem item)
     {
         if (item.Product.MarketId != 0)
         {

@@ -27,7 +27,7 @@ public class OrdersController : ControllerBase
     {
         return Ok(await _db.Orders
             .Include(o => o.Status)
-            .Include(o => o.OrderItems)
+            .Include(o => o.Items)
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Address)
             .ThenInclude(a => a.City)
@@ -40,7 +40,7 @@ public class OrdersController : ControllerBase
         var order = await _db.Orders.Where(o => o.Id == orderId)
             .Include(o => o.Address)
             .ThenInclude(a => a.City)
-            .Include(o => o.OrderItems)
+            .Include(o => o.Items)
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
@@ -53,7 +53,7 @@ public class OrdersController : ControllerBase
     {
         var order = await _db.Orders
             .Where(o => o.Id == orderId)
-            .Include(o => o.OrderItems)
+            .Include(o => o.Items)
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
@@ -62,7 +62,7 @@ public class OrdersController : ControllerBase
         order.Deleted = true;
         if (order.Status.Name != "Отменён")
         {
-            foreach (var item in order.OrderItems)
+            foreach (var item in order.Items)
             {
                 item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
@@ -80,7 +80,7 @@ public class OrdersController : ControllerBase
     {
         var order = await _db.Orders
             .Where(o => o.Id == orderId)
-            .Include(o => o.OrderItems)
+            .Include(o => o.Items)
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
@@ -89,12 +89,12 @@ public class OrdersController : ControllerBase
         order.Deleted = false;
         if (order.Status.Name != "Отменён")
         {
-            if (order.OrderItems.Any(oi => oi.Product.Leftover < oi.Amount))
+            if (order.Items.Any(oi => oi.Product.Leftover < oi.Amount))
             {
                 return Conflict();
             }
 
-            foreach (var item in order.OrderItems)
+            foreach (var item in order.Items)
             {
                 item.Product.Leftover -= item.Amount;
                 await UpdateLeftoverInVk(item);
@@ -111,10 +111,10 @@ public class OrdersController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrderRequestBody body)
     {
-        var orderStatus = await _db.OrderStatuses.FindAsync(body.Status);
+        var orderStatus = await _db.MovingStatuses.FindAsync(body.Status);
         var order = await _db.Orders
             .Where(o => o.Id == body.OrderId)
-            .Include(o => o.OrderItems)
+            .Include(o => o.Items)
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
@@ -133,7 +133,7 @@ public class OrdersController : ControllerBase
         {
             case "Обрабатывается":
             {
-                foreach (var item in order.OrderItems)
+                foreach (var item in order.Items)
                 {
                     item.Product.Leftover -= item.Amount;
                     await UpdateLeftoverInVk(item);
@@ -143,7 +143,7 @@ public class OrdersController : ControllerBase
             }
             case "Отменён":
             {
-                foreach (var item in order.OrderItems)
+                foreach (var item in order.Items)
                 {
                     item.Product.Leftover += item.Amount;
                     await UpdateLeftoverInVk(item);
@@ -163,17 +163,17 @@ public class OrdersController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateOrder([FromBody] CreateOrderRequestBody body)
     {
-        var orderItems = await FindOrderItems(body.OrderItems);
-        var orderStatus = await _db.OrderStatuses.FindAsync(body.Status);
+        var items = await FindOrderItems(body.OrderItems);
+        var orderStatus = await _db.MovingStatuses.FindAsync(body.Status);
 
         if (orderStatus.Name == "Обрабатывается")
         {
-            if (orderItems.Any(oi => oi.Product.Leftover < oi.Amount))
+            if (items.Any(oi => oi.Product.Leftover < oi.Amount))
             {
                 return Conflict();
             }
 
-            foreach (var item in orderItems)
+            foreach (var item in items)
             {
                 item.Product.Leftover -= item.Amount;
                 await UpdateLeftoverInVk(item);
@@ -191,7 +191,7 @@ public class OrdersController : ControllerBase
                 City = await _db.OrderCities.FindAsync(body.Address.City),
                 Street = body.Address.Street
             },
-            OrderItems = orderItems,
+            Items = items,
             Status = orderStatus
         };
         await _db.Orders.AddAsync(order);
@@ -199,12 +199,12 @@ public class OrdersController : ControllerBase
         return Created("/api/Orders", order);
     }
 
-    private async Task<List<OrderItem>> FindOrderItems(List<CreateOrderItemsRequestBody> source)
+    private async Task<List<MovingItem>> FindOrderItems(List<CreateOrderItemsRequestBody> source)
     {
-        var items = new List<OrderItem>();
+        var items = new List<MovingItem>();
         foreach (var sourceItem in source)
         {
-            items.Add(new OrderItem
+            items.Add(new MovingItem
             {
                 Amount = sourceItem.Amount,
                 Product = await _db.Products.FindAsync(sourceItem.Id)
@@ -214,7 +214,7 @@ public class OrdersController : ControllerBase
         return items;
     }
 
-    private async Task UpdateLeftoverInVk(OrderItem item)
+    private async Task UpdateLeftoverInVk(MovingItem item)
     {
         if (item.Product.MarketId != 0)
         {

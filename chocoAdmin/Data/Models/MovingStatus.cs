@@ -1,6 +1,6 @@
 namespace choco.Data.Models;
 
-public class ShipmentStatus: BaseModel
+public class MovingStatus: BaseModel
 {
     public string Name { get; set; }
 }

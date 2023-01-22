@@ -6,19 +6,19 @@ namespace choco.Controllers;
 
 [Controller]
 [Route("[controller]")]
-public class OrderStatusesController : ControllerBase
+public class ShipmentStatusesController : ControllerBase
 {
     private readonly AppDbContext _db;
 
-    public OrderStatusesController(AppDbContext db)
+    public ShipmentStatusesController(AppDbContext db)
     {
         _db = db;
     }
 
     [HttpGet]
-    public async Task<ActionResult> GetAllOrderStatuses()
+    public async Task<ActionResult> GetAllShipmentStatuses()
     {
-        return Ok(await _db.OrderStatuses
+        return Ok(await _db.MovingStatuses
             .ToListAsync());
     }
 }

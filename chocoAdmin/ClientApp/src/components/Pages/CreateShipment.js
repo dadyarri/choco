@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 export const CreateShipment = () => {
     const validationSchema = Yup.object().shape({
         date: Yup.date().required("Обязательно укажите дату поставки"),
-        shipmentItems: Yup.array().of(
+        items: Yup.array().of(
             Yup.object().shape({
                 id: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
                 amount: Yup.number().required("Количество товара обязательно!").positive("Количество товара не может быть меньше единицы")
@@ -85,18 +85,18 @@ export const CreateShipment = () => {
                                                                type={"select"}
                                                                valid={errors &&
                                                                    errors.shipmentItems &&
-                                                                   errors.shipmentItems[index] &&
-                                                                   !errors.shipmentItems[index].id &&
+                                                                   errors.items[index] &&
+                                                                   !errors.items[index].id &&
                                                                    touched && touched.shipmentItems &&
-                                                                   touched.shipmentItems[index] &&
-                                                                   touched.shipmentItems[index].id}
+                                                                   touched.items[index] &&
+                                                                   touched.items[index].id}
                                                                invalid={errors &&
                                                                    errors.shipmentItems &&
-                                                                   errors.shipmentItems[index] &&
-                                                                   errors.shipmentItems[index].id &&
+                                                                   errors.items[index] &&
+                                                                   errors.items[index].id &&
                                                                    touched && touched.shipmentItems &&
-                                                                   touched.shipmentItems[index] &&
-                                                                   touched.shipmentItems[index].id}
+                                                                   touched.items[index] &&
+                                                                   touched.items[index].id}
                                                                key={`arrayOfProductsNameInput${index}`}
                                                         >
                                                             <option key={"arrayOfProductsDefaultOption"}
@@ -109,12 +109,12 @@ export const CreateShipment = () => {
                                                         </Field>
                                                         {errors &&
                                                         errors.shipmentItems &&
-                                                        errors.shipmentItems[index] &&
-                                                        errors.shipmentItems[index].id &&
+                                                        errors.items[index] &&
+                                                        errors.items[index].id &&
                                                         touched && touched.shipmentItems &&
-                                                        touched.shipmentItems[index] &&
-                                                        touched.shipmentItems[index].id ?
-                                                            <FormFeedback>{errors.shipmentItems[index].id}</FormFeedback> : null}
+                                                        touched.items[index] &&
+                                                        touched.items[index].id ?
+                                                            <FormFeedback>{errors.items[index].id}</FormFeedback> : null}
 
                                                     </div>
                                                     <div className={"form-group m-3"}
@@ -128,28 +128,28 @@ export const CreateShipment = () => {
                                                                as={Input}
                                                                valid={errors &&
                                                                    errors.shipmentItems &&
-                                                                   errors.shipmentItems[index] &&
-                                                                   !errors.shipmentItems[index].amount &&
+                                                                   errors.items[index] &&
+                                                                   !errors.items[index].amount &&
                                                                    touched && touched.shipmentItems &&
-                                                                   touched.shipmentItems[index] &&
-                                                                   touched.shipmentItems[index].amount}
+                                                                   touched.items[index] &&
+                                                                   touched.items[index].amount}
                                                                invalid={errors &&
                                                                    errors.shipmentItems &&
-                                                                   errors.shipmentItems[index] &&
-                                                                   errors.shipmentItems[index].amount &&
+                                                                   errors.items[index] &&
+                                                                   errors.items[index].amount &&
                                                                    touched && touched.shipmentItems &&
-                                                                   touched.shipmentItems[index] &&
-                                                                   touched.shipmentItems[index].amount}
+                                                                   touched.items[index] &&
+                                                                   touched.items[index].amount}
                                                                key={`arrayOfProductsAmountInput_${index}`}
                                                         />
                                                         {errors &&
                                                         errors.shipmentItems &&
-                                                        errors.shipmentItems[index] &&
-                                                        errors.shipmentItems[index].amount &&
+                                                        errors.items[index] &&
+                                                        errors.items[index].amount &&
                                                         touched && touched.shipmentItems &&
-                                                        touched.shipmentItems[index] &&
-                                                        touched.shipmentItems[index].amount ?
-                                                            <FormFeedback>{errors.shipmentItems[index].amount}</FormFeedback> : null}
+                                                        touched.items[index] &&
+                                                        touched.items[index].amount ?
+                                                            <FormFeedback>{errors.items[index].amount}</FormFeedback> : null}
                                                     </div>
                                                 </div>
                                                 <button type={"button"} onClick={() => arrayHelpers.remove(index)}
