@@ -311,8 +311,12 @@ export const Orders = () => {
                     </div>
                     {contents}
 
-                    <h1>Удалённые заказы</h1>
-                    {deletedContents}
+                    {orders.some((el) => el.deleted) &&
+                        <div>
+                            <h1>Удалённые заказы</h1>
+                            {deletedContents}
+                        </div>
+                    }
                 </div>
                 <ToastsList toastList={toasts}/>
             </>
