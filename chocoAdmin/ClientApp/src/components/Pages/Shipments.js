@@ -14,7 +14,7 @@ import {ToastsList} from "../Parts/Toasts/ToastsList";
 export class Shipments extends Component {
     static displayName = Shipments.name;
 
-    shipmentSchema = {date: '', status: {name: '', id: ''}, shipmentItems: [], deleted: false, id: ''}
+    shipmentSchema = {date: '', status: {name: '', id: ''}, items: [], deleted: false, id: ''}
 
     constructor(props) {
         super(props);
@@ -103,13 +103,13 @@ export class Shipments extends Component {
                             <td>{new Date(shipment.date).toLocaleDateString("ru-RU")} {this.getShipmentStatusIcon(shipment.status.name)}</td>
                             <td>
                                 <ul>
-                                    {shipment.shipmentItems.map(item =>
+                                    {shipment.items.map(item =>
                                         <li key={uuid()}>{item.product.name} x{item.amount}</li>
                                     )}
                                 </ul>
                             </td>
                             <td>
-                                {shipment.shipmentItems.reduce((sum, item) => sum + item.product.wholesalePrice * item.amount, 0)} &#8381;
+                                {shipment.items.reduce((sum, item) => sum + item.product.wholesalePrice * item.amount, 0)} &#8381;
                             </td>
                             <td>
                                 <div className="btn-group">
@@ -151,13 +151,13 @@ export class Shipments extends Component {
                     <td>{new Date(shipment.date).toLocaleDateString("ru-RU")} {this.getShipmentStatusIcon(shipment.status.name)}</td>
                     <td>
                         <ul>
-                            {shipment.shipmentItems.map(item =>
+                            {shipment.items.map(item =>
                                 <li key={uuid()}>{item.product.name} x{item.amount}</li>
                             )}
                         </ul>
                     </td>
                     <td>
-                        {shipment.shipmentItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
+                        {shipment.items.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
                     </td>
                     <td>
                         <button className={"btn btn-primary"} title={"Восстановить"} type={"button"}
@@ -190,7 +190,7 @@ export class Shipments extends Component {
                     <ModalBody>
                         <Formik initialValues={{
                             date: editData.date,
-                            shipmentItems: editData.shipmentItems,
+                            shipmentItems: editData.items,
                             status: editData.status.id
                         }}
                                 onSubmit={async (values) => {
@@ -270,7 +270,7 @@ export class Shipments extends Component {
     }
 
     async populateShipmentStatusesData() {
-        await axios.get("/api/shipmentStatuses")
+        await axios.get("/api/movingStatuses")
             .then((response) =>
                 this.setState({shipmentStatuses: response.data}))
     }
