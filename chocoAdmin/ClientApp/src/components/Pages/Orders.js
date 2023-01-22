@@ -122,7 +122,7 @@ export const Orders = () => {
                             <td>{new Date(order.date).toLocaleDateString("ru-RU")} {getOrderStatusIcon(order.status.name)}</td>
                             <td>
                                 <ul>
-                                    {order.items.map(item =>
+                                    {order.orderItems.map(item =>
                                         <li key={uuid()}>{item.product.name} x{item.amount}</li>
                                     )}
                                 </ul>
@@ -135,7 +135,7 @@ export const Orders = () => {
                                 </Button>
                             </td>
                             <td>
-                                {order.items.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
+                                {order.orderItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
                             </td>
                             <td>
                                 <div className="btn-group">
@@ -170,7 +170,7 @@ export const Orders = () => {
     }
 
     const populateOrdersStatuesesData = async () => {
-        await axios.get("/api/movingStatuses")
+        await axios.get("/api/orderStatuses")
             .then((response) =>
                 setOrderStatuses(response.data)
             );

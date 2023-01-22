@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 export const CreateShipment = () => {
     const validationSchema = Yup.object().shape({
         date: Yup.date().required("Обязательно укажите дату поставки"),
-        items: Yup.array().of(
+        shipmentItems: Yup.array().of(
             Yup.object().shape({
                 id: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
                 amount: Yup.number().required("Количество товара обязательно!").positive("Количество товара не может быть меньше единицы")
@@ -43,7 +43,7 @@ export const CreateShipment = () => {
         <div>
             <h1>Создание поставки</h1>
             <Formik
-                initialValues={{date: '', items: [], status: ''}}
+                initialValues={{date: '', shipmentItems: [], status: ''}}
                 onSubmit={async values => {
                     await axios.post("/api/shipments", values)
                         .then((_) => navigate("/shipments"))
@@ -64,12 +64,12 @@ export const CreateShipment = () => {
                             <Label for={"arrayOfProducts"} key={"arrayOfProductsLabel"}>Товары, входящие в
                                 поставку</Label>
                             <FieldArray
-                                name={"items"}
+                                name={"shipmentItems"}
                                 key={"arrayOfProducts"}
                                 id={"arrayOfProducts"}
                                 render={arrayHelpers => (
                                     <div className={"m-3"}>
-                                        {values.items.map((product, index) => (
+                                        {values.shipmentItems.map((product, index) => (
                                             <div className={"d-flex align-items-center m-3"}
                                                  key={`arrayOfProductsParentBlock_${index}`}>
                                                 <div key={"arrayOfProductsInnerBlock"}>
@@ -78,25 +78,25 @@ export const CreateShipment = () => {
                                                         <Label for={`productsName${index}Input`}
                                                                key={`arrayOfProductsNameLabel_${index}`}>Название
                                                             продукта</Label>
-                                                        <Field name={`items[${index}].id`}
+                                                        <Field name={`shipmentItems[${index}].id`}
                                                                id={`productsName[${index}]Input`}
                                                                className={"form-control-sm"}
                                                                as={Input}
                                                                type={"select"}
                                                                valid={errors &&
-                                                                   errors.items &&
-                                                                   errors.items[index] &&
-                                                                   !errors.items[index].id &&
-                                                                   touched && touched.items &&
-                                                                   touched.items[index] &&
-                                                                   touched.items[index].id}
+                                                                   errors.shipmentItems &&
+                                                                   errors.shipmentItems[index] &&
+                                                                   !errors.shipmentItems[index].id &&
+                                                                   touched && touched.shipmentItems &&
+                                                                   touched.shipmentItems[index] &&
+                                                                   touched.shipmentItems[index].id}
                                                                invalid={errors &&
-                                                                   errors.items &&
-                                                                   errors.items[index] &&
-                                                                   errors.items[index].id &&
-                                                                   touched && touched.items &&
-                                                                   touched.items[index] &&
-                                                                   touched.items[index].id}
+                                                                   errors.shipmentItems &&
+                                                                   errors.shipmentItems[index] &&
+                                                                   errors.shipmentItems[index].id &&
+                                                                   touched && touched.shipmentItems &&
+                                                                   touched.shipmentItems[index] &&
+                                                                   touched.shipmentItems[index].id}
                                                                key={`arrayOfProductsNameInput${index}`}
                                                         >
                                                             <option key={"arrayOfProductsDefaultOption"}
@@ -108,48 +108,48 @@ export const CreateShipment = () => {
                                                             ))}
                                                         </Field>
                                                         {errors &&
-                                                        errors.items &&
-                                                        errors.items[index] &&
-                                                        errors.items[index].id &&
-                                                        touched && touched.items &&
-                                                        touched.items[index] &&
-                                                        touched.items[index].id ?
-                                                            <FormFeedback>{errors.items[index].id}</FormFeedback> : null}
+                                                        errors.shipmentItems &&
+                                                        errors.shipmentItems[index] &&
+                                                        errors.shipmentItems[index].id &&
+                                                        touched && touched.shipmentItems &&
+                                                        touched.shipmentItems[index] &&
+                                                        touched.shipmentItems[index].id ?
+                                                            <FormFeedback>{errors.shipmentItems[index].id}</FormFeedback> : null}
 
                                                     </div>
                                                     <div className={"form-group m-3"}
                                                          key={`arrayOfProductsAmountInputGroup_${index}`}>
                                                         <Label for={`productsAmount${index}Input`}
                                                                key={`arrayOfProductAmountLabel_${index}`}>Количество</Label>
-                                                        <Field name={`items[${index}].amount`}
+                                                        <Field name={`shipmentItems[${index}].amount`}
                                                                id={`productsAmount${index}Input`}
                                                                className={"form-control-sm"}
                                                                type={"number"}
                                                                as={Input}
                                                                valid={errors &&
-                                                                   errors.items &&
-                                                                   errors.items[index] &&
-                                                                   !errors.items[index].amount &&
-                                                                   touched && touched.items &&
-                                                                   touched.items[index] &&
-                                                                   touched.items[index].amount}
+                                                                   errors.shipmentItems &&
+                                                                   errors.shipmentItems[index] &&
+                                                                   !errors.shipmentItems[index].amount &&
+                                                                   touched && touched.shipmentItems &&
+                                                                   touched.shipmentItems[index] &&
+                                                                   touched.shipmentItems[index].amount}
                                                                invalid={errors &&
-                                                                   errors.items &&
-                                                                   errors.items[index] &&
-                                                                   errors.items[index].amount &&
-                                                                   touched && touched.items &&
-                                                                   touched.items[index] &&
-                                                                   touched.items[index].amount}
+                                                                   errors.shipmentItems &&
+                                                                   errors.shipmentItems[index] &&
+                                                                   errors.shipmentItems[index].amount &&
+                                                                   touched && touched.shipmentItems &&
+                                                                   touched.shipmentItems[index] &&
+                                                                   touched.shipmentItems[index].amount}
                                                                key={`arrayOfProductsAmountInput_${index}`}
                                                         />
                                                         {errors &&
-                                                        errors.items &&
-                                                        errors.items[index] &&
-                                                        errors.items[index].amount &&
-                                                        touched && touched.items &&
-                                                        touched.items[index] &&
-                                                        touched.items[index].amount ?
-                                                            <FormFeedback>{errors.items[index].amount}</FormFeedback> : null}
+                                                        errors.shipmentItems &&
+                                                        errors.shipmentItems[index] &&
+                                                        errors.shipmentItems[index].amount &&
+                                                        touched && touched.shipmentItems &&
+                                                        touched.shipmentItems[index] &&
+                                                        touched.shipmentItems[index].amount ?
+                                                            <FormFeedback>{errors.shipmentItems[index].amount}</FormFeedback> : null}
                                                     </div>
                                                 </div>
                                                 <button type={"button"} onClick={() => arrayHelpers.remove(index)}

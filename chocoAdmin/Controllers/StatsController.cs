@@ -37,9 +37,9 @@ public class StatsController : ControllerBase
             .Include(o => o.Status)
             .Where(o => !o.Deleted && o.Status.Name != "Отменён" && o.Date.Month == DateTime.Now.Month &&
                         o.Date.Year == DateTime.Now.Year)
-            .Include(o => o.Items)
+            .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
-            .SelectMany(o => o.Items, (order, item) => new { order, item })
+            .SelectMany(o => o.OrderItems, (order, item) => new { order, item })
             .GroupBy(o => o.item.Product)
             .Select(g => new { name = g.Key.Name, value = g.Count() })
             .Take(10)
@@ -55,10 +55,10 @@ public class StatsController : ControllerBase
             .Include(o => o.Status)
             .Where(o => !o.Deleted && o.Status.Name != "Отменён" && o.Date.Month == DateTime.Now.Month &&
                         o.Date.Year == DateTime.Now.Year)
-            .Include(o => o.Items)
+            .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .ThenInclude(p => p.Category)
-            .SelectMany(o => o.Items, (order, item) => new { order, item })
+            .SelectMany(o => o.OrderItems, (order, item) => new { order, item })
             .GroupBy(o => o.item.Product.Category)
             .Select(g => new { name = g.Key.Name, value = g.Count() })
             .Take(10)
@@ -78,19 +78,19 @@ public class StatsController : ControllerBase
             var data = await _db.Orders
                 .Include(o => o.Status)
                 .Where(o => !o.Deleted && o.Status.Name != "Отменён")
-                .Include(o => o.Items)
+                .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)
                 .Where(o => o.Date.Month == date.Month &&
                             o.Date.Year == date.Year)
                 .ToListAsync();
 
-            var income = data.Sum(order => order.Items.Sum(oi => oi.Product.RetailPrice * oi.Amount));
+            var income = data.Sum(order => order.OrderItems.Sum(oi => oi.Product.RetailPrice * oi.Amount));
 
             incomeInfo.Add(new IncomeInfo
             {
                 Index = -delta,
                 DateInfo = $"{date.Month}/{date.Year}",
-                Total = (int)Math.Ceiling(income)
+                Total = income
             });
         }
 
