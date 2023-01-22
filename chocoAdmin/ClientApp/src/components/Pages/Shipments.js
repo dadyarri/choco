@@ -251,8 +251,12 @@ export class Shipments extends Component {
                     </div>
                     {contents}
 
-                    <h1>Удалённые поставки</h1>
-                    {deletedContents}
+                    {this.state.shipments.some((el) => el.deleted) &&
+                        <div>
+                            <h1>Удалённые поставки</h1>
+                            {deletedContents}
+                        </div>
+                    }
                 </div>
                 <ToastsList toastList={this.state.toasts}/>
             </>
