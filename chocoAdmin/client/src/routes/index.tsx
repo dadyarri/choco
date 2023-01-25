@@ -9,6 +9,7 @@ const routes: Route[] = [
         element: <Home/>
     },
     {
+        path: "/warehouse",
         element: <Warehouse/>
     }
 ];
