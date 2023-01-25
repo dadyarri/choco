@@ -233,3 +233,6 @@ _Pvt_Extensions
 
 /.idea/.idea.choco/.idea/efCoreCommonOptions.xml
 /.idea/.idea.choco/.idea/efCoreDialogsState.xml
+
+# Temp ignoring, until work on it started
+bot/
