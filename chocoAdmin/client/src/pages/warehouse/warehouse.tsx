@@ -34,7 +34,7 @@ const Warehouse: FC = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {data?.map(product =>
+                        {data?.map((product: Product) =>
                             (!product.deleted && <tr key={product.id} className={product.leftover < 0 ?
                                 "table-danger" : ""}>
                                 <td>{product.name} {product.isByWeight ? <GiWeight/> : null}</td>
