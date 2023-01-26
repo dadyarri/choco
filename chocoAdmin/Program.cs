@@ -1,6 +1,7 @@
 using choco.ApiClients.VkService;
 using choco.Data;
 using choco.Extensions;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
@@ -20,6 +21,16 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connect
 builder.Services.AddSingleton<VkServiceClient>();
 
 builder.Services.AddLettuceEncrypt();
+
+builder.WebHost.UseKestrel(k =>
+{
+    var appServices = k.ApplicationServices;
+    k.ConfigureHttpsDefaults(h =>
+    {
+        h.ClientCertificateMode = ClientCertificateMode.RequireCertificate;
+        h.UseLettuceEncrypt(appServices);
+    });
+});
 
 var app = builder.Build();
 
