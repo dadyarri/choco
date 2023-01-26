@@ -236,3 +236,7 @@ _Pvt_Extensions
 
 # Temp ignoring, until work on it started
 bot/
+
+# Ignore old client app
+ClientApp/
+ClientApp.old/
