@@ -24,5 +24,7 @@ RUN dotnet publish "chocoAdmin.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
+ARG REACT_APP_HERE_TOKEN
+ENV REACT_APP_HERE_TOKEN $REACT_APP_HERE_TOKEN
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "chocoAdmin.dll"]
