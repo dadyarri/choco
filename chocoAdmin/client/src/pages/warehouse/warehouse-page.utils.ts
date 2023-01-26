@@ -6,6 +6,7 @@ export const fetchProductsList = async () => {
         .then((response) => response.data)
         .catch((error) => {
             toast('Ошибка получения данных!');
+            return error;
         })
 }
 
