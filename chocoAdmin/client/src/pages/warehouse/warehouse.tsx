@@ -8,7 +8,7 @@ import {ImWarning} from "react-icons/im";
 import {HiOutlineTrash, HiPencil} from "react-icons/hi";
 import {SlSocialVkontakte} from "react-icons/sl";
 import {AxiosError} from "axios";
-import {deleteConfirm, fetchProductsList, openEditModal, openVkPageOfProduct} from "./warehouse-page.utils";
+import {deleteConfirm, fetchProductsList, openEditModal, openVkPageOfProduct} from "./warehouse.utils";
 
 const Warehouse: FC = () => {
 

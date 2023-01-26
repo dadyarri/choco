@@ -1,7 +1,7 @@
 import Route from "./index.specs";
 import React from "react";
-import Warehouse from "../pages/warehouse/warehouse-page";
-import Home from "../pages/home-page";
+import Warehouse from "../pages/warehouse/warehouse";
+import Home from "../pages/home";
 
 const routes: Route[] = [
     {
