@@ -9,6 +9,7 @@ import {HiOutlineTrash, HiPencil} from "react-icons/hi";
 import {SlSocialVkontakte} from "react-icons/sl";
 import {AxiosError} from "axios";
 import {deleteConfirm, fetchProductsList, openEditModal, openVkPageOfProduct} from "./warehouse.utils";
+import StatefulButton from "../../components/stateful-button/stateful-button";
 
 const Warehouse: FC = () => {
 
@@ -50,18 +51,14 @@ const Warehouse: FC = () => {
                                             onClick={() => openEditModal(product.id)}>
                                             <HiPencil/>
                                         </Button>
-                                        <Button
+                                        <StatefulButton
                                             variant={"danger"}
-                                            type={"button"}
                                             title={"Удалить"}
-                                            data-item-id={product.id}
-                                            data-bs-toggle={"button"}
-                                            data-clicked={0}
-                                            aria-pressed={false}
-                                            onClick={() => deleteConfirm(product.id)}
-                                        >
-                                            <HiOutlineTrash/>
-                                        </Button>
+                                            prefix={<HiOutlineTrash/>}
+                                            postfixWhenActive={"Удалить?"}
+                                            clickHandler={(event) => {
+                                                deleteConfirm(product.id)
+                                            }}/>
                                         {product.marketId ? <Button
                                             variant={"primary"}
                                             type={"button"}
