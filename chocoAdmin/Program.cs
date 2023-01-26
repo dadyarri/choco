@@ -1,3 +1,4 @@
+using System.Net;
 using choco.ApiClients.VkService;
 using choco.Data;
 using choco.Extensions;
@@ -25,11 +26,12 @@ builder.Services.AddLettuceEncrypt();
 builder.WebHost.UseKestrel(k =>
 {
     var appServices = k.ApplicationServices;
-    k.ConfigureHttpsDefaults(h =>
-    {
-        h.ClientCertificateMode = ClientCertificateMode.RequireCertificate;
-        h.UseLettuceEncrypt(appServices);
-    });
+    k.Listen(
+        IPAddress.Any, 443,
+        o => o.UseHttps(h =>
+        {
+            h.UseLettuceEncrypt(appServices);
+        }));
 });
 
 var app = builder.Build();
