@@ -4,7 +4,6 @@ using choco.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
-namespace Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Default");
