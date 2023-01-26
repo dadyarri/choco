@@ -233,3 +233,7 @@ _Pvt_Extensions
 
 /.idea/.idea.choco/.idea/efCoreCommonOptions.xml
 /.idea/.idea.choco/.idea/efCoreDialogsState.xml
+
+client/
+ClientApp.old/
+bot/
