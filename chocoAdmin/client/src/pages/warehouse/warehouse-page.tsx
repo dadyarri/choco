@@ -24,7 +24,7 @@ const Warehouse: FC = () => {
                 </div> :
                 <div>
                     <h1>Склад</h1>
-                    <Table striped bordered hover>
+                    <Table striped bordered hover responsive>
                         <thead>
                         <tr>
                             <th>Название</th>
