@@ -24,7 +24,7 @@ const Warehouse: FC = () => {
                 </div> :
                 <div>
                     <h1>Склад</h1>
-                    <Table striped bordered hover responsive>
+                    {data !== undefined && data.length > 0 && <Table striped bordered hover responsive>
                         <thead>
                         <tr>
                             <th>Название</th>
@@ -75,7 +75,7 @@ const Warehouse: FC = () => {
 
                             </tr>))}
                         </tbody>
-                    </Table>
+                    </Table>}
                 </div>
     )
 }
