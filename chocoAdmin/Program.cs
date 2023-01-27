@@ -2,10 +2,10 @@ using System.Net;
 using choco.ApiClients.VkService;
 using choco.Data;
 using choco.Extensions;
-using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
+using LettuceEncrypt;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Default");
@@ -21,7 +21,13 @@ builder.Services.AddControllersWithViews(options => { options.UseGeneralRoutePre
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddSingleton<VkServiceClient>();
 
-builder.Services.AddLettuceEncrypt();
+builder.Services
+    .AddLettuceEncrypt()
+    .PersistDataToDirectory(
+        new DirectoryInfo("/etc/certs"),
+        builder.Configuration["Certificates:Password"]
+    );
+
 
 builder.WebHost.UseKestrel(k =>
 {
