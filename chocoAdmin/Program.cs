@@ -21,24 +21,27 @@ builder.Services.AddControllersWithViews(options => { options.UseGeneralRoutePre
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddSingleton<VkServiceClient>();
 
-builder.Services
-    .AddLettuceEncrypt()
-    .PersistDataToDirectory(
-        new DirectoryInfo("/etc/certs"),
-        builder.Configuration["Certificates:Password"]
-    );
-
-
-builder.WebHost.UseKestrel(k =>
+if (!builder.Environment.IsDevelopment())
 {
-    var appServices = k.ApplicationServices;
-    k.Listen(
-        IPAddress.Any, 443,
-        o => o.UseHttps(h =>
-        {
-            h.UseLettuceEncrypt(appServices);
-        }));
-});
+    builder.Services
+        .AddLettuceEncrypt()
+        .PersistDataToDirectory(
+            new DirectoryInfo(builder.Configuration["Certificates:Path"]!),
+            builder.Configuration["Certificates:Password"]
+        );
+
+
+    builder.WebHost.UseKestrel(k =>
+    {
+        var appServices = k.ApplicationServices;
+        k.Listen(
+            IPAddress.Any, 443,
+            o => o.UseHttps(h =>
+            {
+                h.UseLettuceEncrypt(appServices);
+            }));
+    });
+}
 
 var app = builder.Build();
 
