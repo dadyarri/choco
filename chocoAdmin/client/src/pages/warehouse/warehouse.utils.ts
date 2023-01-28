@@ -20,5 +20,14 @@ export const deleteProduct = async (id: string) => {
             return error;
         })
 }
-export const openVkPageOfProduct = (marketId: number) => {
+export const openVkPageOfProduct = async (marketId: number) => {
+    return await HttpService.getMarketUrl(marketId)
+        .then((response) => {
+            let url = response.data.url;
+            window.open(url, "_blank");
+        })
+        .catch((error) => {
+            toast("Ошибка получения ссылки на товар!");
+            return error;
+        })
 }
