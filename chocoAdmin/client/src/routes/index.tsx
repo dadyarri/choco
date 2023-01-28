@@ -7,11 +7,14 @@ import ProductEdit from "../pages/product-edit/product-edit";
 const routes: Route[] = [
     {
         index: true,
-        element: <Home/>
+        path: "/",
+        element: <Home/>,
+        label: "Главная"
     },
     {
         path: "/warehouse",
-        element: <Warehouse/>
+        element: <Warehouse/>,
+        label: "Склад"
     },
     {
         path: "/warehouse/add",
