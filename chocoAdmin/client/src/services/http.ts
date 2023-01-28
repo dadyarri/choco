@@ -6,6 +6,13 @@ class HttpService {
         return {}
     }
 
+    public static async getProductById(productId: string): Promise<AxiosResponse> {
+        return await axios.get(
+            `/api/products/${productId}`,
+            {headers: this.getHeaders()}
+        )
+    }
+
     public static async getProducts(): Promise<AxiosResponse> {
         return await axios.get(
             "/api/products",
