@@ -5,7 +5,7 @@ import {Button, ButtonGroup, Table} from "react-bootstrap";
 import Product from "../../services/types";
 import {GiWeight} from "react-icons/gi";
 import {ImWarning} from "react-icons/im";
-import {HiOutlineTrash, HiPencil} from "react-icons/hi";
+import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
 import {SlSocialVkontakte} from "react-icons/sl";
 import {AxiosError} from "axios";
 import {deleteProduct, fetchProductsList, openVkPageOfProduct} from "./warehouse.utils";
@@ -46,6 +46,9 @@ const Warehouse: FC = () => {
                 </div> :
                 <div>
                     <h1>Склад</h1>
+                    <Link to={"/warehouse/add"} className={"btn btn-success mb-3"}>
+                        <HiPlus/> Создать
+                    </Link>
                     {productListData !== undefined && productListData.length > 0 &&
                         <Table striped bordered hover responsive>
                             <thead>
