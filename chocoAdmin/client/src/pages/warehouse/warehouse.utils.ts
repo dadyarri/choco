@@ -10,8 +10,6 @@ export const fetchProductsList = async () => {
         })
 }
 
-export const openEditModal = (id: string) => {
-}
 export const deleteProduct = async (id: string) => {
     return await HttpService.deleteProduct(id)
         .then(response => response.data)
@@ -23,7 +21,7 @@ export const deleteProduct = async (id: string) => {
 export const openVkPageOfProduct = async (marketId: number) => {
     return await HttpService.getMarketUrl(marketId)
         .then((response) => {
-            let url = response.data.url;
+            const url = response.data.url;
             window.open(url, "_blank");
         })
         .catch((error) => {

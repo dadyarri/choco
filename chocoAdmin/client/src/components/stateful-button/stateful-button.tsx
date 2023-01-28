@@ -15,7 +15,7 @@ const StatefulButton: FC<StatefulButtonProps> = ({
     const [clickCount, setClickCount] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const buttonClickHandler = (event: React.MouseEvent<HTMLButtonElement>, baseHandler: MouseEventHandler<HTMLButtonElement>) => {
-        let count = clickCount + 1;
+        const count = clickCount + 1;
         setClickCount(count)
 
         if (count === 1) {

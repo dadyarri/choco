@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {BeatLoader} from "react-spinners";
 import {Button, ButtonGroup, Table} from "react-bootstrap";
-import Product from "../../services/types";
+import {Product} from "../../services/types";
 import {GiWeight} from "react-icons/gi";
 import {ImWarning} from "react-icons/im";
 import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
@@ -14,7 +14,7 @@ import {Link} from "react-router-dom";
 
 const Warehouse: FC = () => {
 
-    let {
+    const {
         isLoading: isProductListLoading,
         isError: isProductListErrored,
         data: productListData,
@@ -82,7 +82,7 @@ const Warehouse: FC = () => {
                                                 title={"Удалить"}
                                                 prefix={<HiOutlineTrash/>}
                                                 postfixWhenActive={"Удалить?"}
-                                                clickHandler={async (event) => {
+                                                clickHandler={async (_event) => {
                                                     await deleteProductMutation.mutate(product.id)
                                                 }}/>
                                             {product.marketId ? <Button
