@@ -33,6 +33,13 @@ class HttpService {
             {headers: this.getHeaders()}
         )
     }
+
+    static getProductCategories() {
+        return axios.get(
+            `/api/productCategories`,
+            {headers: this.getHeaders()}
+        )
+    }
 }
 
 export default HttpService;
