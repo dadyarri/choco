@@ -14,6 +14,10 @@ const routes: Route[] = [
         element: <Warehouse/>
     },
     {
+        path: "/warehouse/add",
+        element: <WarehouseEdit/>
+    },
+    {
         path: "/warehouse/edit/:productId",
         element: <WarehouseEdit/>
     }
