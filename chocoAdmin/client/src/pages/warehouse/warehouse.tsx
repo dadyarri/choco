@@ -8,8 +8,9 @@ import {ImWarning} from "react-icons/im";
 import {HiOutlineTrash, HiPencil} from "react-icons/hi";
 import {SlSocialVkontakte} from "react-icons/sl";
 import {AxiosError} from "axios";
-import {deleteProduct, fetchProductsList, openEditModal, openVkPageOfProduct} from "./warehouse.utils";
+import {deleteProduct, fetchProductsList, openVkPageOfProduct} from "./warehouse.utils";
 import StatefulButton from "../../components/stateful-button/stateful-button";
+import {Link} from "react-router-dom";
 
 const Warehouse: FC = () => {
 
@@ -65,13 +66,14 @@ const Warehouse: FC = () => {
                                         <ImWarning title={"Количество товара опустилось ниже нуля"}/> : null}</td>
                                     <td>
                                         <ButtonGroup>
-                                            <Button
-                                                type={"button"}
-                                                variant={"primary"}
+                                            <Link
                                                 title={"Редактировать"}
-                                                onClick={() => openEditModal(product.id)}>
+                                                type={"button"}
+                                                to={`/warehouse/edit/${product.id}`}
+                                                className={"btn btn-primary"}
+                                            >
                                                 <HiPencil/>
-                                            </Button>
+                                            </Link>
                                             <StatefulButton
                                                 variant={"danger"}
                                                 title={"Удалить"}
