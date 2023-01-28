@@ -32,6 +32,7 @@
     "@types/node": "^16.18.11",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@types/uuid": "^9.0.0",
     "typescript": "^4.9.4"
   },
   "scripts": {
@@ -62,7 +63,10 @@
       ],
       "@typescript-eslint/no-non-null-assertion": "off"
     },
-    "ignorePatterns": ["aspnetcore*.js", "src/setupProxy.js"]
+    "ignorePatterns": [
+      "aspnetcore*.js",
+      "src/setupProxy.js"
+    ]
   },
   "browserslist": {
     "production": [
