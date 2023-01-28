@@ -19,6 +19,13 @@ class HttpService {
             {headers: this.getHeaders()}
         )
     }
+
+    public static getMarketUrl(marketId: number) {
+        return axios.get(
+            `/api/vk/productUrl/${marketId}`,
+            {headers: this.getHeaders()}
+        )
+    }
 }
 
 export default HttpService;
