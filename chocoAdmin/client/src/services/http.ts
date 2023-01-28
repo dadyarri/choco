@@ -12,6 +12,13 @@ class HttpService {
             {headers: this.getHeaders()}
         )
     }
+
+    public static deleteProduct(itemId: string): Promise<AxiosResponse> {
+        return axios.delete(
+            `/api/products/${itemId}`,
+            {headers: this.getHeaders()}
+        )
+    }
 }
 
 export default HttpService;
