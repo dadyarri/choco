@@ -1,6 +1,7 @@
 import React, {FC} from "react";
 import {Nav, Navbar} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import routes from "../../routes/index";
 
 const NavMenu: FC = () => {
 
@@ -9,11 +10,9 @@ const NavMenu: FC = () => {
         <Navbar.Toggle/>
         <Navbar.Collapse>
             <Nav>
-                <Nav.Link as={Link} className="text-dark" to="/">Главная</Nav.Link>
-                <Nav.Link as={Link} className="text-dark" to="/orders">Заказы</Nav.Link>
-                <Nav.Link as={Link} className="text-dark" to="/shipments">Поставки</Nav.Link>
-                <Nav.Link as={Link} className="text-dark" to="/warehouse">Склад</Nav.Link>
-                <Nav.Link as={Link} className="text-dark" to="/categories">Категории</Nav.Link>
+                {routes.map((route) =>
+                    route.label && <Nav.Link as={Link} to={route.path!}>{route.label}</Nav.Link>)
+                }
             </Nav>
         </Navbar.Collapse>
     </Navbar>
