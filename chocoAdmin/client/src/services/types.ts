@@ -1,4 +1,4 @@
-type Product = {
+export type Product = {
     id: string
     deleted: boolean
     leftover: number
@@ -7,6 +7,10 @@ type Product = {
     wholesalePrice: number
     isByWeight: boolean
     marketId: number
+    category: ProductCategory
 }
 
-export default Product;
+export type ProductCategory = {
+    id: string
+    name: string
+}
