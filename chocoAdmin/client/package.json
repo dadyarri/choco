@@ -44,8 +44,25 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app"
-    ]
+      "eslint:recommended",
+      "react-app",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_"
+        }
+      ],
+      "@typescript-eslint/no-non-null-assertion": "off"
+    },
+    "ignorePatterns": ["aspnetcore*.js", "src/setupProxy.js"]
   },
   "browserslist": {
     "production": [
