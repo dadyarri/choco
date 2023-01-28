@@ -12,7 +12,13 @@ export const fetchProductsList = async () => {
 
 export const openEditModal = (id: string) => {
 }
-export const deleteConfirm = (id: string) => {
+export const deleteProduct = async (id: string) => {
+    return await HttpService.deleteProduct(id)
+        .then(response => response.data)
+        .catch((error) => {
+            toast("Ошибка удаления товара!");
+            return error;
+        })
 }
 export const openVkPageOfProduct = (marketId: number) => {
 }
