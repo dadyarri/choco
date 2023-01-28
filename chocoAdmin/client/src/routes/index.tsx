@@ -2,7 +2,7 @@ import Route from "./index.specs";
 import React from "react";
 import Warehouse from "../pages/warehouse/warehouse";
 import Home from "../pages/home";
-import WarehouseEdit from "../pages/warehouse-edit/warehouse-edit";
+import ProductEdit from "../pages/product-edit/product-edit";
 
 const routes: Route[] = [
     {
@@ -15,11 +15,11 @@ const routes: Route[] = [
     },
     {
         path: "/warehouse/add",
-        element: <WarehouseEdit/>
+        element: <ProductEdit/>
     },
     {
         path: "/warehouse/edit/:productId",
-        element: <WarehouseEdit/>
+        element: <ProductEdit/>
     }
 ];
 
