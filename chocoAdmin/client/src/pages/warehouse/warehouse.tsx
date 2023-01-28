@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {useQuery} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 import {BeatLoader} from "react-spinners";
 import {Button, ButtonGroup, Table} from "react-bootstrap";
 import Product from "../../services/types";
@@ -8,12 +8,28 @@ import {ImWarning} from "react-icons/im";
 import {HiOutlineTrash, HiPencil} from "react-icons/hi";
 import {SlSocialVkontakte} from "react-icons/sl";
 import {AxiosError} from "axios";
-import {deleteConfirm, fetchProductsList, openEditModal, openVkPageOfProduct} from "./warehouse.utils";
+import {fetchProductsList, openEditModal, openVkPageOfProduct, deleteProduct} from "./warehouse.utils";
 import StatefulButton from "../../components/stateful-button/stateful-button";
 
 const Warehouse: FC = () => {
 
-    let {isLoading, isError, data, error} = useQuery<Product[], AxiosError>('products', fetchProductsList)
+    let {
+        isLoading,
+        isError,
+        data,
+        error
+    } = useQuery<Product[], AxiosError>(
+        'products',
+        fetchProductsList,
+    )
+    const queryClient = useQueryClient();
+    const deleteProductMutation = useMutation((id: string) => {
+        return deleteProduct(id)
+    }, {
+        onSuccess: async () => {
+            await queryClient.invalidateQueries("products")
+        }
+    });
 
     return (
         isLoading ?
@@ -56,8 +72,8 @@ const Warehouse: FC = () => {
                                             title={"Удалить"}
                                             prefix={<HiOutlineTrash/>}
                                             postfixWhenActive={"Удалить?"}
-                                            clickHandler={(event) => {
-                                                deleteConfirm(product.id)
+                                            clickHandler={async (event) => {
+                                                await deleteProductMutation.mutate(product.id)
                                             }}/>
                                         {product.marketId ? <Button
                                             variant={"primary"}
