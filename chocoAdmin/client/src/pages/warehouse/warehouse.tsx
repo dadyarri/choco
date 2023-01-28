@@ -14,10 +14,10 @@ import StatefulButton from "../../components/stateful-button/stateful-button";
 const Warehouse: FC = () => {
 
     let {
-        isLoading,
-        isError,
-        data,
-        error
+        isLoading: isProductListLoading,
+        isError: isProductListErrored,
+        data: productListData,
+        error: productListError
     } = useQuery<Product[], AxiosError>(
         'products',
         fetchProductsList,
@@ -31,64 +31,71 @@ const Warehouse: FC = () => {
         }
     });
 
+    const goToMarketMutation = useMutation((marketId: number) => {
+        return openVkPageOfProduct(marketId)
+    })
+
     return (
-        isLoading ?
+        isProductListLoading ?
             <BeatLoader color="#36d7b7"/> :
-            isError ?
+            isProductListErrored ?
                 <div>
                     <h1>Ошибка загрузки</h1>
-                    <p>{error?.message}</p>
+                    <p>{productListError?.message}</p>
                 </div> :
                 <div>
                     <h1>Склад</h1>
-                    {data !== undefined && data.length > 0 && <Table striped bordered hover responsive>
-                        <thead>
-                        <tr>
-                            <th>Название</th>
-                            <th>Цена</th>
-                            <th>Остаток</th>
-                            <th>Действия</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {data?.map((product: Product) =>
-                            (!product.deleted && <tr key={product.id} className={product.leftover < 0 ?
-                                "table-danger" : ""}>
-                                <td>{product.name} {product.isByWeight ? <GiWeight/> : null}</td>
-                                <td>{product.wholesalePrice} ({product.retailPrice}) &#8381;</td>
-                                <td>{product.leftover} {product.isByWeight ? 'кг.' : 'шт.'} {product.leftover < 0 ?
-                                    <ImWarning title={"Количество товара опустилось ниже нуля"}/> : null}</td>
-                                <td>
-                                    <ButtonGroup>
-                                        <Button
-                                            type={"button"}
-                                            variant={"primary"}
-                                            title={"Редактировать"}
-                                            onClick={() => openEditModal(product.id)}>
-                                            <HiPencil/>
-                                        </Button>
-                                        <StatefulButton
-                                            variant={"danger"}
-                                            title={"Удалить"}
-                                            prefix={<HiOutlineTrash/>}
-                                            postfixWhenActive={"Удалить?"}
-                                            clickHandler={async (event) => {
-                                                await deleteProductMutation.mutate(product.id)
-                                            }}/>
-                                        {product.marketId ? <Button
-                                            variant={"primary"}
-                                            type={"button"}
-                                            title={"Открыть страницу товара в ВК"}
-                                            onClick={() => openVkPageOfProduct(product.marketId)}
-                                        >
-                                            <SlSocialVkontakte/>
-                                        </Button> : null}
-                                    </ButtonGroup>
-                                </td>
+                    {productListData !== undefined && productListData.length > 0 &&
+                        <Table striped bordered hover responsive>
+                            <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Цена</th>
+                                <th>Остаток</th>
+                                <th>Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {productListData?.map((product: Product) =>
+                                (!product.deleted && <tr key={product.id} className={product.leftover < 0 ?
+                                    "table-danger" : ""}>
+                                    <td>{product.name} {product.isByWeight ? <GiWeight/> : null}</td>
+                                    <td>{product.wholesalePrice} ({product.retailPrice}) &#8381;</td>
+                                    <td>{product.leftover} {product.isByWeight ? 'кг.' : 'шт.'} {product.leftover < 0 ?
+                                        <ImWarning title={"Количество товара опустилось ниже нуля"}/> : null}</td>
+                                    <td>
+                                        <ButtonGroup>
+                                            <Button
+                                                type={"button"}
+                                                variant={"primary"}
+                                                title={"Редактировать"}
+                                                onClick={() => openEditModal(product.id)}>
+                                                <HiPencil/>
+                                            </Button>
+                                            <StatefulButton
+                                                variant={"danger"}
+                                                title={"Удалить"}
+                                                prefix={<HiOutlineTrash/>}
+                                                postfixWhenActive={"Удалить?"}
+                                                clickHandler={async (event) => {
+                                                    await deleteProductMutation.mutate(product.id)
+                                                }}/>
+                                            {product.marketId ? <Button
+                                                variant={"primary"}
+                                                type={"button"}
+                                                title={"Открыть страницу товара в ВК"}
+                                                onClick={async () => {
+                                                    await goToMarketMutation.mutate(product.marketId);
+                                                }}
+                                            >
+                                                <SlSocialVkontakte/>
+                                            </Button> : null}
+                                        </ButtonGroup>
+                                    </td>
 
-                            </tr>))}
-                        </tbody>
-                    </Table>}
+                                </tr>))}
+                            </tbody>
+                        </Table>}
                 </div>
     )
 }
