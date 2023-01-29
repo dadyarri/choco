@@ -29,3 +29,12 @@ export const updateProduct = async (itemId: string, body: UpdateProductRequestBo
             return error;
         })
 }
+
+export const createProduct = async (body: UpdateProductRequestBody): Promise<Product> => {
+    return await HttpService.createProduct(body)
+        .then((response) => response.data)
+        .catch((error) => {
+            toast("Ошибка создания товара!");
+            return error;
+        })
+}

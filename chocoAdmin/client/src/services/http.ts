@@ -50,6 +50,14 @@ class HttpService {
             {headers: this.getHeaders()}
         )
     }
+
+    static createProduct(body: UpdateProductRequestBody) {
+        return axios.post(
+            "/api/products",
+            body,
+            {headers: this.getHeaders()}
+        )
+    }
 }
 
 export default HttpService;
