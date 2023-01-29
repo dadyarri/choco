@@ -1,6 +1,7 @@
 import {Product, ProductCategory} from "../../services/types";
 import HttpService from "../../services/http";
 import {toast} from "react-toastify";
+import {UpdateProductRequestBody} from "../../services/request-bodies";
 
 export const getProductById = async (productId: string): Promise<Product> => {
     return await HttpService.getProductById(productId)
@@ -16,6 +17,15 @@ export const getProductCategories = async (): Promise<ProductCategory[]> => {
         .then((response) => response.data)
         .catch((error) => {
             toast("Ошибка получения списка категорий товара!");
+            return error;
+        })
+}
+
+export const updateProduct = async (itemId: string, body: UpdateProductRequestBody): Promise<Product> => {
+    return await HttpService.updateProduct(itemId, body)
+        .then((response) => response.data)
+        .catch((error) => {
+            toast("Ошибка обновления товара!");
             return error;
         })
 }

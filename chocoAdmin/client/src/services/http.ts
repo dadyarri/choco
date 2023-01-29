@@ -1,5 +1,7 @@
 import Headers from "./http.specs";
 import axios, {AxiosResponse} from "axios";
+import {Product} from "./types";
+import {UpdateProductRequestBody} from "./request-bodies";
 
 class HttpService {
     private static getHeaders(): Headers {
@@ -23,6 +25,14 @@ class HttpService {
     public static deleteProduct(itemId: string): Promise<AxiosResponse> {
         return axios.delete(
             `/api/products/${itemId}`,
+            {headers: this.getHeaders()}
+        )
+    }
+
+    public static updateProduct(itemId: string, body: UpdateProductRequestBody): Promise<AxiosResponse> {
+        return axios.patch(
+            `/api/products/${itemId}`,
+            body,
             {headers: this.getHeaders()}
         )
     }
