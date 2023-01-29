@@ -47,6 +47,22 @@ public class ProductsController : ControllerBase
 
         await _db.SaveChangesAsync();
 
+        await _vkServiceClient.EditProduct(new EditProductRequestBody
+        {
+            MarketId = body.MarketId,
+            Name = body.Name,
+            Price = body.RetailPrice
+        });
+
+        var products = await _db.Products
+            .Where(p => p.Leftover > 0 && !p.Deleted)
+            .OrderBy(p => p.Name)
+            .ToListAsync();
+        var imageData =
+            ReplacePostUtil.GenerateImage(products);
+        
+        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData.ToArray());
+
         return Ok(product);
     }
 
