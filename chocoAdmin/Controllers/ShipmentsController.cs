@@ -30,6 +30,7 @@ public class ShipmentsController : ControllerBase
             .Include(s => s.ShipmentItems)
             .ThenInclude(si => si.Product)
             .Include(s => s.ShipmentItems)
+            .OrderByDescending(s => s.Date)
             .ToListAsync());
     }
 
