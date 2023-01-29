@@ -1,8 +1,8 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useQuery, useQueryClient} from "react-query";
 import {Product, ProductCategory} from "../../services/types";
 import {AxiosError} from "axios";
-import {getProductById, getProductCategories, updateProduct} from "./product-edit.utils";
+import {createProduct, getProductById, getProductCategories, updateProduct} from "./product-edit.utils";
 import {BeatLoader} from "react-spinners";
 import React, {useState} from "react";
 import {InputGroup} from "react-bootstrap";
@@ -27,7 +27,8 @@ const ProductEdit = () => {
     )
     const queryClient = useQueryClient();
 
-    const [isSubmitting, setSubmitting] = useState(false)
+    const [isSubmitting, setSubmitting] = useState(false);
+    const navigate = useNavigate();
 
     const {
         isLoading: _isCategoriesLoading,
@@ -56,7 +57,7 @@ const ProductEdit = () => {
                 </div> :
                 <div>
                     <h1>{data ? "Редактирование" : "Создание"} товара</h1>
-                    {data ? <Formik
+                    <Formik
                         initialValues={{
                             name: data ? data.name : '',
                             wholesalePrice: data ? data.wholesalePrice : '',
@@ -67,8 +68,13 @@ const ProductEdit = () => {
                         }}
                         onSubmit={async (values) => {
                             setSubmitting(true);
-                            await updateProduct(data.id, values);
-                            await queryClient.invalidateQueries(["product", productId])
+                            if (data) {
+                                await updateProduct(data.id, values);
+                                await queryClient.invalidateQueries(["product", productId])
+                            } else {
+                                await createProduct(values);
+                                navigate("/warehouse");
+                            }
                             setSubmitting(false)
                         }}
                         validationSchema={validationSchema}
@@ -152,7 +158,7 @@ const ProductEdit = () => {
                                 />
                             </Form>
                         )}
-                    </Formik> : null}
+                    </Formik>
                 </div>
     )
 }
