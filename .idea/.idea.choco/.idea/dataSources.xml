@@ -15,5 +15,12 @@
       <jdbc-url>jdbc:postgresql://localhost:7232/choco</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="choco: remote" uuid="a4bdc04a-607c-4245-b508-3623953bf170">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://212.193.48.172:7232/choco</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
