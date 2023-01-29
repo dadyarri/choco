@@ -23,7 +23,10 @@ public class ExportController : ControllerBase
     [HttpGet("ReplacePost")]
     public async Task<ActionResult> ReplacePost()
     {
-        var products = await _db.Products.Where(p => p.Leftover > 0 && !p.Deleted).ToListAsync();
+        var products = await _db.Products
+            .Where(p => p.Leftover > 0 && !p.Deleted)
+            .OrderBy(p => p.Name)
+            .ToListAsync();
         var imageData = ReplacePostUtil.GenerateImage(products).ToArray();
         try
         {
@@ -40,7 +43,10 @@ public class ExportController : ControllerBase
     [HttpGet("Image")]
     public async Task<ActionResult> ExportImage()
     {
-        var products = await _db.Products.Where(p => p.Leftover > 0 && !p.Deleted).ToListAsync();
+        var products = await _db.Products
+            .Where(p => p.Leftover > 0 && !p.Deleted)
+            .OrderBy(p => p.Name)
+            .ToListAsync();
         var imageData = ReplacePostUtil.GenerateImage(products).ToArray();
 
         return File(imageData, "image/jpeg");
