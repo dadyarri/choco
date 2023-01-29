@@ -31,10 +31,10 @@ public class ProductsController : ControllerBase
         );
     }
 
-    [HttpPut]
-    public async Task<ActionResult> UpdateProduct([FromBody] UpdateProductRequestBody body)
+    [HttpPatch("{productId:guid}")]
+    public async Task<ActionResult> UpdateProduct(Guid productId, [FromBody] UpdateProductRequestBody body)
     {
-        var product = await _db.Products.FindAsync(body.ProductId);
+        var product = await _db.Products.FindAsync(productId);
 
         if (product == null) return NotFound();
 
