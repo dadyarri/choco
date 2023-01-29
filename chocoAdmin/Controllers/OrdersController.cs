@@ -31,6 +31,7 @@ public class OrdersController : ControllerBase
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Address)
             .ThenInclude(a => a.City)
+            .OrderByDescending(o => o.Date)
             .ToListAsync());
     }
 
