@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using choco.Data;
@@ -11,9 +12,11 @@ using choco.Data;
 namespace choco.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230129214622_ChangeType")]
+    partial class ChangeType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,12 +93,12 @@ namespace choco.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ff463388-158c-48ab-98c2-6b798ceda4ed"),
+                            Id = new Guid("296aba19-e328-409b-b31a-86057835677e"),
                             Name = "Владимир"
                         },
                         new
                         {
-                            Id = new Guid("121ed4ac-8fd9-4a2f-b88e-80129fbbc824"),
+                            Id = new Guid("d00d8d42-c27a-4e54-a4fa-1cece378e0c1"),
                             Name = "Фурманов"
                         });
                 });
@@ -141,22 +144,22 @@ namespace choco.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3e2a576c-740a-4d81-8e9a-6fa7136d96d9"),
+                            Id = new Guid("5cfde14c-6082-4590-8859-923b093c7476"),
                             Name = "Обрабатывается"
                         },
                         new
                         {
-                            Id = new Guid("a632e467-59ba-48db-9f26-88ccb3ee31d9"),
+                            Id = new Guid("754e2120-e730-44d7-b11a-fa042cb95296"),
                             Name = "Доставляется"
                         },
                         new
                         {
-                            Id = new Guid("41e7f82c-d17c-4c5f-9c0d-5d5903e6b257"),
+                            Id = new Guid("9ca9fe3a-1fb7-43d5-9a08-14049da47c3e"),
                             Name = "Выполнен"
                         },
                         new
                         {
-                            Id = new Guid("110dd7cd-6c6b-4404-bb63-7dcf70a3c2db"),
+                            Id = new Guid("3dd40727-8cfd-4e96-9daa-de49d60e3a83"),
                             Name = "Отменён"
                         });
                 });
@@ -277,23 +280,23 @@ namespace choco.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2a0bf093-7d67-4d38-a54d-01a35bee7763"),
-                            Name = "Обрабатывается"
+                            Id = new Guid("7dd731d8-7489-44c4-ab44-ce2b4d6db625"),
+                            Name = "В работе"
                         },
                         new
                         {
-                            Id = new Guid("c03c116d-89f4-498d-94ca-df3ac482fd4e"),
-                            Name = "Доставлется"
+                            Id = new Guid("5afeb5de-2495-48cf-b76f-6acdf4928c5d"),
+                            Name = "Ожидается"
                         },
                         new
                         {
-                            Id = new Guid("d63b2425-7ab7-4728-b9d6-88e01db46218"),
-                            Name = "Выполнена"
+                            Id = new Guid("2bf67549-86cf-4e06-874e-1714a0646172"),
+                            Name = "Доставляется"
                         },
                         new
                         {
-                            Id = new Guid("22414a8d-2f56-4e31-9cce-337ef149ebce"),
-                            Name = "Отменена"
+                            Id = new Guid("837e5fb0-b6a8-42e6-b5ae-87122547ce76"),
+                            Name = "Получено"
                         });
                 });
 
