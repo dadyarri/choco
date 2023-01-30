@@ -35,7 +35,7 @@ const StatefulButton: FC<StatefulButtonProps> = ({
 
     return (
         <Button
-            variant={variant}
+            colorScheme={variant}
             type={"button"}
             title={title}
             isLoading={isLoading}
