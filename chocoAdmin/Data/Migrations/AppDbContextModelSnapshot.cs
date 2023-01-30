@@ -97,6 +97,16 @@ namespace choco.Data.Migrations
                         {
                             Id = new Guid("121ed4ac-8fd9-4a2f-b88e-80129fbbc824"),
                             Name = "Фурманов"
+                        },
+                        new
+                        {
+                            Id = new Guid("0b1b3201-ace5-475b-8ddc-9e15af8f9f77"),
+                            Name = "Приволжск"
+                        },
+                        new
+                        {
+                            Id = new Guid("44d561fe-a8fd-4f3f-8674-75942b34e48a"),
+                            Name = "Иваново"
                         });
                 });
 
@@ -141,22 +151,22 @@ namespace choco.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3e2a576c-740a-4d81-8e9a-6fa7136d96d9"),
+                            Id = new Guid("f6ef3e23-a292-4ee8-ac4b-03ba6d95830f"),
                             Name = "Обрабатывается"
                         },
                         new
                         {
-                            Id = new Guid("a632e467-59ba-48db-9f26-88ccb3ee31d9"),
+                            Id = new Guid("3c3fd23a-e53f-446f-b7d9-82647eb87e59"),
                             Name = "Доставляется"
                         },
                         new
                         {
-                            Id = new Guid("41e7f82c-d17c-4c5f-9c0d-5d5903e6b257"),
+                            Id = new Guid("bd40220b-354c-474f-a6eb-e5106ca7dd2a"),
                             Name = "Выполнен"
                         },
                         new
                         {
-                            Id = new Guid("110dd7cd-6c6b-4404-bb63-7dcf70a3c2db"),
+                            Id = new Guid("1ffb1ac4-2cfe-42af-8b4c-e782ea720f97"),
                             Name = "Отменён"
                         });
                 });
@@ -277,22 +287,22 @@ namespace choco.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2a0bf093-7d67-4d38-a54d-01a35bee7763"),
+                            Id = new Guid("21ecdafc-dc56-4bb2-868f-0be776726713"),
                             Name = "Обрабатывается"
                         },
                         new
                         {
-                            Id = new Guid("c03c116d-89f4-498d-94ca-df3ac482fd4e"),
-                            Name = "Доставлется"
+                            Id = new Guid("90786c29-b967-457f-afe6-714d92b5fffd"),
+                            Name = "Доставляется"
                         },
                         new
                         {
-                            Id = new Guid("d63b2425-7ab7-4728-b9d6-88e01db46218"),
+                            Id = new Guid("9ba56286-f218-4a04-a682-9ded4613a33e"),
                             Name = "Выполнена"
                         },
                         new
                         {
-                            Id = new Guid("22414a8d-2f56-4e31-9cce-337ef149ebce"),
+                            Id = new Guid("d5c0799e-bd48-4e12-985b-502a05e72432"),
                             Name = "Отменена"
                         });
                 });

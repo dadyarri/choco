@@ -12,8 +12,8 @@ using choco.Data;
 namespace choco.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230111124224_AddDeleted")]
-    partial class AddDeleted
+    [Migration("20230130053054_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,6 +89,28 @@ namespace choco.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OrderCities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ff463388-158c-48ab-98c2-6b798ceda4ed"),
+                            Name = "Владимир"
+                        },
+                        new
+                        {
+                            Id = new Guid("121ed4ac-8fd9-4a2f-b88e-80129fbbc824"),
+                            Name = "Фурманов"
+                        },
+                        new
+                        {
+                            Id = new Guid("0b1b3201-ace5-475b-8ddc-9e15af8f9f77"),
+                            Name = "Приволжск"
+                        },
+                        new
+                        {
+                            Id = new Guid("44d561fe-a8fd-4f3f-8674-75942b34e48a"),
+                            Name = "Иваново"
+                        });
                 });
 
             modelBuilder.Entity("choco.Data.Models.OrderItem", b =>
@@ -97,8 +119,8 @@ namespace choco.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
+                    b.Property<double>("Amount")
+                        .HasColumnType("double precision");
 
                     b.Property<Guid?>("OrderId")
                         .HasColumnType("uuid");
@@ -128,6 +150,28 @@ namespace choco.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OrderStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f6ef3e23-a292-4ee8-ac4b-03ba6d95830f"),
+                            Name = "Обрабатывается"
+                        },
+                        new
+                        {
+                            Id = new Guid("3c3fd23a-e53f-446f-b7d9-82647eb87e59"),
+                            Name = "Доставляется"
+                        },
+                        new
+                        {
+                            Id = new Guid("bd40220b-354c-474f-a6eb-e5106ca7dd2a"),
+                            Name = "Выполнен"
+                        },
+                        new
+                        {
+                            Id = new Guid("1ffb1ac4-2cfe-42af-8b4c-e782ea720f97"),
+                            Name = "Отменён"
+                        });
                 });
 
             modelBuilder.Entity("choco.Data.Models.Product", b =>
@@ -139,11 +183,17 @@ namespace choco.Data.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsByWeight")
                         .HasColumnType("boolean");
 
                     b.Property<double>("Leftover")
                         .HasColumnType("double precision");
+
+                    b.Property<int>("MarketId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -186,6 +236,9 @@ namespace choco.Data.Migrations
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
                     b.Property<Guid>("StatusId")
                         .HasColumnType("uuid");
 
@@ -211,33 +264,13 @@ namespace choco.Data.Migrations
                     b.Property<Guid?>("ShipmentId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("StatusId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
                     b.HasIndex("ShipmentId");
 
-                    b.HasIndex("StatusId");
-
                     b.ToTable("ShipmentItems");
-                });
-
-            modelBuilder.Entity("choco.Data.Models.ShipmentItemStatus", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ShipmentItemStatuses");
                 });
 
             modelBuilder.Entity("choco.Data.Models.ShipmentStatus", b =>
@@ -253,6 +286,28 @@ namespace choco.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ShipmentStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("21ecdafc-dc56-4bb2-868f-0be776726713"),
+                            Name = "Обрабатывается"
+                        },
+                        new
+                        {
+                            Id = new Guid("90786c29-b967-457f-afe6-714d92b5fffd"),
+                            Name = "Доставляется"
+                        },
+                        new
+                        {
+                            Id = new Guid("9ba56286-f218-4a04-a682-9ded4613a33e"),
+                            Name = "Выполнена"
+                        },
+                        new
+                        {
+                            Id = new Guid("d5c0799e-bd48-4e12-985b-502a05e72432"),
+                            Name = "Отменена"
+                        });
                 });
 
             modelBuilder.Entity("choco.Data.Models.Order", b =>
@@ -334,15 +389,7 @@ namespace choco.Data.Migrations
                         .WithMany("ShipmentItems")
                         .HasForeignKey("ShipmentId");
 
-                    b.HasOne("choco.Data.Models.ShipmentItemStatus", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Product");
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("choco.Data.Models.Order", b =>
