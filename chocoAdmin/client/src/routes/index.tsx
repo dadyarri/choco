@@ -3,6 +3,7 @@ import React from "react";
 import Warehouse from "../pages/warehouse";
 import Home from "../pages";
 import ProductEdit from "../pages/product-edit";
+import Orders from "../pages/orders";
 
 const routes: Route[] = [
     {
@@ -10,6 +11,11 @@ const routes: Route[] = [
         path: "/",
         element: <Home/>,
         label: "Главная"
+    },
+    {
+        path: "/orders",
+        element: <Orders/>,
+        label: "Заказы"
     },
     {
         path: "/warehouse",
