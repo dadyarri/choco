@@ -16,7 +16,7 @@ import {
     Input,
     InputGroup,
     InputRightAddon,
-    Select
+    Select, VStack
 } from "@chakra-ui/react";
 
 
@@ -64,7 +64,7 @@ const ProductEdit = () => {
                     <p>{error?.message}</p>
                 </div> :
                 <div>
-                    <Heading as={"h1"}>{data ? "Редактирование" : "Создание"} товара</Heading>
+                    <Heading as={"h1"} mb={4}>{data ? "Редактирование" : "Создание"} товара</Heading>
                     <Formik
                         initialValues={{
                             name: data ? data.name : '',
@@ -89,63 +89,67 @@ const ProductEdit = () => {
                     >
                         {({errors, touched}) => (
                             <Form>
-                                <FormControl className={"m-2"}>
-                                    <FormLabel>Название</FormLabel>
-                                    <Field type={"text"} name={"name"} as={Input}/>
-                                    <FormErrorMessage>{errors.name}</FormErrorMessage>
-                                </FormControl>
-                                <FormControl className={"m-2"}>
-                                    <FormLabel>Оптовая цена</FormLabel>
-                                    <InputGroup>
-                                        <Field as={Input} type={"number"}
-                                               name={"wholesalePrice"}/>
-                                        <InputRightAddon>&#8381;</InputRightAddon>
+                                <VStack spacing={4} align={"flex-start"}>
+                                    <FormControl
+                                        isInvalid={!!errors.name && touched.name}>
+                                        <FormLabel>Название</FormLabel>
+                                        <Field type={"text"} name={"name"} as={Input}/>
+                                        <FormErrorMessage>{errors.name}</FormErrorMessage>
+                                    </FormControl>
+                                    <FormControl isInvalid={!!errors.wholesalePrice && touched.wholesalePrice}>
+                                        <FormLabel>Оптовая цена</FormLabel>
+                                        <InputGroup>
+                                            <Field as={Input} type={"number"}
+                                                   name={"wholesalePrice"}/>
+                                            <InputRightAddon>&#8381;</InputRightAddon>
+                                        </InputGroup>
                                         <FormErrorMessage>{errors.wholesalePrice}</FormErrorMessage>
-                                    </InputGroup>
-                                </FormControl>
-                                <FormControl className={"m-2"}>
-                                    <FormLabel>Розничная цена</FormLabel>
-                                    <InputGroup>
-                                        <Field as={Input} type={"number"}
-                                               name={"retailPrice"}/>
-                                        <InputRightAddon>&#8381;</InputRightAddon>
+                                    </FormControl>
+                                    <FormControl isInvalid={!!errors.retailPrice && touched.retailPrice}>
+                                        <FormLabel>Розничная цена</FormLabel>
+                                        <InputGroup>
+                                            <Field as={Input} type={"number"}
+                                                   name={"retailPrice"}/>
+                                            <InputRightAddon>&#8381;</InputRightAddon>
+                                        </InputGroup>
                                         <FormErrorMessage>{errors.retailPrice}</FormErrorMessage>
-                                    </InputGroup>
 
-                                </FormControl>
-                                <FormControl className={"m-2"}>
-                                    <FormLabel>Категория</FormLabel>
-                                    <Field as={Select}
-                                           name={"category"}
-                                    >
-                                        {categoriesData && categoriesData.map((pc) => (
-                                            <option key={pc.id} value={pc.id}>{pc.name}</option>
-                                        ))}
-                                    </Field>
-                                    <FormErrorMessage>{errors.category}</FormErrorMessage>
-                                </FormControl>
+                                    </FormControl>
+                                    <FormControl isInvalid={!!errors.category && touched.category}>
+                                        <FormLabel>Категория</FormLabel>
+                                        <Field as={Select}
+                                               name={"category"}
+                                        >
+                                            <option defaultChecked>-- Выберите категорию --</option>
+                                            {categoriesData && categoriesData.map((pc) => (
+                                                <option key={pc.id} value={pc.id}>{pc.name}</option>
+                                            ))}
+                                        </Field>
+                                        <FormErrorMessage>{errors.category}</FormErrorMessage>
+                                    </FormControl>
 
-                                <FormControl className={"m-2"}>
-                                    <FormLabel>ИД товара в ВК</FormLabel>
-                                    <Field name={"marketId"} id={"marketIdInput"} as={Input}/>
-                                    <FormErrorMessage>{errors.marketId}</FormErrorMessage>
-                                </FormControl>
+                                    <FormControl isInvalid={!!errors.marketId && touched.marketId}>
+                                        <FormLabel>ИД товара в ВК</FormLabel>
+                                        <Field name={"marketId"} id={"marketIdInput"} as={Input}/>
+                                        <FormErrorMessage>{errors.marketId}</FormErrorMessage>
+                                    </FormControl>
 
-                                <FormControl className={"m-2"}>
-                                    <Field type={"checkbox"} name={"isByWeight"}
-                                           as={Checkbox}
-                                    >
-                                        На развес?
-                                    </Field>
-                                    <FormErrorMessage>{errors.isByWeight}</FormErrorMessage>
-                                </FormControl>
-                                <LoadingButton
-                                    variant={"success"}
-                                    label={"Сохранить"}
-                                    title={"Сохранить"}
-                                    type={"submit"}
-                                    isSubmitting={isSubmitting}
-                                />
+                                    <FormControl isInvalid={!!errors.isByWeight && touched.marketId}>
+                                        <Field type={"checkbox"} name={"isByWeight"}
+                                               as={Checkbox}
+                                        >
+                                            На развес?
+                                        </Field>
+                                        <FormErrorMessage>{errors.isByWeight}</FormErrorMessage>
+                                    </FormControl>
+                                    <LoadingButton
+                                        variant={"green"}
+                                        label={"Сохранить"}
+                                        title={"Сохранить"}
+                                        type={"submit"}
+                                        isSubmitting={isSubmitting}
+                                    />
+                                </VStack>
                             </Form>
                         )}
                     </Formik>
