@@ -1,5 +1,5 @@
 import React, {FC, MouseEventHandler, useState} from "react";
-import StatefulButtonProps from "./stateful-button.specs";
+import StatefulButtonProps from "./index.specs";
 import {Button, HStack} from "@chakra-ui/react";
 
 const StatefulButton: FC<StatefulButtonProps> = ({

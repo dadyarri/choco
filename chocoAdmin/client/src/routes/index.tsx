@@ -1,8 +1,8 @@
 import Route from "./index.specs";
 import React from "react";
-import Warehouse from "../pages/warehouse/warehouse";
-import Home from "../pages/home";
-import ProductEdit from "../pages/product-edit/product-edit";
+import Warehouse from "../pages/warehouse";
+import Home from "../pages";
+import ProductEdit from "../pages/product-edit";
 
 const routes: Route[] = [
     {

@@ -1,5 +1,5 @@
 import React, {FC} from "react";
-import {LoadingButtonSpecs} from "./loading-button.specs";
+import {LoadingButtonSpecs} from "./index.specs";
 import {Button, Spinner} from "@chakra-ui/react";
 
 export const LoadingButton: FC<LoadingButtonSpecs> = ({

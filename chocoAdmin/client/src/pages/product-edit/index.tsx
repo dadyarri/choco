@@ -2,12 +2,12 @@ import {useNavigate, useParams} from "react-router-dom";
 import {useQuery, useQueryClient} from "react-query";
 import {Product, ProductCategory} from "../../services/types";
 import {AxiosError} from "axios";
-import {createProduct, getProductById, getProductCategories, updateProduct} from "./product-edit.utils";
+import {createProduct, getProductById, getProductCategories, updateProduct} from "./index.utils";
 import {BeatLoader} from "react-spinners";
 import React, {useState} from "react";
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-import {LoadingButton} from "../../components/loading-button/loading-button";
+import {LoadingButton} from "../../components/loading-button";
 import {
     Checkbox,
     FormControl,

@@ -7,8 +7,8 @@ import {ImWarning} from "react-icons/im";
 import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
 import {SlSocialVkontakte} from "react-icons/sl";
 import {AxiosError} from "axios";
-import {deleteProduct, fetchProductsList, openVkPageOfProduct} from "./warehouse.utils";
-import StatefulButton from "../../components/stateful-button/stateful-button";
+import {deleteProduct, fetchProductsList, openVkPageOfProduct} from "./index.utils";
+import StatefulButton from "../../components/stateful-button";
 import {Link} from "react-router-dom";
 import {Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
 
