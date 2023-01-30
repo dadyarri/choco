@@ -7,7 +7,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     return (
         <div>
             <NavMenu/>
-            <Container as={"main"}>
+            <Container as={"main"} maxW={"1300px"}>
                 {children}
             </Container>
         </div>
