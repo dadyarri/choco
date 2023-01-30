@@ -1,6 +1,6 @@
 import React, {FC, MouseEventHandler, useState} from "react";
 import StatefulButtonProps from "./stateful-button.specs";
-import {Button, Spinner} from "@chakra-ui/react";
+import {Button, HStack} from "@chakra-ui/react";
 
 const StatefulButton: FC<StatefulButtonProps> = ({
                                                      variant,
@@ -43,7 +43,9 @@ const StatefulButton: FC<StatefulButtonProps> = ({
                 buttonClickHandler(event, clickHandler)
             }}
         >
-            <span>{prefix} {isActive && !isLoading && postfixWhenActive}</span>
+            <HStack align={"center"}>
+                {prefix}{isActive && !isLoading && <p>{postfixWhenActive}</p>}
+            </HStack>
         </Button>
     )
 }
