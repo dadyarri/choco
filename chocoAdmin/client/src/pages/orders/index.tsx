@@ -9,10 +9,32 @@ import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
 import React from "react";
 import {DateTime} from "luxon";
 import StatefulButton from "../../components/stateful-button";
+import {GiCancel, GiCheckMark, GiSandsOfTime} from "react-icons/gi";
+import {TbTruckDelivery} from "react-icons/tb";
 
 const Orders = () => {
 
     const {isLoading, isError, data, error} = useQuery<Order[], AxiosError>("orders", fetchOrdersList);
+
+    const getOrderStatusIcon = (status: string) => {
+        switch (status) {
+            case "Выполнен": {
+                return <GiCheckMark/>
+            }
+            case "Доставляется": {
+                return <TbTruckDelivery/>
+            }
+            case "Обрабатывается": {
+                return <GiSandsOfTime/>
+            }
+            case "Отменён": {
+                return <GiCancel/>
+            }
+            default: {
+                return null
+            }
+        }
+    }
 
     return (
         isLoading ?
@@ -33,10 +55,10 @@ const Orders = () => {
                                 <Thead>
                                     <Tr>
                                         <Th>Дата</Th>
+                                        <Th>Статус</Th>
                                         <Th>Содержимое заказа</Th>
                                         <Th>Адрес</Th>
                                         <Th>Итог</Th>
-                                        <Th>Статус</Th>
                                         <Th>Действия</Th>
                                     </Tr>
                                 </Thead>
@@ -46,19 +68,20 @@ const Orders = () => {
                                             <Td>
                                                 {DateTime.fromISO(order.date.toString()).toFormat("dd.MM.yyyy")}
                                             </Td>
+                                            <Td title={order.status.name}>
+                                                {getOrderStatusIcon(order.status.name)}
+                                            </Td>
+
                                             <Td>
                                                 <ul>
-                                                    {order.orderItems.map(item =>
-                                                        <li key={item.id}>{item.product.name} x{item.amount}</li>
+                                                    {order.orderItems.map(item => <li
+                                                        key={item.id}>{item.product.name} x{item.amount}</li>
                                                     )}
                                                 </ul>
                                             </Td>
                                             <Td>г. {order.address.city.name}, {order.address.street}, {order.address.building}</Td>
                                             <Td>
                                                 {order.orderItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
-                                            </Td>
-                                            <Td>
-                                                {order.status.name}
                                             </Td>
                                             <Td>
                                                 <ButtonGroup>
@@ -87,7 +110,8 @@ const Orders = () => {
                                 </Tbody>
                             </Table>
                         </TableContainer>
-                        : <Heading as={"h3"} size={"md"}>Нет заказов</Heading>
+                        :
+                        <Heading as={"h3"} size={"md"}>Нет заказов</Heading>
                     }
                 </div>
     )
