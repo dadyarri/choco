@@ -13,7 +13,7 @@ export const LoadingButton: FC<LoadingButtonSpecs> = ({
 
     return (
         <Button
-            variant={variant}
+            colorScheme={variant}
             title={title}
             type={type}
             onClick={(event) => {
