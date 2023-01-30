@@ -55,6 +55,7 @@ const Warehouse: FC = () => {
                                 <Thead>
                                 <Tr>
                                     <Th>Название</Th>
+                                    <Th>На развес?</Th>
                                     <Th>Цена</Th>
                                     <Th>Остаток</Th>
                                     <Th>Действия</Th>
@@ -63,7 +64,8 @@ const Warehouse: FC = () => {
                                 <Tbody>
                                 {productListData?.map((product: Product) =>
                                     (!product.deleted && <Tr key={product.id}>
-                                        <Td>{product.name} {product.isByWeight ? <GiWeight/> : null}</Td>
+                                        <Td>{product.name}</Td>
+                                        <Td>{product.isByWeight ? <GiWeight/> : null}</Td>
                                         <Td>{product.wholesalePrice} ({product.retailPrice}) &#8381;</Td>
                                         <Td>{product.leftover} {product.isByWeight ? 'кг.' : 'шт.'} {product.leftover < 0 ?
                                             <ImWarning title={"Количество товара опустилось ниже нуля"}/> : null}</Td>
