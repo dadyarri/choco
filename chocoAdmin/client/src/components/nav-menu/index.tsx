@@ -23,11 +23,10 @@ const NavMenu: FC = () => {
         as={"nav"}
         w={"100%"}
         bg={"#ffffff40"}
-        style={{backdropFilter: "blur(10px)"}}
         zIndex={2}
     >
-        <Container display={"flex"} p={2} maxW={"container.md"}>
-            <Flex align={"center"} mr={5}>
+        <Container display={"flex"} p={2} maxW={"1500px"}>
+            <Flex align={"center"} mr={5} flexGrow={1}>
                 <Heading
                     as={"h1"}
                     size={"lg"}
@@ -38,7 +37,7 @@ const NavMenu: FC = () => {
                 </Heading>
             </Flex>
 
-            <Stack
+            <HStack><Stack
                 direction={{base: "column", md: "row"}}
                 display={{base: "none", md: "flex"}}
                 width={{base: "full", md: "auto"}}
@@ -50,26 +49,26 @@ const NavMenu: FC = () => {
                     route.label && <Link to={route.path!} key={uuid()}>{route.label}</Link>)
                 }
             </Stack>
-            <Box flex={1}>
-                <Box ml={2} display={{base: "inline-block", md: "none"}}>
-                    <Menu>
-                        <MenuButton
-                            as={IconButton}
-                            icon={<GiHamburgerMenu/>}
-                            variant={"outline"}
-                            aria-label={"Options"}
-                        ></MenuButton>
-                        <MenuList>
-                            {routes.map((route) =>
-                                route.label &&
-                                <MenuItem key={uuid()}>
-                                    <Link to={route.path!} key={uuid()}>{route.label}</Link>
-                                </MenuItem>)
-                            }
-                        </MenuList>
-                    </Menu>
-                </Box>
-            </Box>
+                <Box flex={1}>
+                    <Box ml={2} display={{base: "inline-block", md: "none"}}>
+                        <Menu>
+                            <MenuButton
+                                as={IconButton}
+                                icon={<GiHamburgerMenu/>}
+                                variant={"outline"}
+                                aria-label={"Options"}
+                            ></MenuButton>
+                            <MenuList>
+                                {routes.map((route) =>
+                                    route.label &&
+                                    <MenuItem key={uuid()}>
+                                        <Link to={route.path!} key={uuid()}>{route.label}</Link>
+                                    </MenuItem>)
+                                }
+                            </MenuList>
+                        </Menu>
+                    </Box>
+                </Box></HStack>
         </Container>
     </Box>
 }
