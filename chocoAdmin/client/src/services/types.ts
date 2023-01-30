@@ -19,6 +19,7 @@ export type Order = {
     id: string
     date: Date
     status: OrderStatus
+    orderItems: OrderItem[]
     address: OrderAddress
     deleted: boolean
 
@@ -27,6 +28,12 @@ export type Order = {
 export type OrderStatus = {
     id: string
     name: string
+}
+
+export type OrderItem = {
+    id: string
+    product: Product
+    amount: number
 }
 
 export type OrderAddress = {
