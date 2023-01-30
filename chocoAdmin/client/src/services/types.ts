@@ -14,3 +14,29 @@ export type ProductCategory = {
     id: string
     name: string
 }
+
+export type Order = {
+    id: string
+    date: Date
+    status: OrderStatus
+    address: OrderAddress
+    deleted: boolean
+
+}
+
+export type OrderStatus = {
+    id: string
+    name: string
+}
+
+export type OrderAddress = {
+    id: string
+    city: OrderCity
+    street: string
+    building: string
+}
+
+export type OrderCity = {
+    id: string
+    name: string
+}
