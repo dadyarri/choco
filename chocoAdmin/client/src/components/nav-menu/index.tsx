@@ -28,7 +28,8 @@ const NavMenu: FC = () => {
         <Container display={"flex"} p={2} maxW={"1500px"}>
             <Flex align={"center"} mr={5} flexGrow={1}>
                 <Heading
-                    as={"h1"}
+                    as={Link}
+                    to={"/"}
                     size={"lg"}
                     letterSpacing={"tighter"}
                     style={{userSelect: "none", cursor: "pointer"}}
