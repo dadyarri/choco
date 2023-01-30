@@ -1,6 +1,6 @@
 import React, {FC, MouseEventHandler, useState} from "react";
-import {Button, Spinner} from "react-bootstrap";
 import StatefulButtonProps from "./stateful-button.specs";
+import {Button, Spinner} from "@chakra-ui/react";
 
 const StatefulButton: FC<StatefulButtonProps> = ({
                                                      variant,
@@ -38,16 +38,12 @@ const StatefulButton: FC<StatefulButtonProps> = ({
             variant={variant}
             type={"button"}
             title={title}
-            active={isActive}
+            isLoading={isLoading}
             onClick={(event) => {
                 buttonClickHandler(event, clickHandler)
             }}
         >
-            {isLoading &&
-                <Spinner animation="border" role="status" size={"sm"}>
-                    <span className="visually-hidden">Загрузка...</span>
-                </Spinner>}
-            <span>{!isLoading && prefix} {isActive && !isLoading && postfixWhenActive}</span>
+            <span>{prefix} {isActive && !isLoading && postfixWhenActive}</span>
         </Button>
     )
 }

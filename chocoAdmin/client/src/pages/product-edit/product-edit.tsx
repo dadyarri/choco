@@ -5,11 +5,19 @@ import {AxiosError} from "axios";
 import {createProduct, getProductById, getProductCategories, updateProduct} from "./product-edit.utils";
 import {BeatLoader} from "react-spinners";
 import React, {useState} from "react";
-import {InputGroup} from "react-bootstrap";
 import {Field, Form, Formik} from "formik";
-import BsForm from "react-bootstrap/Form";
 import * as Yup from "yup";
 import {LoadingButton} from "../../components/loading-button/loading-button";
+import {
+    Checkbox,
+    FormControl,
+    FormErrorMessage,
+    FormLabel, Heading,
+    Input,
+    InputGroup,
+    InputRightAddon,
+    Select
+} from "@chakra-ui/react";
 
 
 const ProductEdit = () => {
@@ -52,11 +60,11 @@ const ProductEdit = () => {
             <BeatLoader color="#36d7b7"/> :
             isError ?
                 <div>
-                    <h1>Ошибка загрузки</h1>
+                    <Heading as={"h1"}>Ошибка загрузки</Heading>
                     <p>{error?.message}</p>
                 </div> :
                 <div>
-                    <h1>{data ? "Редактирование" : "Создание"} товара</h1>
+                    <Heading as={"h1"}>{data ? "Редактирование" : "Создание"} товара</Heading>
                     <Formik
                         initialValues={{
                             name: data ? data.name : '',
@@ -81,74 +89,56 @@ const ProductEdit = () => {
                     >
                         {({errors, touched}) => (
                             <Form>
-                                <BsForm.Group className={"m-2"}>
-                                    <BsForm.Label>Название</BsForm.Label>
-                                    <Field type={"text"} name={"name"} as={BsForm.Control}
-                                           valid={!errors.name && touched.name}
-                                           invalid={errors.name && touched.name}/>
-                                    {errors.name && touched.name ?
-                                        <BsForm.Control.Feedback>{errors.name}</BsForm.Control.Feedback> : null}
-                                </BsForm.Group>
-                                <BsForm.Group className={"m-2"}>
-                                    <BsForm.Label>Оптовая цена</BsForm.Label>
+                                <FormControl className={"m-2"}>
+                                    <FormLabel>Название</FormLabel>
+                                    <Field type={"text"} name={"name"} as={Input}/>
+                                    <FormErrorMessage>{errors.name}</FormErrorMessage>
+                                </FormControl>
+                                <FormControl className={"m-2"}>
+                                    <FormLabel>Оптовая цена</FormLabel>
                                     <InputGroup>
-                                        <Field as={BsForm.Control} type={"number"}
-                                               name={"wholesalePrice"}
-                                               valid={!errors.wholesalePrice && touched.wholesalePrice}
-                                               invalid={errors.wholesalePrice && touched.wholesalePrice}/>
-                                        <InputGroup.Text>&#8381;</InputGroup.Text>
-                                        {errors.wholesalePrice && touched.wholesalePrice ?
-                                            <BsForm.Control.Feedback>{errors.wholesalePrice}</BsForm.Control.Feedback> : null}
+                                        <Field as={Input} type={"number"}
+                                               name={"wholesalePrice"}/>
+                                        <InputRightAddon>&#8381;</InputRightAddon>
+                                        <FormErrorMessage>{errors.wholesalePrice}</FormErrorMessage>
                                     </InputGroup>
-                                </BsForm.Group>
-                                <BsForm.Group className={"m-2"}>
-                                    <BsForm.Label>Розничная цена</BsForm.Label>
+                                </FormControl>
+                                <FormControl className={"m-2"}>
+                                    <FormLabel>Розничная цена</FormLabel>
                                     <InputGroup>
-                                        <Field as={BsForm.Control} type={"number"}
-                                               name={"retailPrice"}
-                                               valid={!errors.retailPrice && touched.retailPrice}
-                                               invalid={errors.retailPrice && touched.retailPrice}/>
-                                        <InputGroup.Text>&#8381;</InputGroup.Text>
-                                        {errors.retailPrice && touched.retailPrice ?
-                                            <BsForm.Control.Feedback>{errors.retailPrice}</BsForm.Control.Feedback> : null}
+                                        <Field as={Input} type={"number"}
+                                               name={"retailPrice"}/>
+                                        <InputRightAddon>&#8381;</InputRightAddon>
+                                        <FormErrorMessage>{errors.retailPrice}</FormErrorMessage>
                                     </InputGroup>
 
-                                </BsForm.Group>
-                                <BsForm.Group className={"m-2"}>
-                                    <BsForm.Label>Категория</BsForm.Label>
-                                    <Field as={BsForm.Select}
+                                </FormControl>
+                                <FormControl className={"m-2"}>
+                                    <FormLabel>Категория</FormLabel>
+                                    <Field as={Select}
                                            name={"category"}
-                                           valid={!errors.category && touched.category}
-                                           invalid={errors.category && touched.category}
                                     >
                                         {categoriesData && categoriesData.map((pc) => (
                                             <option key={pc.id} value={pc.id}>{pc.name}</option>
                                         ))}
                                     </Field>
-                                    {errors.category && touched.category ?
-                                        <BsForm.Control.Feedback>{errors.category}</BsForm.Control.Feedback> : null}
-                                </BsForm.Group>
+                                    <FormErrorMessage>{errors.category}</FormErrorMessage>
+                                </FormControl>
 
-                                <BsForm.Group className={"m-2"}>
-                                    <BsForm.Label>ИД товара в ВК</BsForm.Label>
-                                    <Field name={"marketId"} id={"marketIdInput"} as={BsForm.Control}
-                                           valid={!errors.marketId && touched.marketId}
-                                           invalid={errors.marketId && touched.marketId}/>
-                                    {errors.marketId && touched.marketId ?
-                                        <BsForm.Control.Feedback>{errors.marketId}</BsForm.Control.Feedback> : null}
-                                </BsForm.Group>
+                                <FormControl className={"m-2"}>
+                                    <FormLabel>ИД товара в ВК</FormLabel>
+                                    <Field name={"marketId"} id={"marketIdInput"} as={Input}/>
+                                    <FormErrorMessage>{errors.marketId}</FormErrorMessage>
+                                </FormControl>
 
-                                <BsForm.Group className={"m-2"}>
+                                <FormControl className={"m-2"}>
                                     <Field type={"checkbox"} name={"isByWeight"}
-                                           as={BsForm.Check}
-                                           valid={!errors.isByWeight && touched.isByWeight}
-                                           invalid={errors.isByWeight && touched.isByWeight}
-                                           className={"mr-2"}
-                                           label={"На развес?"}
-                                    />
-                                    {errors.isByWeight && touched.isByWeight ?
-                                        <BsForm.Control.Feedback>{errors.isByWeight}</BsForm.Control.Feedback> : null}
-                                </BsForm.Group>
+                                           as={Checkbox}
+                                    >
+                                        На развес?
+                                    </Field>
+                                    <FormErrorMessage>{errors.isByWeight}</FormErrorMessage>
+                                </FormControl>
                                 <LoadingButton
                                     variant={"success"}
                                     label={"Сохранить"}

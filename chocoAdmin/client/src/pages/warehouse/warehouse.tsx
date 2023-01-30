@@ -1,7 +1,6 @@
 import React, {FC} from "react";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {BeatLoader} from "react-spinners";
-import {Button, ButtonGroup, Table} from "react-bootstrap";
 import {Product} from "../../services/types";
 import {GiWeight} from "react-icons/gi";
 import {ImWarning} from "react-icons/im";
@@ -11,6 +10,7 @@ import {AxiosError} from "axios";
 import {deleteProduct, fetchProductsList, openVkPageOfProduct} from "./warehouse.utils";
 import StatefulButton from "../../components/stateful-button/stateful-button";
 import {Link} from "react-router-dom";
+import {Button, ButtonGroup, Table} from "@chakra-ui/react";
 
 const Warehouse: FC = () => {
 
@@ -50,7 +50,7 @@ const Warehouse: FC = () => {
                         <HiPlus/> Создать
                     </Link>
                     {productListData !== undefined && productListData.length > 0 &&
-                        <Table striped bordered hover responsive>
+                        <Table>
                             <thead>
                             <tr>
                                 <th>Название</th>

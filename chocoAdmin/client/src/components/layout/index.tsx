@@ -1,7 +1,7 @@
 import {FC} from "react";
-import {Container} from "react-bootstrap";
 import LayoutProps from "./index.specs";
 import NavMenu from "../nav-menu";
+import {Container} from "@chakra-ui/react";
 
 const Layout: FC<LayoutProps> = ({ children }) => {
     return (

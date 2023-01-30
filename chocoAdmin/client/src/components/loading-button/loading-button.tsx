@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {LoadingButtonSpecs} from "./loading-button.specs";
-import {Button, Spinner} from "react-bootstrap";
+import {Button, Spinner} from "@chakra-ui/react";
 
 export const LoadingButton: FC<LoadingButtonSpecs> = ({
                                                           variant,
@@ -22,9 +22,7 @@ export const LoadingButton: FC<LoadingButtonSpecs> = ({
                 }
             }}>
             {isSubmitting &&
-                <Spinner animation="border" role="status" size={"sm"}>
-                    <span className="visually-hidden">Загрузка...</span>
-                </Spinner>}&nbsp;
+                <Spinner size={"xs"}/>}&nbsp;
             {label}
         </Button>
     )
