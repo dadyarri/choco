@@ -58,6 +58,13 @@ class HttpService {
             {headers: this.getHeaders()}
         )
     }
+
+    static getOrders() {
+        return axios.get(
+            "/api/orders",
+            {headers: this.getHeaders()}
+        )
+    }
 }
 
 export default HttpService;
