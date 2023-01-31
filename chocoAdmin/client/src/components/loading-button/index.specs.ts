@@ -1,4 +1,4 @@
-import {MouseEventHandler} from "react";
+import {MouseEventHandler, ReactElement} from "react";
 
 export type LoadingButtonSpecs = {
     variant: string
@@ -6,5 +6,6 @@ export type LoadingButtonSpecs = {
     title: string
     isSubmitting: boolean
     type?: "button" | "submit" | "reset" | undefined
+    leftIcon?: ReactElement
     clickHandler?: MouseEventHandler<HTMLButtonElement>
 }

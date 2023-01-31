@@ -8,7 +8,8 @@ export const LoadingButton: FC<LoadingButtonSpecs> = ({
                                                           title,
                                                           type,
                                                           isSubmitting,
-                                                          clickHandler
+                                                          clickHandler,
+                                                          leftIcon
                                                       }) => {
 
     return (
@@ -16,6 +17,7 @@ export const LoadingButton: FC<LoadingButtonSpecs> = ({
             colorScheme={variant}
             title={title}
             type={type}
+            leftIcon={leftIcon}
             onClick={(event) => {
                 if (clickHandler) {
                     clickHandler(event);
