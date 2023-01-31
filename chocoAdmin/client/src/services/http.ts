@@ -1,7 +1,7 @@
 import Headers from "./http.specs";
 import axios, {AxiosResponse} from "axios";
-import {Product} from "./types";
-import {UpdateProductRequestBody} from "./request-bodies";
+import {Order, Product} from "./types";
+import {UpdateOrderRequestBody, UpdateProductRequestBody} from "./request-bodies";
 
 class HttpService {
     private static getHeaders(): Headers {
@@ -76,6 +76,29 @@ class HttpService {
     static getOrderById(orderId: string) {
         return axios.get(
             `/api/orders/${orderId}`,
+            {headers: this.getHeaders()}
+        )
+    }
+
+    static updateOrder(orderId: string, values: UpdateOrderRequestBody) {
+        return axios.patch(
+            `/api/orders/${orderId}`,
+            values,
+            {headers: this.getHeaders()}
+        )
+    }
+
+    static createOrder(values: UpdateOrderRequestBody) {
+        return axios.post(
+            "/api/orders",
+            values,
+            {headers: this.getHeaders()}
+        )
+    }
+
+    static getOrderCities() {
+        return axios.get(
+            "/api/ordercities",
             {headers: this.getHeaders()}
         )
     }
