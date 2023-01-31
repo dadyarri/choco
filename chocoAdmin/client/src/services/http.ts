@@ -72,6 +72,13 @@ class HttpService {
             {headers: this.getHeaders()}
         )
     }
+
+    static getOrderById(orderId: string) {
+        return axios.get(
+            `/api/orders/${orderId}`,
+            {headers: this.getHeaders()}
+        )
+    }
 }
 
 export default HttpService;
