@@ -11,3 +11,13 @@ export const fetchOrdersList = async (): Promise<Order[]> => {
             return error;
         })
 }
+
+export const fetchProductsList = async () => {
+    return await HttpService.getProducts()
+        .then((response) => response.data)
+        .catch((error) => {
+            toast(`Ошибка получения данных!
+            ${error?.response.data}`);
+            return error;
+        })
+}

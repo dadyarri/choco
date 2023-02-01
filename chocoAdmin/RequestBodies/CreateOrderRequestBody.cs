@@ -18,5 +18,5 @@ public class CreateOrderAddressRequestBody
 public class CreateOrderItemsRequestBody
 {
     public Guid Id { get; set; }
-    public int Amount { get; set; }
+    public double Amount { get; set; }
 }

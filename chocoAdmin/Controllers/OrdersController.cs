@@ -138,6 +138,7 @@ public class OrdersController : ControllerBase
         order.Status = orderStatus;
         order.Date = body.Date;
         order.Address = address;
+        order.OrderItems = await FindOrderItems(body.OrderItems);
 
         switch (orderStatus.Name)
         {

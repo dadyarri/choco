@@ -11,11 +11,16 @@ export type UpdateProductRequestBody = {
 
 export type UpdateOrderRequestBody = {
     date: Date | string,
-    orderItems: OrderItem[]
+    orderItems: OrderItemsRequestBody[]
     status: string,
     address: {
         city: string,
         street: string,
         building: string
     }
+}
+
+export type OrderItemsRequestBody = {
+    id: string
+    amount: number
 }
