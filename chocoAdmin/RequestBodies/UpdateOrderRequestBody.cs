@@ -1,5 +1,3 @@
-using choco.Data.Models;
-
 namespace choco.RequestBodies;
 
 public class UpdateOrderRequestBody

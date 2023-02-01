@@ -109,12 +109,12 @@ public class OrdersController : ControllerBase
         return Ok();
     }
 
-    [HttpPut]
-    public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrderRequestBody body)
+    [HttpPatch("{orderId:guid}")]
+    public async Task<ActionResult> UpdateOrder(Guid orderId, [FromBody] UpdateOrderRequestBody body)
     {
         var orderStatus = await _db.OrderStatuses.FindAsync(body.Status);
         var order = await _db.Orders
-            .Where(o => o.Id == body.OrderId)
+            .Where(o => o.Id == orderId)
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Status)
@@ -129,6 +129,10 @@ public class OrdersController : ControllerBase
         }
 
         order.Status = orderStatus;
+        order.Date = body.Date;
+        order.Address.City = await _db.OrderCities.FindAsync(body.Address.City);
+        order.Address.Street = body.Address.Street;
+        order.Address.Building = body.Address.Building;
 
         switch (orderStatus.Name)
         {
@@ -228,13 +232,13 @@ public class OrdersController : ControllerBase
     }
     private async Task ReplacePost()
     {
-        var imageData =
-            ReplacePostUtil.GenerateImage(
-                await _db.Products
-                    .Where(p => p.Leftover > 0 && !p.Deleted)
-                    .ToListAsync()
-            ).ToArray();
-        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+        // var imageData =
+        //     ReplacePostUtil.GenerateImage(
+        //         await _db.Products
+        //             .Where(p => p.Leftover > 0 && !p.Deleted)
+        //             .ToListAsync()
+        //     ).ToArray();
+        // await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
     }
 
     private bool IsStatusChangingPossible(string oldStatus, string newStatus)
