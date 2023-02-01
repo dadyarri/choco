@@ -34,9 +34,13 @@ export const fetchOrderCitiesList = async (): Promise<OrderCity[]> => {
 
 export const updateOrder = async (orderId: string, values: UpdateOrderRequestBody): Promise<Order> => {
     return await HttpService.updateOrder(orderId, values)
-        .then((response) => response.data)
+        .then((response) => {
+            toast("Заказ обновлён!")
+            return response.data
+        })
         .catch((error) => {
-            toast("Ошибка обновления заказа!");
+            toast(`Ошибка обновления заказа!
+${error?.message}`);
             return error;
         })
 }
