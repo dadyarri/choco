@@ -7,7 +7,8 @@ export const getOrderById = async (orderId: string): Promise<Order> => {
     return await HttpService.getOrderById(orderId)
         .then((response) => response.data)
         .catch((error) => {
-            toast("Ошибка получения данных!");
+            toast(`Ошибка получения данных!
+            ${error?.response.data}`);
             return error
         })
 
@@ -17,7 +18,8 @@ export const fetchOrderStatusesList = async (): Promise<OrderStatus[]> => {
     return await HttpService.getOrderStatuses()
         .then((response) => response.data)
         .catch((error) => {
-            toast('Ошибка получения данных!');
+            toast(`Ошибка получения данных!
+            ${error?.response.data}`);
             return error;
         })
 }
@@ -26,7 +28,8 @@ export const fetchOrderCitiesList = async (): Promise<OrderCity[]> => {
     return await HttpService.getOrderCities()
         .then((response) => response.data)
         .catch((error) => {
-            toast('Ошибка получения данных!');
+            toast(`Ошибка получения данных!
+            ${error?.response.data}`);
             return error;
         })
 }
@@ -49,7 +52,8 @@ export const createOrder = async (values: UpdateOrderRequestBody): Promise<Order
     return await HttpService.createOrder(values)
         .then((response) => response.data)
         .catch((error) => {
-            toast("Ошибка создания заказа!");
+            toast(`Ошибка создания заказа!
+            ${error?.response.data}`);
             return error;
         })
 }

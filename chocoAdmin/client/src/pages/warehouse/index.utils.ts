@@ -5,7 +5,8 @@ export const fetchProductsList = async () => {
     return await HttpService.getProducts()
         .then((response) => response.data)
         .catch((error) => {
-            toast('Ошибка получения данных!');
+            toast(`Ошибка получения данных!
+            ${error?.response.data}`);
             return error;
         })
 }
@@ -14,7 +15,8 @@ export const deleteProduct = async (id: string) => {
     return await HttpService.deleteProduct(id)
         .then(response => response.data)
         .catch((error) => {
-            toast("Ошибка удаления товара!");
+            toast(`Ошибка удаления товара!
+            ${error?.response.data}`);
             return error;
         })
 }
@@ -25,7 +27,8 @@ export const openVkPageOfProduct = async (marketId: number) => {
             window.open(url, "_blank");
         })
         .catch((error) => {
-            toast("Ошибка получения ссылки на товар!");
+            toast(`Ошибка получения ссылки на товар!
+            ${error?.response.data}`);
             return error;
         })
 }
