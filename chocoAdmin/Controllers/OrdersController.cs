@@ -125,7 +125,7 @@ public class OrdersController : ControllerBase
 
         if (!IsStatusChangingPossible(order.Status.Name, orderStatus.Name))
         {
-            return Conflict($"{order.Status.Name} \u2192 {orderStatus.Name}");
+            return Conflict($"Переход {order.Status.Name} \u2192 {orderStatus.Name} невозможен");
         }
 
         var address = new OrderAddress
