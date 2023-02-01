@@ -128,11 +128,16 @@ public class OrdersController : ControllerBase
             return Conflict($"{order.Status.Name} \u2192 {orderStatus.Name}");
         }
 
+        var address = new OrderAddress
+        {
+            City = await _db.OrderCities.FindAsync(body.Address.City),
+            Street = body.Address.Street,
+            Building = body.Address.Building
+        };
+        
         order.Status = orderStatus;
         order.Date = body.Date;
-        order.Address.City = await _db.OrderCities.FindAsync(body.Address.City);
-        order.Address.Street = body.Address.Street;
-        order.Address.Building = body.Address.Building;
+        order.Address = address;
 
         switch (orderStatus.Name)
         {
@@ -230,6 +235,7 @@ public class OrdersController : ControllerBase
             });
         }
     }
+
     private async Task ReplacePost()
     {
         // var imageData =
@@ -248,6 +254,7 @@ public class OrdersController : ControllerBase
                oldStatus == "Обрабатывается" && newStatus == "Отменён" ||
                oldStatus == "Отменён" && newStatus == "Обрабатывается" ||
                oldStatus == "Доставляется" && newStatus == "Отменён" ||
-               oldStatus == "Отменён" && newStatus == "Доставляется";
+               oldStatus == "Отменён" && newStatus == "Доставляется" ||
+               oldStatus == newStatus;
     }
 }
