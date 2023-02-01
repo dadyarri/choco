@@ -40,7 +40,7 @@ export const updateOrder = async (orderId: string, values: UpdateOrderRequestBod
         })
         .catch((error) => {
             toast(`Ошибка обновления заказа!
-${error?.message}`);
+${error?.response.data}`);
             return error;
         })
 }
