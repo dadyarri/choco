@@ -25,10 +25,6 @@ public class ReplacePostUtil
                 Photo = attachmentId.Photo
             });
         }
-        else
-        {
-            throw new UploadingImageException("Couldn't upload image to server");
-        }
     }
 
     public static SKData GenerateImage(List<Product> products)
