@@ -21,3 +21,13 @@ export const fetchProductsList = async () => {
             return error;
         })
 }
+
+export const deleteOrder = async (orderId: string) => {
+    return await HttpService.deleteOrder(orderId)
+        .then((response) => response.data)
+        .catch((error) => {
+            toast(`Ошибка удаления заказа!
+            ${error?.response.data}`);
+            return error;
+        })
+}

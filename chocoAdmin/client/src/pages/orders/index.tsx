@@ -1,7 +1,7 @@
-import {useQuery} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 import {AxiosError} from "axios";
 import {Order} from "../../services/types";
-import {fetchOrdersList} from "./index.utils";
+import {deleteOrder, fetchOrdersList} from "./index.utils";
 import {BeatLoader} from "react-spinners";
 import {Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
 import {Link} from "react-router-dom";
@@ -35,6 +35,13 @@ const Orders = () => {
             }
         }
     }
+
+    const deleteOrderMutation = useMutation(
+        "deleteOrder",
+        (orderId: string) => deleteOrder(orderId)
+    )
+
+    const queryClient = useQueryClient();
 
     return (
         isLoading ?
@@ -101,7 +108,8 @@ const Orders = () => {
                                                         prefix={<HiOutlineTrash/>}
                                                         postfixWhenActive={"Удалить?"}
                                                         clickHandler={async (_event) => {
-                                                            // await deleteProductMutation.mutate(product.id)
+                                                            await deleteOrderMutation.mutate(order.id);
+                                                            await queryClient.invalidateQueries("orders");
                                                         }}/>
                                                 </ButtonGroup>
                                             </Td>

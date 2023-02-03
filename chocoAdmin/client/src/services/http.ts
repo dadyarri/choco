@@ -1,6 +1,5 @@
 import Headers from "./http.specs";
 import axios, {AxiosResponse} from "axios";
-import {Order, Product} from "./types";
 import {UpdateOrderRequestBody, UpdateProductRequestBody} from "./request-bodies";
 
 class HttpService {
@@ -92,6 +91,13 @@ class HttpService {
         return axios.post(
             "/api/orders",
             values,
+            {headers: this.getHeaders()}
+        )
+    }
+
+    static deleteOrder(orderId: string) {
+        return axios.delete(
+            `/api/orders/${orderId}`,
             {headers: this.getHeaders()}
         )
     }
