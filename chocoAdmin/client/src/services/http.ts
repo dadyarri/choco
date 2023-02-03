@@ -108,6 +108,13 @@ class HttpService {
             {headers: this.getHeaders()}
         )
     }
+
+    static restoreFromDeleted(orderId: string) {
+        return axios.put(
+            `/api/orders/${orderId}`,
+            {headers: this.getHeaders()}
+        )
+    }
 }
 
 export default HttpService;

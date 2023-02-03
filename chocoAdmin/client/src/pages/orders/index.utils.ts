@@ -31,3 +31,13 @@ export const deleteOrder = async (orderId: string) => {
             return error;
         })
 }
+
+export const restoreFromDeleted = async (orderId: string) => {
+    return await HttpService.restoreFromDeleted(orderId)
+        .then((response) => response.data)
+        .catch((error) => {
+            toast(`Ошибка восстановления заказа
+            ${error?.response.data}`);
+            return error;
+        })
+}
