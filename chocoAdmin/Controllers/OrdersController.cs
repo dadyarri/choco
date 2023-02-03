@@ -239,13 +239,13 @@ public class OrdersController : ControllerBase
 
     private async Task ReplacePost()
     {
-        // var imageData =
-        //     ReplacePostUtil.GenerateImage(
-        //         await _db.Products
-        //             .Where(p => p.Leftover > 0 && !p.Deleted)
-        //             .ToListAsync()
-        //     ).ToArray();
-        // await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
+        var imageData =
+            ReplacePostUtil.GenerateImage(
+                await _db.Products
+                    .Where(p => p.Leftover > 0 && !p.Deleted)
+                    .ToListAsync()
+            ).ToArray();
+        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
     }
 
     private bool IsStatusChangingPossible(string oldStatus, string newStatus)
