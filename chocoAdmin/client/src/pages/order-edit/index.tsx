@@ -29,6 +29,7 @@ import {BiSave} from "react-icons/bi";
 import {LoadingButton} from "../../components/loading-button";
 import {HiOutlineTrash, HiPlus} from "react-icons/hi";
 import {fetchProductsList} from "../orders/index.utils";
+import {DateTime} from "luxon";
 
 export const OrderEdit = () => {
 
@@ -74,7 +75,7 @@ export const OrderEdit = () => {
     } = useQuery<OrderCity[], AxiosError>("orderCities", fetchOrderCitiesList);
 
     const validationSchema = Yup.object().shape({
-        date: Yup.date().required("Обязательно укажите дату заказа"),
+        date: Yup.date(),
         status: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать статус заказа обязательно!"),
         orderItems: Yup.array().of(
             Yup.object().shape({
@@ -120,6 +121,11 @@ export const OrderEdit = () => {
                         }}
                         onSubmit={async (values) => {
                             setSubmitting(true);
+
+                            if (!values.date) {
+                                values.date = DateTime.now().toFormat("yyyy-MM-dd");
+                            }
+
                             if (order) {
                                 await updateOrder(order.id, values);
                                 await queryClient.invalidateQueries(["order", orderId]);
@@ -135,7 +141,7 @@ export const OrderEdit = () => {
                         {({values, errors, touched}) => (
                             <Form>
                                 <VStack spacing={4} align={"flex-start"} mb={4}>
-                                    <FormControl isInvalid={!!errors.date && touched.date} isRequired>
+                                    <FormControl isInvalid={!!errors.date && touched.date}>
                                         <FormLabel>Дата заказа</FormLabel>
                                         <Field type={"date"} name={"date"} as={Input}/>
                                         <FormErrorMessage>{errors.date}</FormErrorMessage>
