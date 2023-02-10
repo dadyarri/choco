@@ -44,6 +44,14 @@ export const PieChart: FC<PieChartProps> = (data) => {
 
     const colors = Array.from({length: data.data.length}, getRandomColor);
 
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom' as const,
+            },
+        },
+    };
 
     const pieData = {
         labels: data.data?.map(item => item.name),
@@ -59,7 +67,7 @@ export const PieChart: FC<PieChartProps> = (data) => {
     }
 
     return (
-        <Pie data={pieData}/>
+        <Pie options={options} data={pieData}/>
     )
 
 
