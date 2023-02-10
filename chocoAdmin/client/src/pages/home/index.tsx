@@ -1,15 +1,17 @@
 import React, {FC} from "react";
 import {useQuery} from "react-query";
-import {getStatsByCity} from "./index.utils";
-import {StatsByCity, StatsCompareIncomes} from "../../services/types";
+import {getStatsByCity, getTopProducts} from "./index.utils";
+import {StatsByCity, StatsCompareIncomes, StatsTopProducts} from "../../services/types";
 import {AxiosError} from "axios";
 import {Grid, GridItem, Heading, Spinner} from "@chakra-ui/react";
 import {PieChart} from "../../components/charts/pie-chart/pie-chart";
+import {TopProducts} from "../../components/charts/top-products";
 
 const Home: FC = () => {
 
     const {isLoading: isStatsByCityLoading, isError: isStatsByCityError, data: statsByCity} = useQuery<StatsByCity, AxiosError>("statsByCity", getStatsByCity);
     const {data: compareIncomes} = useQuery<StatsCompareIncomes, AxiosError>("compareIncomes", getStatsByCity);
+    const {isLoading: isTopProductsLoading, isError: isTopProductsError, data: topProductsData} = useQuery<StatsTopProducts, AxiosError>("topProducts", getTopProducts);
     // const {data: statsTopProducts} = useQuery("statsByCity", getStatsByCity);
     // const {data: statsCategories} = useQuery("statsByCity", getStatsByCity);
     // const {data: statsTotal2} = useQuery("statsByCity", getStatsByCity);
@@ -27,7 +29,12 @@ const Home: FC = () => {
             <GridItem w='100%' >
                 {/*<CompareIncomes data={compareIncomes!}/>*/}
             </GridItem>
-            <GridItem w='100%' ></GridItem>
+            <GridItem w='100%' >
+                <Heading size={"md"} mb={4}>10 самых продаваемых товаров</Heading>
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/*@ts-ignore*/}
+                {isTopProductsLoading ? <Spinner/> : !isTopProductsError ? <TopProducts data={topProductsData!}/>: null}
+            </GridItem>
             <GridItem w='100%' ></GridItem>
             <GridItem w='100%' ></GridItem>
         </Grid>
