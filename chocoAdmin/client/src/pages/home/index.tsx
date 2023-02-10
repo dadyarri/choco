@@ -7,6 +7,7 @@ import {GridItem, Heading, SimpleGrid, Spinner} from "@chakra-ui/react";
 import {PieChart} from "../../components/charts/pie-chart";
 import {TopProducts} from "../../components/charts/top-products";
 import {CompareIncomes} from "../../components/charts/compare-incomes";
+import {IncomesChart} from "../../components/charts/incomes-chart";
 
 const Home: FC = () => {
 
@@ -25,7 +26,11 @@ const Home: FC = () => {
         isError: isTopProductsError,
         data: topProductsData
     } = useQuery<StatsTopProducts, AxiosError>("topProducts", getTopProducts);
-    // const {data: statsTopProducts} = useQuery("statsByCity", getStatsByCity);
+    const {
+        isLoading: isIncomesStatsLoading,
+        isError: isIncomesStatsError,
+        data: incomesStats
+    } = useQuery<StatsCompareIncomes, AxiosError>(["compareIncomes", 10], () => getIncomesInfo(10));
     // const {data: statsCategories} = useQuery("statsByCity", getStatsByCity);
     // const {data: statsTotal2} = useQuery("statsByCity", getStatsByCity);
     // const {data: statsTotal10} = useQuery("statsByCity", getStatsByCity);
@@ -47,7 +52,11 @@ const Home: FC = () => {
                 {isTopProductsLoading ? <Spinner/> : !isTopProductsError ?
                     <TopProducts data={topProductsData!}/> : null}
             </GridItem>
-            <GridItem w='100%'></GridItem>
+            <GridItem w='100%'>
+                <Heading size={"md"} mb={4}>Продажи за последние 10 месяцев</Heading>
+                {isIncomesStatsLoading ? <Spinner/> : !isIncomesStatsError ?
+                    <IncomesChart data={incomesStats!}/> : null}
+            </GridItem>
             <GridItem w='100%'></GridItem>
         </SimpleGrid>
     </div>
