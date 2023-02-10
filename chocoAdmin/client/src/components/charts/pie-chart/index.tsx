@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {Pie} from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 
 type PieChartProps = {
     data: {
@@ -24,14 +24,25 @@ export const PieChart: FC<PieChartProps> = (data) => {
         throw new Error('Bad Hex');
     }
 
-    const colors = [
-        "#FF6384",
-        "#36A2EB",
-        "#FFCE56",
-        "#4BC0C0",
-        "#9966FF",
-        "#FF9F40",
-    ];
+
+    const getRandomColor = () => {
+
+        const h = Math.floor(Math.random() * 360);
+        const s = 100;
+        let l = 30;
+
+        l /= 100;
+        const a = s * Math.min(l, 1 - l) / 100;
+        const f = (n: number) => {
+            const k = (n + h / 30) % 12;
+            const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+            return Math.round(255 * color).toString(16).padStart(2, '0');
+        };
+        return `#${f(0)}${f(8)}${f(4)}`;
+
+    }
+
+    const colors = Array.from({length: data.data.length}, getRandomColor);
 
 
     const pieData = {
