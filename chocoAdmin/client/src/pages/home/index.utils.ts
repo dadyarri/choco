@@ -20,3 +20,13 @@ export const getTopProducts = async () => {
             return error
         })
 }
+
+export const getIncomesInfo = async (months: number) => {
+    return await HttpService.getIncomesInfo(months)
+        .then((response) => response.data)
+        .catch((error) => {
+            toast(`Ошибка получения данных
+        ${error.data?.message}`);
+            return error
+        })
+}

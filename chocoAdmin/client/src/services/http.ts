@@ -129,6 +129,13 @@ class HttpService {
             {headers: this.getHeaders()}
         );
     }
+
+    static getIncomesInfo(months: number) {
+        return axios.get(
+            `/api/Stats/TotalIncomes/${months}`,
+            {headers: this.getHeaders()}
+        );
+    }
 }
 
 export default HttpService;

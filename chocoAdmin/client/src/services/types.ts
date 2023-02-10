@@ -55,9 +55,7 @@ export type StatByCity = {
 
 export type StatsByCity = StatByCity[]
 
-export type StatsCompareIncomes = {
-    data: IncomeInfo[]
-}
+export type StatsCompareIncomes = IncomeInfo[]
 
 export type IncomeInfo = {
     index: number
