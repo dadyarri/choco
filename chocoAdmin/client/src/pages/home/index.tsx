@@ -3,7 +3,7 @@ import {useQuery} from "react-query";
 import {getStatsByCity, getTopProducts} from "./index.utils";
 import {StatsByCity, StatsCompareIncomes, StatsTopProducts} from "../../services/types";
 import {AxiosError} from "axios";
-import {Grid, GridItem, Heading, Spinner} from "@chakra-ui/react";
+import {GridItem, Heading, SimpleGrid, Spinner} from "@chakra-ui/react";
 import {PieChart} from "../../components/charts/pie-chart/pie-chart";
 import {TopProducts} from "../../components/charts/top-products";
 
@@ -18,7 +18,7 @@ const Home: FC = () => {
     // const {data: statsTotal10} = useQuery("statsByCity", getStatsByCity);
 
     return <div>
-        <Grid templateColumns='repeat(5, 1fr)' gap={6}>
+        <SimpleGrid columns={[1, 2, 3, 4]} gap={6}>
             <GridItem w='100%' >
                 <Heading size={"md"} mb={4}>Продажи по городам</Heading>
                 {isStatsByCityLoading ? <Spinner/> : !isStatsByCityError ? <PieChart data={statsByCity!}/> : null}
@@ -33,7 +33,7 @@ const Home: FC = () => {
             </GridItem>
             <GridItem w='100%' ></GridItem>
             <GridItem w='100%' ></GridItem>
-        </Grid>
+        </SimpleGrid>
     </div>
 }
 
