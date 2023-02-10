@@ -115,6 +115,13 @@ class HttpService {
             {headers: this.getHeaders()}
         )
     }
+
+    static getStatsByCity() {
+        return axios.get(
+            "/api/Stats/ByCity",
+            {headers: this.getHeaders()}
+        );
+    }
 }
 
 export default HttpService;

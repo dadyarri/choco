@@ -47,3 +47,20 @@ export type OrderCity = {
     id: string
     name: string
 }
+
+export type StatByCity = {
+    name: string,
+    value: number
+}
+
+export type StatsByCity = StatByCity[]
+
+export type StatsCompareIncomes = {
+    data: IncomeInfo[]
+}
+
+export type IncomeInfo = {
+    index: number
+    dateInfo: string,
+    total: number
+}
