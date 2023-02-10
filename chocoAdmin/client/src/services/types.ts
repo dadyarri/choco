@@ -64,3 +64,10 @@ export type IncomeInfo = {
     dateInfo: string,
     total: number
 }
+
+export type StatsTopProducts = {
+    data: {
+        name: string,
+        value: number
+    }[]
+}

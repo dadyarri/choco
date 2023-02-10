@@ -122,6 +122,13 @@ class HttpService {
             {headers: this.getHeaders()}
         );
     }
+
+    static getTopProducts() {
+        return axios.get(
+            "/api/Stats/TopProducts",
+            {headers: this.getHeaders()}
+        );
+    }
 }
 
 export default HttpService;
