@@ -21,9 +21,7 @@ const Home: FC = () => {
         <Grid templateColumns='repeat(5, 1fr)' gap={6}>
             <GridItem w='100%' >
                 <Heading size={"md"} mb={4}>Продажи по городам</Heading>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/*@ts-ignore*/}
-                {isStatsByCityLoading ? <Spinner/> : !isStatsByCityError ? <PieChart data={statsByCity}/> : null}
+                {isStatsByCityLoading ? <Spinner/> : !isStatsByCityError ? <PieChart data={statsByCity!}/> : null}
 
             </GridItem>
             <GridItem w='100%' >
@@ -31,8 +29,6 @@ const Home: FC = () => {
             </GridItem>
             <GridItem w='100%' >
                 <Heading size={"md"} mb={4}>10 самых продаваемых товаров</Heading>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/*@ts-ignore*/}
                 {isTopProductsLoading ? <Spinner/> : !isTopProductsError ? <TopProducts data={topProductsData!}/>: null}
             </GridItem>
             <GridItem w='100%' ></GridItem>

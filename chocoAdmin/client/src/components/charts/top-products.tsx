@@ -1,11 +1,12 @@
 import {List} from "@chakra-ui/react";
 import {FC} from "react";
 
+type TopProduct = {
+  name: string,
+  value: number
+};
 type TopProductsProps = {
-  data: {
-    name: string,
-    value: number
-  }[]
+  data: TopProduct[]
 }
 
 export const TopProducts: FC<TopProductsProps> = ({ data }) => {

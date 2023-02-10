@@ -66,8 +66,6 @@ export type IncomeInfo = {
 }
 
 export type StatsTopProducts = {
-    data: {
-        name: string,
-        value: number
-    }[]
-}
+    name: string,
+    value: number
+}[]
