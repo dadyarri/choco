@@ -4,7 +4,7 @@ import {getStatsByCity, getTopProducts} from "./index.utils";
 import {StatsByCity, StatsCompareIncomes, StatsTopProducts} from "../../services/types";
 import {AxiosError} from "axios";
 import {GridItem, Heading, SimpleGrid, Spinner} from "@chakra-ui/react";
-import {PieChart} from "../../components/charts/pie-chart/pie-chart";
+import {PieChart} from "../../components/charts/pie-chart";
 import {TopProducts} from "../../components/charts/top-products";
 
 const Home: FC = () => {
