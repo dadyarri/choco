@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {useQuery} from "react-query";
-import {getIncomesInfo, getStatsByCity, getTopProducts} from "./index.utils";
-import {StatsByCity, StatsCompareIncomes, StatsTopProducts} from "../../services/types";
+import {getIncomesInfo, getStatsByCategory, getStatsByCity, getTopProducts} from "./index.utils";
+import {StatsBy, StatsCompareIncomes, StatsTopProducts} from "../../services/types";
 import {AxiosError} from "axios";
 import {GridItem, Heading, SimpleGrid, Spinner} from "@chakra-ui/react";
 import {PieChart} from "../../components/charts/pie-chart";
@@ -15,7 +15,7 @@ const Home: FC = () => {
         isLoading: isStatsByCityLoading,
         isError: isStatsByCityError,
         data: statsByCity
-    } = useQuery<StatsByCity, AxiosError>("statsByCity", getStatsByCity);
+    } = useQuery<StatsBy, AxiosError>("statsByCity", getStatsByCity);
     const {
         isLoading: isCompareIncomesLoading,
         isError: isCompareIncomesError,
@@ -31,9 +31,11 @@ const Home: FC = () => {
         isError: isIncomesStatsError,
         data: incomesStats
     } = useQuery<StatsCompareIncomes, AxiosError>(["compareIncomes", 10], () => getIncomesInfo(10));
-    // const {data: statsCategories} = useQuery("statsByCity", getStatsByCity);
-    // const {data: statsTotal2} = useQuery("statsByCity", getStatsByCity);
-    // const {data: statsTotal10} = useQuery("statsByCity", getStatsByCity);
+    const {
+        isLoading: isStatsByCategoryLoading,
+        isError: isStatsByCategoryError,
+        data: statsByCategory
+    } = useQuery<StatsBy, AxiosError>("statsByCategory", getStatsByCategory);
 
     return <div>
         <SimpleGrid columns={[1, 2, 3, 4]} gap={6}>
@@ -57,7 +59,10 @@ const Home: FC = () => {
                 {isIncomesStatsLoading ? <Spinner/> : !isIncomesStatsError ?
                     <IncomesChart data={incomesStats!}/> : null}
             </GridItem>
-            <GridItem w='100%'></GridItem>
+            <GridItem w='100%'>
+                <Heading size={"md"} mb={4}>Продажи по категориям</Heading>
+                {isStatsByCategoryLoading ? <Spinner/> : !isStatsByCategoryError ? <PieChart data={statsByCategory!}/> : null}
+            </GridItem>
         </SimpleGrid>
     </div>
 }
