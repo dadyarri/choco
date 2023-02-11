@@ -27,6 +27,7 @@ export const IncomesChart: FC<IncomesChartProps> = ({data}) => {
 
     const options = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 position: 'bottom' as const,
