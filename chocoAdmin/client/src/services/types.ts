@@ -67,3 +67,23 @@ export type StatsTopProducts = {
     name: string,
     value: number
 }[]
+
+export type Shipment = {
+    id: string
+    date: Date
+    status: ShipmentStatus
+    shipmentItems: ShipmentItem[]
+    deleted: boolean
+
+}
+
+export type ShipmentStatus = {
+    id: string
+    name: string
+}
+
+export type ShipmentItem = {
+    id: string
+    product: Product
+    amount: number
+}
