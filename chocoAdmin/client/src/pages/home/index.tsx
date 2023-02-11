@@ -3,7 +3,7 @@ import {useQuery} from "react-query";
 import {getIncomesInfo, getStatsByCategory, getStatsByCity, getTopProducts} from "./index.utils";
 import {StatsBy, StatsCompareIncomes, StatsTopProducts} from "../../services/types";
 import {AxiosError} from "axios";
-import {GridItem, Heading, SimpleGrid, Spinner} from "@chakra-ui/react";
+import {Card, CardBody, CardHeader, GridItem, Heading, SimpleGrid, Spinner} from "@chakra-ui/react";
 import {PieChart} from "../../components/charts/pie-chart";
 import {TopProducts} from "../../components/charts/top-products";
 import {CompareIncomes} from "../../components/charts/compare-incomes";
@@ -40,28 +40,59 @@ const Home: FC = () => {
     return <div>
         <SimpleGrid columns={[1, 2, 3, 4]} gap={6}>
             <GridItem w='100%'>
-                <Heading size={"md"} mb={4}>Продажи по городам</Heading>
-                {isStatsByCityLoading ? <Spinner/> : !isStatsByCityError ? <PieChart data={statsByCity!}/> : null}
-
+                <Card>
+                    <CardHeader>
+                        <Heading size={"md"} mb={4}>Продажи по городам</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        {isStatsByCityLoading ? <Spinner/> : !isStatsByCityError ?
+                            <PieChart data={statsByCity!}/> : null}
+                    </CardBody>
+                </Card>
             </GridItem>
             <GridItem w='100%'>
-                <Heading size={"md"} mb={4}>Сравнение продаж за последние два месяца</Heading>
-                {isCompareIncomesLoading ? <Spinner/> : !isCompareIncomesError ?
-                    <CompareIncomes data={compareIncomes!}/> : null}
+                <Card>
+                    <CardHeader>
+                        <Heading size={"md"} mb={4}>Сравнение продаж за последние два месяца</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        {isCompareIncomesLoading ? <Spinner/> : !isCompareIncomesError ?
+                            <CompareIncomes data={compareIncomes!}/> : null}
+                    </CardBody>
+                </Card>
             </GridItem>
             <GridItem w='100%'>
-                <Heading size={"md"} mb={4}>10 самых продаваемых товаров</Heading>
-                {isTopProductsLoading ? <Spinner/> : !isTopProductsError ?
-                    <TopProducts data={topProductsData!}/> : null}
+                <Card>
+                    <CardHeader>
+                        <Heading size={"md"} mb={4}>10 самых продаваемых товаров</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        {isTopProductsLoading ? <Spinner/> : !isTopProductsError ?
+                            <TopProducts data={topProductsData!}/> : null}
+                    </CardBody>
+                </Card>
             </GridItem>
             <GridItem w='100%'>
-                <Heading size={"md"} mb={4}>Продажи за последние 10 месяцев</Heading>
-                {isIncomesStatsLoading ? <Spinner/> : !isIncomesStatsError ?
-                    <IncomesChart data={incomesStats!}/> : null}
+                <Card>
+                    <CardHeader>
+                        <Heading size={"md"} mb={4}>Продажи за последние 10 месяцев</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        {isIncomesStatsLoading ? <Spinner/> : !isIncomesStatsError ?
+                            <IncomesChart data={incomesStats!}/> : null}
+                    </CardBody>
+                </Card>
             </GridItem>
             <GridItem w='100%'>
-                <Heading size={"md"} mb={4}>Продажи по категориям</Heading>
-                {isStatsByCategoryLoading ? <Spinner/> : !isStatsByCategoryError ? <PieChart data={statsByCategory!}/> : null}
+                <Card>
+                    <CardHeader>
+                        <Heading size={"md"} mb={4}>Продажи по категориям</Heading>
+                    </CardHeader>
+                    <CardBody>
+                        {isStatsByCategoryLoading ? <Spinner/> : !isStatsByCategoryError ?
+                            <PieChart data={statsByCategory!}/> : null}
+                    </CardBody>
+                </Card>
             </GridItem>
         </SimpleGrid>
     </div>
