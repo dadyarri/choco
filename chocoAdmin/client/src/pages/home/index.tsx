@@ -42,7 +42,7 @@ const Home: FC = () => {
             <GridItem w='100%'>
                 <Card>
                     <CardHeader>
-                        <Heading size={"md"} mb={4}>Продажи по городам</Heading>
+                        <Heading size={"md"}>Продажи по городам</Heading>
                     </CardHeader>
                     <CardBody>
                         {isStatsByCityLoading ? <Spinner/> : !isStatsByCityError ?
@@ -53,7 +53,7 @@ const Home: FC = () => {
             <GridItem w='100%'>
                 <Card>
                     <CardHeader>
-                        <Heading size={"md"} mb={4}>Сравнение продаж за последние два месяца</Heading>
+                        <Heading size={"md"}>Сравнение продаж за последние два месяца</Heading>
                     </CardHeader>
                     <CardBody>
                         {isCompareIncomesLoading ? <Spinner/> : !isCompareIncomesError ?
@@ -64,7 +64,7 @@ const Home: FC = () => {
             <GridItem w='100%'>
                 <Card>
                     <CardHeader>
-                        <Heading size={"md"} mb={4}>10 самых продаваемых товаров</Heading>
+                        <Heading size={"md"}>10 самых продаваемых товаров</Heading>
                     </CardHeader>
                     <CardBody>
                         {isTopProductsLoading ? <Spinner/> : !isTopProductsError ?
@@ -75,7 +75,7 @@ const Home: FC = () => {
             <GridItem w='100%'>
                 <Card>
                     <CardHeader>
-                        <Heading size={"md"} mb={4}>Продажи за последние 10 месяцев</Heading>
+                        <Heading size={"md"}>Продажи за последние 10 месяцев</Heading>
                     </CardHeader>
                     <CardBody>
                         {isIncomesStatsLoading ? <Spinner/> : !isIncomesStatsError ?
@@ -86,7 +86,7 @@ const Home: FC = () => {
             <GridItem w='100%'>
                 <Card>
                     <CardHeader>
-                        <Heading size={"md"} mb={4}>Продажи по категориям</Heading>
+                        <Heading size={"md"}>Продажи по категориям</Heading>
                     </CardHeader>
                     <CardBody>
                         {isStatsByCategoryLoading ? <Spinner/> : !isStatsByCategoryError ?
