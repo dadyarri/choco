@@ -136,6 +136,13 @@ class HttpService {
             {headers: this.getHeaders()}
         );
     }
+
+    static getStatsByCategory() {
+        return axios.get(
+            `/api/Stats/Categories`,
+            {headers: this.getHeaders()}
+        );
+    }
 }
 
 export default HttpService;

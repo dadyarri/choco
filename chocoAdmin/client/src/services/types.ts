@@ -48,12 +48,12 @@ export type OrderCity = {
     name: string
 }
 
-export type StatByCity = {
+export type StatBy = {
     name: string,
     value: number
 }
 
-export type StatsByCity = StatByCity[]
+export type StatsBy = StatBy[]
 
 export type StatsCompareIncomes = IncomeInfo[]
 

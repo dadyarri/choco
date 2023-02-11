@@ -30,3 +30,12 @@ export const getIncomesInfo = async (months: number) => {
             return error
         })
 }
+
+export const getStatsByCategory = async () => {
+    return await HttpService.getStatsByCategory().then(
+        (response) => response.data
+    ).catch((error) => {
+        toast(`Ошибка получения данных
+        ${error.data?.message}`);
+    })
+}
