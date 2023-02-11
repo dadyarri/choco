@@ -1,4 +1,4 @@
-import {List} from "@chakra-ui/react";
+import {ListItem, UnorderedList} from "@chakra-ui/react";
 import {FC} from "react";
 
 type TopProduct = {
@@ -10,7 +10,7 @@ type TopProductsProps = {
 }
 
 export const TopProducts: FC<TopProductsProps> = ({ data }) => {
-  return <List>
-      {data.map((item) => <li key={item.name}>{item.name} (в {item.value} заказах)</li>)}
-  </List>
+  return <UnorderedList>
+      {data.map((item) => <ListItem key={item.name}>{item.name} (в {item.value} заказах)</ListItem>)}
+  </UnorderedList>
 }
