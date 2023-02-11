@@ -195,7 +195,7 @@ public class OrdersController : ControllerBase
 
         var order = new Order
         {
-            Date = DateOnly.ParseExact(body.Date, "yyyy-mm-dd"),
+            Date = DateOnly.ParseExact(body.Date, "yyyy-MM-dd"),
             Address = new OrderAddress
             {
                 Building = body.Address.Building,
