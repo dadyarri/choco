@@ -5,6 +5,7 @@ import Home from "../pages/home";
 import ProductEdit from "../pages/product-edit";
 import Orders from "../pages/orders";
 import {OrderEdit} from "../pages/order-edit";
+import Shipments from "../pages/shipments";
 
 const routes: Route[] = [
     {
@@ -17,6 +18,11 @@ const routes: Route[] = [
         path: "/orders",
         element: <Orders/>,
         label: "Заказы"
+    },
+    {
+        path: "/shipments",
+        element: <Shipments/>,
+        label: "Поставки"
     },
     {
         path: "/warehouse",
