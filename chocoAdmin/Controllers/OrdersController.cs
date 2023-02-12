@@ -251,6 +251,7 @@ public class OrdersController : ControllerBase
     private bool IsStatusChangingPossible(string oldStatus, string newStatus)
     {
         return oldStatus == "Обрабатывается" && newStatus == "Доставляется" ||
+               oldStatus == "Обрабатывается" && newStatus == "Выполнен" ||
                oldStatus == "Доставляется" && newStatus == "Выполнен" ||
                oldStatus == "Обрабатывается" && newStatus == "Отменён" ||
                oldStatus == "Отменён" && newStatus == "Обрабатывается" ||
