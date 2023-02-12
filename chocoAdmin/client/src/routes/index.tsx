@@ -6,6 +6,7 @@ import ProductEdit from "../pages/product-edit";
 import Orders from "../pages/orders";
 import {OrderEdit} from "../pages/order-edit";
 import Shipments from "../pages/shipments";
+import {ShipmentEdit} from "../pages/shipment-edit";
 
 const routes: Route[] = [
     {
@@ -44,6 +45,14 @@ const routes: Route[] = [
     {
         path: "/orders/edit/:orderId",
         element: <OrderEdit/>
+    },
+    {
+        "path": "/shipments/add",
+        element: <ShipmentEdit/>
+    },
+    {
+        "path": "/shipments/edit/:shipmentId",
+        element: <ShipmentEdit/>
     }
 ];
 
