@@ -131,30 +131,32 @@ public class ShipmentsController : ControllerBase
         return Ok(order);
     }
 
-    [HttpPut]
-    public async Task<ActionResult> UpdateShipment([FromBody] UpdateShipmentRequestBody body)
+    [HttpPatch("{shipmentId:guid}")]
+    public async Task<ActionResult> UpdateShipment(Guid shipmentId, [FromBody] UpdateShipmentRequestBody body)
     {
-        var orderStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
-        var order = await _db.Shipments
-            .Where(s => s.Id == body.ShipmentId)
+        var shipmentStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
+        var shipment = await _db.Shipments
+            .Where(s => s.Id == shipmentId)
             .Include(s => s.ShipmentItems)
             .ThenInclude(si => si.Product)
             .Include(s => s.Status)
             .FirstOrDefaultAsync();
 
-        if (orderStatus == null) return NotFound();
-        if (order == null) return NotFound();
+        if (shipmentStatus == null) return NotFound();
+        if (shipment == null) return NotFound();
 
-        if (!IsStatusChangingPossible(order.Status.Name, orderStatus.Name))
+        if (!IsStatusChangingPossible(shipment.Status.Name, shipmentStatus.Name))
         {
-            return Conflict($"{order.Status.Name} → {orderStatus.Name}");
+            return Conflict($"{shipment.Status.Name} → {shipmentStatus.Name}");
         }
 
-        order.Status = orderStatus;
+        shipment.Status = shipmentStatus;
+        shipment.Date = shipment.Date;
+        shipment.ShipmentItems = await FindShipmentItems(body.ShipmentItems);
 
-        if (orderStatus.Name == "Выполнена")
+        if (shipmentStatus.Name == "Выполнена")
         {
-            foreach (var item in order.ShipmentItems)
+            foreach (var item in shipment.ShipmentItems)
             {
                 item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
