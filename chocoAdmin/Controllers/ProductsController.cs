@@ -27,6 +27,19 @@ public class ProductsController : ControllerBase
     {
         return Ok(await _db.Products
             .OrderBy(p => p.Name)
+            .Select(p =>
+                new Product
+                {
+                    Category = null,
+                    Deleted = p.Deleted,
+                    Id = p.Id,
+                    IsByWeight = p.IsByWeight,
+                    Leftover = Math.Round(p.Leftover, 2),
+                    MarketId = p.MarketId,
+                    Name = p.Name,
+                    RetailPrice = p.RetailPrice,
+                    WholesalePrice = p.WholesalePrice
+                })
             .ToListAsync()
         );
     }
