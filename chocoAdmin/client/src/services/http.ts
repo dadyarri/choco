@@ -151,9 +151,9 @@ class HttpService {
         )
     }
 
-    static getShipmentById(orderId: string) {
+    static getShipmentById(shipmentId: string) {
         return axios.get(
-            `/api/shipments/${orderId}`,
+            `/api/shipments/${shipmentId}`,
             {headers: this.getHeaders()}
         )
     }

@@ -41,7 +41,7 @@ export const ShipmentEdit = () => {
         data: shipment,
         error: shipmentError
     } = useQuery<Shipment, AxiosError>(
-        ["order", shipmentId],
+        ["shipment", shipmentId],
         () => getShipmentById(shipmentId!),
         {enabled: shipmentId !== undefined}
     );
@@ -53,11 +53,11 @@ export const ShipmentEdit = () => {
         fetchProductsList,
     )
 
-    const orderItems = []
+    const shipmentItems = []
 
     if (shipment) {
         for (let i = 0; i < shipment.shipmentItems.length; i++) {
-            orderItems.push({id: shipment.shipmentItems[i].product.id, amount: shipment.shipmentItems[i].amount})
+            shipmentItems.push({id: shipment.shipmentItems[i].product.id, amount: shipment.shipmentItems[i].amount})
         }
     }
 
@@ -73,7 +73,7 @@ export const ShipmentEdit = () => {
     const validationSchema = Yup.object().shape({
         date: Yup.date(),
         status: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать статус заказа обязательно!"),
-        orderItems: Yup.array().of(
+        shipmentItems: Yup.array().of(
             Yup.object().shape({
                 id: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
                 amount: Yup.number().required("Количество товара обязательно!").positive("Количество товара не может быть меньше или равно нулю")
@@ -94,7 +94,7 @@ export const ShipmentEdit = () => {
                     <Formik
                         initialValues={{
                             date: shipment ? shipment.date : '',
-                            orderItems: shipment ? orderItems : [],
+                            shipmentItems: shipment ? shipmentItems : [],
                             status: shipment ? shipment.status.id : '',
                         }}
                         onSubmit={async (values) => {
@@ -138,7 +138,7 @@ export const ShipmentEdit = () => {
                                         </Field>
                                         <FormErrorMessage>{errors.status}</FormErrorMessage>
                                     </FormControl>
-                                    <FieldArray name={"orderItems"}>
+                                    <FieldArray name={"shipmentItems"}>
                                         {(arrayHelpers) => (
                                             <FormControl>
                                                 <FormLabel>Содержимое поставки</FormLabel>
@@ -157,7 +157,7 @@ export const ShipmentEdit = () => {
 
                                                         </IconButton>
                                                     </Flex>
-                                                    {values.orderItems.length > 0 && <Table variant={"striped"}>
+                                                    {values.shipmentItems.length > 0 && <Table variant={"striped"}>
                                                         <Thead>
                                                             <Tr>
                                                                 <Th>Товар</Th>
@@ -166,7 +166,7 @@ export const ShipmentEdit = () => {
                                                             </Tr>
                                                         </Thead>
                                                         <Tbody>
-                                                            {values.orderItems.map((item, index) =>
+                                                            {values.shipmentItems.map((item, index) =>
                                                                 <Tr key={index}>
                                                                     <Td>
                                                                         <FormControl>

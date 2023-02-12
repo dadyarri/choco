@@ -19,7 +19,7 @@ export type UpdateOrderRequestBody = {
 }
 export type UpdateShipmentRequestBody = {
     date: Date | string,
-    orderItems: ShipmentItemsRequestBody[]
+    shipmentItems: ShipmentItemsRequestBody[]
     status: string,
 }
 

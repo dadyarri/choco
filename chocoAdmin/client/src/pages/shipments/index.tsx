@@ -112,7 +112,7 @@ const Shipments = () => {
                                                         colorScheme={"blue"}
                                                         title={"Редактировать"}
                                                         type={"button"}
-                                                        to={`/orders/edit/${shipment.id}`}
+                                                        to={`/shipments/edit/${shipment.id}`}
                                                     >
                                                         <HiPencil/>
                                                     </Button>

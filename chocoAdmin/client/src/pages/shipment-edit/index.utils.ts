@@ -3,8 +3,8 @@ import HttpService from "../../services/http";
 import {toast} from "react-toastify";
 import {UpdateShipmentRequestBody} from "../../services/request-bodies";
 
-export const getShipmentById = async (orderId: string): Promise<Shipment> => {
-    return await HttpService.getShipmentById(orderId)
+export const getShipmentById = async (shipmentId: string): Promise<Shipment> => {
+    return await HttpService.getShipmentById(shipmentId)
         .then((response) => response.data)
         .catch((error) => {
             toast(`Ошибка получения данных!
