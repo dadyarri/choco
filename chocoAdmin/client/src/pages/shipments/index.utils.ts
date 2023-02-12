@@ -1,4 +1,4 @@
-import {Order, Shipment} from "../../services/types";
+import {Shipment} from "../../services/types";
 import HttpService from "../../services/http";
 import {toast} from "react-toastify";
 
@@ -12,18 +12,8 @@ export const fetchShipmentsList = async (): Promise<Shipment[]> => {
         })
 }
 
-export const fetchProductsList = async () => {
-    return await HttpService.getProducts()
-        .then((response) => response.data)
-        .catch((error) => {
-            toast(`Ошибка получения данных!
-            ${error?.response.data}`);
-            return error;
-        })
-}
-
-export const deleteOrder = async (orderId: string) => {
-    return await HttpService.deleteOrder(orderId)
+export const deleteShipment = async (shipmentId: string) => {
+    return await HttpService.deleteShipment(shipmentId)
         .then((response) => response.data)
         .catch((error) => {
             toast(`Ошибка удаления заказа!
@@ -33,7 +23,7 @@ export const deleteOrder = async (orderId: string) => {
 }
 
 export const restoreFromDeleted = async (orderId: string) => {
-    return await HttpService.restoreFromDeleted(orderId)
+    return await HttpService.restoreShipmentFromDeleted(orderId)
         .then((response) => response.data)
         .catch((error) => {
             toast(`Ошибка восстановления заказа

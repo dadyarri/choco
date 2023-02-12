@@ -109,7 +109,7 @@ class HttpService {
         )
     }
 
-    static restoreFromDeleted(orderId: string) {
+    static restoreOrderFromDeleted(orderId: string) {
         return axios.put(
             `/api/orders/${orderId}`,
             {headers: this.getHeaders()}
@@ -177,6 +177,20 @@ class HttpService {
         return axios.post(
             "/api/shipments",
             values,
+            {headers: this.getHeaders()}
+        )
+    }
+
+    static deleteShipment(shipmentId: string) {
+        return axios.delete(
+            `/api/shipments/${shipmentId}`,
+            {headers: this.getHeaders()}
+        )
+    }
+
+    static restoreShipmentFromDeleted(shipmentId: string) {
+        return axios.put(
+            `/api/shipments/${shipmentId}`,
             {headers: this.getHeaders()}
         )
     }
