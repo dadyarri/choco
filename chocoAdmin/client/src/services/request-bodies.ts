@@ -1,5 +1,3 @@
-import {OrderItem} from "./types";
-
 export type UpdateProductRequestBody = {
     name: string,
     wholesalePrice: string | number,
@@ -19,8 +17,18 @@ export type UpdateOrderRequestBody = {
         building: string
     }
 }
+export type UpdateShipmentRequestBody = {
+    date: Date | string,
+    orderItems: ShipmentItemsRequestBody[]
+    status: string,
+}
 
 export type OrderItemsRequestBody = {
+    id: string
+    amount: number
+}
+
+export type ShipmentItemsRequestBody = {
     id: string
     amount: number
 }

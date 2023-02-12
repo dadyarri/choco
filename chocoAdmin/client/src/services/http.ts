@@ -1,6 +1,6 @@
 import Headers from "./http.specs";
 import axios, {AxiosResponse} from "axios";
-import {UpdateOrderRequestBody, UpdateProductRequestBody} from "./request-bodies";
+import {UpdateOrderRequestBody, UpdateProductRequestBody, UpdateShipmentRequestBody} from "./request-bodies";
 
 class HttpService {
     private static getHeaders(): Headers {
@@ -147,6 +147,36 @@ class HttpService {
     static getShipments() {
         return axios.get(
             "/api/shipments",
+            {headers: this.getHeaders()}
+        )
+    }
+
+    static getShipmentById(orderId: string) {
+        return axios.get(
+            `/api/shipments/${orderId}`,
+            {headers: this.getHeaders()}
+        )
+    }
+
+    static getShipmentStatuses() {
+        return axios.get(
+            "/api/shipmentstatuses",
+            {headers: this.getHeaders()}
+        )
+    }
+
+    static updateShipment(shipmentId: string, values: UpdateShipmentRequestBody) {
+        return axios.patch(
+            `/api/shipments/${shipmentId}`,
+            values,
+            {headers: this.getHeaders()}
+        )
+    }
+
+    static createShipment(values: UpdateShipmentRequestBody) {
+        return axios.post(
+            "/api/shipments",
+            values,
             {headers: this.getHeaders()}
         )
     }
