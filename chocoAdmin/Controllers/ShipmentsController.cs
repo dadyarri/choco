@@ -215,6 +215,7 @@ public class ShipmentsController : ControllerBase
                oldStatus == "Обрабатывается" && newStatus == "Отменена" ||
                oldStatus == "Отменена" && newStatus == "Обрабатывается" ||
                oldStatus == "Доставляется" && newStatus == "Отменена" ||
-               oldStatus == "Отменена" && newStatus == "Доставляется";
+               oldStatus == "Отменена" && newStatus == "Доставляется" ||
+               oldStatus == newStatus;
     }
 }
