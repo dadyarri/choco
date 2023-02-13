@@ -10,7 +10,7 @@ export type UpdateProductRequestBody = {
 export type UpdateOrderRequestBody = {
     date: Date | string,
     orderItems: OrderItemsRequestBody[]
-    status: string,
+    status: string | undefined,
     address: {
         city: string,
         street: string,

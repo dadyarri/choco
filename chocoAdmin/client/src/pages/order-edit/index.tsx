@@ -98,6 +98,13 @@ export const OrderEdit = () => {
         })
     })
 
+    const processingStatus = (): OrderStatus | undefined => {
+        if (statusesData) {
+            return statusesData.find((item: OrderStatus) => item.name === "Обрабатывается");
+        }
+        return undefined;
+    };
+
     return (
         isOrderLoading ?
             <BeatLoader color={"#36d7b7"}/> :
@@ -112,7 +119,7 @@ export const OrderEdit = () => {
                         initialValues={{
                             date: order ? order.date : '',
                             orderItems: order ? orderItems : [],
-                            status: order ? order.status.id : '',
+                            status: order ? order.status.id : processingStatus()?.id,
                             address: {
                                 city: order ? order.address.city.id : '',
                                 street: order ? order.address.street : '',
@@ -146,20 +153,24 @@ export const OrderEdit = () => {
                                         <Field type={"date"} name={"date"} as={Input}/>
                                         <FormErrorMessage>{errors.date}</FormErrorMessage>
                                     </FormControl>
-                                    <FormControl isInvalid={!!errors.status && touched.status} isRequired>
-                                        <FormLabel>Статус заказа</FormLabel>
-                                        <Field as={Select} name={"status"}>
-                                            <option defaultChecked>--Выберите статус --</option>
-                                            {statusesData?.map((status) =>
-                                                <option key={status.id}
-                                                        value={status.id}
-                                                >
-                                                    {status.name}
-                                                </option>
-                                            )}
-                                        </Field>
-                                        <FormErrorMessage>{errors.status}</FormErrorMessage>
-                                    </FormControl>
+                                    {!order ?
+                                        <FormControl>
+                                            <Field type={"hidden"} name={"status"}/>
+                                        </FormControl> :
+                                        <FormControl isInvalid={!!errors.status && touched.status} isRequired>
+                                            <FormLabel>Статус заказа</FormLabel>
+                                            <Field as={Select} name={"status"}>
+                                                <option defaultChecked>--Выберите статус --</option>
+                                                {statusesData?.map((status) =>
+                                                    <option key={status.id}
+                                                            value={status.id}
+                                                    >
+                                                        {status.name}
+                                                    </option>
+                                                )}
+                                            </Field>
+                                            <FormErrorMessage>{errors.status}</FormErrorMessage>
+                                        </FormControl>}
 
                                     <FormControl isInvalid={!!errors.address?.city && touched.address?.city} isRequired>
                                         <FormLabel>Город</FormLabel>
