@@ -135,6 +135,15 @@ public class OrdersController : ControllerBase
             Building = body.Address.Building
         };
         
+        var savedAddress = await _db.OrderAddresses.SingleOrDefaultAsync(a =>
+            a.City == address.City && a.Street == address.Street &&
+            a.Building == address.Building);
+        
+        if (savedAddress == null)
+        {
+            await _db.OrderAddresses.AddAsync(address);
+        }
+
         order.Status = orderStatus;
         order.Date = body.Date;
         order.Address = address;
@@ -193,15 +202,26 @@ public class OrdersController : ControllerBase
             await ReplacePost();
         }
 
+        var orderAddress = new OrderAddress
+        {
+            Building = body.Address.Building,
+            City = await _db.OrderCities.FindAsync(body.Address.City),
+            Street = body.Address.Street
+        };
+
+        var savedAddress = await _db.OrderAddresses.SingleOrDefaultAsync(a =>
+            a.City == orderAddress.City && a.Street == orderAddress.Street &&
+            a.Building == orderAddress.Building);
+        
+        if (savedAddress == null)
+        {
+            await _db.OrderAddresses.AddAsync(orderAddress);
+        }
+
         var order = new Order
         {
             Date = DateOnly.ParseExact(body.Date, "yyyy-MM-dd"),
-            Address = new OrderAddress
-            {
-                Building = body.Address.Building,
-                City = await _db.OrderCities.FindAsync(body.Address.City),
-                Street = body.Address.Street
-            },
+            Address = orderAddress,
             OrderItems = orderItems,
             Status = orderStatus
         };
