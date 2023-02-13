@@ -76,7 +76,6 @@ export const OrderEdit = () => {
 
     const validationSchema = Yup.object().shape({
         date: Yup.date(),
-        status: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать статус заказа обязательно!"),
         orderItems: Yup.array().of(
             Yup.object().shape({
                 id: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
@@ -98,13 +97,6 @@ export const OrderEdit = () => {
         })
     })
 
-    const processingStatus = (): OrderStatus | undefined => {
-        if (statusesData) {
-            return statusesData.find((item: OrderStatus) => item.name === "Обрабатывается");
-        }
-        return undefined;
-    };
-
     return (
         isOrderLoading ?
             <BeatLoader color={"#36d7b7"}/> :
@@ -119,7 +111,7 @@ export const OrderEdit = () => {
                         initialValues={{
                             date: order ? order.date : '',
                             orderItems: order ? orderItems : [],
-                            status: order ? order.status.id : processingStatus()?.id,
+                            status: order ? order.status.id : '',
                             address: {
                                 city: order ? order.address.city.id : '',
                                 street: order ? order.address.street : '',

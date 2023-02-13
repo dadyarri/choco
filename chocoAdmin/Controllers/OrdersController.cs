@@ -134,11 +134,11 @@ public class OrdersController : ControllerBase
             Street = body.Address.Street,
             Building = body.Address.Building
         };
-        
+
         var savedAddress = await _db.OrderAddresses.SingleOrDefaultAsync(a =>
             a.City == address.City && a.Street == address.Street &&
             a.Building == address.Building);
-        
+
         if (savedAddress == null)
         {
             await _db.OrderAddresses.AddAsync(address);
@@ -184,7 +184,8 @@ public class OrdersController : ControllerBase
     public async Task<ActionResult> CreateOrder([FromBody] CreateOrderRequestBody body)
     {
         var orderItems = await FindOrderItems(body.OrderItems);
-        var orderStatus = await _db.OrderStatuses.FindAsync(body.Status);
+        var orderStatus = await _db.OrderStatuses.FindAsync(body.Status) ??
+                          await _db.OrderStatuses.FirstAsync(os => os.Name == "Обрабатывается");
 
         if (orderStatus.Name == "Обрабатывается")
         {
@@ -212,7 +213,7 @@ public class OrdersController : ControllerBase
         var savedAddress = await _db.OrderAddresses.SingleOrDefaultAsync(a =>
             a.City == orderAddress.City && a.Street == orderAddress.Street &&
             a.Building == orderAddress.Building);
-        
+
         if (savedAddress == null)
         {
             await _db.OrderAddresses.AddAsync(orderAddress);

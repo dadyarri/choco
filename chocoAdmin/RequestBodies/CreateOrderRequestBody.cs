@@ -3,7 +3,7 @@ namespace choco.RequestBodies;
 public class CreateOrderRequestBody
 {
     public string Date { get; set; }
-    public Guid Status { get; set; }
+    public Guid? Status { get; set; }
     public List<CreateOrderItemsRequestBody> OrderItems { get; set; }
     public CreateOrderAddressRequestBody Address {get; set;}
     }
