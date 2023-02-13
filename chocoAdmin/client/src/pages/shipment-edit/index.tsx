@@ -66,6 +66,13 @@ export const ShipmentEdit = () => {
     const [isSubmitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
 
+    const processingStatus = (): ShipmentStatus | undefined => {
+        if (statusesData) {
+            return statusesData.find((item: ShipmentStatus) => item.name === "Обрабатывается");
+        }
+        return undefined;
+    };
+
     const {
         data: statusesData
     } = useQuery<ShipmentStatus[], AxiosError>("shipmentStatuses", fetchShipmentStatusesList);
@@ -95,7 +102,7 @@ export const ShipmentEdit = () => {
                         initialValues={{
                             date: shipment ? shipment.date : '',
                             shipmentItems: shipment ? shipmentItems : [],
-                            status: shipment ? shipment.status.id : '',
+                            status: shipment ? shipment.status.id : processingStatus()?.id,
                         }}
                         onSubmit={async (values) => {
                             setSubmitting(true);
@@ -124,20 +131,24 @@ export const ShipmentEdit = () => {
                                         <Field type={"date"} name={"date"} as={Input}/>
                                         <FormErrorMessage>{errors.date}</FormErrorMessage>
                                     </FormControl>
-                                    <FormControl isInvalid={!!errors.status && touched.status} isRequired>
-                                        <FormLabel>Статус заказа</FormLabel>
-                                        <Field as={Select} name={"status"}>
-                                            <option defaultChecked>--Выберите статус --</option>
-                                            {statusesData?.map((status) =>
-                                                <option key={status.id}
-                                                        value={status.id}
-                                                >
-                                                    {status.name}
-                                                </option>
-                                            )}
-                                        </Field>
-                                        <FormErrorMessage>{errors.status}</FormErrorMessage>
-                                    </FormControl>
+                                    {!shipment ?
+                                        <FormControl>
+                                            <Field type={"hidden"} name={"status"}/>
+                                        </FormControl> :
+                                        <FormControl isInvalid={!!errors.status && touched.status} isRequired>
+                                            <FormLabel>Статус поставки</FormLabel>
+                                            <Field as={Select} name={"status"}>
+                                                <option defaultChecked>--Выберите статус --</option>
+                                                {statusesData?.map((status) =>
+                                                    <option key={status.id}
+                                                            value={status.id}
+                                                    >
+                                                        {status.name}
+                                                    </option>
+                                                )}
+                                            </Field>
+                                            <FormErrorMessage>{errors.status}</FormErrorMessage>
+                                        </FormControl>}
                                     <FieldArray name={"shipmentItems"}>
                                         {(arrayHelpers) => (
                                             <FormControl>
@@ -190,10 +201,11 @@ export const ShipmentEdit = () => {
                                                                     </Td>
                                                                     <Td>
                                                                         <FormControl>
-                                                                            <Field name={`shipmentItems[${index}].amount`}
-                                                                                   type={"number"}
-                                                                                   step={0.1}
-                                                                                   as={Input}
+                                                                            <Field
+                                                                                name={`shipmentItems[${index}].amount`}
+                                                                                type={"number"}
+                                                                                step={0.1}
+                                                                                as={Input}
                                                                             />
                                                                         </FormControl>
                                                                     </Td>
