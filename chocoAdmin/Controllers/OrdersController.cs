@@ -31,6 +31,7 @@ public class OrdersController : ControllerBase
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Address)
             .ThenInclude(a => a.City)
+            .OrderByDescending(o => o.Date)
             .ToListAsync());
     }
 
@@ -108,12 +109,12 @@ public class OrdersController : ControllerBase
         return Ok();
     }
 
-    [HttpPut]
-    public async Task<ActionResult> UpdateOrder([FromBody] UpdateOrderRequestBody body)
+    [HttpPatch("{orderId:guid}")]
+    public async Task<ActionResult> UpdateOrder(Guid orderId, [FromBody] UpdateOrderRequestBody body)
     {
         var orderStatus = await _db.OrderStatuses.FindAsync(body.Status);
         var order = await _db.Orders
-            .Where(o => o.Id == body.OrderId)
+            .Where(o => o.Id == orderId)
             .Include(o => o.OrderItems)
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Status)
@@ -124,10 +125,29 @@ public class OrdersController : ControllerBase
 
         if (!IsStatusChangingPossible(order.Status.Name, orderStatus.Name))
         {
-            return Conflict($"{order.Status.Name} \u2192 {orderStatus.Name}");
+            return Conflict($"Переход {order.Status.Name} \u2192 {orderStatus.Name} невозможен");
+        }
+
+        var address = new OrderAddress
+        {
+            City = await _db.OrderCities.FindAsync(body.Address.City),
+            Street = body.Address.Street,
+            Building = body.Address.Building
+        };
+        
+        var savedAddress = await _db.OrderAddresses.SingleOrDefaultAsync(a =>
+            a.City == address.City && a.Street == address.Street &&
+            a.Building == address.Building);
+        
+        if (savedAddress == null)
+        {
+            await _db.OrderAddresses.AddAsync(address);
         }
 
         order.Status = orderStatus;
+        order.Date = body.Date;
+        order.Address = address;
+        order.OrderItems = await FindOrderItems(body.OrderItems);
 
         switch (orderStatus.Name)
         {
@@ -182,15 +202,26 @@ public class OrdersController : ControllerBase
             await ReplacePost();
         }
 
+        var orderAddress = new OrderAddress
+        {
+            Building = body.Address.Building,
+            City = await _db.OrderCities.FindAsync(body.Address.City),
+            Street = body.Address.Street
+        };
+
+        var savedAddress = await _db.OrderAddresses.SingleOrDefaultAsync(a =>
+            a.City == orderAddress.City && a.Street == orderAddress.Street &&
+            a.Building == orderAddress.Building);
+        
+        if (savedAddress == null)
+        {
+            await _db.OrderAddresses.AddAsync(orderAddress);
+        }
+
         var order = new Order
         {
-            Date = DateOnly.ParseExact(body.Date, "yyyy-mm-dd"),
-            Address = new OrderAddress
-            {
-                Building = body.Address.Building,
-                City = await _db.OrderCities.FindAsync(body.Address.City),
-                Street = body.Address.Street
-            },
+            Date = DateOnly.ParseExact(body.Date, "yyyy-MM-dd"),
+            Address = orderAddress,
             OrderItems = orderItems,
             Status = orderStatus
         };
@@ -225,6 +256,7 @@ public class OrdersController : ControllerBase
             });
         }
     }
+
     private async Task ReplacePost()
     {
         var imageData =
@@ -239,10 +271,12 @@ public class OrdersController : ControllerBase
     private bool IsStatusChangingPossible(string oldStatus, string newStatus)
     {
         return oldStatus == "Обрабатывается" && newStatus == "Доставляется" ||
+               oldStatus == "Обрабатывается" && newStatus == "Выполнен" ||
                oldStatus == "Доставляется" && newStatus == "Выполнен" ||
                oldStatus == "Обрабатывается" && newStatus == "Отменён" ||
                oldStatus == "Отменён" && newStatus == "Обрабатывается" ||
                oldStatus == "Доставляется" && newStatus == "Отменён" ||
-               oldStatus == "Отменён" && newStatus == "Доставляется";
+               oldStatus == "Отменён" && newStatus == "Доставляется" ||
+               oldStatus == newStatus;
     }
 }

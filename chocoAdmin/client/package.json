@@ -1,0 +1,87 @@
+{
+  "name": "choco-client",
+  "version": "1.1.0",
+  "private": false,
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/dadyarri/choco"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.4.9",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "axios": "^1.2.4",
+    "chart.js": "^4.2.1",
+    "formik": "^2.2.9",
+    "framer-motion": "^8.5.4",
+    "here-js-api": "^2.0.0",
+    "http-proxy-middleware": "^2.0.6",
+    "luxon": "^3.2.1",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.7.1",
+    "react-query": "^3.39.2",
+    "react-router-dom": "^6.7.0",
+    "react-scripts": "5.0.1",
+    "react-spinners": "^0.13.8",
+    "react-toastify": "^9.1.1",
+    "rimraf": "^4.1.2",
+    "uuid": "^9.0.0",
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@types/node": "^16.18.11",
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@types/luxon": "^3.2.0",
+    "@types/uuid": "^9.0.0",
+    "typescript": "^4.9.4"
+  },
+  "scripts": {
+    "prestart": "node aspnetcore-https && node aspnetcore-react",
+    "start": "rimraf ./build && react-scripts start",
+    "build": "react-scripts build",
+    "test": "cross-env CI=true react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "lint": "eslint ./src/"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "react-app",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_"
+        }
+      ],
+      "@typescript-eslint/no-non-null-assertion": "off"
+    },
+    "ignorePatterns": [
+      "aspnetcore*.js",
+      "src/setupProxy.js"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

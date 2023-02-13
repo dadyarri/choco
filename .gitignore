@@ -234,6 +234,10 @@ _Pvt_Extensions
 /.idea/.idea.choco/.idea/efCoreCommonOptions.xml
 /.idea/.idea.choco/.idea/efCoreDialogsState.xml
 
-client/
-ClientApp.old/
+
+# Temp ignoring, until work on it started
 bot/
+
+# Ignore old client app
+ClientApp/
+ClientApp.old/

@@ -27,14 +27,27 @@ public class ProductsController : ControllerBase
     {
         return Ok(await _db.Products
             .OrderBy(p => p.Name)
+            .Select(p =>
+                new Product
+                {
+                    Category = null,
+                    Deleted = p.Deleted,
+                    Id = p.Id,
+                    IsByWeight = p.IsByWeight,
+                    Leftover = Math.Round(p.Leftover, 2),
+                    MarketId = p.MarketId,
+                    Name = p.Name,
+                    RetailPrice = p.RetailPrice,
+                    WholesalePrice = p.WholesalePrice
+                })
             .ToListAsync()
         );
     }
 
-    [HttpPut]
-    public async Task<ActionResult> UpdateProduct([FromBody] UpdateProductRequestBody body)
+    [HttpPatch("{productId:guid}")]
+    public async Task<ActionResult> UpdateProduct(Guid productId, [FromBody] UpdateProductRequestBody body)
     {
-        var product = await _db.Products.FindAsync(body.ProductId);
+        var product = await _db.Products.FindAsync(productId);
 
         if (product == null) return NotFound();
 
@@ -46,6 +59,22 @@ public class ProductsController : ControllerBase
         product.MarketId = body.MarketId;
 
         await _db.SaveChangesAsync();
+
+        await _vkServiceClient.EditProduct(new EditProductRequestBody
+        {
+            MarketId = body.MarketId,
+            Name = body.Name,
+            Price = body.RetailPrice
+        });
+
+        var products = await _db.Products
+            .Where(p => p.Leftover > 0 && !p.Deleted)
+            .OrderBy(p => p.Name)
+            .ToListAsync();
+        var imageData =
+            ReplacePostUtil.GenerateImage(products);
+        
+        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData.ToArray());
 
         return Ok(product);
     }

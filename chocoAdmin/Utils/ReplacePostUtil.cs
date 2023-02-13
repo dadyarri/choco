@@ -25,10 +25,6 @@ public class ReplacePostUtil
                 Photo = attachmentId.Photo
             });
         }
-        else
-        {
-            throw new UploadingImageException("Couldn't upload image to server");
-        }
     }
 
     public static SKData GenerateImage(List<Product> products)
@@ -82,13 +78,14 @@ public class ReplacePostUtil
                 {
                     yCoord += 30;
                     var unit = product.IsByWeight ? "кг." : "шт.";
+                    var postfixAtPrice = product.IsByWeight ? "/кг" : "";
                     canvas.DrawLine(
                         new SKPoint(nameXCoord + xPadding, yCoord + yPadding + 5),
                         new SKPoint(leftoverXCoord + xPadding + 105, yCoord + yPadding + 5),
                         paint
                     );
                     canvas.DrawText(product.Name, nameXCoord + xPadding + 5, yCoord + yPadding, paint);
-                    canvas.DrawText($"{product.RetailPrice}₽", priceXCoord + xPadding + 5, yCoord + yPadding, paint);
+                    canvas.DrawText($"""{product.RetailPrice}₽{postfixAtPrice}""", priceXCoord + xPadding + 5, yCoord + yPadding, paint);
                     canvas.DrawText($"{product.Leftover} {unit}", leftoverXCoord + xPadding + 5, yCoord + yPadding,
                         paint);
                 }

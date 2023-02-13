@@ -16,6 +16,13 @@ public class VkServiceClient
         StringComparison.InvariantCultureIgnoreCase
     );
 
+    private readonly ILogger<VkServiceClient> _logger;
+
+    public VkServiceClient(ILogger<VkServiceClient> logger)
+    {
+        _logger = logger;
+    }
+
     private static HttpClient _httpClient => new()
     {
         BaseAddress = new Uri(isDevelopment ? "http://localhost:5679" : "http://vkintegration.com:8080")
@@ -23,14 +30,17 @@ public class VkServiceClient
 
     public async Task<UploadFileResponse?> UploadImage(byte[] imageData)
     {
-        var content = new MultipartFormDataContent();
-        var streamContent = new StreamContent(new MemoryStream(imageData));
-        streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
-        content.Add(streamContent, "photo", "upload.jpg");
-        var response = await _httpClient.PostAsync("/uploadImage", content);
-        if (response.StatusCode == HttpStatusCode.OK)
+        if (await TryPing())
         {
-            return JsonSerializer.Deserialize<UploadFileResponse>(await response.Content.ReadAsStringAsync());
+            var content = new MultipartFormDataContent();
+            var streamContent = new StreamContent(new MemoryStream(imageData));
+            streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
+            content.Add(streamContent, "photo", "upload.jpg");
+            var response = await _httpClient.PostAsync("/uploadImage", content);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return JsonSerializer.Deserialize<UploadFileResponse>(await response.Content.ReadAsStringAsync());
+            }
         }
 
         return null;
@@ -38,29 +48,43 @@ public class VkServiceClient
 
     public async Task EditProduct(EditProductRequestBody body)
     {
-        var stringContent =
-            new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-        var response = await _httpClient.PostAsync("/editProduct", stringContent);
-        if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
+        if (await TryPing())
         {
-            throw new UpdatingProductException("Couldn't update product");
+            var stringContent =
+                new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync("/editProduct", stringContent);
+            if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
+            {
+                throw new UpdatingProductException("Couldn't update product");
+            }
         }
     }
 
     public async Task ReplacePost(ReplacePostRequestBody body)
     {
-        var stringContent = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-        var result = await _httpClient.PostAsync("/replacePinned", stringContent);
-        if (result.StatusCode == HttpStatusCode.UnprocessableEntity)
+        if (await TryPing())
         {
-            throw new UpdatingPostException("Couldn't update post");
+            var stringContent = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var result = await _httpClient.PostAsync("/replacePinned", stringContent);
+            if (result.StatusCode == HttpStatusCode.UnprocessableEntity)
+            {
+                throw new UpdatingPostException("Couldn't update post");
+            }
         }
     }
 
-    public async Task<bool> Ping()
+    private async Task<bool> TryPing()
     {
-        var result = await _httpClient.GetAsync("ping");
-        return result.StatusCode == HttpStatusCode.OK;
+        try
+        {
+            var result = await _httpClient.GetAsync("ping");
+            return result.StatusCode == HttpStatusCode.OK;
+        }
+        catch (HttpRequestException)
+        {
+            _logger.LogWarning("VkIntegration service is not available at the moment, skipping syncronization...");
+            return false;
+        }
     }
 
     public async Task<string> GetProductUrl(int marketId)
