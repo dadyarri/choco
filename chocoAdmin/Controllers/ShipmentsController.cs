@@ -38,7 +38,8 @@ public class ShipmentsController : ControllerBase
     public async Task<ActionResult> CreateShipment([FromBody] CreateShipmentRequestBody body)
     {
         var shipmentItems = await FindShipmentItems(body.ShipmentItems);
-        var shipmentStatus = await _db.ShipmentStatuses.FindAsync(body.Status);
+        var shipmentStatus = await _db.ShipmentStatuses.FindAsync(body.Status) ??
+                             await _db.ShipmentStatuses.FirstAsync(os => os.Name == "Обрабатывается");
 
         if (shipmentStatus!.Name == "Выполнена")
         {

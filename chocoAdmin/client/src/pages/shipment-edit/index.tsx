@@ -66,20 +66,12 @@ export const ShipmentEdit = () => {
     const [isSubmitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
 
-    const processingStatus = (): ShipmentStatus | undefined => {
-        if (statusesData) {
-            return statusesData.find((item: ShipmentStatus) => item.name === "Обрабатывается");
-        }
-        return undefined;
-    };
-
     const {
         data: statusesData
     } = useQuery<ShipmentStatus[], AxiosError>("shipmentStatuses", fetchShipmentStatusesList);
 
     const validationSchema = Yup.object().shape({
         date: Yup.date(),
-        status: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать статус заказа обязательно!"),
         shipmentItems: Yup.array().of(
             Yup.object().shape({
                 id: Yup.string().uuid("Неверный формат идентификатора!").required("Выбрать продукт обязательно!"),
@@ -102,7 +94,7 @@ export const ShipmentEdit = () => {
                         initialValues={{
                             date: shipment ? shipment.date : '',
                             shipmentItems: shipment ? shipmentItems : [],
-                            status: shipment ? shipment.status.id : processingStatus()?.id,
+                            status: shipment ? shipment.status.id : '',
                         }}
                         onSubmit={async (values) => {
                             setSubmitting(true);
