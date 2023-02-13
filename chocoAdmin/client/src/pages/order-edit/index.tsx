@@ -111,7 +111,7 @@ export const OrderEdit = () => {
                         initialValues={{
                             date: order ? order.date : '',
                             orderItems: order ? orderItems : [],
-                            status: order ? order.status.id : '',
+                            status: order ? order.status.id : undefined,
                             address: {
                                 city: order ? order.address.city.id : '',
                                 street: order ? order.address.street : '',
@@ -129,9 +129,9 @@ export const OrderEdit = () => {
                                 await updateOrder(order.id, values);
                                 await queryClient.invalidateQueries(["order", orderId]);
                             } else {
-                                await createOrder(values).then(
-                                    (_) => navigate("/orders")
-                                );
+                                await createOrder(values)
+                                    .then((_) => navigate("/orders"))
+                                    .catch((error) => console.error(error));
                             }
                             setSubmitting(false);
                         }}
@@ -147,7 +147,7 @@ export const OrderEdit = () => {
                                     </FormControl>
                                     {!order ?
                                         <FormControl>
-                                            <Field type={"hidden"} name={"status"}/>
+                                            <Field type={"hidden"} name={"status"} value={undefined}/>
                                         </FormControl> :
                                         <FormControl isInvalid={!!errors.status && touched.status} isRequired>
                                             <FormLabel>Статус заказа</FormLabel>

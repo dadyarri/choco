@@ -203,20 +203,27 @@ public class OrdersController : ControllerBase
             await ReplacePost();
         }
 
-        var orderAddress = new OrderAddress
-        {
-            Building = body.Address.Building,
-            City = await _db.OrderCities.FindAsync(body.Address.City),
-            Street = body.Address.Street
-        };
+        var orderCity = await _db.OrderCities.FindAsync(body.Address.City);
 
-        var savedAddress = await _db.OrderAddresses.SingleOrDefaultAsync(a =>
-            a.City == orderAddress.City && a.Street == orderAddress.Street &&
-            a.Building == orderAddress.Building);
+        var savedAddress = await _db.OrderAddresses.FirstOrDefaultAsync(a =>
+            a.City == orderCity && a.Street == body.Address.Street &&
+            a.Building == body.Address.Building);
+
+        OrderAddress orderAddress;
 
         if (savedAddress == null)
         {
+            orderAddress = new OrderAddress
+            {
+                Building = body.Address.Building,
+                City = orderCity!,
+                Street = body.Address.Street
+            };
             await _db.OrderAddresses.AddAsync(orderAddress);
+        }
+        else
+        {
+            orderAddress = savedAddress;
         }
 
         var order = new Order

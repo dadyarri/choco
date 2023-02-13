@@ -94,7 +94,7 @@ export const ShipmentEdit = () => {
                         initialValues={{
                             date: shipment ? shipment.date : '',
                             shipmentItems: shipment ? shipmentItems : [],
-                            status: shipment ? shipment.status.id : '',
+                            status: shipment ? shipment.status.id : undefined,
                         }}
                         onSubmit={async (values) => {
                             setSubmitting(true);
@@ -107,9 +107,9 @@ export const ShipmentEdit = () => {
                                 await updateShipment(shipment.id, values);
                                 await queryClient.invalidateQueries(["shipment", shipmentId]);
                             } else {
-                                await createShipment(values).then(
-                                    (_) => navigate("/shipments")
-                                );
+                                await createShipment(values)
+                                    .then((_) => navigate("/shipments"))
+                                    .catch((error) => console.error(error));
                             }
                             setSubmitting(false);
                         }}
