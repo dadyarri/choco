@@ -1,35 +1,35 @@
-import {useMutation, useQuery, useQueryClient} from "react-query";
-import {AxiosError} from "axios";
-import {Shipment} from "../../services/types";
-import {deleteShipment, fetchShipmentsList, restoreFromDeleted} from "./index.utils";
-import {BeatLoader} from "react-spinners";
-import {Box, Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
-import {Link} from "react-router-dom";
-import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { AxiosError } from "axios";
+import { Shipment } from "../../services/types";
+import { deleteShipment, fetchShipmentsList, restoreFromDeleted } from "./index.utils";
+import { BeatLoader } from "react-spinners";
+import { Box, Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { HiOutlineTrash, HiPencil, HiPlus } from "react-icons/hi";
 import React from "react";
-import {DateTime} from "luxon";
+import { DateTime } from "luxon";
 import StatefulButton from "../../components/stateful-button";
-import {GiCancel, GiCheckMark, GiSandsOfTime} from "react-icons/gi";
-import {TbTruckDelivery} from "react-icons/tb";
-import {MdRestoreFromTrash} from "react-icons/md";
+import { GiCancel, GiCheckMark, GiSandsOfTime } from "react-icons/gi";
+import { TbTruckDelivery } from "react-icons/tb";
+import { MdRestoreFromTrash } from "react-icons/md";
 
 const Shipments = () => {
 
-    const {isLoading, isError, data, error} = useQuery<Shipment[], AxiosError>("shipments", fetchShipmentsList);
+    const { isLoading, isError, data, error } = useQuery<Shipment[], AxiosError>("shipments", fetchShipmentsList);
 
     const getShipmentStatusIcon = (status: string) => {
         switch (status) {
             case "Выполнена": {
-                return <GiCheckMark/>
+                return <GiCheckMark />
             }
             case "Доставляется": {
-                return <TbTruckDelivery/>
+                return <TbTruckDelivery />
             }
             case "Обрабатывается": {
-                return <GiSandsOfTime/>
+                return <GiSandsOfTime />
             }
             case "Отменена": {
-                return <GiCancel/>
+                return <GiCancel />
             }
             default: {
                 return null
@@ -62,7 +62,7 @@ const Shipments = () => {
 
     return (
         isLoading ?
-            <BeatLoader color={"#36d7b7"}/> :
+            <BeatLoader color={"#36d7b7"} /> :
             isError ?
                 <div>
                     <Heading as={"h1"}>Ошибка загрузки</Heading>
@@ -70,7 +70,7 @@ const Shipments = () => {
                 </div> :
                 <div>
                     <Heading as={"h1"} mb={4}>Поставки</Heading>
-                    <Button as={Link} leftIcon={<HiPlus/>} colorScheme={"green"} to={"/shipments/add"} mb={4}>
+                    <Button as={Link} leftIcon={<HiPlus />} colorScheme={"green"} to={"/shipments/add"} mb={4}>
                         Создать
                     </Button>
                     {data !== undefined && data.length > 0 ?
@@ -114,16 +114,16 @@ const Shipments = () => {
                                                         type={"button"}
                                                         to={`/shipments/edit/${shipment.id}`}
                                                     >
-                                                        <HiPencil/>
+                                                        <HiPencil />
                                                     </Button>
                                                     <StatefulButton
                                                         variant={"red"}
                                                         title={"Удалить"}
-                                                        prefix={<HiOutlineTrash/>}
+                                                        prefix={<HiOutlineTrash />}
                                                         postfixWhenActive={"Удалить?"}
                                                         clickHandler={async (_event) => {
                                                             deleteShipmentMutation.mutate(shipment.id);
-                                                        }}/>
+                                                        }} />
                                                 </ButtonGroup>
                                             </Td>
                                         </Tr>
@@ -169,18 +169,17 @@ const Shipments = () => {
                                                     {shipment.shipmentItems.reduce((sum, item) => sum + item.product.wholesalePrice * item.amount, 0)}&nbsp;&#8381;
                                                 </Td>
                                                 <Td>
-                                                    <Button
-                                                        colorScheme={"blue"}
+                                                    <StatefulButton
+                                                        variant={"blue"}
                                                         title={"Восстановить"}
-                                                        type={"button"}
-                                                        onClick={
+                                                        prefix={<MdRestoreFromTrash />}
+                                                        postfixWhenActive={"Восстановить?"}
+                                                        clickHandler={
                                                             async () => {
                                                                 restoreFromDeletedMutation.mutate(shipment.id);
                                                             }
                                                         }
-                                                    >
-                                                        <MdRestoreFromTrash/>
-                                                    </Button>
+                                                    />
                                                 </Td>
                                             </Tr>
                                         ))}
