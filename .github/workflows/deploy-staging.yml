@@ -28,28 +28,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Get files changed in chocoAdmin service
-        id: changed-files-in-choco-admin
-        uses: tj-actions/changed-files@v35
-        with:
-          files: chocoAdmin/**
-      -
         name: Build and push chocoAdmin
-        if: steps.changed-files-in-choco-admin.outputs.any_changed == 'true'
         uses: docker/build-push-action@v4
         with:
           context: "{{defaultContext}}:chocoAdmin"
           push: true
           tags: dadyarri/9f840c17c6fd49dfb786607fdfb89e85:latest-staging
-      -
-        name: Get files changed in vkIntegration service
-        id: changed-files-in-vk-integration
-        uses: tj-actions/changed-files@v35
-        with:
-          files: VkIntegration/**
       - 
         name: Build and push VkIntegration
-        if: steps.changed-files-in-vk-integration.outputs.any_changed == 'true'
         uses: docker/build-push-action@v4
         with:
           context: "{{defaultContext}}:VkIntegration"
