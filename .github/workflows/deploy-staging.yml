@@ -1,3 +1,5 @@
+name: "Deploy application to Docker Hub (staging)"
+
 on:
   push:
     branches:

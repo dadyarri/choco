@@ -173,18 +173,17 @@ const Orders = () => {
                                                     {order.orderItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
                                                 </Td>
                                                 <Td>
-                                                    <Button
-                                                        colorScheme={"blue"}
+                                                    <StatefulButton
+                                                        variant={"blue"}
                                                         title={"Восстановить"}
-                                                        type={"button"}
-                                                        onClick={
+                                                        prefix={<MdRestoreFromTrash/>}
+                                                        postfixWhenActive={"Восстановить?"}
+                                                        clickHandler={
                                                             async () => {
                                                                 restoreFromDeletedMutation.mutate(order.id);
                                                             }
                                                         }
-                                                    >
-                                                        <MdRestoreFromTrash/>
-                                                    </Button>
+                                                    />
                                                 </Td>
                                             </Tr>
                                         ))}
