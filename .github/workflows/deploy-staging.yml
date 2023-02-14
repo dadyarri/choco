@@ -8,7 +8,7 @@ jobs:
   build:
     name: "Build & push services"
     runs-on: "ubuntu-latest"
-    environment: "production"
+    environment: "Staging"
     steps:
       - 
         name: Set up Docker Buildx
