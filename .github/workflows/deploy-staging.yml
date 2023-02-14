@@ -13,6 +13,12 @@ jobs:
     environment: "Staging"
     steps:
       - 
+        name: "Use git history"
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - 
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       -
