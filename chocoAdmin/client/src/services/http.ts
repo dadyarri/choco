@@ -1,6 +1,11 @@
 import Headers from "./http.specs";
 import axios, {AxiosResponse} from "axios";
-import {UpdateOrderRequestBody, UpdateProductRequestBody, UpdateShipmentRequestBody} from "./request-bodies";
+import {
+    InventoryRequestBody,
+    UpdateOrderRequestBody,
+    UpdateProductRequestBody,
+    UpdateShipmentRequestBody
+} from "./request-bodies";
 
 class HttpService {
     private static getHeaders(): Headers {
@@ -191,6 +196,14 @@ class HttpService {
     static restoreShipmentFromDeleted(shipmentId: string) {
         return axios.put(
             `/api/shipments/${shipmentId}`,
+            {headers: this.getHeaders()}
+        )
+    }
+
+    static sendInventory(values: InventoryRequestBody) {
+        return axios.post(
+            "/api/inventory",
+            values,
             {headers: this.getHeaders()}
         )
     }
