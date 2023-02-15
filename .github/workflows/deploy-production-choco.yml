@@ -1,4 +1,4 @@
-name: "Deploy application to Docker Hub (production)"
+name: "Deploy application to production server"
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
       - name: Install SSH
         run: sudo apt install openssh-client -y
 
-      - name: Connect to Production Server
+      - name: Upload new version & restart application
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.PRODUCTION_HOST }}
@@ -52,19 +52,7 @@ jobs:
           script: |
             cd /code
             docker compose pull admin
-            docker compose up -d --scale admin=2
+            docker compose stop admin
+            docker compose rm admin
+            docker compose up admin -d
             docker compose logs
-
-      - name: Wait for Deployment to Finish
-        run: sleep 10
-
-      - name: Remove Old Containers
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.PRODUCTION_HOST }}
-          username: ${{ secrets.PRODUCTION_USER }}
-          password: ${{ secrets.PRODUCTION_PASSWORD }}
-          port: ${{ secrets.PRODUCTION_PORT }}
-          script: |
-            cd /code
-            docker compose down --remove-orphans --volumes
