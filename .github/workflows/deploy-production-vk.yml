@@ -20,7 +20,7 @@ jobs:
       
       - name: Get version number
         id: vars
-        run: echo "tag=${GITHUB_REF#refs/*/bot-}" >> $GITHUB_OUTPUT
+        run: echo "tag=${GITHUB_REF#refs/*/bot-v}" >> $GITHUB_OUTPUT
 
       - 
         name: Set up Docker Buildx
