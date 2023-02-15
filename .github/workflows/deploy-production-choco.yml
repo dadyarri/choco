@@ -53,7 +53,7 @@ jobs:
             cd /code
             docker compose pull admin
             docker compose up -d --scale admin=2
-            docker compose logs -f
+            docker compose logs
 
       - name: Wait for Deployment to Finish
         run: sleep 10
@@ -67,7 +67,7 @@ jobs:
           port: ${{ secrets.PRODUCTION_PORT }}
           script: |
             cd /code
-            docker-compose ps --filter status=running --format '{{.Names}}'
+            docker compose ps --filter status=running --format '{{.Names}}'
 
       - name: Remove Old Containers
         uses: appleboy/ssh-action@master
@@ -78,4 +78,4 @@ jobs:
           port: ${{ secrets.PRODUCTION_PORT }}
           script: |
             cd /code
-            docker-compose down --remove-orphans --volumes
+            docker compose down --remove-orphans --volumes
