@@ -38,3 +38,44 @@ jobs:
           context: "{{defaultContext}}:VkIntegration"
           push: true
           tags: "dadyarri/daa03b929cab49cb917a5830be1c03e6:${{ steps.vars.outputs.tag }}, dadyarri/daa03b929cab49cb917a5830be1c03e6:latest"
+
+      - name: Install SSH
+        run: sudo apt install openssh-client -y
+
+      - name: Connect to Production Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USER }}
+          password: ${{ secrets.PRODUCTION_PASSWORD }}
+          port: ${{ secrets.PRODUCTION_PORT }}
+          script: |
+            cd /code
+            docker compose pull vkIntegration
+            docker compose up -d --scale vkIntegration=2
+            docker compose logs -f
+
+      - name: Wait for Deployment to Finish
+        run: sleep 10
+
+      - name: Check Deployment Status
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USER }}
+          password: ${{ secrets.PRODUCTION_PASSWORD }}
+          port: ${{ secrets.PRODUCTION_PORT }}
+          script: |
+            cd /code
+            docker-compose ps --filter status=running --format '{{.Names}}'
+
+      - name: Remove Old Containers
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USER }}
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+          port: ${{ secrets.PRODUCTION_PORT }}
+          script: |
+            cd /code
+            docker-compose down --remove-orphans --volumes

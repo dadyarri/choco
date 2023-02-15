@@ -38,3 +38,44 @@ jobs:
           context: "{{defaultContext}}:chocoAdmin"
           push: true
           tags: "dadyarri/9f840c17c6fd49dfb786607fdfb89e85:${{ steps.vars.outputs.tag }}, dadyarri/9f840c17c6fd49dfb786607fdfb89e85:latest"
+
+      - name: Install SSH
+        run: sudo apt install openssh-client -y
+
+      - name: Connect to Production Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USER }}
+          password: ${{ secrets.PRODUCTION_PASSWORD }}
+          port: ${{ secrets.PRODUCTION_PORT }}
+          script: |
+            cd /code
+            docker compose pull admin
+            docker compose up -d --scale admin=2
+            docker compose logs -f
+
+      - name: Wait for Deployment to Finish
+        run: sleep 10
+
+      - name: Check Deployment Status
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USER }}
+          password: ${{ secrets.PRODUCTION_PASSWORD }}
+          port: ${{ secrets.PRODUCTION_PORT }}
+          script: |
+            cd /code
+            docker-compose ps --filter status=running --format '{{.Names}}'
+
+      - name: Remove Old Containers
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_HOST }}
+          username: ${{ secrets.PRODUCTION_USER }}
+          key: ${{ secrets.PRODUCTION_SSH_KEY }}
+          port: ${{ secrets.PRODUCTION_PORT }}
+          script: |
+            cd /code
+            docker-compose down --remove-orphans --volumes
