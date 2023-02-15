@@ -8,6 +8,7 @@ import {OrderEdit} from "../pages/order-edit";
 import Shipments from "../pages/shipments";
 import {ShipmentEdit} from "../pages/shipment-edit";
 import ProductCategories from "../pages/categories";
+import {Inventory} from "../pages/inventory";
 
 const routes: Route[] = [
     {
@@ -30,6 +31,11 @@ const routes: Route[] = [
         path: "/warehouse",
         element: <Warehouse/>,
         label: "Склад"
+    },
+    {
+        path: "/inventory",
+        element: <Inventory/>,
+        label: "Ревизия"
     },
     {
         path: "/categories",
