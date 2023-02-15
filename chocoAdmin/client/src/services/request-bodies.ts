@@ -1,3 +1,5 @@
+import {Product} from "./types";
+
 export type UpdateProductRequestBody = {
     name: string,
     wholesalePrice: string | number,
@@ -31,4 +33,8 @@ export type OrderItemsRequestBody = {
 export type ShipmentItemsRequestBody = {
     id: string
     amount: number
+}
+
+export type InventoryRequestBody = {
+    products: Product[] | undefined
 }
