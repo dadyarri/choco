@@ -58,17 +58,6 @@ jobs:
       - name: Wait for Deployment to Finish
         run: sleep 10
 
-      - name: Check Deployment Status
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.PRODUCTION_HOST }}
-          username: ${{ secrets.PRODUCTION_USER }}
-          password: ${{ secrets.PRODUCTION_PASSWORD }}
-          port: ${{ secrets.PRODUCTION_PORT }}
-          script: |
-            cd /code
-            docker compose ps --filter status=running --format '{{.Names}}'
-
       - name: Remove Old Containers
         uses: appleboy/ssh-action@master
         with:
