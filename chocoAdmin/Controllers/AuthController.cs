@@ -17,10 +17,12 @@ namespace choco.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly IConfiguration _configuration;
 
-    public AuthController(AppDbContext db)
+    public AuthController(AppDbContext db, IConfiguration configuration)
     {
         _db = db;
+        _configuration = configuration;
     }
 
     [HttpPost("register")]
@@ -84,7 +86,11 @@ public class AuthController : ControllerBase
             new(ClaimTypes.Name, user.Username)
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(""));
+        var securityKey = _configuration.GetRequiredSection("Security").GetValue<string>("Key");
+        ArgumentException.ThrowIfNullOrEmpty(securityKey);
+        
+        var key = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(securityKey));
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
