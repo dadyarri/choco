@@ -4,6 +4,7 @@ using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
 using choco.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult> GetAllProducts()
     {
         return Ok(await _db.Products
@@ -44,6 +46,7 @@ public class ProductsController : ControllerBase
         );
     }
 
+    [Authorize]
     [HttpPatch("{productId:guid}")]
     public async Task<ActionResult> UpdateProduct(Guid productId, [FromBody] UpdateProductRequestBody body)
     {
@@ -67,18 +70,12 @@ public class ProductsController : ControllerBase
             Price = body.RetailPrice
         });
 
-        var products = await _db.Products
-            .Where(p => p.Leftover > 0 && !p.Deleted)
-            .OrderBy(p => p.Name)
-            .ToListAsync();
-        var imageData =
-            ReplacePostUtil.GenerateImage(products);
-        
-        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData.ToArray());
+        await ReplacePost();
 
         return Ok(product);
     }
 
+    [Authorize]
     [HttpGet("{productId:guid}")]
     public async Task<ActionResult> GetProduct(Guid productId)
     {
@@ -92,6 +89,7 @@ public class ProductsController : ControllerBase
         return Ok(product);
     }
 
+    [Authorize]
     [HttpDelete("{productId:guid}")]
     public async Task<ActionResult> DeleteProduct(Guid productId)
     {
@@ -116,6 +114,7 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpPut("{productId:guid}")]
     public async Task<ActionResult> RecoverProductFromDeleted(Guid productId)
     {
@@ -141,6 +140,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> CreateProduct([FromBody] CreateProductRequestBody body)
     {
         var product = new Product
@@ -166,6 +166,20 @@ public class ProductsController : ControllerBase
             ReplacePostUtil.GenerateImage(
                 await _db.Products
                     .Where(p => p.Leftover > 0 && !p.Deleted)
+                    .OrderBy(p => p.Name)
+                    .Select(p =>
+                        new Product
+                        {
+                            Category = null,
+                            Deleted = p.Deleted,
+                            Id = p.Id,
+                            IsByWeight = p.IsByWeight,
+                            Leftover = Math.Round(p.Leftover, 2),
+                            MarketId = p.MarketId,
+                            Name = p.Name,
+                            RetailPrice = p.RetailPrice,
+                            WholesalePrice = p.WholesalePrice
+                        })
                     .ToListAsync()
             ).ToArray();
         await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);

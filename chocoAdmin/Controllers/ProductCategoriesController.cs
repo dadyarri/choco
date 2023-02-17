@@ -1,5 +1,6 @@
 using choco.Data;
 using choco.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ public class ProductCategoriesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult> GetAllProductCategories()
     {
         return Ok(await _db.ProductCategories
@@ -24,6 +26,7 @@ public class ProductCategoriesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> CreateProductCategory([FromBody] ProductCategory body)
     {
         await _db.ProductCategories.AddAsync(body);

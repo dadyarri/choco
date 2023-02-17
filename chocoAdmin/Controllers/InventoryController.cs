@@ -4,6 +4,7 @@ using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
 using choco.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,7 @@ public class InventoryController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> SaveInventory([FromBody] SaveInventoryRequestBody body)
     {
         foreach (var product in body.Products)

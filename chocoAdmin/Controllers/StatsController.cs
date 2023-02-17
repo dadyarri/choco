@@ -1,5 +1,6 @@
 using choco.Data;
 using choco.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ public class StatsController : ControllerBase
         _db = db;
     }
 
+    [Authorize]
     [HttpGet("ByCity")]
     public async Task<ActionResult> GetStatsByCity()
     {
@@ -30,6 +32,7 @@ public class StatsController : ControllerBase
         return Ok(data);
     }
 
+    [Authorize]
     [HttpGet("TopProducts")]
     public async Task<ActionResult> GetTopProducts()
     {
@@ -48,6 +51,7 @@ public class StatsController : ControllerBase
         return Ok(data);
     }
 
+    [Authorize]
     [HttpGet("Categories")]
     public async Task<ActionResult> GetCategories()
     {
@@ -67,6 +71,7 @@ public class StatsController : ControllerBase
         return Ok(data);
     }
 
+    [Authorize]
     [HttpGet("TotalIncomes/{months:int}")]
     public async Task<ActionResult> GetTotalIncomes(int months)
     {

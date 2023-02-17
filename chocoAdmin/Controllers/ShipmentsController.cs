@@ -4,6 +4,7 @@ using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
 using choco.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,7 @@ public class ShipmentsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult> GetAllShipments()
     {
         return Ok(await _db.Shipments
@@ -35,6 +37,7 @@ public class ShipmentsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> CreateShipment([FromBody] CreateShipmentRequestBody body)
     {
         var shipmentItems = await FindShipmentItems(body.ShipmentItems);
@@ -65,6 +68,7 @@ public class ShipmentsController : ControllerBase
         return Created("/api/Shipments", shipment);
     }
 
+    [Authorize]
     [HttpDelete("{shipmentId:guid}")]
     public async Task<ActionResult> DeleteShipment(Guid shipmentId)
     {
@@ -92,6 +96,7 @@ public class ShipmentsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpPut("{shipmentId:guid}")]
     public async Task<ActionResult> RecoverDeletedShipment(Guid shipmentId)
     {
@@ -120,6 +125,7 @@ public class ShipmentsController : ControllerBase
         return Ok();
     }
 
+    [Authorize]
     [HttpGet("{shipmentId:guid}")]
     public async Task<ActionResult> GetShipmentById(Guid shipmentId)
     {
@@ -132,6 +138,7 @@ public class ShipmentsController : ControllerBase
         return Ok(order);
     }
 
+    [Authorize]
     [HttpPatch("{shipmentId:guid}")]
     public async Task<ActionResult> UpdateShipment(Guid shipmentId, [FromBody] UpdateShipmentRequestBody body)
     {
