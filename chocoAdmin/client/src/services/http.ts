@@ -33,196 +33,196 @@ class HttpService {
     public static async getProductById(productId: string): Promise<AxiosResponse> {
         return await axios.get(
             `/api/products/${productId}`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
     public static async getProducts(): Promise<AxiosResponse> {
         return await axios.get(
             "/api/products",
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    public static deleteProduct(itemId: string): Promise<AxiosResponse> {
-        return axios.delete(
+    public static async deleteProduct(itemId: string): Promise<AxiosResponse> {
+        return await axios.delete(
             `/api/products/${itemId}`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    public static updateProduct(itemId: string, body: UpdateProductRequestBody): Promise<AxiosResponse> {
-        return axios.patch(
+    public static async updateProduct(itemId: string, body: UpdateProductRequestBody): Promise<AxiosResponse> {
+        return await axios.patch(
             `/api/products/${itemId}`,
             body,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    public static getMarketUrl(marketId: number) {
-        return axios.get(
+    public static async getMarketUrl(marketId: number) {
+        return await axios.get(
             `/api/vk/productUrl/${marketId}`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static getProductCategories() {
-        return axios.get(
+    static async getProductCategories() {
+        return await axios.get(
             `/api/productCategories`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static createProduct(body: UpdateProductRequestBody) {
-        return axios.post(
+    static async createProduct(body: UpdateProductRequestBody) {
+        return await axios.post(
             "/api/products",
             body,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static getOrders() {
-        return axios.get(
+    static async getOrders() {
+        return await axios.get(
             "/api/orders",
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static getOrderStatuses() {
-        return axios.get(
+    static async getOrderStatuses() {
+        return await axios.get(
             "/api/orderstatuses",
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static getOrderById(orderId: string) {
-        return axios.get(
+    static async getOrderById(orderId: string) {
+        return await axios.get(
             `/api/orders/${orderId}`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static updateOrder(orderId: string, values: UpdateOrderRequestBody) {
-        return axios.patch(
+    static async updateOrder(orderId: string, values: UpdateOrderRequestBody) {
+        return await axios.patch(
             `/api/orders/${orderId}`,
             values,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static createOrder(values: UpdateOrderRequestBody) {
-        return axios.post(
+    static async createOrder(values: UpdateOrderRequestBody) {
+        return await axios.post(
             "/api/orders",
             values,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static deleteOrder(orderId: string) {
-        return axios.delete(
+    static async deleteOrder(orderId: string) {
+        return await axios.delete(
             `/api/orders/${orderId}`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static getOrderCities() {
-        return axios.get(
+    static async getOrderCities() {
+        return await axios.get(
             "/api/ordercities",
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static restoreOrderFromDeleted(orderId: string) {
-        return axios.put(
+    static async restoreOrderFromDeleted(orderId: string) {
+        return await axios.put(
             `/api/orders/${orderId}`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static getStatsByCity() {
-        return axios.get(
+    static async getStatsByCity() {
+        return await axios.get(
             "/api/Stats/ByCity",
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         );
     }
 
-    static getTopProducts() {
-        return axios.get(
+    static async getTopProducts() {
+        return await axios.get(
             "/api/Stats/TopProducts",
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         );
     }
 
-    static getIncomesInfo(months: number) {
-        return axios.get(
+    static async getIncomesInfo(months: number) {
+        return await axios.get(
             `/api/Stats/TotalIncomes/${months}`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         );
     }
 
-    static getStatsByCategory() {
-        return axios.get(
+    static async getStatsByCategory() {
+        return await axios.get(
             `/api/Stats/Categories`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         );
     }
 
-    static getShipments() {
-        return axios.get(
+    static async getShipments() {
+        return await axios.get(
             "/api/shipments",
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static getShipmentById(shipmentId: string) {
-        return axios.get(
+    static async getShipmentById(shipmentId: string) {
+        return await axios.get(
             `/api/shipments/${shipmentId}`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static getShipmentStatuses() {
-        return axios.get(
+    static async getShipmentStatuses() {
+        return await axios.get(
             "/api/shipmentstatuses",
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static updateShipment(shipmentId: string, values: UpdateShipmentRequestBody) {
-        return axios.patch(
+    static async updateShipment(shipmentId: string, values: UpdateShipmentRequestBody) {
+        return await axios.patch(
             `/api/shipments/${shipmentId}`,
             values,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static createShipment(values: UpdateShipmentRequestBody) {
-        return axios.post(
+    static async createShipment(values: UpdateShipmentRequestBody) {
+        return await axios.post(
             "/api/shipments",
             values,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static deleteShipment(shipmentId: string) {
-        return axios.delete(
+    static async deleteShipment(shipmentId: string) {
+        return await axios.delete(
             `/api/shipments/${shipmentId}`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static restoreShipmentFromDeleted(shipmentId: string) {
-        return axios.put(
+    static async restoreShipmentFromDeleted(shipmentId: string) {
+        return await axios.put(
             `/api/shipments/${shipmentId}`,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 
-    static sendInventory(values: InventoryRequestBody) {
-        return axios.post(
+    static async sendInventory(values: InventoryRequestBody) {
+        return await axios.post(
             "/api/inventory",
             values,
-            {headers: this.getHeaders()}
+            {headers: await this.getHeaders()}
         )
     }
 }
