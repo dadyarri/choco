@@ -16,11 +16,13 @@ public class InventoryController : ControllerBase
 {
     private readonly AppDbContext _db;
     private readonly VkServiceClient _vkServiceClient;
+    private readonly ILogger _logger;
 
-    public InventoryController(AppDbContext db, VkServiceClient vkServiceClient)
+    public InventoryController(AppDbContext db, VkServiceClient vkServiceClient, ILogger logger)
     {
         _db = db;
         _vkServiceClient = vkServiceClient;
+        _logger = logger;
     }
 
     [HttpPost]
@@ -31,17 +33,18 @@ public class InventoryController : ControllerBase
         {
             var savedProduct = await _db.Products.FindAsync(product.Id);
             if (savedProduct == null) continue;
-            
+
             savedProduct.Leftover = product.Leftover;
             await UpdateLeftoverInVk(product);
         }
 
         await _db.SaveChangesAsync();
         await ReplacePost();
-        
+
+        _logger.LogInformation("Inventory saved");
         return Created("/inventory", null);
     }
-    
+
     private async Task UpdateLeftoverInVk(Product item)
     {
         if (item.MarketId != 0)
@@ -53,7 +56,7 @@ public class InventoryController : ControllerBase
             });
         }
     }
-    
+
     private async Task ReplacePost()
     {
         var imageData =

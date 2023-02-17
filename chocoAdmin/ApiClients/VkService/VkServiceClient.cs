@@ -39,6 +39,7 @@ public class VkServiceClient
             var response = await _httpClient.PostAsync("/uploadImage", content);
             if (response.StatusCode == HttpStatusCode.OK)
             {
+                _logger.LogInformation("Image uploaded");
                 return JsonSerializer.Deserialize<UploadFileResponse>(await response.Content.ReadAsStringAsync());
             }
         }
@@ -57,6 +58,7 @@ public class VkServiceClient
             {
                 throw new UpdatingProductException("Couldn't update product");
             }
+            _logger.LogInformation("Product {} updated", body.MarketId);
         }
     }
 
@@ -70,6 +72,7 @@ public class VkServiceClient
             {
                 throw new UpdatingPostException("Couldn't update post");
             }
+            _logger.LogInformation("Post updated");
         }
     }
 
@@ -78,7 +81,12 @@ public class VkServiceClient
         try
         {
             var result = await _httpClient.GetAsync("ping");
-            return result.StatusCode == HttpStatusCode.OK;
+            var tryPing = result.StatusCode == HttpStatusCode.OK;
+            if (tryPing)
+            {
+                _logger.LogInformation("VkIntegration service is available, continue synchronization...");
+            }
+            return tryPing;
         }
         catch (HttpRequestException)
         {

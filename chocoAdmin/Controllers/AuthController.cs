@@ -19,11 +19,13 @@ public class AuthController : ControllerBase
 {
     private readonly AppDbContext _db;
     private readonly IConfiguration _configuration;
+    private readonly ILogger _logger;
 
-    public AuthController(AppDbContext db, IConfiguration configuration)
+    public AuthController(AppDbContext db, IConfiguration configuration, ILogger logger)
     {
         _db = db;
         _configuration = configuration;
+        _logger = logger;
     }
 
     [HttpPost("register")]
@@ -42,6 +44,8 @@ public class AuthController : ControllerBase
 
         await _db.Users.AddAsync(user);
         await _db.SaveChangesAsync();
+
+        _logger.LogInformation("User {} created", user.Username);
 
         return Created("/auth/register", user);
     }
@@ -63,6 +67,7 @@ public class AuthController : ControllerBase
 
         var token = GenerateToken(user);
 
+        _logger.LogInformation("User {} logged in", user.Username);
         return Ok(new LoginResponse { Token = token, Name = user.Name, AvatarUri = user.AvatarUri });
     }
 

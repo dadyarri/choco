@@ -15,11 +15,13 @@ public class ExportController : ControllerBase
 {
     private readonly AppDbContext _db;
     private readonly VkServiceClient _vkServiceClient;
+    private readonly ILogger _logger;
 
-    public ExportController(AppDbContext db, VkServiceClient vkServiceClient)
+    public ExportController(AppDbContext db, VkServiceClient vkServiceClient, ILogger logger)
     {
         _db = db;
         _vkServiceClient = vkServiceClient;
+        _logger = logger;
     }
 
     [Authorize]
@@ -78,6 +80,7 @@ public class ExportController : ControllerBase
             .ToListAsync();
         var imageData = ReplacePostUtil.GenerateImage(products).ToArray();
 
+        _logger.LogInformation("Image requested");
         return File(imageData, "image/jpeg");
     }
 }

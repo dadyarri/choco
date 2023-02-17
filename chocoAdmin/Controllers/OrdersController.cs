@@ -7,6 +7,7 @@ using choco.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ILogger = Serilog.ILogger;
 
 namespace choco.Controllers;
 
@@ -16,11 +17,13 @@ public class OrdersController : ControllerBase
 {
     private readonly AppDbContext _db;
     private readonly VkServiceClient _vkServiceClient;
+    private readonly ILogger _logger;
 
-    public OrdersController(AppDbContext db, VkServiceClient vkServiceClient)
+    public OrdersController(AppDbContext db, VkServiceClient vkServiceClient, ILogger logger)
     {
         _db = db;
         _vkServiceClient = vkServiceClient;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -48,7 +51,14 @@ public class OrdersController : ControllerBase
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
-        if (order == null) return NotFound();
+
+        if (order == null)
+        {
+            _logger.Warning("Order {} was not found", orderId);
+            return NotFound();
+        }
+
+        _logger.Information("Found order {}", orderId);
         return Ok(order);
     }
 
@@ -62,21 +72,31 @@ public class OrdersController : ControllerBase
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
-        if (order == null) return NotFound();
+
+        if (order == null)
+        {
+            _logger.Warning("Order {} was not found", orderId);
+            return NotFound();
+        }
 
         order.Deleted = true;
         if (order.Status.Name != "Отменён")
         {
+            _logger.Information("Incrementing leftovers...");
             foreach (var item in order.OrderItems)
             {
                 item.Product.Leftover += item.Amount;
                 await UpdateLeftoverInVk(item);
             }
 
+            _logger.Information("Leftovers incremented...");
+
             await ReplacePost();
         }
 
         await _db.SaveChangesAsync();
+
+        _logger.Information("Deleted order {}", orderId);
         return NoContent();
     }
 
@@ -90,21 +110,31 @@ public class OrdersController : ControllerBase
             .ThenInclude(oi => oi.Product)
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
-        if (order == null) return NotFound();
+
+        if (order == null)
+        {
+            _logger.Warning("Order {} was not found", orderId);
+            return NotFound();
+        }
 
         order.Deleted = false;
         if (order.Status.Name != "Отменён")
         {
             if (order.OrderItems.Any(oi => oi.Product.Leftover < oi.Amount))
             {
+                _logger.Information("Insufficient amount of one or more products. Cancelling restoring...");
+                order.Deleted = true;
                 return Conflict();
             }
 
+            _logger.Information("Decreasing leftovers...");
             foreach (var item in order.OrderItems)
             {
                 item.Product.Leftover -= item.Amount;
                 await UpdateLeftoverInVk(item);
             }
+
+            _logger.Information("Leftovers decreased");
 
             await ReplacePost();
         }
@@ -126,11 +156,26 @@ public class OrdersController : ControllerBase
             .Include(o => o.Status)
             .FirstOrDefaultAsync();
 
-        if (orderStatus == null) return NotFound();
-        if (order == null) return NotFound();
+        if (orderStatus == null)
+        {
+            _logger.Warning("Order status {} was not found", body.Status);
+            return NotFound();
+        }
+
+        if (order == null)
+        {
+            _logger.Warning("Order {} was not found", orderId);
+            return NotFound();
+        }
 
         if (!IsStatusChangingPossible(order.Status.Name, orderStatus.Name))
         {
+            _logger.Warning(
+                "Can't change status of order ({} -> {})",
+                order.Status.Name,
+                orderStatus.Name
+            );
+            
             return Conflict($"Переход {order.Status.Name} \u2192 {orderStatus.Name} невозможен");
         }
 
@@ -147,33 +192,40 @@ public class OrdersController : ControllerBase
 
         if (savedAddress == null)
         {
+            _logger.Information("Created new address");
             await _db.OrderAddresses.AddAsync(address);
         }
 
         order.Status = orderStatus;
         order.Date = body.Date;
         order.Address = address;
+        
+        // todo: add check on sufficiency of leftovers
         order.OrderItems = await FindOrderItems(body.OrderItems);
 
         switch (orderStatus.Name)
         {
             case "Обрабатывается":
             {
+                _logger.Information("Decreasing leftovers...");
                 foreach (var item in order.OrderItems)
                 {
                     item.Product.Leftover -= item.Amount;
                     await UpdateLeftoverInVk(item);
                 }
+                _logger.Information("Leftovers decreased");
 
                 break;
             }
             case "Отменён":
             {
+                _logger.Information("Increasing leftovers...");
                 foreach (var item in order.OrderItems)
                 {
                     item.Product.Leftover += item.Amount;
                     await UpdateLeftoverInVk(item);
                 }
+                _logger.Information("Leftovers increased");
 
                 break;
             }
@@ -182,6 +234,7 @@ public class OrdersController : ControllerBase
         await ReplacePost();
 
         await _db.SaveChangesAsync();
+        _logger.Information("Order updated");
 
         return Ok();
     }
@@ -198,14 +251,17 @@ public class OrdersController : ControllerBase
         {
             if (orderItems.Any(oi => oi.Product.Leftover < oi.Amount))
             {
+                _logger.Information("Insufficient amount of one or more products. Cancelling creating order...");
                 return Conflict();
             }
 
+            _logger.Information("Decreasing leftovers...");
             foreach (var item in orderItems)
             {
                 item.Product.Leftover -= item.Amount;
                 await UpdateLeftoverInVk(item);
             }
+            _logger.Information("Leftovers decreased");
 
             await ReplacePost();
         }
@@ -220,6 +276,7 @@ public class OrdersController : ControllerBase
 
         if (savedAddress == null)
         {
+            _logger.Information("Created new address");
             orderAddress = new OrderAddress
             {
                 Building = body.Address.Building,
@@ -242,6 +299,8 @@ public class OrdersController : ControllerBase
         };
         await _db.Orders.AddAsync(order);
         await _db.SaveChangesAsync();
+        
+        _logger.Information("Order created");
         return Created("/api/Orders", order);
     }
 
