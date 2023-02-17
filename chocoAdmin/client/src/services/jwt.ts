@@ -11,6 +11,8 @@ export const login = (username: string, password: string) => {
             localStorage.setItem("username", username);
             localStorage.setItem("password", password);
             localStorage.setItem("token", response.data.token);
+            localStorage.setItem("name", response.data.name);
+            localStorage.setItem("avatarUri", response.data.avatarUri);
             return true;
         })
         .catch((error: AxiosError) => {
