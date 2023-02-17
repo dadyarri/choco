@@ -3,6 +3,7 @@ using choco.Data;
 using choco.Data.Models;
 using choco.Exceptions;
 using choco.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,7 @@ public class ExportController : ControllerBase
         _vkServiceClient = vkServiceClient;
     }
 
+    [Authorize]
     [HttpGet("ReplacePost")]
     public async Task<ActionResult> ReplacePost()
     {

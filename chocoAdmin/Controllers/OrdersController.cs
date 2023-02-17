@@ -4,6 +4,7 @@ using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
 using choco.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult> GetAllOrders()
     {
         return Ok(await _db.Orders
@@ -35,6 +37,7 @@ public class OrdersController : ControllerBase
             .ToListAsync());
     }
 
+    [Authorize]
     [HttpGet("{orderId:guid}")]
     public async Task<ActionResult> GetOrderById(Guid orderId)
     {
@@ -49,6 +52,7 @@ public class OrdersController : ControllerBase
         return Ok(order);
     }
 
+    [Authorize]
     [HttpDelete("{orderId:guid}")]
     public async Task<ActionResult> DeleteOrder(Guid orderId)
     {
@@ -76,6 +80,7 @@ public class OrdersController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpPut("{orderId:guid}")]
     public async Task<ActionResult> RecoverDeletedOrder(Guid orderId)
     {
@@ -109,6 +114,7 @@ public class OrdersController : ControllerBase
         return Ok();
     }
 
+    [Authorize]
     [HttpPatch("{orderId:guid}")]
     public async Task<ActionResult> UpdateOrder(Guid orderId, [FromBody] UpdateOrderRequestBody body)
     {
@@ -181,6 +187,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> CreateOrder([FromBody] CreateOrderRequestBody body)
     {
         var orderItems = await FindOrderItems(body.OrderItems);

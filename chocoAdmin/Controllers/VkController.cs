@@ -1,6 +1,7 @@
 using choco.ApiClients.VkService;
 using choco.Data;
 using choco.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ public class VkController : ControllerBase
         _vkServiceClient = vkServiceClient;
     }
 
+    [Authorize]
     [HttpGet("ProductUrl/{marketId:int}")]
     public async Task<ActionResult> GetProductUrl(int marketId)
     {

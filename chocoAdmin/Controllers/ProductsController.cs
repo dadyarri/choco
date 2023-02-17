@@ -4,6 +4,7 @@ using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
 using choco.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult> GetAllProducts()
     {
         return Ok(await _db.Products
@@ -44,6 +46,7 @@ public class ProductsController : ControllerBase
         );
     }
 
+    [Authorize]
     [HttpPatch("{productId:guid}")]
     public async Task<ActionResult> UpdateProduct(Guid productId, [FromBody] UpdateProductRequestBody body)
     {
@@ -79,6 +82,7 @@ public class ProductsController : ControllerBase
         return Ok(product);
     }
 
+    [Authorize]
     [HttpGet("{productId:guid}")]
     public async Task<ActionResult> GetProduct(Guid productId)
     {
@@ -92,6 +96,7 @@ public class ProductsController : ControllerBase
         return Ok(product);
     }
 
+    [Authorize]
     [HttpDelete("{productId:guid}")]
     public async Task<ActionResult> DeleteProduct(Guid productId)
     {
@@ -116,6 +121,7 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpPut("{productId:guid}")]
     public async Task<ActionResult> RecoverProductFromDeleted(Guid productId)
     {
@@ -141,6 +147,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> CreateProduct([FromBody] CreateProductRequestBody body)
     {
         var product = new Product
