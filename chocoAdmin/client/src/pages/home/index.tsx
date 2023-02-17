@@ -34,31 +34,54 @@ const Home: FC = () => {
         isLoading: isStatsByCityLoading,
         isError: isStatsByCityError,
         data: statsByCity
-    } = useQuery<StatsBy, AxiosError>("statsByCity", getStatsByCity, {enabled: hasAuthData});
+    } = useQuery<StatsBy, AxiosError>(
+        "statsByCity",
+        getStatsByCity,
+        {enabled: hasAuthData}
+    );
     const {
         isLoading: isCompareIncomesLoading,
         isError: isCompareIncomesError,
         data: compareIncomes
-    } = useQuery<StatsCompareIncomes, AxiosError>(["compareIncomes", 2], () => getIncomesInfo(2), {enabled: hasAuthData});
+    } = useQuery<StatsCompareIncomes, AxiosError>(
+        ["compareIncomes", 2],
+        () => getIncomesInfo(2),
+        {enabled: hasAuthData}
+    );
+
     const {
         isLoading: isTopProductsLoading,
         isError: isTopProductsError,
         data: topProductsData
-    } = useQuery<StatsTopProducts, AxiosError>("topProducts", getTopProducts, {enabled: hasAuthData});
+    } = useQuery<StatsTopProducts, AxiosError>(
+        "topProducts",
+        getTopProducts,
+        {enabled: hasAuthData}
+    );
+
     const {
         isLoading: isIncomesStatsLoading,
         isError: isIncomesStatsError,
         data: incomesStats
-    } = useQuery<StatsCompareIncomes, AxiosError>(["compareIncomes", 10], () => getIncomesInfo(10), {enabled: hasAuthData});
+    } = useQuery<StatsCompareIncomes, AxiosError>(
+        ["compareIncomes", 10],
+        () => getIncomesInfo(10),
+        {enabled: hasAuthData}
+    );
+
     const {
         isLoading: isStatsByCategoryLoading,
         isError: isStatsByCategoryError,
         data: statsByCategory
-    } = useQuery<StatsBy, AxiosError>("statsByCategory", getStatsByCategory, {enabled: hasAuthData});
+    } = useQuery<StatsBy, AxiosError>(
+        "statsByCategory",
+        getStatsByCategory,
+        {enabled: hasAuthData}
+    );
 
     return <div>
         {!hasAuthData ? <div>
-                <Formik initialValues={{username: "", login: ""}} onSubmit={async (values) => {
+                <Formik initialValues={{username: "", password: ""}} onSubmit={async (values) => {
                     console.log(values);
                 }}>
                     {() => (
@@ -86,7 +109,12 @@ const Home: FC = () => {
                                                     name={"password"}
                                                     autoComplete={"current-password"}/>
                                             </FormControl>
-                                            <Button colorScheme={"green"} leftIcon={<BiLogInCircle/>}>Войти</Button>
+                                            <Button
+                                                colorScheme={"green"}
+                                                leftIcon={<BiLogInCircle/>}
+                                                type={"submit"}>
+                                                Войти
+                                            </Button>
                                         </VStack>
                                     </Form>
                                 </CardBody>
