@@ -82,7 +82,12 @@ const Home: FC = () => {
     return <div>
         {!hasAuthData ? <div>
                 <Formik initialValues={{username: "", password: ""}} onSubmit={async (values) => {
-                    await login(values.username, values.password);
+                    const isLoggedIn = await login(values.username, values.password);
+
+                    if (isLoggedIn) {
+                        window.location.reload();
+                    }
+
                 }}>
                     {() => (
                         <Center>
