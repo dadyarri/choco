@@ -6,6 +6,7 @@ using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
 using choco.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -63,6 +64,13 @@ public class AuthController : ControllerBase
         var token = GenerateToken(user);
 
         return Ok(new LoginResponse { Token = token });
+    }
+
+    [Authorize]
+    [HttpGet("verify")]
+    public async Task<ActionResult> Verify()
+    {
+        return Ok();
     }
 
     private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
