@@ -23,7 +23,7 @@ import {TopProducts} from "../../components/charts/top-products";
 import {CompareIncomes} from "../../components/charts/compare-incomes";
 import {IncomesChart} from "../../components/charts/incomes-chart";
 import {Field, Form, Formik} from "formik";
-import {getToken} from "../../services/jwt";
+import {getToken, login} from "../../services/jwt";
 import {BiLogInCircle} from "react-icons/bi";
 
 const Home: FC = () => {
@@ -82,7 +82,7 @@ const Home: FC = () => {
     return <div>
         {!hasAuthData ? <div>
                 <Formik initialValues={{username: "", password: ""}} onSubmit={async (values) => {
-                    console.log(values);
+                    await login(values.username, values.password);
                 }}>
                     {() => (
                         <Center>
