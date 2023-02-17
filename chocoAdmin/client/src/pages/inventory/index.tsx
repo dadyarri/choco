@@ -50,8 +50,6 @@ export const Inventory = () => {
                         onSubmit={async (values) => {
                             setSubmitting(true);
 
-                            alert(JSON.stringify(values, null, 2))
-
                             await sendInventory(values)
                                 .then((_) => navigate("/warehouse"))
                                 .catch((error) => console.error(error));
