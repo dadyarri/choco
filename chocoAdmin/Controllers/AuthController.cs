@@ -1,17 +1,21 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
+using choco.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace choco.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AuthController: ControllerBase
+public class AuthController : ControllerBase
 {
-
     private readonly AppDbContext _db;
 
     public AuthController(AppDbContext db)
@@ -35,8 +39,28 @@ public class AuthController: ControllerBase
 
         await _db.Users.AddAsync(user);
         await _db.SaveChangesAsync();
-        
+
         return Created("/auth/register", user);
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult> Login(LoginRequestBody body)
+    {
+        var user = await _db.Users.Where(u => u.Username == body.Username).FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        if (!VerifyPasswordHash(body.Password, user.PasswordHash, user.PasswordSalt))
+        {
+            return Forbid();
+        }
+
+        var token = GenerateToken(user);
+
+        return Ok(new LoginResponse { Token = token });
     }
 
     private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -44,5 +68,34 @@ public class AuthController: ControllerBase
         using var hmac = new HMACSHA512();
         passwordSalt = hmac.Key;
         passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+    }
+
+    private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+    {
+        using var hmac = new HMACSHA512(passwordSalt);
+        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+        return computedHash.SequenceEqual(passwordHash);
+    }
+
+    private string GenerateToken(User user)
+    {
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Name, user.Username)
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(""));
+
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+        var token = new JwtSecurityToken(
+            claims: claims,
+            expires: DateTime.Now.AddDays(2),
+            signingCredentials: credentials
+        );
+
+        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return jwt;
     }
 }
