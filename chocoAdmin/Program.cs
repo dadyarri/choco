@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text;
 using choco.ApiClients.VkService;
 using choco.Data;
 using choco.Extensions;
@@ -6,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
 using LettuceEncrypt;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Default");
@@ -20,6 +23,25 @@ builder.Host.UseSerilog();
 builder.Services.AddControllersWithViews(options => { options.UseGeneralRoutePrefix("api"); });
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddSingleton<VkServiceClient>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    var key = builder
+        .Configuration
+        .GetRequiredSection("Security")
+        .GetValue<string>("Key");
+    ArgumentException.ThrowIfNullOrEmpty(key);
+    
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey =
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                key)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
 
 if (!builder.Environment.IsDevelopment())
 {
@@ -36,10 +58,7 @@ if (!builder.Environment.IsDevelopment())
         var appServices = k.ApplicationServices;
         k.Listen(
             IPAddress.Any, 443,
-            o => o.UseHttps(h =>
-            {
-                h.UseLettuceEncrypt(appServices);
-            }));
+            o => o.UseHttps(h => { h.UseLettuceEncrypt(appServices); }));
     });
 }
 
@@ -72,5 +91,8 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 app.UseSerilogRequestLogging();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
