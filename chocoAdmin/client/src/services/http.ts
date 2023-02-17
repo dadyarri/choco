@@ -6,10 +6,12 @@ import {
     UpdateProductRequestBody,
     UpdateShipmentRequestBody
 } from "./request-bodies";
+import {getToken} from "./jwt";
 
 class HttpService {
     private static getHeaders(): Headers {
-        return {}
+        const token = getToken();
+        return {Authorization: `Bearer ${token}`};
     }
 
     public static async getProductById(productId: string): Promise<AxiosResponse> {
