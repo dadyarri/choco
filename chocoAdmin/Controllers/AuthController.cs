@@ -63,7 +63,7 @@ public class AuthController : ControllerBase
 
         var token = GenerateToken(user);
 
-        return Ok(new LoginResponse { Token = token });
+        return Ok(new LoginResponse { Token = token, Name = user.Name, AvatarUri = user.AvatarUri });
     }
 
     [Authorize]
@@ -96,7 +96,7 @@ public class AuthController : ControllerBase
 
         var securityKey = _configuration.GetRequiredSection("Security").GetValue<string>("Key");
         ArgumentException.ThrowIfNullOrEmpty(securityKey);
-        
+
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(securityKey));
 
