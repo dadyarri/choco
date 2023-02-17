@@ -8,6 +8,8 @@ export const getToken = () => {
 export const login = (username: string, password: string) => {
     return axios.post("/api/auth/login", {username, password})
         .then((response) => {
+            localStorage.setItem("username", username);
+            localStorage.setItem("password", password);
             localStorage.setItem("token", response.data.token);
             return true;
         })
@@ -23,7 +25,7 @@ export const login = (username: string, password: string) => {
 }
 
 export const verifyToken = (token: string) => {
-    return axios.get("/api/auth/verify", {headers: {Authorization: `Bearer: ${token}`}})
+    return axios.get("/api/auth/verify", {headers: {Authorization: `Bearer ${token}`}})
         .then((_) =>  true)
         .catch((_) => false);
 }
