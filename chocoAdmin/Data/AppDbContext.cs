@@ -15,6 +15,7 @@ public class AppDbContext : DbContext
     public DbSet<OrderStatus> OrderStatuses => Set<OrderStatus>();
     public DbSet<OrderCity> OrderCities => Set<OrderCity>();
     public DbSet<OrderAddress> OrderAddresses => Set<OrderAddress>();
+    public DbSet<User> Users => Set<User>();
 
     public AppDbContext(DbContextOptions<AppDbContext> contextOptions) : base(contextOptions)
     {
