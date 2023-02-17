@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosError} from "axios";
 import {toast} from "react-toastify";
 
 export const getToken = () => {
@@ -11,9 +11,13 @@ export const login = (username: string, password: string) => {
             localStorage.setItem("token", response.data.token);
             return true;
         })
-        .catch((error) => {
-            toast(`Ошибка входа
-            ${error.message}`);
+        .catch((error: AxiosError) => {
+            if (error.response?.status === 404) {
+                toast("Ошибка входа: Нет такого пользователя");
+            }
+            if (error.response?.status === 403) {
+                toast(`Ошибка входа: Неверный пароль`);
+            }
             return false;
         });
 }
