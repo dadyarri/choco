@@ -15,8 +15,11 @@ import {
     MenuList, Stack
 } from "@chakra-ui/react";
 import {GiHamburgerMenu} from "react-icons/gi";
+import {getToken} from "../../services/jwt";
 
 const NavMenu: FC = () => {
+
+    const hasAuthData = !!getToken();
 
     return <Box
         position={"sticky"}
@@ -38,18 +41,19 @@ const NavMenu: FC = () => {
                 </Heading>
             </Flex>
 
-            <HStack><Stack
-                direction={{base: "column", md: "row"}}
-                display={{base: "none", md: "flex"}}
-                width={{base: "full", md: "auto"}}
-                alignItems={"center"}
-                flexGrow={1}
-                mt={{base: 4, md: 0}}
-            >
-                {routes.map((route) =>
-                    route.label && <Link to={route.path!} key={uuid()}>{route.label}</Link>)
-                }
-            </Stack>
+            {hasAuthData && <HStack>
+                <Stack
+                    direction={{base: "column", md: "row"}}
+                    display={{base: "none", md: "flex"}}
+                    width={{base: "full", md: "auto"}}
+                    alignItems={"center"}
+                    flexGrow={1}
+                    mt={{base: 4, md: 0}}
+                >
+                    {routes.map((route) =>
+                        route.label && <Link to={route.path!} key={uuid()}>{route.label}</Link>)
+                        }
+                </Stack>
                 <Box flex={1}>
                     <Box ml={2} display={{base: "inline-block", md: "none"}}>
                         <Menu>
@@ -65,11 +69,12 @@ const NavMenu: FC = () => {
                                     <MenuItem key={uuid()}>
                                         <Link to={route.path!} key={uuid()}>{route.label}</Link>
                                     </MenuItem>)
-                                }
+                                    }
                             </MenuList>
                         </Menu>
                     </Box>
-                </Box></HStack>
+                </Box>
+            </HStack>}
         </Container>
     </Box>
 }
