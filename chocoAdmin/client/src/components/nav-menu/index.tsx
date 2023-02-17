@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import routes from "../../routes/index";
 import {v4 as uuid} from "uuid";
 import {
+    Avatar,
     Box,
     Container,
     Flex,
@@ -52,7 +53,7 @@ const NavMenu: FC = () => {
                 >
                     {routes.map((route) =>
                         route.label && <Link to={route.path!} key={uuid()}>{route.label}</Link>)
-                        }
+                    }
                 </Stack>
                 <Box flex={1}>
                     <Box ml={2} display={{base: "inline-block", md: "none"}}>
@@ -69,10 +70,26 @@ const NavMenu: FC = () => {
                                     <MenuItem key={uuid()}>
                                         <Link to={route.path!} key={uuid()}>{route.label}</Link>
                                     </MenuItem>)
-                                    }
+                                }
                             </MenuList>
                         </Menu>
                     </Box>
+                </Box>
+                <Box flex={1}>
+                    <Menu>
+                        <MenuButton
+                            as={Avatar}
+                            name={localStorage.getItem("name")!}
+                            src={localStorage.getItem("avatarUri")!}
+                            size={"sm"}
+                        />
+                        <MenuList>
+                            <MenuItem onClick={() => {
+                                localStorage.removeItem("token");
+                                window.location.reload()
+                            }}>Выйти</MenuItem>
+                        </MenuList>
+                    </Menu>
                 </Box>
             </HStack>}
         </Container>
