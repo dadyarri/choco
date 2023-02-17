@@ -70,14 +70,7 @@ public class ProductsController : ControllerBase
             Price = body.RetailPrice
         });
 
-        var products = await _db.Products
-            .Where(p => p.Leftover > 0 && !p.Deleted)
-            .OrderBy(p => p.Name)
-            .ToListAsync();
-        var imageData =
-            ReplacePostUtil.GenerateImage(products);
-        
-        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData.ToArray());
+        await ReplacePost();
 
         return Ok(product);
     }
@@ -173,6 +166,20 @@ public class ProductsController : ControllerBase
             ReplacePostUtil.GenerateImage(
                 await _db.Products
                     .Where(p => p.Leftover > 0 && !p.Deleted)
+                    .OrderBy(p => p.Name)
+                    .Select(p =>
+                        new Product
+                        {
+                            Category = null,
+                            Deleted = p.Deleted,
+                            Id = p.Id,
+                            IsByWeight = p.IsByWeight,
+                            Leftover = Math.Round(p.Leftover, 2),
+                            MarketId = p.MarketId,
+                            Name = p.Name,
+                            RetailPrice = p.RetailPrice,
+                            WholesalePrice = p.WholesalePrice
+                        })
                     .ToListAsync()
             ).ToArray();
         await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
