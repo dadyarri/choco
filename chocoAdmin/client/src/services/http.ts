@@ -6,12 +6,28 @@ import {
     UpdateProductRequestBody,
     UpdateShipmentRequestBody
 } from "./request-bodies";
-import {getToken} from "./jwt";
+import {getToken, login, verifyToken} from "./jwt";
 
 class HttpService {
-    private static getHeaders(): Headers {
+    private static async getHeaders(): Promise<Headers> {
         const token = getToken();
-        return {Authorization: `Bearer ${token}`};
+        if (token) {
+            const isValid = await verifyToken(token);
+            if (!isValid) {
+                const username = localStorage.getItem("username");
+                const password = localStorage.getItem("password");
+
+                if (username && password) {
+                    await login(username, password)
+                } else {
+                    window.location.href = "/";
+                }
+            }
+            return {Authorization: `Bearer ${token}`};
+        }
+
+        window.location.href = "/";
+        return {}
     }
 
     public static async getProductById(productId: string): Promise<AxiosResponse> {
