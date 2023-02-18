@@ -200,6 +200,8 @@ public class OrdersController : ControllerBase
         order.Date = body.Date;
         order.Address = address;
         
+        // todo: add calulating delta between new and old order items, to correctly change leftovers
+        // todo: skip changing leftovers if delta is 0
         // todo: add check on sufficiency of leftovers
         order.OrderItems = await FindOrderItems(body.OrderItems);
 

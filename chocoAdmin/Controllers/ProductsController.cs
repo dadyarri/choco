@@ -7,6 +7,7 @@ using choco.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ILogger = Serilog.ILogger;
 
 namespace choco.Controllers;
 
@@ -16,6 +17,7 @@ public class ProductsController : ControllerBase
 {
     private readonly AppDbContext _db;
     private readonly VkServiceClient _vkServiceClient;
+    private readonly ILogger _logger;
 
     public ProductsController(AppDbContext db, VkServiceClient vkServiceClient)
     {
@@ -52,7 +54,11 @@ public class ProductsController : ControllerBase
     {
         var product = await _db.Products.FindAsync(productId);
 
-        if (product == null) return NotFound();
+        if (product == null)
+        {
+            _logger.Warning("Product {} was not found", productId);
+            return NotFound();
+        }
 
         product.Category = await _db.ProductCategories.FindAsync(body.Category);
         product.RetailPrice = body.RetailPrice;
@@ -63,6 +69,7 @@ public class ProductsController : ControllerBase
 
         await _db.SaveChangesAsync();
 
+
         await _vkServiceClient.EditProduct(new EditProductRequestBody
         {
             MarketId = body.MarketId,
@@ -71,6 +78,8 @@ public class ProductsController : ControllerBase
         });
 
         await ReplacePost();
+        
+        _logger.Information("Product saved");
 
         return Ok(product);
     }
@@ -84,7 +93,11 @@ public class ProductsController : ControllerBase
             .Include(p => p.Category)
             .FirstOrDefaultAsync();
 
-        if (product == null) return NotFound();
+        if (product == null)
+        {
+            _logger.Warning("Product {} was not found", productId);
+            return NotFound();
+        }
 
         return Ok(product);
     }
@@ -95,13 +108,20 @@ public class ProductsController : ControllerBase
     {
         var product = await _db.Products.FindAsync(productId);
 
-        if (product == null) return NotFound();
+        if (product == null)
+        {
+            _logger.Warning("Product {} was not found", productId);
+            return NotFound();
+        }
 
         product.Deleted = true;
         await _db.SaveChangesAsync();
+        
+        _logger.Information("Product {} deleted", productId);
 
         if (product.MarketId != 0)
         {
+            _logger.Information("Hiding product {} from vk", productId);
             await _vkServiceClient.EditProduct(new EditProductRequestBody
             {
                 MarketId = product.MarketId,
@@ -120,13 +140,20 @@ public class ProductsController : ControllerBase
     {
         var product = await _db.Products.FindAsync(productId);
 
-        if (product == null) return NotFound();
+        if (product == null)
+        {
+            _logger.Warning("Product {} was not found", productId);
+            return NotFound();
+        }
 
         product.Deleted = false;
         await _db.SaveChangesAsync();
+        
+        _logger.Information("Product {} restored", productId);
 
         if (product.MarketId != 0)
         {
+            _logger.Information("Restoring product {} in vk...", productId);
             await _vkServiceClient.EditProduct(new EditProductRequestBody
             {
                 MarketId = product.MarketId,
@@ -157,6 +184,8 @@ public class ProductsController : ControllerBase
         await _db.Products.AddAsync(product);
         await _db.SaveChangesAsync();
 
+        _logger.Information("Product {} created", product.Id);
+        
         return Created("/Products", body);
     }
 
