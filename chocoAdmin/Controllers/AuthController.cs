@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ILogger = Serilog.ILogger;
 
 namespace choco.Controllers;
 
@@ -45,7 +46,7 @@ public class AuthController : ControllerBase
         await _db.Users.AddAsync(user);
         await _db.SaveChangesAsync();
 
-        _logger.LogInformation("User {} created", user.Username);
+        _logger.Information("User {Username} created", user.Username);
 
         return Created("/auth/register", user);
     }
@@ -67,7 +68,7 @@ public class AuthController : ControllerBase
 
         var token = GenerateToken(user);
 
-        _logger.LogInformation("User {} logged in", user.Username);
+        _logger.Information("User {Username} logged in", user.Username);
         return Ok(new LoginResponse { Token = token, Name = user.Name, AvatarUri = user.AvatarUri });
     }
 
