@@ -4,6 +4,7 @@ using choco.Utils.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ILogger = Serilog.ILogger;
 
 namespace choco.Controllers;
 
@@ -54,7 +55,7 @@ public class ExportController : ControllerBase
             .ToListAsync();
         var imageData = _replacePostUtil.GenerateImage(products).ToArray();
 
-        _logger.LogInformation("Image requested");
+        _logger.Information("Image requested");
         return File(imageData, "image/jpeg");
     }
 }

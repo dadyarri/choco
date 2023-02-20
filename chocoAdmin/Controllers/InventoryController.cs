@@ -1,11 +1,9 @@
-using choco.ApiClients.VkService.RequestBodies;
-using choco.ApiClients.VkService.Services;
 using choco.Data;
-using choco.Data.Models;
 using choco.RequestBodies;
 using choco.Utils.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ILogger = Serilog.ILogger;
 
 namespace choco.Controllers;
 
@@ -40,7 +38,7 @@ public class InventoryController : ControllerBase
         await _db.SaveChangesAsync();
         await _vkUpdateUtils.ReplacePost();
 
-        _logger.LogInformation("Inventory saved");
+        _logger.Information("Inventory saved");
         return Created("/inventory", null);
     }
 }
