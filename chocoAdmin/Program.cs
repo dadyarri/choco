@@ -29,10 +29,10 @@ try
     builder.Services.AddControllersWithViews(options => { options.UseGeneralRoutePrefix("api"); });
     builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
     
-    builder.Services.AddSingleton<IVkServiceClient, VkServiceClient>();
-    builder.Services.AddSingleton<IVkUpdateUtils, VkUpdateUtils>();
-    builder.Services.AddSingleton<IDeltaUtils, DeltaUtils>();
-    builder.Services.AddSingleton<IReplacePostUtil, ReplacePostUtil>();
+    builder.Services.AddScoped<IVkServiceClient, VkServiceClient>();
+    builder.Services.AddScoped<IVkUpdateUtils, VkUpdateUtils>();
+    builder.Services.AddScoped<IDeltaUtils, DeltaUtils>();
+    builder.Services.AddScoped<IReplacePostUtil, ReplacePostUtil>();
     
     builder.Services.AddSingleton(Log.Logger);
 
