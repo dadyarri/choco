@@ -1,9 +1,7 @@
-using choco.ApiClients.VkService;
-using choco.ApiClients.VkService.RequestBodies;
 using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
-using choco.Utils;
+using choco.Utils.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,14 +14,16 @@ namespace choco.Controllers;
 public class OrdersController : ControllerBase
 {
     private readonly AppDbContext _db;
-    private readonly VkServiceClient _vkServiceClient;
     private readonly ILogger _logger;
+    private readonly IDeltaUtils _delta;
+    private readonly IVkUpdateUtils _vkUpdateUtils;
 
-    public OrdersController(AppDbContext db, VkServiceClient vkServiceClient, ILogger logger)
+    public OrdersController(AppDbContext db, IVkUpdateUtils vkUpdateUtils, ILogger logger, IDeltaUtils delta)
     {
         _db = db;
-        _vkServiceClient = vkServiceClient;
+        _vkUpdateUtils = vkUpdateUtils;
         _logger = logger;
+        _delta = delta;
     }
 
     [HttpGet]
@@ -54,11 +54,11 @@ public class OrdersController : ControllerBase
 
         if (order == null)
         {
-            _logger.Warning("Order {} was not found", orderId);
+            _logger.Warning("Order {orderId} was not found", orderId);
             return NotFound();
         }
 
-        _logger.Information("Found order {}", orderId);
+        _logger.Information("Found order {orderId}", orderId);
         return Ok(order);
     }
 
@@ -75,7 +75,7 @@ public class OrdersController : ControllerBase
 
         if (order == null)
         {
-            _logger.Warning("Order {} was not found", orderId);
+            _logger.Warning("Order {orderId} was not found", orderId);
             return NotFound();
         }
 
@@ -86,17 +86,17 @@ public class OrdersController : ControllerBase
             foreach (var item in order.OrderItems)
             {
                 item.Product.Leftover += item.Amount;
-                await UpdateLeftoverInVk(item);
+                await _vkUpdateUtils.EditProduct(item.Product);
             }
 
             _logger.Information("Leftovers incremented...");
 
-            await ReplacePost();
+            await _vkUpdateUtils.ReplacePost();
         }
 
         await _db.SaveChangesAsync();
 
-        _logger.Information("Deleted order {}", orderId);
+        _logger.Information("Deleted order {orderId}", orderId);
         return NoContent();
     }
 
@@ -113,7 +113,7 @@ public class OrdersController : ControllerBase
 
         if (order == null)
         {
-            _logger.Warning("Order {} was not found", orderId);
+            _logger.Error("Order {orderId} was not found", orderId);
             return NotFound();
         }
 
@@ -122,7 +122,7 @@ public class OrdersController : ControllerBase
         {
             if (order.OrderItems.Any(oi => oi.Product.Leftover < oi.Amount))
             {
-                _logger.Information("Insufficient amount of one or more products. Cancelling restoring...");
+                _logger.Error("Insufficient amount of one or more products. Cancelling restoring...");
                 order.Deleted = true;
                 return Conflict();
             }
@@ -131,12 +131,12 @@ public class OrdersController : ControllerBase
             foreach (var item in order.OrderItems)
             {
                 item.Product.Leftover -= item.Amount;
-                await UpdateLeftoverInVk(item);
+                await _vkUpdateUtils.EditProduct(item.Product);
             }
 
             _logger.Information("Leftovers decreased");
 
-            await ReplacePost();
+            await _vkUpdateUtils.ReplacePost();
         }
 
         await _db.SaveChangesAsync();
@@ -158,35 +158,43 @@ public class OrdersController : ControllerBase
 
         if (orderStatus == null)
         {
-            _logger.Warning("Order status {} was not found", body.Status);
+            _logger.Error("Order status {Status} was not found", body.Status);
             return NotFound();
         }
 
         if (order == null)
         {
-            _logger.Warning("Order {} was not found", orderId);
+            _logger.Error("Order {orderId} was not found", orderId);
             return NotFound();
         }
 
         if (!IsStatusChangingPossible(order.Status.Name, orderStatus.Name))
         {
             _logger.Warning(
-                "Can't change status of order ({} -> {})",
+                "Can't change status of order ({Status.Name} -> {Name})",
                 order.Status.Name,
                 orderStatus.Name
             );
-            
+
             return Conflict($"Переход {order.Status.Name} \u2192 {orderStatus.Name} невозможен");
+        }
+
+        var city = await _db.OrderCities.FindAsync(body.Address.City);
+
+        if (city == null)
+        {
+            _logger.Error("Order city {City} was not found.", body.Address.City);
+            return Conflict();
         }
 
         var address = new OrderAddress
         {
-            City = await _db.OrderCities.FindAsync(body.Address.City),
+            City = city,
             Street = body.Address.Street,
             Building = body.Address.Building
         };
 
-        var savedAddress = await _db.OrderAddresses.SingleOrDefaultAsync(a =>
+        var savedAddress = await _db.OrderAddresses.FirstOrDefaultAsync(a =>
             a.City == address.City && a.Street == address.Street &&
             a.Building == address.Building);
 
@@ -199,23 +207,31 @@ public class OrdersController : ControllerBase
         order.Status = orderStatus;
         order.Date = body.Date;
         order.Address = address;
-        
-        // todo: add calulating delta between new and old order items, to correctly change leftovers
-        // todo: skip changing leftovers if delta is 0
-        // todo: add check on sufficiency of leftovers
-        order.OrderItems = await FindOrderItems(body.OrderItems);
 
         switch (orderStatus.Name)
         {
             case "Обрабатывается":
             {
-                _logger.Information("Decreasing leftovers...");
-                foreach (var item in order.OrderItems)
+                var delta = _delta.CalculateDelta(order.OrderItems, await FindOrderItems(body.OrderItems));
+
+                if (delta.Count > 0)
                 {
-                    item.Product.Leftover -= item.Amount;
-                    await UpdateLeftoverInVk(item);
+                    _logger.Information("Order items list has changed. Trying to update leftovers...");
+                    try
+                    {
+                        await _delta.ApplyDelta(order.OrderItems, delta);
+                        _logger.Information("Leftovers changed");
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        _logger.Error("Insufficient amount of one or more product.");
+                        return Conflict();
+                    }
                 }
-                _logger.Information("Leftovers decreased");
+                else
+                {
+                    _logger.Information("Order items list was not changed.");
+                }
 
                 break;
             }
@@ -225,18 +241,21 @@ public class OrdersController : ControllerBase
                 foreach (var item in order.OrderItems)
                 {
                     item.Product.Leftover += item.Amount;
-                    await UpdateLeftoverInVk(item);
+                    await _vkUpdateUtils.EditProduct(item.Product);
                 }
+
+                await _vkUpdateUtils.ReplacePost();
+
                 _logger.Information("Leftovers increased");
 
                 break;
             }
         }
 
-        await ReplacePost();
+        await _vkUpdateUtils.ReplacePost();
 
         await _db.SaveChangesAsync();
-        _logger.Information("Order updated");
+        _logger.Information("Order {} updated", orderId);
 
         return Ok();
     }
@@ -261,11 +280,12 @@ public class OrdersController : ControllerBase
             foreach (var item in orderItems)
             {
                 item.Product.Leftover -= item.Amount;
-                await UpdateLeftoverInVk(item);
+                await _vkUpdateUtils.EditProduct(item.Product);
             }
+
             _logger.Information("Leftovers decreased");
 
-            await ReplacePost();
+            await _vkUpdateUtils.ReplacePost();
         }
 
         var orderCity = await _db.OrderCities.FindAsync(body.Address.City);
@@ -301,7 +321,7 @@ public class OrdersController : ControllerBase
         };
         await _db.Orders.AddAsync(order);
         await _db.SaveChangesAsync();
-        
+
         _logger.Information("Order created");
         return Created("/api/Orders", order);
     }
@@ -319,43 +339,6 @@ public class OrdersController : ControllerBase
         }
 
         return items;
-    }
-
-    private async Task UpdateLeftoverInVk(OrderItem item)
-    {
-        if (item.Product.MarketId != 0)
-        {
-            await _vkServiceClient.EditProduct(new EditProductRequestBody
-            {
-                MarketId = item.Product.MarketId,
-                Leftover = (int)item.Product.Leftover
-            });
-        }
-    }
-
-    private async Task ReplacePost()
-    {
-        var imageData =
-            ReplacePostUtil.GenerateImage(
-                await _db.Products
-                    .Where(p => p.Leftover > 0 && !p.Deleted)
-                    .OrderBy(p => p.Name)
-                    .Select(p =>
-                        new Product
-                        {
-                            Category = null,
-                            Deleted = p.Deleted,
-                            Id = p.Id,
-                            IsByWeight = p.IsByWeight,
-                            Leftover = Math.Round(p.Leftover, 2),
-                            MarketId = p.MarketId,
-                            Name = p.Name,
-                            RetailPrice = p.RetailPrice,
-                            WholesalePrice = p.WholesalePrice
-                        })
-                    .ToListAsync()
-            ).ToArray();
-        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
     }
 
     private bool IsStatusChangingPossible(string oldStatus, string newStatus)

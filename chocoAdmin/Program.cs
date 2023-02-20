@@ -1,14 +1,18 @@
 using System.Net;
 using System.Text;
-using choco.ApiClients.VkService;
+using choco.ApiClients.VkService.Interfaces;
+using choco.ApiClients.VkService.Services;
 using choco.Data;
 using choco.Extensions;
-using Microsoft.EntityFrameworkCore;
-using Serilog;
-using Serilog.Events;
+using choco.Utils;
+using choco.Utils.Interfaces;
+using choco.Utils.Services;
 using LettuceEncrypt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("Default");
@@ -24,7 +28,12 @@ try
 
     builder.Services.AddControllersWithViews(options => { options.UseGeneralRoutePrefix("api"); });
     builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
-    builder.Services.AddSingleton<VkServiceClient>();
+    
+    builder.Services.AddSingleton<IVkServiceClient, VkServiceClient>();
+    builder.Services.AddSingleton<IVkUpdateUtils, VkUpdateUtils>();
+    builder.Services.AddSingleton<IDeltaUtils, DeltaUtils>();
+    builder.Services.AddSingleton<IReplacePostUtil, ReplacePostUtil>();
+    
     builder.Services.AddSingleton(Log.Logger);
 
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

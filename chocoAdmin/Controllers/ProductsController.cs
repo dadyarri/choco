@@ -1,9 +1,8 @@
-using choco.ApiClients.VkService;
 using choco.ApiClients.VkService.RequestBodies;
 using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
-using choco.Utils;
+using choco.Utils.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,13 +15,14 @@ namespace choco.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly AppDbContext _db;
-    private readonly VkServiceClient _vkServiceClient;
     private readonly ILogger _logger;
+    private readonly IVkUpdateUtils _vkUpdateUtils;
 
-    public ProductsController(AppDbContext db, VkServiceClient vkServiceClient)
+    public ProductsController(AppDbContext db, ILogger logger, IVkUpdateUtils vkUpdateUtils)
     {
         _db = db;
-        _vkServiceClient = vkServiceClient;
+        _logger = logger;
+        _vkUpdateUtils = vkUpdateUtils;
     }
 
     [HttpGet]
@@ -70,14 +70,9 @@ public class ProductsController : ControllerBase
         await _db.SaveChangesAsync();
 
 
-        await _vkServiceClient.EditProduct(new EditProductRequestBody
-        {
-            MarketId = body.MarketId,
-            Name = body.Name,
-            Price = body.RetailPrice
-        });
+        await _vkUpdateUtils.EditProduct(product);
 
-        await ReplacePost();
+        await _vkUpdateUtils.ReplacePost();
         
         _logger.Information("Product saved");
 
@@ -95,7 +90,7 @@ public class ProductsController : ControllerBase
 
         if (product == null)
         {
-            _logger.Warning("Product {} was not found", productId);
+            _logger.Warning("Product {productId} was not found", productId);
             return NotFound();
         }
 
@@ -122,14 +117,14 @@ public class ProductsController : ControllerBase
         if (product.MarketId != 0)
         {
             _logger.Information("Hiding product {} from vk", productId);
-            await _vkServiceClient.EditProduct(new EditProductRequestBody
+            await _vkUpdateUtils.EditProduct(new EditProductRequestBody
             {
                 MarketId = product.MarketId,
                 Leftover = 0
             });
         }
 
-        await ReplacePost();
+        await _vkUpdateUtils.ReplacePost();
 
         return NoContent();
     }
@@ -142,26 +137,27 @@ public class ProductsController : ControllerBase
 
         if (product == null)
         {
-            _logger.Warning("Product {} was not found", productId);
+            _logger.Warning("Product {productId} was not found", productId);
             return NotFound();
         }
 
         product.Deleted = false;
         await _db.SaveChangesAsync();
         
-        _logger.Information("Product {} restored", productId);
+        _logger.Information("Product {productId} restored", productId);
 
         if (product.MarketId != 0)
         {
-            _logger.Information("Restoring product {} in vk...", productId);
-            await _vkServiceClient.EditProduct(new EditProductRequestBody
+            _logger.Information("Restoring product {productId} in vk...", productId);
+            await _vkUpdateUtils.EditProduct(new EditProductRequestBody
             {
                 MarketId = product.MarketId,
                 Leftover = (int)product.Leftover
             });
+            _logger.Information("Product {productId} restored", productId);
         }
 
-        await ReplacePost();
+        await _vkUpdateUtils.ReplacePost();
 
         return Ok();
     }
@@ -187,30 +183,5 @@ public class ProductsController : ControllerBase
         _logger.Information("Product {} created", product.Id);
         
         return Created("/Products", body);
-    }
-
-    private async Task ReplacePost()
-    {
-        var imageData =
-            ReplacePostUtil.GenerateImage(
-                await _db.Products
-                    .Where(p => p.Leftover > 0 && !p.Deleted)
-                    .OrderBy(p => p.Name)
-                    .Select(p =>
-                        new Product
-                        {
-                            Category = null,
-                            Deleted = p.Deleted,
-                            Id = p.Id,
-                            IsByWeight = p.IsByWeight,
-                            Leftover = Math.Round(p.Leftover, 2),
-                            MarketId = p.MarketId,
-                            Name = p.Name,
-                            RetailPrice = p.RetailPrice,
-                            WholesalePrice = p.WholesalePrice
-                        })
-                    .ToListAsync()
-            ).ToArray();
-        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
     }
 }
