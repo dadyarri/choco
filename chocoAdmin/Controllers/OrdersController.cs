@@ -213,13 +213,15 @@ public class OrdersController : ControllerBase
             case "Обрабатывается":
             {
                 var delta = _delta.CalculateDelta(order.OrderItems, await FindOrderItems(body.OrderItems));
-
+                
+                _logger.Information(delta.ToString());
+                
                 if (delta.Count > 0)
                 {
                     _logger.Information("Order items list has changed. Trying to update leftovers...");
                     try
                     {
-                        await _delta.ApplyDelta(order.OrderItems, delta);
+                        order.OrderItems = await _delta.ApplyDelta(order.OrderItems, delta);
                         _logger.Information("Leftovers changed");
                     }
                     catch (InvalidOperationException)
