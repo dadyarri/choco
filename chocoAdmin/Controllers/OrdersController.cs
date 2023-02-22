@@ -214,14 +214,16 @@ public class OrdersController : ControllerBase
             {
                 var delta = _delta.CalculateDelta(order.OrderItems, await FindOrderItems(body.OrderItems));
                 
-                _logger.Information(delta.ToString());
-                
                 if (delta.Count > 0)
                 {
                     _logger.Information("Order items list has changed. Trying to update leftovers...");
                     try
                     {
                         order.OrderItems = await _delta.ApplyDelta(order.OrderItems, delta);
+                        
+                        await _db.OrderItems
+                            .Where(oi => oi.Order == null)
+                            .ForEachAsync(oi => _db.OrderItems.Remove(oi));
                         _logger.Information("Leftovers changed");
                     }
                     catch (InvalidOperationException)
