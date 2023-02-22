@@ -1,5 +1,4 @@
 using choco.Data.Models;
-using choco.Utils.Services;
 
 namespace choco.Utils.Interfaces;
 
@@ -10,10 +9,15 @@ public interface IDeltaUtils
         public double Amount { get; init; }
         public required Product Product { get; init; }
         public bool ShouldDelete { get; init; }
+
+        public override string ToString()
+        {
+            return $"Delta['{Product.Name}', {Amount}, {ShouldDelete}]";
+        }
     }
     
     public List<DeltaItem> CalculateDelta(List<OrderItem> oldList, List<OrderItem> newList);
-    public Task ApplyDelta(List<OrderItem> oldList, List<DeltaItem> delta);
+    public Task<List<OrderItem>> ApplyDelta(List<OrderItem> oldList, List<DeltaItem> delta);
 
 
 }
