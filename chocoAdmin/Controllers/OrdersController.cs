@@ -259,7 +259,7 @@ public class OrdersController : ControllerBase
         await _vkUpdateUtils.ReplacePost();
 
         await _db.SaveChangesAsync();
-        _logger.Information("Order {} updated", orderId);
+        _logger.Information("Order {orderId} updated", orderId);
 
         return Ok();
     }

@@ -56,7 +56,7 @@ public class ProductsController : ControllerBase
 
         if (product == null)
         {
-            _logger.Warning("Product {} was not found", productId);
+            _logger.Warning("Product {productId} was not found", productId);
             return NotFound();
         }
 
@@ -105,18 +105,18 @@ public class ProductsController : ControllerBase
 
         if (product == null)
         {
-            _logger.Warning("Product {} was not found", productId);
+            _logger.Warning("Product {productId} was not found", productId);
             return NotFound();
         }
 
         product.Deleted = true;
         await _db.SaveChangesAsync();
         
-        _logger.Information("Product {} deleted", productId);
+        _logger.Information("Product {productId} deleted", productId);
 
         if (product.MarketId != 0)
         {
-            _logger.Information("Hiding product {} from vk", productId);
+            _logger.Information("Hiding product {productId} from vk", productId);
             await _vkUpdateUtils.EditProduct(new EditProductRequestBody
             {
                 MarketId = product.MarketId,
@@ -180,7 +180,7 @@ public class ProductsController : ControllerBase
         await _db.Products.AddAsync(product);
         await _db.SaveChangesAsync();
 
-        _logger.Information("Product {} created", product.Id);
+        _logger.Information("Product {Id} created", product.Id);
         
         return Created("/Products", body);
     }

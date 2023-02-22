@@ -52,7 +52,7 @@ public class ShipmentsController : ControllerBase
             {
                 item.Product.Leftover += item.Amount;
                 await _vkUpdateUtils.EditProduct(item.Product);
-                _logger.Information("Leftovers of product {} increased", item.Product.Id);
+                _logger.Information("Leftovers of product {Id} increased", item.Product.Id);
             }
 
             _logger.Information("Leftovers incremented");
@@ -70,7 +70,7 @@ public class ShipmentsController : ControllerBase
         await _db.Shipments.AddAsync(shipment);
         await _db.SaveChangesAsync();
 
-        _logger.Information("Shipment {} created", shipment.Id);
+        _logger.Information("Shipment {Id} created", shipment.Id);
 
         return Created("/api/Shipments", shipment);
     }
@@ -88,7 +88,7 @@ public class ShipmentsController : ControllerBase
 
         if (shipment == null)
         {
-            _logger.Warning("Shipment {} was not found", shipmentId);
+            _logger.Warning("Shipment {Id} was not found", shipmentId);
             return NotFound();
         }
 
@@ -106,7 +106,7 @@ public class ShipmentsController : ControllerBase
             {
                 item.Product.Leftover -= item.Amount;
                 await _vkUpdateUtils.EditProduct(item.Product);
-                _logger.Information("Leftovers of product {} decreased", item.Product.Id);
+                _logger.Information("Leftovers of product {Id} decreased", item.Product.Id);
             }
 
             _logger.Information("Leftovers decreased");
@@ -131,7 +131,7 @@ public class ShipmentsController : ControllerBase
 
         if (shipment == null)
         {
-            _logger.Warning("Shipment {} was not found", shipmentId);
+            _logger.Warning("Shipment {Id} was not found", shipmentId);
             return NotFound();
         }
 
@@ -143,7 +143,7 @@ public class ShipmentsController : ControllerBase
             {
                 item.Product.Leftover += item.Amount;
                 await _vkUpdateUtils.EditProduct(item.Product);
-                _logger.Information("Leftovers of product {} increased", item.Product.Id);
+                _logger.Information("Leftovers of product {Id} increased", item.Product.Id);
             }
 
             _logger.Information("Leftovers increased");
@@ -170,7 +170,7 @@ public class ShipmentsController : ControllerBase
 
         if (shipment == null)
         {
-            _logger.Warning("Shipment {} was not found", shipmentId);
+            _logger.Warning("Shipment {shipmentId} was not found", shipmentId);
             return NotFound();
         }
 
@@ -191,31 +191,29 @@ public class ShipmentsController : ControllerBase
 
         if (shipmentStatus == null)
         {
-            _logger.Warning("Shipment status {} was not found", body.Status);
+            _logger.Warning("Shipment status {Status} was not found", body.Status);
             return NotFound();
         }
 
         if (shipment == null)
         {
-            _logger.Warning("Shipment {} was not found", shipmentId);
+            _logger.Warning("Shipment {shipmentId} was not found", shipmentId);
             return NotFound();
         }
 
         if (!IsStatusChangingPossible(shipment.Status.Name, shipmentStatus.Name))
         {
-            _logger.Warning(
-                "Can't change shipment status {} → {}",
-                shipment.Status.Name,
-                shipmentStatus.Name
-            );
+            _logger
+                .ForContext("oldStatusName", shipment.Status.Name)
+                .ForContext("newStatusName", shipmentStatus.Name)
+                .Warning("Can't change shipment status {oldStatusName} → {newStatusName}");
             return Conflict($"{shipment.Status.Name} → {shipmentStatus.Name}");
         }
 
         shipment.Status = shipmentStatus;
         shipment.Date = shipment.Date;
-        
-        // todo: calculate delta between new and old shipment items to correctly change leftovers
-        // todo: skip decreasing leftovers, if delta is 0
+
+        // todo: use new delta mechanism here (possibly will require changes)
         shipment.ShipmentItems = await FindShipmentItems(body.ShipmentItems);
 
         if (shipmentStatus.Name == "Выполнена")
@@ -225,15 +223,15 @@ public class ShipmentsController : ControllerBase
             {
                 item.Product.Leftover += item.Amount;
                 await _vkUpdateUtils.EditProduct(item.Product);
-                _logger.Information("Leftovers of product {} increased", item.Product.Id);
+                _logger.Information("Leftovers of product {Id} increased", item.Product.Id);
             }
 
             await _vkUpdateUtils.ReplacePost();
         }
 
         await _db.SaveChangesAsync();
-        
-        _logger.Information("Shipment {} updated", shipmentId);
+
+        _logger.Information("Shipment {shipmentId} updated", shipmentId);
 
         return Ok();
     }
