@@ -98,7 +98,7 @@ public class DeltaUtils : IDeltaUtils
 
         _logger.Information("Deleting items, that was marked as should be deleted...");
         var shouldBeDeleted = delta.Where(y => y.ShouldDelete).ToList();
-        _logger.Information("Should delete {Count}", shouldBeDeleted.Count);
+        _logger.Information("Will delete {Count} items", shouldBeDeleted.Count);
         foreach (var deltaItem in shouldBeDeleted)
         {
             oldList.RemoveAll(oi => oi.Product.Id == deltaItem.Product.Id);
