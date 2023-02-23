@@ -106,4 +106,14 @@ public class DeltaUtils : IDeltaUtils
 
         return oldList;
     }
+
+    public List<IDeltaUtils.DeltaItem> CalculateDeltaInShipment(List<ShipmentItem> oldList, List<ShipmentItem> newList)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<ShipmentItem>> ApplyDeltaToOrder(List<ShipmentItem> oldList, List<IDeltaUtils.DeltaItem> delta)
+    {
+        throw new NotImplementedException();
+    }
 }
