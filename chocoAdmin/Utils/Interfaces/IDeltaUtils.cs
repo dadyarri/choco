@@ -16,8 +16,8 @@ public interface IDeltaUtils
         }
     }
     
-    public List<DeltaItem> CalculateDelta(List<OrderItem> oldList, List<OrderItem> newList);
-    public Task<List<OrderItem>> ApplyDelta(List<OrderItem> oldList, List<DeltaItem> delta);
+    public List<DeltaItem> CalculateDeltaInOrder(List<OrderItem> oldList, List<OrderItem> newList);
+    public Task<List<OrderItem>> ApplyDeltaToOrder(List<OrderItem> oldList, List<DeltaItem> delta);
 
 
 }
