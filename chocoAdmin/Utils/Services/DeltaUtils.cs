@@ -15,7 +15,7 @@ public class DeltaUtils : IDeltaUtils
         _logger = logger;
     }
 
-    public List<IDeltaUtils.DeltaItem> CalculateDeltaInOrder(List<OrderItem> oldList, List<OrderItem> newList)
+    public List<IDeltaUtils.DeltaItem> CalculateDelta(List<OrderItem> oldList, List<OrderItem> newList)
     {
         var oldDict = new Dictionary<Guid, OrderItem>();
         foreach (var item in oldList)
@@ -67,7 +67,7 @@ public class DeltaUtils : IDeltaUtils
         return delta;
     }
 
-    public async Task<List<OrderItem>> ApplyDeltaToOrder(List<OrderItem> oldList, List<IDeltaUtils.DeltaItem> delta)
+    public async Task<List<OrderItem>> ApplyDelta(List<OrderItem> oldList, List<IDeltaUtils.DeltaItem> delta)
     {
         if (delta.Any(item => item.Product.Leftover + item.Amount < 0))
         {
@@ -107,12 +107,12 @@ public class DeltaUtils : IDeltaUtils
         return oldList;
     }
 
-    public List<IDeltaUtils.DeltaItem> CalculateDeltaInShipment(List<ShipmentItem> oldList, List<ShipmentItem> newList)
+    public List<IDeltaUtils.DeltaItem> CalculateDelta(List<ShipmentItem> oldList, List<ShipmentItem> newList)
     {
         throw new NotImplementedException();
     }
 
-    public Task<List<ShipmentItem>> ApplyDeltaToOrder(List<ShipmentItem> oldList, List<IDeltaUtils.DeltaItem> delta)
+    public Task<List<ShipmentItem>> ApplyDelta(List<ShipmentItem> oldList, List<IDeltaUtils.DeltaItem> delta)
     {
         throw new NotImplementedException();
     }

@@ -16,11 +16,11 @@ public interface IDeltaUtils
         }
     }
     
-    public List<DeltaItem> CalculateDeltaInOrder(List<OrderItem> oldList, List<OrderItem> newList);
-    public Task<List<OrderItem>> ApplyDeltaToOrder(List<OrderItem> oldList, List<DeltaItem> delta);
+    public List<DeltaItem> CalculateDelta(List<OrderItem> oldList, List<OrderItem> newList);
+    public Task<List<OrderItem>> ApplyDelta(List<OrderItem> oldList, List<DeltaItem> delta);
     
-    public List<DeltaItem> CalculateDeltaInShipment(List<ShipmentItem> oldList, List<ShipmentItem> newList);
-    public Task<List<ShipmentItem>> ApplyDeltaToOrder(List<ShipmentItem> oldList, List<DeltaItem> delta);
+    public List<DeltaItem> CalculateDelta(List<ShipmentItem> oldList, List<ShipmentItem> newList);
+    public Task<List<ShipmentItem>> ApplyDelta(List<ShipmentItem> oldList, List<DeltaItem> delta);
 
 
 }
