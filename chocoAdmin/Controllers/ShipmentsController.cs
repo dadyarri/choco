@@ -16,12 +16,14 @@ public class ShipmentsController : ControllerBase
     private readonly AppDbContext _db;
     private readonly ILogger _logger;
     private readonly IVkUpdateUtils _vkUpdateUtils;
+    private readonly IDeltaUtils _delta;
 
-    public ShipmentsController(AppDbContext db, ILogger logger, IVkUpdateUtils vkUpdateUtils)
+    public ShipmentsController(AppDbContext db, ILogger logger, IVkUpdateUtils vkUpdateUtils, IDeltaUtils delta)
     {
         _db = db;
         _logger = logger;
         _vkUpdateUtils = vkUpdateUtils;
+        _delta = delta;
     }
 
     [HttpGet]
@@ -213,17 +215,30 @@ public class ShipmentsController : ControllerBase
         shipment.Status = shipmentStatus;
         shipment.Date = shipment.Date;
 
-        // todo: use new delta mechanism here (possibly will require changes)
-        shipment.ShipmentItems = await FindShipmentItems(body.ShipmentItems);
-
         if (shipmentStatus.Name == "Выполнена")
         {
             _logger.Information("Shipment finished, increasing leftovers...");
-            foreach (var item in shipment.ShipmentItems)
+            var delta = _delta.CalculateDelta(
+                shipment.ShipmentItems,
+                await FindShipmentItems(body.ShipmentItems)
+            );
+            if (delta.Count > 0)
             {
-                item.Product.Leftover += item.Amount;
-                await _vkUpdateUtils.EditProduct(item.Product);
-                _logger.Information("Leftovers of product {Id} increased", item.Product.Id);
+                _logger.Information("Shipment items list has changed. Trying to update leftovers...");
+                try
+                {
+                    shipment.ShipmentItems = await _delta.ApplyDelta(shipment.ShipmentItems, delta);
+                        
+                    await _db.ShipmentItems
+                        .Where(si => si.Shipment == null)
+                        .ForEachAsync(si => _db.ShipmentItems.Remove(si));
+                    _logger.Information("Leftovers changed");
+                }
+                catch (InvalidOperationException)
+                {
+                    _logger.Error("Insufficient amount of one or more product.");
+                    return Conflict();
+                }
             }
 
             await _vkUpdateUtils.ReplacePost();
