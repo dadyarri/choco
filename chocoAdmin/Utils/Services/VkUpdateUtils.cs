@@ -1,7 +1,6 @@
 using choco.ApiClients.VkService.Interfaces;
 using choco.ApiClients.VkService.RequestBodies;
 using choco.Data;
-using choco.Data.Interfaces;
 using choco.Data.Models;
 using choco.Utils.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -25,13 +24,13 @@ public class VkUpdateUtils: IVkUpdateUtils
     {
         if (item.MarketId != 0)
         {
-            await _vkServiceClient.EditProduct(new EditProductRequestBody
+            await Task.Run(() => _vkServiceClient.EditProduct(new EditProductRequestBody
             {
                 MarketId = item.MarketId,
                 Leftover = (int)Math.Round(item.Leftover),
                 Price = item.RetailPrice,
                 Name = item.Name
-            });
+            }));
         }   
     }
 
@@ -39,7 +38,7 @@ public class VkUpdateUtils: IVkUpdateUtils
     {
         if (item.MarketId != 0)
         {
-            await _vkServiceClient.EditProduct(item);
+            await Task.Run(() => _vkServiceClient.EditProduct(item));
         }   
     }
     

@@ -17,13 +17,13 @@ public class ReplacePostUtil: IReplacePostUtil
 
     public async Task ReplacePost(byte[] imageData)
     {
-        var attachmentId = await _vkServiceClient.UploadImage(imageData);
+        var attachmentId = await Task.Run(() => _vkServiceClient.UploadImage(imageData));
         if (attachmentId != null)
         {
-            await _vkServiceClient.ReplacePost(new ReplacePostRequestBody
+            await Task.Run(() => _vkServiceClient.ReplacePost(new ReplacePostRequestBody
             {
                 Photo = attachmentId.Photo
-            });
+            }));
         }
     }
 
