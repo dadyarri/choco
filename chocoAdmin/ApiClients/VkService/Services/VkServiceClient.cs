@@ -6,6 +6,8 @@ using choco.ApiClients.VkService.Interfaces;
 using choco.ApiClients.VkService.RequestBodies;
 using choco.ApiClients.VkService.Responses;
 using choco.Exceptions;
+using Polly;
+using Polly.Contrib.WaitAndRetry;
 using ILogger = Serilog.ILogger;
 
 namespace choco.ApiClients.VkService.Services;
@@ -19,6 +21,18 @@ public class VkServiceClient : IVkServiceClient
     );
 
     private readonly ILogger _logger;
+
+    private readonly IAsyncPolicy<HttpResponseMessage> _retryPolicy = Policy<HttpResponseMessage>
+        .Handle<HttpRequestException>()
+        .OrResult(x =>
+            x.StatusCode is
+                HttpStatusCode.TooManyRequests or
+                HttpStatusCode.InternalServerError or
+                HttpStatusCode.BadRequest
+        )
+        .WaitAndRetryAsync(
+            Backoff.DecorrelatedJitterBackoffV2(TimeSpan.FromSeconds(1), 5)
+        );
 
     public VkServiceClient(ILogger logger)
     {
@@ -38,7 +52,7 @@ public class VkServiceClient : IVkServiceClient
             var streamContent = new StreamContent(new MemoryStream(imageData));
             streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse("image/jpeg");
             content.Add(streamContent, "photo", "upload.jpg");
-            var response = await HttpClient.PostAsync("/uploadImage", content);
+            var response = await _retryPolicy.ExecuteAsync(() => HttpClient.PostAsync("/uploadImage", content));
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 _logger.Information("Image uploaded");
@@ -55,11 +69,12 @@ public class VkServiceClient : IVkServiceClient
         {
             var stringContent =
                 new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-            var response = await HttpClient.PostAsync("/editProduct", stringContent);
+            var response = await _retryPolicy.ExecuteAsync(() => HttpClient.PostAsync("/editProduct", stringContent));
             if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
             {
                 throw new UpdatingProductException("Couldn't update product");
             }
+
             _logger.Information("Product {MarketId} updated", body.MarketId);
         }
     }
@@ -69,11 +84,12 @@ public class VkServiceClient : IVkServiceClient
         if (await TryPing())
         {
             var stringContent = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-            var result = await HttpClient.PostAsync("/replacePinned", stringContent);
+            var result = await _retryPolicy.ExecuteAsync(() => HttpClient.PostAsync("/replacePinned", stringContent));
             if (result.StatusCode == HttpStatusCode.UnprocessableEntity)
             {
                 throw new UpdatingPostException("Couldn't update post");
             }
+
             _logger.Information("Post updated");
         }
     }
@@ -92,6 +108,7 @@ public class VkServiceClient : IVkServiceClient
             {
                 _logger.Warning("VkIntegration service is not available at the moment, skipping syncronization...");
             }
+
             return tryPing;
         }
         catch (HttpRequestException)
