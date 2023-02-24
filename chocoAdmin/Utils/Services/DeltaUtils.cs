@@ -1,4 +1,4 @@
-using choco.Data.Models;
+using choco.Data.Interfaces;
 using choco.Utils.Interfaces;
 using ILogger = Serilog.ILogger;
 
@@ -15,9 +15,9 @@ public class DeltaUtils : IDeltaUtils
         _logger = logger;
     }
 
-    public List<IDeltaUtils.DeltaItem> CalculateDelta(List<OrderItem> oldList, List<OrderItem> newList)
+    public List<IDeltaUtils.DeltaItem> CalculateDelta<T>(List<T> oldList, List<T> newList) where T: ITransactionItem
     {
-        var oldDict = new Dictionary<Guid, OrderItem>();
+        var oldDict = new Dictionary<Guid, T>();
         foreach (var item in oldList)
         {
             oldDict[item.Product.Id] = item;
@@ -37,7 +37,7 @@ public class DeltaUtils : IDeltaUtils
                         .ForContext("oldItemAmount", oldItem.Amount)
                         .ForContext("newItemAmount", newItem.Amount)
                         .Information("Amount differs ({oldItemAmount} -> {newItemAmount})");
-     
+
                     delta.Add(new IDeltaUtils.DeltaItem
                     {
                         Product = newItem.Product, Amount = oldItem.Amount - newItem.Amount, ShouldDelete = false,
@@ -67,7 +67,8 @@ public class DeltaUtils : IDeltaUtils
         return delta;
     }
 
-    public async Task<List<OrderItem>> ApplyDelta(List<OrderItem> oldList, List<IDeltaUtils.DeltaItem> delta)
+    public async Task<List<T>> ApplyDelta<T>(List<T> oldList, List<IDeltaUtils.DeltaItem> delta)
+        where T : ITransactionItem, new()
     {
         if (delta.Any(item => item.Product.Leftover + item.Amount < 0))
         {
@@ -90,7 +91,7 @@ public class DeltaUtils : IDeltaUtils
             {
                 _logger.Information("Didn't found item from delta in old list, adding it to order, updating leftovers");
                 deltaItem.Product.Leftover += deltaItem.Amount;
-                oldList.Add(new OrderItem
+                oldList.Add(new T
                     { Product = deltaItem.Product, Amount = deltaItem.Amount });
                 await _vkUpdateUtils.EditProduct(deltaItem.Product);
             }
@@ -105,15 +106,5 @@ public class DeltaUtils : IDeltaUtils
         }
 
         return oldList;
-    }
-
-    public List<IDeltaUtils.DeltaItem> CalculateDelta(List<ShipmentItem> oldList, List<ShipmentItem> newList)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<ShipmentItem>> ApplyDelta(List<ShipmentItem> oldList, List<IDeltaUtils.DeltaItem> delta)
-    {
-        throw new NotImplementedException();
     }
 }

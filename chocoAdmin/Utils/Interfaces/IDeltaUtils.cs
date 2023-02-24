@@ -1,3 +1,4 @@
+using choco.Data.Interfaces;
 using choco.Data.Models;
 
 namespace choco.Utils.Interfaces;
@@ -16,11 +17,8 @@ public interface IDeltaUtils
         }
     }
     
-    public List<DeltaItem> CalculateDelta(List<OrderItem> oldList, List<OrderItem> newList);
-    public Task<List<OrderItem>> ApplyDelta(List<OrderItem> oldList, List<DeltaItem> delta);
-    
-    public List<DeltaItem> CalculateDelta(List<ShipmentItem> oldList, List<ShipmentItem> newList);
-    public Task<List<ShipmentItem>> ApplyDelta(List<ShipmentItem> oldList, List<DeltaItem> delta);
+    public List<DeltaItem> CalculateDelta<T>(List<T> oldList, List<T> newList) where T: ITransactionItem;
+    public Task<List<T>> ApplyDelta<T>(List<T> oldList, List<DeltaItem> delta) where T: ITransactionItem, new();
 
 
 }
