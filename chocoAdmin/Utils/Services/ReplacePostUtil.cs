@@ -1,16 +1,16 @@
-using choco.ApiClients.VkService;
+using choco.ApiClients.VkService.Interfaces;
 using choco.ApiClients.VkService.RequestBodies;
 using choco.Data.Models;
-using choco.Exceptions;
+using choco.Utils.Interfaces;
 using SkiaSharp;
 
-namespace choco.Utils;
+namespace choco.Utils.Services;
 
-public class ReplacePostUtil
+public class ReplacePostUtil: IReplacePostUtil
 {
-    private readonly VkServiceClient _vkServiceClient;
+    private readonly IVkServiceClient _vkServiceClient;
 
-    public ReplacePostUtil(VkServiceClient vkServiceClient)
+    public ReplacePostUtil(IVkServiceClient vkServiceClient)
     {
         _vkServiceClient = vkServiceClient;
     }
@@ -27,7 +27,7 @@ public class ReplacePostUtil
         }
     }
 
-    public static SKData GenerateImage(List<Product> products)
+    public SKData GenerateImage(List<Product> products)
     {
         SKData data;
 

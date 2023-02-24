@@ -1,9 +1,7 @@
-using choco.ApiClients.VkService;
-using choco.ApiClients.VkService.RequestBodies;
 using choco.Data;
 using choco.Data.Models;
 using choco.RequestBodies;
-using choco.Utils;
+using choco.Utils.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,14 +14,16 @@ namespace choco.Controllers;
 public class ShipmentsController : ControllerBase
 {
     private readonly AppDbContext _db;
-    private readonly VkServiceClient _vkServiceClient;
     private readonly ILogger _logger;
+    private readonly IVkUpdateUtils _vkUpdateUtils;
+    private readonly IDeltaUtils _delta;
 
-    public ShipmentsController(AppDbContext db, VkServiceClient vkServiceClient, ILogger logger)
+    public ShipmentsController(AppDbContext db, ILogger logger, IVkUpdateUtils vkUpdateUtils, IDeltaUtils delta)
     {
         _db = db;
-        _vkServiceClient = vkServiceClient;
         _logger = logger;
+        _vkUpdateUtils = vkUpdateUtils;
+        _delta = delta;
     }
 
     [HttpGet]
@@ -53,13 +53,13 @@ public class ShipmentsController : ControllerBase
             foreach (var item in shipmentItems)
             {
                 item.Product.Leftover += item.Amount;
-                await Task.Run(() => UpdateLeftoverInVk(item));
-                _logger.Information("Leftovers of product {} increased", item.Product.Id);
+                await _vkUpdateUtils.EditProduct(item.Product);
+                _logger.Information("Leftovers of product {Id} increased", item.Product.Id);
             }
 
             _logger.Information("Leftovers incremented");
 
-            await Task.Run(ReplacePost);
+            await _vkUpdateUtils.ReplacePost();
         }
 
         var shipment = new Shipment
@@ -72,7 +72,7 @@ public class ShipmentsController : ControllerBase
         await _db.Shipments.AddAsync(shipment);
         await _db.SaveChangesAsync();
 
-        _logger.Information("Shipment {} created", shipment.Id);
+        _logger.Information("Shipment {Id} created", shipment.Id);
 
         return Created("/api/Shipments", shipment);
     }
@@ -90,7 +90,7 @@ public class ShipmentsController : ControllerBase
 
         if (shipment == null)
         {
-            _logger.Warning("Shipment {} was not found", shipmentId);
+            _logger.Warning("Shipment {Id} was not found", shipmentId);
             return NotFound();
         }
 
@@ -107,13 +107,13 @@ public class ShipmentsController : ControllerBase
             foreach (var item in shipment.ShipmentItems)
             {
                 item.Product.Leftover -= item.Amount;
-                await Task.Run(() => UpdateLeftoverInVk(item));
-                _logger.Information("Leftovers of product {} decreased", item.Product.Id);
+                await _vkUpdateUtils.EditProduct(item.Product);
+                _logger.Information("Leftovers of product {Id} decreased", item.Product.Id);
             }
 
             _logger.Information("Leftovers decreased");
 
-            await Task.Run(ReplacePost);
+            await _vkUpdateUtils.ReplacePost();
         }
 
         await _db.SaveChangesAsync();
@@ -133,7 +133,7 @@ public class ShipmentsController : ControllerBase
 
         if (shipment == null)
         {
-            _logger.Warning("Shipment {} was not found", shipmentId);
+            _logger.Warning("Shipment {Id} was not found", shipmentId);
             return NotFound();
         }
 
@@ -144,13 +144,13 @@ public class ShipmentsController : ControllerBase
             foreach (var item in shipment.ShipmentItems)
             {
                 item.Product.Leftover += item.Amount;
-                await Task.Run(() => UpdateLeftoverInVk(item));
-                _logger.Information("Leftovers of product {} increased", item.Product.Id);
+                await _vkUpdateUtils.EditProduct(item.Product);
+                _logger.Information("Leftovers of product {Id} increased", item.Product.Id);
             }
 
             _logger.Information("Leftovers increased");
 
-            await Task.Run(ReplacePost);
+            await _vkUpdateUtils.ReplacePost();
         }
 
         await _db.SaveChangesAsync();
@@ -172,7 +172,7 @@ public class ShipmentsController : ControllerBase
 
         if (shipment == null)
         {
-            _logger.Warning("Shipment {} was not found", shipmentId);
+            _logger.Warning("Shipment {shipmentId} was not found", shipmentId);
             return NotFound();
         }
 
@@ -193,49 +193,60 @@ public class ShipmentsController : ControllerBase
 
         if (shipmentStatus == null)
         {
-            _logger.Warning("Shipment status {} was not found", body.Status);
+            _logger.Warning("Shipment status {Status} was not found", body.Status);
             return NotFound();
         }
 
         if (shipment == null)
         {
-            _logger.Warning("Shipment {} was not found", shipmentId);
+            _logger.Warning("Shipment {shipmentId} was not found", shipmentId);
             return NotFound();
         }
 
         if (!IsStatusChangingPossible(shipment.Status.Name, shipmentStatus.Name))
         {
-            _logger.Warning(
-                "Can't change shipment status {} → {}",
-                shipment.Status.Name,
-                shipmentStatus.Name
-            );
+            _logger
+                .ForContext("oldStatusName", shipment.Status.Name)
+                .ForContext("newStatusName", shipmentStatus.Name)
+                .Warning("Can't change shipment status {oldStatusName} → {newStatusName}");
             return Conflict($"{shipment.Status.Name} → {shipmentStatus.Name}");
         }
 
         shipment.Status = shipmentStatus;
         shipment.Date = shipment.Date;
-        
-        // todo: calculate delta between new and old shipment items to correctly change leftovers
-        // todo: skip decreasing leftovers, if delta is 0
-        shipment.ShipmentItems = await FindShipmentItems(body.ShipmentItems);
 
         if (shipmentStatus.Name == "Выполнена")
         {
             _logger.Information("Shipment finished, increasing leftovers...");
-            foreach (var item in shipment.ShipmentItems)
+            var delta = _delta.CalculateDelta(
+                shipment.ShipmentItems,
+                await FindShipmentItems(body.ShipmentItems)
+            );
+            if (delta.Count > 0)
             {
-                item.Product.Leftover += item.Amount;
-                await Task.Run(() => UpdateLeftoverInVk(item));
-                _logger.Information("Leftovers of product {} increased", item.Product.Id);
+                _logger.Information("Shipment items list has changed. Trying to update leftovers...");
+                try
+                {
+                    shipment.ShipmentItems = await _delta.ApplyDelta(shipment.ShipmentItems, delta);
+                        
+                    await _db.ShipmentItems
+                        .Where(si => si.Shipment == null)
+                        .ForEachAsync(si => _db.ShipmentItems.Remove(si));
+                    _logger.Information("Leftovers changed");
+                }
+                catch (InvalidOperationException)
+                {
+                    _logger.Error("Insufficient amount of one or more product.");
+                    return Conflict();
+                }
             }
 
-            await Task.Run(ReplacePost);
+            await _vkUpdateUtils.ReplacePost();
         }
 
         await _db.SaveChangesAsync();
-        
-        _logger.Information("Shipment {} updated", shipmentId);
+
+        _logger.Information("Shipment {shipmentId} updated", shipmentId);
 
         return Ok();
     }
@@ -253,43 +264,6 @@ public class ShipmentsController : ControllerBase
         }
 
         return items;
-    }
-
-    private async Task UpdateLeftoverInVk(ShipmentItem item)
-    {
-        if (item.Product.MarketId != 0)
-        {
-            await _vkServiceClient.EditProduct(new EditProductRequestBody
-            {
-                MarketId = item.Product.MarketId,
-                Leftover = (int)item.Product.Leftover
-            });
-        }
-    }
-
-    private async Task ReplacePost()
-    {
-        var imageData =
-            ReplacePostUtil.GenerateImage(
-                await _db.Products
-                    .Where(p => p.Leftover > 0 && !p.Deleted)
-                    .OrderBy(p => p.Name)
-                    .Select(p =>
-                        new Product
-                        {
-                            Category = null,
-                            Deleted = p.Deleted,
-                            Id = p.Id,
-                            IsByWeight = p.IsByWeight,
-                            Leftover = Math.Round(p.Leftover, 2),
-                            MarketId = p.MarketId,
-                            Name = p.Name,
-                            RetailPrice = p.RetailPrice,
-                            WholesalePrice = p.WholesalePrice
-                        })
-                    .ToListAsync()
-            ).ToArray();
-        await new ReplacePostUtil(_vkServiceClient).ReplacePost(imageData);
     }
 
     private bool IsStatusChangingPossible(string oldStatus, string newStatus)
