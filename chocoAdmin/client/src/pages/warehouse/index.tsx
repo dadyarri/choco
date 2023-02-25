@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import React, {FC, useState} from "react";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {BeatLoader} from "react-spinners";
 import {Product} from "../../services/types";
@@ -10,7 +10,21 @@ import {AxiosError} from "axios";
 import {deleteProduct, fetchProductsList, openVkPageOfProduct} from "./index.utils";
 import StatefulButton from "../../components/stateful-button";
 import {Link} from "react-router-dom";
-import {Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
+import {
+    Button,
+    ButtonGroup,
+    Checkbox,
+    FormControl,
+    Heading,
+    Table,
+    TableContainer,
+    Tbody,
+    Td,
+    Th,
+    Thead,
+    Tr
+} from "@chakra-ui/react";
+import {Field, Formik} from "formik";
 
 const Warehouse: FC = () => {
 
@@ -36,6 +50,8 @@ const Warehouse: FC = () => {
         return openVkPageOfProduct(marketId)
     })
 
+    const [showWholesalePrice, setShowWholesalePrice] = useState(false);
+
     return (
         isProductListLoading ?
             <BeatLoader color="#36d7b7"/> :
@@ -51,6 +67,26 @@ const Warehouse: FC = () => {
                     </Button>
                     {productListData !== undefined && productListData.length > 0 &&
                         <TableContainer>
+                            <Formik initialValues={{show: showWholesalePrice}} onSubmit={(values) => {
+                                setShowWholesalePrice(values.show);
+                            }}>
+                                {({values, handleChange, submitForm}) => (
+                                    <FormControl>
+                                        <Field
+                                            type={"checkbox"}
+                                            as={Checkbox} name={"show"}
+                                            value={values.show}
+                                            onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
+                                                handleChange(ev);
+                                                submitForm();
+                                            }}
+                                        >
+                                            Показать оптовые цены
+                                        </Field>
+                                    </FormControl>
+                                )}
+
+                            </Formik>
                             <Table variant={"striped"} colorScheme={"gray"}>
                                 <Thead>
                                     <Tr>
@@ -66,7 +102,7 @@ const Warehouse: FC = () => {
                                         (!product.deleted && <Tr key={product.id}>
                                             <Td>{product.name}</Td>
                                             <Td>{product.isByWeight ? <GiWeight/> : null}</Td>
-                                            <Td>{product.wholesalePrice} ({product.retailPrice}) &#8381;</Td>
+                                            <Td>{showWholesalePrice && product.wholesalePrice}{showWholesalePrice && " ("}{product.retailPrice}{showWholesalePrice && ")"} &#8381;</Td>
                                             <Td>{product.leftover} {product.isByWeight ? 'кг.' : 'шт.'} {product.leftover < 0 ?
                                                 <ImWarning
                                                     title={"Количество товара опустилось ниже нуля"}/> : null}</Td>
