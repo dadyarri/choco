@@ -13,6 +13,7 @@ export const login = (username: string, password: string) => {
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("name", response.data.name);
             localStorage.setItem("avatarUri", response.data.avatarUri);
+            window.location.reload();
             return true;
         })
         .catch((error: AxiosError) => {
