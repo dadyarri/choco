@@ -135,6 +135,7 @@ class HttpService {
     static async restoreOrderFromDeleted(orderId: string) {
         return await axios.put(
             `/api/orders/${orderId}`,
+            {},
             {headers: await this.getHeaders()}
         )
     }
@@ -214,6 +215,7 @@ class HttpService {
     static async restoreShipmentFromDeleted(shipmentId: string) {
         return await axios.put(
             `/api/shipments/${shipmentId}`,
+            {},
             {headers: await this.getHeaders()}
         )
     }
@@ -222,6 +224,14 @@ class HttpService {
         return await axios.post(
             "/api/inventory",
             values,
+            {headers: await this.getHeaders()}
+        )
+    }
+
+    static async restoreProduct(productId: string) {
+        return await axios.put(
+            `/api/products/${productId}`,
+            {},
             {headers: await this.getHeaders()}
         )
     }
