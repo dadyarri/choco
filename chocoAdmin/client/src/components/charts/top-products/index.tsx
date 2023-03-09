@@ -1,5 +1,5 @@
-import {ListItem, UnorderedList} from "@chakra-ui/react";
-import {FC} from "react";
+import {ListItem, Text, UnorderedList} from "@chakra-ui/react";
+import React, {FC} from "react";
 
 type TopProduct = {
     name: string,
@@ -26,8 +26,8 @@ export const TopProducts: FC<TopProductsProps> = ({data}) => {
         }
     };
 
-    return <UnorderedList>
+    return (data.length > 0 ? <UnorderedList>
         {data.map((item) => <ListItem
             key={item.name}>{item.name} (в {item.value} {inclineWord(item.value)})</ListItem>)}
-    </UnorderedList>
+    </UnorderedList> : <Text>Недостаточно данных</Text>)
 }
