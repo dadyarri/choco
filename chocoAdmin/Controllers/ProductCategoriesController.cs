@@ -34,4 +34,23 @@ public class ProductCategoriesController : ControllerBase
         
         return Created("/ProductCategories", body);
     }
+
+    [HttpDelete]
+    [Authorize]
+    [Route("{categoryId:guid}")]
+    public async Task<ActionResult> DeleteProductCategory(Guid categoryId)
+    {
+
+        var category = await _db.ProductCategories.FindAsync(categoryId);
+
+        if (category == null)
+        {
+            return NotFound();
+        }
+
+        category.Deleted = true;
+        await _db.SaveChangesAsync();
+        
+        return NoContent();
+    }
 }
