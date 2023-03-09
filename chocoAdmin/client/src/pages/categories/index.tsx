@@ -91,42 +91,42 @@ const ProductCategories = () => {
                         </>
                         : null}
                     {categories.data !== undefined && categories.data.some(c => c.deleted) ?
-                            <>
-                                <Heading as={"h1"} my={4}>Удалённые категории</Heading>
+                        <>
+                            <Heading as={"h1"} my={4}>Удалённые категории</Heading>
 
-                                <TableContainer>
-                                    <Table variant={"striped"} colorScheme={"gray"}>
-                                        <Thead>
-                                            <Tr>
-                                                <Th>Название</Th>
-                                                <Th>Действия</Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody>
-                                            {categories.data?.map((category: ProductCategory) => (
-                                                (category.deleted && <Tr key={category.id}>
-                                                    <Td>
-                                                        {category.name}
-                                                    </Td>
-                                                    <Td>
-                                                        <StatefulButton
-                                                            variant={"blue"}
-                                                            title={"Восстановить"}
-                                                            prefix={<HiOutlineTrash/>}
-                                                            postfixWhenActive={"Восстановить?"}
-                                                            clickHandler={async (_event) => {
-                                                                restoreCategoryMutation.mutate(category.id);
-                                                            }}/>
+                            <TableContainer>
+                                <Table variant={"striped"} colorScheme={"gray"}>
+                                    <Thead>
+                                        <Tr>
+                                            <Th>Название</Th>
+                                            <Th>Действия</Th>
+                                        </Tr>
+                                    </Thead>
+                                    <Tbody>
+                                        {categories.data?.map((category: ProductCategory) => (
+                                            (category.deleted && <Tr key={category.id}>
+                                                <Td>
+                                                    {category.name}
+                                                </Td>
+                                                <Td>
+                                                    <StatefulButton
+                                                        variant={"blue"}
+                                                        title={"Восстановить"}
+                                                        prefix={<HiOutlineTrash/>}
+                                                        postfixWhenActive={"Восстановить?"}
+                                                        clickHandler={async (_event) => {
+                                                            restoreCategoryMutation.mutate(category.id);
+                                                        }}/>
 
-                                                    </Td>
-                                                </Tr>)
-                                            ))}
-                                        </Tbody>
-                                    </Table>
-                                </TableContainer>
-                            </> :
-                            <Heading as={"h3"} size={"md"}>Нет категорий</Heading>
-                    }
+                                                </Td>
+                                            </Tr>)
+                                        ))}
+                                    </Tbody>
+                                </Table>
+                            </TableContainer>
+                        </> : null}
+                    {categories.data !== undefined && categories.data.length === 0 &&
+                        <Heading as={"h3"} size={"md"}>Нет категорий</Heading>}
                 </div>
     )
 }
