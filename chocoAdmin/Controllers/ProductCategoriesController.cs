@@ -87,7 +87,7 @@ public class ProductCategoriesController : ControllerBase
         category.Name = body.Name;
         await _db.SaveChangesAsync();
 
-        return Ok();
+        return Ok(category);
 
     }
 }
