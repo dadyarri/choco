@@ -238,7 +238,7 @@ class HttpService {
 
     public static async deleteCategory(itemId: string): Promise<AxiosResponse> {
         return await axios.delete(
-            `/api/productcategory/${itemId}`,
+            `/api/productcategories/${itemId}`,
             {headers: await this.getHeaders()}
         )
     }
