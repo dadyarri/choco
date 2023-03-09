@@ -9,6 +9,7 @@ import Shipments from "../pages/shipments";
 import {ShipmentEdit} from "../pages/shipment-edit";
 import ProductCategories from "../pages/categories";
 import {Inventory} from "../pages/inventory";
+import ProductCategoryEdit from "../pages/product-category-edit";
 
 const routes: Route[] = [
     {
@@ -59,13 +60,21 @@ const routes: Route[] = [
         element: <OrderEdit/>
     },
     {
-        "path": "/shipments/add",
+        path: "/shipments/add",
         element: <ShipmentEdit/>
     },
     {
-        "path": "/shipments/edit/:shipmentId",
+        path: "/shipments/edit/:shipmentId",
         element: <ShipmentEdit/>
-    }
+    },
+    {
+        path: "/categories/add",
+        element: <ProductCategoryEdit/>
+    },
+    {
+        path: "/categories/edit/:categoryId",
+        element: <ProductCategoryEdit/>
+    },
 ];
 
 export default routes;
