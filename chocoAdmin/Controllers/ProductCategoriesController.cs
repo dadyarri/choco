@@ -16,6 +16,21 @@ public class ProductCategoriesController : ControllerBase
     {
         _db = db;
     }
+    
+    [HttpGet("{categoryId:guid}")]
+    [Authorize]
+    public async Task<ActionResult> GetProductCategoryById(Guid categoryId)
+    {
+        var category = await _db.ProductCategories.FindAsync(categoryId);
+
+        if (category == null)
+        {
+            return NotFound();
+        }
+        
+        return Ok(category);
+
+    }
 
     [HttpGet]
     [Authorize]
