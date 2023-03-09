@@ -20,7 +20,7 @@ const ProductCategoryEdit = () => {
         data,
         error
     } = useQuery<ProductCategory, AxiosError>(
-        ["product", categoryId],
+        ["category", categoryId],
         () => getProductCategoryById(categoryId!),
         {enabled: categoryId !== undefined}
     )
@@ -42,7 +42,7 @@ const ProductCategoryEdit = () => {
                     <p>{error?.message}</p>
                 </div> :
                 <div>
-                    <Heading as={"h1"} mb={4}>{data ? "Редактирование" : "Создание"} товара</Heading>
+                    <Heading as={"h1"} mb={4}>{data ? "Редактирование" : "Создание"} категории товара</Heading>
                     <Formik
                         initialValues={{
                             name: data ? data.name : ''
@@ -51,7 +51,7 @@ const ProductCategoryEdit = () => {
                             setSubmitting(true);
                             if (data) {
                                 await updateProductCategory(data.id, values);
-                                await queryClient.invalidateQueries(["product", categoryId])
+                                await queryClient.invalidateQueries(["category", categoryId])
                             } else {
                                 await createProductCategory(values);
                                 navigate("/categories");
