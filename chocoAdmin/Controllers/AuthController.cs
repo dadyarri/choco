@@ -46,7 +46,10 @@ public class AuthController : ControllerBase
         await _db.Users.AddAsync(user);
         await _db.SaveChangesAsync();
 
-        _logger.Information("User {Username} created", user.Username);
+        _logger.Information(
+            "User {0} created",
+            user.Username.Replace(Environment.NewLine, "")
+        );
 
         return Created("/auth/register", user);
     }
