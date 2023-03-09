@@ -12,6 +12,7 @@ import StatefulButton from "../../components/stateful-button";
 import {GiCancel, GiCheckMark, GiSandsOfTime} from "react-icons/gi";
 import {TbTruckDelivery} from "react-icons/tb";
 import {MdRestoreFromTrash} from "react-icons/md";
+import {FaMapMarkerAlt} from "react-icons/fa";
 
 const Orders = () => {
 
@@ -126,6 +127,9 @@ const Orders = () => {
                                                         clickHandler={async (_event) => {
                                                             deleteOrderMutation.mutate(order.id);
                                                         }}/>
+                                                    <Button colorScheme={"purple"} title={"Построить маршрут"}>
+                                                        <FaMapMarkerAlt/>
+                                                    </Button>
                                                 </ButtonGroup>
                                             </Td>
                                         </Tr>
