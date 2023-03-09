@@ -6,13 +6,13 @@ export type Product = {
     retailPrice: number
     wholesalePrice: number
     isByWeight: boolean
-    marketId: number
     category: ProductCategory
 }
 
 export type ProductCategory = {
     id: string
     name: string
+    deleted: boolean
 }
 
 export type Order = {
