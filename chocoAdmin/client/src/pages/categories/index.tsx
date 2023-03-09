@@ -1,40 +1,77 @@
-import {useQuery} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 import {AxiosError} from "axios";
 import {ProductCategory} from "../../services/types";
-import {fetchCategoriesList} from "./index.utils";
+import {deleteCategory, fetchCategoriesList} from "./index.utils";
 import {BeatLoader} from "react-spinners";
-import {Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
+import {Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
+import {Link} from "react-router-dom";
+import {HiOutlineTrash, HiPencil} from "react-icons/hi";
+import StatefulButton from "../../components/stateful-button";
 
 const ProductCategories = () => {
 
-    const {isLoading, isError, data, error} = useQuery<ProductCategory[], AxiosError>("categories", fetchCategoriesList);
+    const categories = useQuery<ProductCategory[], AxiosError>("categories", fetchCategoriesList);
+    const queryClient = useQueryClient();
+
+    const deleteCategoryMutation = useMutation(
+        "deleteCategory",
+        (categoryId: string) => deleteCategory(categoryId),
+        {
+            onSuccess: async () => {
+                await queryClient.invalidateQueries("categories");
+
+            }
+        }
+    )
 
     return (
-        isLoading ?
+        categories.isLoading ?
             <BeatLoader color={"#36d7b7"}/> :
-            isError ?
+            categories.isError ?
                 <div>
                     <Heading as={"h1"}>Ошибка загрузки</Heading>
-                    <p>{error?.message}</p>
+                    <p>{categories.error?.message}</p>
                 </div> :
                 <div>
                     <Heading as={"h1"} mb={4}>Категории</Heading>
-                    {data !== undefined && data.length > 0 ?
+                    {categories.data !== undefined && categories.data.some(c => !c.deleted) ?
                         <TableContainer>
                             <Table variant={"striped"} colorScheme={"gray"}>
                                 <Thead>
                                     <Tr>
                                         <Th>Название</Th>
+                                        <Th>Действия</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {data?.map((category: ProductCategory) => (
-                                        <Tr key={category.id}>
+                                    {categories.data?.map((category: ProductCategory) => (
+                                        (!category.deleted && <Tr key={category.id}>
                                             <Td>
                                                 {category.name}
                                             </Td>
-                                        </Tr>
+                                            <Td>
+                                                <ButtonGroup>
+                                                    <Button
+                                                        as={Link}
+                                                        colorScheme={"blue"}
+                                                        title={"Редактировать"}
+                                                        type={"button"}
+                                                        to={`/categories/edit/${category.id}`}
+                                                    >
+                                                        <HiPencil/>
+                                                    </Button>
+                                                    <StatefulButton
+                                                        variant={"red"}
+                                                        title={"Удалить"}
+                                                        prefix={<HiOutlineTrash/>}
+                                                        postfixWhenActive={"Удалить?"}
+                                                        clickHandler={async (_event) => {
+                                                            deleteCategoryMutation.mutate(category.id);
+                                                        }}/>
+                                                </ButtonGroup>
+                                            </Td>
+                                        </Tr>)
                                     ))}
                                 </Tbody>
                             </Table>
