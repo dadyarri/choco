@@ -12,11 +12,13 @@ import {
     Checkbox,
     FormControl,
     FormErrorMessage,
-    FormLabel, Heading,
+    FormLabel,
+    Heading,
     Input,
     InputGroup,
     InputRightAddon,
-    Select, VStack
+    Select,
+    VStack
 } from "@chakra-ui/react";
 
 
@@ -38,12 +40,7 @@ const ProductEdit = () => {
     const [isSubmitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
 
-    const {
-        isLoading: _isCategoriesLoading,
-        isError: _isCategoriesErrored,
-        data: categoriesData,
-        error: _categoriesError
-    } = useQuery<ProductCategory[], AxiosError>("productCategory", getProductCategories);
+    const categories = useQuery<ProductCategory[], AxiosError>("productCategory", getProductCategories);
 
     const validationSchema = Yup.object().shape({
         name: Yup.string().required("Поле должно быть заполнено!"),
@@ -121,8 +118,8 @@ const ProductEdit = () => {
                                                name={"category"}
                                         >
                                             <option defaultChecked>-- Выберите категорию --</option>
-                                            {categoriesData && categoriesData.map((pc) => (
-                                                <option key={pc.id} value={pc.id}>{pc.name}</option>
+                                            {categories.data && categories.data.map((pc) => (
+                                                (!pc.deleted && <option key={pc.id} value={pc.id}>{pc.name}</option>)
                                             ))}
                                         </Field>
                                         <FormErrorMessage>{errors.category}</FormErrorMessage>

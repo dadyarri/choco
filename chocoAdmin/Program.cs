@@ -4,7 +4,6 @@ using choco.ApiClients.VkService.Interfaces;
 using choco.ApiClients.VkService.Services;
 using choco.Data;
 using choco.Extensions;
-using choco.Utils;
 using choco.Utils.Interfaces;
 using choco.Utils.Services;
 using LettuceEncrypt;
@@ -28,12 +27,12 @@ try
 
     builder.Services.AddControllersWithViews(options => { options.UseGeneralRoutePrefix("api"); });
     builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
-    
+
     builder.Services.AddScoped<IVkServiceClient, VkServiceClient>();
     builder.Services.AddScoped<IVkUpdateUtils, VkUpdateUtils>();
     builder.Services.AddScoped<IDeltaUtils, DeltaUtils>();
     builder.Services.AddScoped<IReplacePostUtil, ReplacePostUtil>();
-    
+
     builder.Services.AddSingleton(Log.Logger);
 
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -43,7 +42,7 @@ try
             .GetRequiredSection("Security")
             .GetValue<string>("Key");
         ArgumentException.ThrowIfNullOrEmpty(key);
-    
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
@@ -90,8 +89,15 @@ try
         var services = scope.ServiceProvider;
 
         var context = services.GetRequiredService<AppDbContext>();
+
+        Log.Logger.Information("Checking if has pending migrations...");
+
         if (context.Database.GetPendingMigrations().Any())
         {
+            Log.Logger.Information(
+                "Found pending migrations: {0}, migrating...",
+                context.Database.GetPendingMigrations()
+            );
             context.Database.Migrate();
         }
     }

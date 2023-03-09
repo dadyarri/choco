@@ -13,6 +13,7 @@ export type Product = {
 export type ProductCategory = {
     id: string
     name: string
+    deleted: boolean
 }
 
 export type Order = {
