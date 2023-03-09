@@ -6,7 +6,7 @@ import {BeatLoader} from "react-spinners";
 import {Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {Link} from "react-router-dom";
-import {HiOutlineTrash, HiPencil} from "react-icons/hi";
+import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
 import StatefulButton from "../../components/stateful-button";
 
 const ProductCategories = () => {
@@ -45,9 +45,12 @@ const ProductCategories = () => {
                     <p>{categories.error?.message}</p>
                 </div> :
                 <div>
+                    <Heading as={"h1"} mb={4}>Категории</Heading>
+                    <Button as={Link} leftIcon={<HiPlus/>} colorScheme={"green"} to={"/categories/add"} mb={4}>
+                        Создать
+                    </Button>
                     {categories.data !== undefined && categories.data.some(c => !c.deleted) ?
                         <>
-                            <Heading as={"h1"} mb={4}>Категории</Heading>
                             <TableContainer>
                                 <Table variant={"striped"} colorScheme={"gray"}>
                                     <Thead>
