@@ -2,7 +2,7 @@ import Headers from "./http.specs";
 import axios, {AxiosResponse} from "axios";
 import {
     InventoryRequestBody,
-    UpdateOrderRequestBody,
+    UpdateOrderRequestBody, UpdateProductCategoryRequestBody,
     UpdateProductRequestBody,
     UpdateShipmentRequestBody
 } from "./request-bodies";
@@ -247,6 +247,29 @@ class HttpService {
         return await axios.put(
             `/api/productcategories/${orderId}`,
             {},
+            {headers: await this.getHeaders()}
+        )
+    }
+
+    static async getProductCategoryById(productCategoryId: string) {
+        return await axios.get(
+            `/api/productcategories/${productCategoryId}`,
+            {headers: await this.getHeaders()}
+        )
+    }
+
+    static async updateProductCategory(itemId: string, body: UpdateProductCategoryRequestBody) {
+        return await axios.patch(
+            `/api/productcategories/${itemId}`,
+            body,
+            {headers: await this.getHeaders()}
+        )
+    }
+
+    static async createProductCategory(body: UpdateProductCategoryRequestBody) {
+        return await axios.post(
+            "/api/productcategories",
+            body,
             {headers: await this.getHeaders()}
         )
     }

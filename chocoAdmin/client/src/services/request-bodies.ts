@@ -38,3 +38,7 @@ export type ShipmentItemsRequestBody = {
 export type InventoryRequestBody = {
     products: Product[] | undefined
 }
+
+export type UpdateProductCategoryRequestBody = {
+    name: string
+}
