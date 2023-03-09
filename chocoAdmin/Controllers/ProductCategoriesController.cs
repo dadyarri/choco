@@ -72,4 +72,22 @@ public class ProductCategoriesController : ControllerBase
         
         return Ok();
     }
+
+    [HttpPatch("{categoryId:guid}")]
+    [Authorize]
+    public async Task<ActionResult> UpdateProductCategory(Guid categoryId, [FromBody] ProductCategory body)
+    {
+        var category = await _db.ProductCategories.FindAsync(categoryId);
+
+        if (category == null)
+        {
+            return NotFound();
+        }
+
+        category.Name = body.Name;
+        await _db.SaveChangesAsync();
+
+        return Ok();
+
+    }
 }
