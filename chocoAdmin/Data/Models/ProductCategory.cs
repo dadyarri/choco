@@ -9,4 +9,6 @@ public class ProductCategory: BaseModel
     /// Название категории товара (например: молочный, горький...)
     /// </summary>
     public string Name { get; set; }
+
+    public bool Deleted { get; set; }
 }
