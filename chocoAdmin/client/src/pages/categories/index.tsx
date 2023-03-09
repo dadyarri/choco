@@ -1,7 +1,7 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {AxiosError} from "axios";
 import {ProductCategory} from "../../services/types";
-import {deleteCategory, fetchCategoriesList} from "./index.utils";
+import {deleteCategory, fetchCategoriesList, restoreCategory} from "./index.utils";
 import {BeatLoader} from "react-spinners";
 import {Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
@@ -17,6 +17,17 @@ const ProductCategories = () => {
     const deleteCategoryMutation = useMutation(
         "deleteCategory",
         (categoryId: string) => deleteCategory(categoryId),
+        {
+            onSuccess: async () => {
+                await queryClient.invalidateQueries("categories");
+
+            }
+        }
+    );
+
+    const restoreCategoryMutation = useMutation(
+        "restoreCategory",
+        (categoryId: string) => restoreCategory(categoryId),
         {
             onSuccess: async () => {
                 await queryClient.invalidateQueries("categories");
@@ -104,7 +115,7 @@ const ProductCategories = () => {
                                                             prefix={<HiOutlineTrash/>}
                                                             postfixWhenActive={"Восстановить?"}
                                                             clickHandler={async (_event) => {
-                                                                deleteCategoryMutation.mutate(category.id);
+                                                                restoreCategoryMutation.mutate(category.id);
                                                             }}/>
 
                                                     </Td>

@@ -21,3 +21,13 @@ export const deleteCategory = async (categoryId: string) => {
             return error;
         })
 }
+
+export const restoreCategory = async (categoryId: string) => {
+    return await HttpService.restoreCategoryFromDeleted(categoryId)
+        .then((response) => response.data)
+        .catch((error) => {
+            toast(`Ошибка восстановления категории!
+            ${error?.response.data}`);
+            return error;
+        })
+}

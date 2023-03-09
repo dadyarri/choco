@@ -242,6 +242,14 @@ class HttpService {
             {headers: await this.getHeaders()}
         )
     }
+
+    static async restoreCategoryFromDeleted(orderId: string) {
+        return await axios.put(
+            `/api/productcategories/${orderId}`,
+            {},
+            {headers: await this.getHeaders()}
+        )
+    }
 }
 
 export default HttpService;
