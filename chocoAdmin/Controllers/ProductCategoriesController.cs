@@ -53,4 +53,23 @@ public class ProductCategoriesController : ControllerBase
         
         return NoContent();
     }
+
+    [HttpPut]
+    [Authorize]
+    [Route("{categoryId:guid}")]
+    public async Task<ActionResult> RestoreProductCategory(Guid categoryId)
+    {
+
+        var category = await _db.ProductCategories.FindAsync(categoryId);
+
+        if (category == null)
+        {
+            return NotFound();
+        }
+
+        category.Deleted = false;
+        await _db.SaveChangesAsync();
+        
+        return Ok();
+    }
 }
