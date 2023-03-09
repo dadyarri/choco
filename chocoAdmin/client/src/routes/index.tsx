@@ -9,7 +9,7 @@ import Shipments from "../pages/shipments";
 import {ShipmentEdit} from "../pages/shipment-edit";
 import ProductCategories from "../pages/categories";
 import {Inventory} from "../pages/inventory";
-import ProductCategoryEdit from "../pages/product-category-edit";
+import ProductCategoryEdit from "../pages/category-edit";
 
 const routes: Route[] = [
     {
