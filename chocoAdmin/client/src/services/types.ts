@@ -6,6 +6,7 @@ export type Product = {
     retailPrice: number
     wholesalePrice: number
     isByWeight: boolean
+    marketId: number
     category: ProductCategory
 }
 
