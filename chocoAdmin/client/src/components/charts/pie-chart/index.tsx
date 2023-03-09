@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {Pie} from "react-chartjs-2";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
+import {Text} from "@chakra-ui/react";
 
 type PieChartProps = {
     data: {
@@ -67,7 +68,7 @@ export const PieChart: FC<PieChartProps> = (data) => {
     }
 
     return (
-        <Pie options={options} data={pieData}/>
+        data.data.length > 0 ? <Pie options={options} data={pieData}/> : <Text>Недостаточно данных</Text>
     )
 
 
