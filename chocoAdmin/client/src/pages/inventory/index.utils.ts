@@ -6,9 +6,9 @@ export const fetchProductsList = async () => {
     return await HttpService.getProducts()
         .then((response) => response.data)
         .catch((error) => {
-            toast(`Ошибка получения данных!
+            toast(`Ошибка получения списка товаров!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -18,6 +18,6 @@ export const sendInventory = async (data: InventoryRequestBody) => {
         .catch((error) => {
             toast(`Ошибка отправки ревизии
             ${error?.response.data}`);
-            return error
+            throw error
         })
 }
