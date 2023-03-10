@@ -7,7 +7,7 @@ export const getProductCategoryById = async (productCategoryId: string): Promise
     return await HttpService.getProductCategoryById(productCategoryId)
         .then((response) => response.data)
         .catch((error) => {
-            toast(`Ошибка получения информации о товаре!
+            toast(`Ошибка получения информации о категории!
             ${error?.response.data}`);
             throw error;
         });

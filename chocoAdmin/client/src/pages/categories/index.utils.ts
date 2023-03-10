@@ -6,7 +6,7 @@ export const fetchCategoriesList = async (): Promise<ProductCategory[]> => {
     return await HttpService.getProductCategories()
         .then((response) => response.data)
         .catch((error) => {
-            toast(`Ошибка получения данных!
+            toast(`Ошибка получения списка категорий!
             ${error?.response.data}`);
             throw error;
         })
