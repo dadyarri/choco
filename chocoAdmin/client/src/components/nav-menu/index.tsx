@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import {GiHamburgerMenu} from "react-icons/gi";
 import {getToken} from "../../services/jwt";
+import {BiLogOutCircle} from "react-icons/bi";
 
 const NavMenu: FC = () => {
 
@@ -85,13 +86,20 @@ const NavMenu: FC = () => {
                             size={"sm"}
                         />
                         <MenuList>
-                            <MenuItem>Привет, {localStorage.getItem("name")}</MenuItem>
+                            <MenuItem isDisabled={false} isFocusable={false}>
+                                Привет, {localStorage.getItem("name")}
+                            </MenuItem>
                             <MenuDivider/>
-                            <MenuItem onClick={() => {
+                            <MenuItem
+                                onClick={() => {
                                 localStorage.removeItem("token");
                                 window.location.reload()
-                            }}>Выйти</MenuItem>
-                            <MenuItem><Text fontSize={"xs"} as={"i"}>Версия: 1.4.0</Text></MenuItem>
+                            }}
+                                icon={<BiLogOutCircle/>}
+                            >Выйти</MenuItem>
+                            <MenuItem isDisabled={false} isFocusable={false}>
+                                <Text fontSize={"xs"} as={"i"}>Версия: 1.4.0</Text>
+                            </MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
