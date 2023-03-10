@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "geocodingintegration"
+version = "0.1.0"
+description = ""
+authors = ["Daniil <dadyarri@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.93.0"
+uvicorn = "^0.21.0"
+here-platform = {version = "2.18.0", source = "here"}
+here-content = {version = "2.18.0", source = "here"}
+
+
+[[tool.poetry.source]]
+name = "here"
+url = "https://repo.platform.here.com/artifactory/api/pypi/analytics-pypi/simple/"
+default = false
+secondary = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
