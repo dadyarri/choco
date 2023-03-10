@@ -4,7 +4,7 @@ import {BeatLoader} from "react-spinners";
 import {Product} from "../../services/types";
 import {GiWeight} from "react-icons/gi";
 import {ImWarning} from "react-icons/im";
-import {HiPencil, HiPlus} from "react-icons/hi";
+import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
 import {SlSocialVkontakte} from "react-icons/sl";
 import {AxiosError} from "axios";
 import {deleteProduct, fetchProductsList, openVkPageOfProduct, restoreProduct} from "./index.utils";
@@ -125,7 +125,7 @@ const Warehouse: FC = () => {
                                                     <StatefulButton
                                                         variant={"red"}
                                                         title={"Удалить"}
-                                                        prefix={<MdRestoreFromTrash/>}
+                                                        prefix={<HiOutlineTrash/>}
                                                         postfixWhenActive={"Удалить?"}
                                                         clickHandler={async (_event) => {
                                                             await deleteProductMutation.mutate(product.id)
