@@ -88,3 +88,16 @@ export type ShipmentItem = {
     product: Product
     amount: number
 }
+
+export type GeocodingResult = {
+    items: GeocodingItem[]
+}
+
+export type GeocodingItem = {
+    position: GeocodingPosition
+}
+
+export type GeocodingPosition = {
+    lat: number,
+    lng: number
+}

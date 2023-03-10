@@ -64,7 +64,6 @@ const Orders = () => {
             navigator.geolocation.getCurrentPosition((position) => {
                 const {latitude, longitude} = position.coords;
                 requestRouteLink(address, latitude, longitude)
-                    .then((routeUrl) => window.open(routeUrl, "_blank"))
             })
         }
     }
