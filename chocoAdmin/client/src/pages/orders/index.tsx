@@ -89,10 +89,10 @@ const Orders = () => {
                                 <Thead>
                                     <Tr>
                                         <Th>Дата</Th>
-                                        <Th>Статус</Th>
                                         <Th>Содержимое заказа</Th>
                                         <Th>Адрес</Th>
                                         <Th>Итог</Th>
+                                        <Th>Статус</Th>
                                         <Th>Действия</Th>
                                     </Tr>
                                 </Thead>
@@ -102,9 +102,6 @@ const Orders = () => {
                                         return !order.deleted && <Tr key={order.id}>
                                             <Td>
                                                 {DateTime.fromISO(order.date.toString()).toFormat("dd.MM.yyyy")}
-                                            </Td>
-                                            <Td title={order.status.name}>
-                                                {getOrderStatusIcon(order.status.name)}
                                             </Td>
 
                                             <Td>
@@ -117,6 +114,9 @@ const Orders = () => {
                                             <Td>{address}</Td>
                                             <Td>
                                                 {order.orderItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
+                                            </Td>
+                                            <Td title={order.status.name}>
+                                                {getOrderStatusIcon(order.status.name)}
                                             </Td>
                                             <Td>
                                                 <ButtonGroup>

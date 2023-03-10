@@ -49,6 +49,6 @@ export const IncomesChart: FC<IncomesChartProps> = ({data}) => {
     };
 
     return (
-        <Bar options={options} data={chartData}/>
+        <Bar options={options} data={chartData} style={{height: "250px"}}/>
     )
 }
