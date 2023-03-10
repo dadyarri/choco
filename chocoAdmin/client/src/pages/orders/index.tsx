@@ -1,7 +1,7 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {AxiosError} from "axios";
 import {Order} from "../../services/types";
-import {deleteOrder, fetchOrdersList, restoreFromDeleted} from "./index.utils";
+import {deleteOrder, fetchOrdersList, requestRouteLink, restoreFromDeleted} from "./index.utils";
 import {BeatLoader} from "react-spinners";
 import {Box, Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
 import {Link} from "react-router-dom";
@@ -59,6 +59,16 @@ const Orders = () => {
         }
     )
 
+    const plotRoute = async (address: string) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const {latitude, longitude} = position.coords;
+                requestRouteLink(address, latitude, longitude)
+                    .then((routeUrl) => window.open(routeUrl, "_blank"))
+            })
+        }
+    }
+
     const queryClient = useQueryClient();
 
     return (
@@ -88,8 +98,9 @@ const Orders = () => {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {data?.map((order: Order) => (
-                                        !order.deleted && <Tr key={order.id}>
+                                    {data?.map((order: Order) => {
+                                        const address = `г. ${order.address.city.name}, ${order.address.street}, ${order.address.building}`;
+                                        return !order.deleted && <Tr key={order.id}>
                                             <Td>
                                                 {DateTime.fromISO(order.date.toString()).toFormat("dd.MM.yyyy")}
                                             </Td>
@@ -104,7 +115,7 @@ const Orders = () => {
                                                     )}
                                                 </ul>
                                             </Td>
-                                            <Td>г. {order.address.city.name}, {order.address.street}, {order.address.building}</Td>
+                                            <Td>{address}</Td>
                                             <Td>
                                                 {order.orderItems.reduce((sum, item) => sum + item.product.retailPrice * item.amount, 0)}&nbsp;&#8381;
                                             </Td>
@@ -127,13 +138,14 @@ const Orders = () => {
                                                         clickHandler={async (_event) => {
                                                             deleteOrderMutation.mutate(order.id);
                                                         }}/>
-                                                    <Button colorScheme={"purple"} title={"Построить маршрут"}>
+                                                    <Button colorScheme={"purple"} title={"Построить маршрут"}
+                                                            onClick={() => plotRoute(address)}>
                                                         <FaMapMarkerAlt/>
                                                     </Button>
                                                 </ButtonGroup>
                                             </Td>
                                         </Tr>
-                                    ))}
+                                    })}
                                 </Tbody>
                             </Table>
                         </TableContainer>

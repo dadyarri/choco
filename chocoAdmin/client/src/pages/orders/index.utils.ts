@@ -41,3 +41,13 @@ export const restoreFromDeleted = async (orderId: string) => {
             return error;
         })
 }
+
+export const requestRouteLink = async (address: string, latitude: number, longitude: number): Promise<string> => {
+    return await HttpService.getRouteLink(address, latitude, longitude)
+        .then((response) => response.data)
+        .catch((error) => {
+            toast(`Ошибка получения маршрута
+            ${error?.response.data}`);
+            throw error
+        })
+}
