@@ -13,6 +13,7 @@
     "@here/maps-api-for-javascript": "^1.38.0",
     "axios": "^1.2.4",
     "chart.js": "^4.2.1",
+    "chroma-js": "^2.4.2",
     "formik": "^2.2.9",
     "framer-motion": "^8.5.4",
     "here-js-api": "^2.0.0",
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "@craco/types": "^7.0.0",
+    "@types/chroma-js": "^2.4.0",
     "@types/luxon": "^3.2.0",
     "@types/node": "^16.18.11",
     "@types/react": "^18.0.27",
