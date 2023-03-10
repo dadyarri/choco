@@ -131,7 +131,7 @@ const Warehouse: FC = () => {
                                                             await deleteProductMutation.mutate(product.id)
                                                         }}/>
                                                     {product.marketId ? <Button
-                                                        variant={"primary"}
+                                                        colorScheme={"teal"}
                                                         type={"button"}
                                                         title={"Открыть страницу товара в ВК"}
                                                         onClick={async () => {
