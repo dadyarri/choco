@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useQuery, useQueryClient} from "react-query";
 import {ProductCategory} from "../../services/types";
 import {AxiosError} from "axios";
@@ -8,7 +8,8 @@ import React, {useState} from "react";
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {LoadingButton} from "../../components/loading-button";
-import {FormControl, FormErrorMessage, FormLabel, Heading, Input, VStack} from "@chakra-ui/react";
+import {Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, VStack} from "@chakra-ui/react";
+import {BiArrowBack} from "react-icons/bi";
 
 
 const ProductCategoryEdit = () => {
@@ -43,6 +44,12 @@ const ProductCategoryEdit = () => {
                 </div> :
                 <div>
                     <Heading as={"h1"} mb={4}>{data ? "Редактирование" : "Создание"} категории товара</Heading>
+                    <Button as={Link}
+                            colorScheme={"purple"}
+                            to={"/categories"}
+                            leftIcon={<BiArrowBack/>}
+                            mb={4}
+                    >Назад</Button>
                     <Formik
                         initialValues={{
                             name: data ? data.name : ''
