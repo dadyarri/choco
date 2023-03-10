@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import routes from "../../routes/index";
 import {v4 as uuid} from "uuid";
 import {
+    Avatar,
     Box,
     Container,
     Flex,
@@ -15,8 +16,11 @@ import {
     MenuList, Stack
 } from "@chakra-ui/react";
 import {GiHamburgerMenu} from "react-icons/gi";
+import {getToken} from "../../services/jwt";
 
 const NavMenu: FC = () => {
+
+    const hasAuthData = !!getToken();
 
     return <Box
         position={"sticky"}
@@ -38,18 +42,19 @@ const NavMenu: FC = () => {
                 </Heading>
             </Flex>
 
-            <HStack><Stack
-                direction={{base: "column", md: "row"}}
-                display={{base: "none", md: "flex"}}
-                width={{base: "full", md: "auto"}}
-                alignItems={"center"}
-                flexGrow={1}
-                mt={{base: 4, md: 0}}
-            >
-                {routes.map((route) =>
-                    route.label && <Link to={route.path!} key={uuid()}>{route.label}</Link>)
-                }
-            </Stack>
+            {hasAuthData && <HStack>
+                <Stack
+                    direction={{base: "column", md: "row"}}
+                    display={{base: "none", md: "flex"}}
+                    width={{base: "full", md: "auto"}}
+                    alignItems={"center"}
+                    flexGrow={1}
+                    mt={{base: 4, md: 0}}
+                >
+                    {routes.map((route) =>
+                        route.label && <Link to={route.path!} key={uuid()}>{route.label}</Link>)
+                    }
+                </Stack>
                 <Box flex={1}>
                     <Box ml={2} display={{base: "inline-block", md: "none"}}>
                         <Menu>
@@ -69,7 +74,24 @@ const NavMenu: FC = () => {
                             </MenuList>
                         </Menu>
                     </Box>
-                </Box></HStack>
+                </Box>
+                <Box flex={1}>
+                    <Menu>
+                        <MenuButton
+                            as={Avatar}
+                            name={localStorage.getItem("name")!}
+                            src={localStorage.getItem("avatarUri")!}
+                            size={"sm"}
+                        />
+                        <MenuList>
+                            <MenuItem onClick={() => {
+                                localStorage.removeItem("token");
+                                window.location.reload()
+                            }}>Выйти</MenuItem>
+                        </MenuList>
+                    </Menu>
+                </Box>
+            </HStack>}
         </Container>
     </Box>
 }

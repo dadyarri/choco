@@ -20,6 +20,16 @@ export const deleteProduct = async (id: string) => {
             return error;
         })
 }
+
+export const restoreProduct = async (id: string) => {
+    return await HttpService.restoreProduct(id)
+        .then(response => response.data)
+        .catch((error) => {
+            toast(`Ошибка восстановления товара!
+            ${error?.response.data}`);
+            return error;
+        })
+}
 export const openVkPageOfProduct = async (marketId: number) => {
     return await HttpService.getMarketUrl(marketId)
         .then((response) => {

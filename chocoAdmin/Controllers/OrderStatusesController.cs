@@ -1,4 +1,5 @@
 using choco.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ public class OrderStatusesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult> GetAllOrderStatuses()
     {
         return Ok(await _db.OrderStatuses

@@ -215,6 +215,9 @@ namespace choco.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -307,6 +310,37 @@ namespace choco.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("choco.Data.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AvatarUri")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("choco.Data.Models.Order", b =>
                 {
                     b.HasOne("choco.Data.Models.OrderAddress", "Address")
@@ -339,7 +373,7 @@ namespace choco.Data.Migrations
 
             modelBuilder.Entity("choco.Data.Models.OrderItem", b =>
                 {
-                    b.HasOne("choco.Data.Models.Order", null)
+                    b.HasOne("choco.Data.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId");
 
@@ -348,6 +382,8 @@ namespace choco.Data.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
                 });
@@ -382,11 +418,13 @@ namespace choco.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("choco.Data.Models.Shipment", null)
+                    b.HasOne("choco.Data.Models.Shipment", "Shipment")
                         .WithMany("ShipmentItems")
                         .HasForeignKey("ShipmentId");
 
                     b.Navigation("Product");
+
+                    b.Navigation("Shipment");
                 });
 
             modelBuilder.Entity("choco.Data.Models.Order", b =>

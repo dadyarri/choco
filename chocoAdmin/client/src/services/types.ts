@@ -13,6 +13,7 @@ export type Product = {
 export type ProductCategory = {
     id: string
     name: string
+    deleted: boolean
 }
 
 export type Order = {
@@ -86,4 +87,17 @@ export type ShipmentItem = {
     id: string
     product: Product
     amount: number
+}
+
+export type GeocodingResult = {
+    items: GeocodingItem[]
+}
+
+export type GeocodingItem = {
+    position: GeocodingPosition
+}
+
+export type GeocodingPosition = {
+    lat: number,
+    lng: number
 }
