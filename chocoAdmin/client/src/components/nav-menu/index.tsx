@@ -11,9 +11,10 @@ import {
     HStack,
     IconButton,
     Menu,
-    MenuButton,
+    MenuButton, MenuDivider,
     MenuItem,
-    MenuList, Stack
+    MenuList, Stack,
+    Text
 } from "@chakra-ui/react";
 import {GiHamburgerMenu} from "react-icons/gi";
 import {getToken} from "../../services/jwt";
@@ -84,10 +85,13 @@ const NavMenu: FC = () => {
                             size={"sm"}
                         />
                         <MenuList>
+                            <MenuItem>Привет, {localStorage.getItem("name")}</MenuItem>
+                            <MenuDivider/>
                             <MenuItem onClick={() => {
                                 localStorage.removeItem("token");
                                 window.location.reload()
                             }}>Выйти</MenuItem>
+                            <MenuItem><Text fontSize={"xs"} as={"i"}>Версия: 1.4.0</Text></MenuItem>
                         </MenuList>
                     </Menu>
                 </Box>
