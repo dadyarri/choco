@@ -79,9 +79,9 @@ const Shipments = () => {
                                 <Thead>
                                     <Tr>
                                         <Th>Дата</Th>
-                                        <Th>Статус</Th>
                                         <Th>Содержимое поставки</Th>
                                         <Th>Итог</Th>
+                                        <Th>Статус</Th>
                                         <Th>Действия</Th>
                                     </Tr>
                                 </Thead>
@@ -91,19 +91,19 @@ const Shipments = () => {
                                             <Td>
                                                 {DateTime.fromISO(shipment.date.toString()).toFormat("dd.MM.yyyy")}
                                             </Td>
-                                            <Td title={shipment.status.name}>
-                                                {getShipmentStatusIcon(shipment.status.name)}
-                                            </Td>
 
                                             <Td>
                                                 <ul>
                                                     {shipment.shipmentItems.map(item => <li
                                                         key={item.id}>{item.product.name} x{item.amount}</li>
-                                                    )}
+                                                        )}
                                                 </ul>
                                             </Td>
                                             <Td>
                                                 {shipment.shipmentItems.reduce((sum, item) => sum + item.product.wholesalePrice * item.amount, 0)}&nbsp;&#8381;
+                                            </Td>
+                                            <Td title={shipment.status.name}>
+                                                {getShipmentStatusIcon(shipment.status.name)}
                                             </Td>
                                             <Td>
                                                 <ButtonGroup>
