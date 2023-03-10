@@ -273,6 +273,14 @@ class HttpService {
             {headers: await this.getHeaders()}
         )
     }
+
+    static async getRouteLink(address: string, latitude: number, longitude: number) {
+        return await axios.post(
+            "/api/geocode",
+            {address, latitude, longitude},
+            {headers: await this.getHeaders()}
+        )
+    }
 }
 
 export default HttpService;
