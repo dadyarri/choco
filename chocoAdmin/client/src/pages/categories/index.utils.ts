@@ -8,7 +8,7 @@ export const fetchCategoriesList = async (): Promise<ProductCategory[]> => {
         .catch((error) => {
             toast(`Ошибка получения данных!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -18,7 +18,7 @@ export const deleteCategory = async (categoryId: string) => {
         .catch((error) => {
             toast(`Ошибка удаления категории!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -28,6 +28,6 @@ export const restoreCategory = async (categoryId: string) => {
         .catch((error) => {
             toast(`Ошибка восстановления категории!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }

@@ -17,7 +17,7 @@ export const getTopProducts = async () => {
         .catch((error) => {
             toast(`Ошибка получения данных
         ${error.data?.message}`);
-            return error
+            throw error
         })
 }
 
@@ -27,7 +27,7 @@ export const getIncomesInfo = async (months: number) => {
         .catch((error) => {
             toast(`Ошибка получения данных
         ${error.data?.message}`);
-            return error
+            throw error
         })
 }
 
@@ -37,5 +37,6 @@ export const getStatsByCategory = async () => {
     ).catch((error) => {
         toast(`Ошибка получения данных
         ${error.data?.message}`);
+        throw error;
     })
 }

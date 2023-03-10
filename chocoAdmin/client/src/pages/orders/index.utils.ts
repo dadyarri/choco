@@ -9,7 +9,7 @@ export const fetchOrdersList = async (): Promise<Order[]> => {
         .catch((error) => {
             toast(`Ошибка получения данных!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -19,7 +19,7 @@ export const fetchProductsList = async () => {
         .catch((error) => {
             toast(`Ошибка получения данных!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -29,7 +29,7 @@ export const deleteOrder = async (orderId: string) => {
         .catch((error) => {
             toast(`Ошибка удаления заказа!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -39,7 +39,7 @@ export const restoreFromDeleted = async (orderId: string) => {
         .catch((error) => {
             toast(`Ошибка восстановления заказа
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 

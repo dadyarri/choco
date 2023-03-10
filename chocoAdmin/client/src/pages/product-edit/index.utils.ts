@@ -9,7 +9,7 @@ export const getProductById = async (productId: string): Promise<Product> => {
         .catch((error) => {
             toast(`Ошибка получения информации о товаре!
             ${error?.response.data}`);
-            return error;
+            throw error;
         });
 }
 
@@ -19,7 +19,7 @@ export const getProductCategories = async (): Promise<ProductCategory[]> => {
         .catch((error) => {
             toast(`Ошибка получения списка категорий товара!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -32,7 +32,7 @@ export const updateProduct = async (itemId: string, body: UpdateProductRequestBo
         .catch((error) => {
             toast(`Ошибка обновления товара!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -42,6 +42,6 @@ export const createProduct = async (body: UpdateProductRequestBody): Promise<Pro
         .catch((error) => {
             toast(`Ошибка создания товара!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }

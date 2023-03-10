@@ -9,7 +9,7 @@ export const getShipmentById = async (shipmentId: string): Promise<Shipment> => 
         .catch((error) => {
             toast(`Ошибка получения данных!
             ${error?.response.data}`);
-            return error
+            throw error
         })
 
 }
@@ -20,7 +20,7 @@ export const fetchShipmentStatusesList = async (): Promise<ShipmentStatus[]> => 
         .catch((error) => {
             toast(`Ошибка получения данных!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -34,7 +34,7 @@ export const updateShipment = async (shipmentId: string, values: UpdateShipmentR
         .catch((error) => {
             toast(`Ошибка обновления поставки!
 ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -44,6 +44,6 @@ export const createShipment = async (values: UpdateShipmentRequestBody): Promise
         .catch((error) => {
             toast(`Ошибка создания поставки!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }

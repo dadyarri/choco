@@ -8,7 +8,7 @@ export const fetchShipmentsList = async (): Promise<Shipment[]> => {
         .catch((error) => {
             toast(`Ошибка получения данных!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -18,7 +18,7 @@ export const deleteShipment = async (shipmentId: string) => {
         .catch((error) => {
             toast(`Ошибка удаления заказа!
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
 
@@ -28,6 +28,6 @@ export const restoreFromDeleted = async (orderId: string) => {
         .catch((error) => {
             toast(`Ошибка восстановления заказа
             ${error?.response.data}`);
-            return error;
+            throw error;
         })
 }
