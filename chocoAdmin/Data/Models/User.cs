@@ -8,4 +8,5 @@ public class User : BaseModel
     public Uri AvatarUri { get; set; }
     public string Name { get; set; }
     public long TelegramId { get; set; }
+    public string RefreshToken { get; set; }
 }
