@@ -9,6 +9,11 @@ app = FastAPI()
 bot = Bot(os.getenv("TELEGRAM_BOT_TOKEN"))
 
 
+@app.get("/ping")
+async def ping():
+    return {"message": "pong"}
+
+
 @app.post("/sendMessages")
 async def root(body: SendMessagesRequestBody):
     for userId in body.userIds:
