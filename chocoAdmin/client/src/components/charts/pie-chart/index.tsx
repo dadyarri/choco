@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {Pie} from "react-chartjs-2";
 import {ArcElement, Chart as ChartJS, Legend, Tooltip} from 'chart.js';
-import {Text} from "@chakra-ui/react";
+import {Text, useColorMode} from "@chakra-ui/react";
 import chroma from "chroma-js";
 
 type PieChartProps = {
@@ -44,14 +44,19 @@ export const PieChart: FC<PieChartProps> = (data) => {
     };
 
     const colors = generateNonSimilarColors(data.data.length);
+    const {colorMode} = useColorMode();
 
     const options = {
         responsive: true,
         plugins: {
             legend: {
                 position: 'bottom' as const,
+                labels: {
+                    color: colorMode === "light" ? "#000000" : "#ffffff",
+                }
             },
         },
+
     };
 
     const pieData = {
