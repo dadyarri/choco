@@ -13,8 +13,11 @@ import {
     Menu,
     MenuButton, MenuDivider,
     MenuItem,
-    MenuList, Stack,
-    Text
+    MenuList,
+    Stack,
+    Switch,
+    Text,
+    useColorMode
 } from "@chakra-ui/react";
 import {GiHamburgerMenu} from "react-icons/gi";
 import {getToken} from "../../services/jwt";
@@ -23,6 +26,7 @@ import {BiLogOutCircle} from "react-icons/bi";
 const NavMenu: FC = () => {
 
     const hasAuthData = !!getToken();
+    const {colorMode, toggleColorMode} = useColorMode();
 
     return <Box
         position={"sticky"}
@@ -86,20 +90,22 @@ const NavMenu: FC = () => {
                             size={"sm"}
                         />
                         <MenuList>
-                            <MenuItem isDisabled={false} isFocusable={false}>
+                            <Text mx={3} my={2}>
                                 Привет, {localStorage.getItem("name")}
-                            </MenuItem>
+                            </Text>
+                            <Flex justifyContent={"space-between"} mx={3} my={2}>
+                                <Text>Темная тема</Text>
+                                <Switch onChange={toggleColorMode} isChecked={colorMode === "dark"}/>
+                            </Flex>
                             <MenuDivider/>
                             <MenuItem
                                 onClick={() => {
-                                localStorage.removeItem("token");
-                                window.location.reload()
-                            }}
+                                    localStorage.removeItem("token");
+                                    window.location.reload()
+                                }}
                                 icon={<BiLogOutCircle/>}
                             >Выйти</MenuItem>
-                            <MenuItem isDisabled={false} isFocusable={false}>
-                                <Text fontSize={"xs"} as={"i"}>Версия: 1.4.0</Text>
-                            </MenuItem>
+                            <Text fontSize={"xs"} as={"i"} mx={3} my={2}>Версия: 1.4.0</Text>
                         </MenuList>
                     </Menu>
                 </Box>
