@@ -54,6 +54,10 @@ public class TelegramServiceClient : ITelegramServiceClient
             {
                 _logger.Information("Messages sent");
             }
+            else if (result.StatusCode == HttpStatusCode.UnprocessableEntity)
+            {
+                _logger.Error("Can't process body");
+            }
         }
     }
 

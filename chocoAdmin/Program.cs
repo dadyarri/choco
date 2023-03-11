@@ -1,5 +1,7 @@
 using System.Net;
 using System.Text;
+using choco.ApiClients.TelegramService.Interfaces;
+using choco.ApiClients.TelegramService.Services;
 using choco.ApiClients.VkService.Interfaces;
 using choco.ApiClients.VkService.Services;
 using choco.Data;
@@ -29,6 +31,7 @@ try
     builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
     builder.Services.AddScoped<IVkServiceClient, VkServiceClient>();
+    builder.Services.AddScoped<ITelegramServiceClient, TelegramServiceClient>();
     builder.Services.AddScoped<IVkUpdateUtils, VkUpdateUtils>();
     builder.Services.AddScoped<IDeltaUtils, DeltaUtils>();
     builder.Services.AddScoped<IReplacePostUtil, ReplacePostUtil>();
