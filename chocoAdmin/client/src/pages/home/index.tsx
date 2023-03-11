@@ -132,7 +132,7 @@ const Home: FC = () => {
                  w="100%"
                  maxW="1500px"
                  mx="auto"
-                 sx={{columnCount: [1, 2, 3], columnGap: "20px", rowGap: "20px"}}>
+                 sx={{columnCount: [1, 2, 3, 4], columnGap: "20px", rowGap: "20px"}}>
                 <ChartContainer header={"Продажи по городам"}>
                     {isStatsByCityLoading ? <Spinner/> : !isStatsByCityError ?
                         <PieChart data={statsByCity!}/> : null}
