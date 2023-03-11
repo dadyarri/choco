@@ -7,13 +7,14 @@ import {ReactQueryDevtools} from "react-query/devtools";
 import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.min.css';
 import {ChakraProvider} from "@chakra-ui/react";
+import theme from "./theme";
 
 const App: FC = () => {
 
     const queryClient = new QueryClient();
 
     return (
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
                 <Layout>
                     <Routes>
