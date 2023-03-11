@@ -22,7 +22,7 @@ import {TopProducts} from "../../components/charts/top-products";
 import {CompareIncomes} from "../../components/charts/compare-incomes";
 import {IncomesChart} from "../../components/charts/incomes-chart";
 import {Field, Form, Formik} from "formik";
-import {getToken, login} from "../../services/jwt";
+import {getToken, loginByPassword} from "../../services/jwt";
 import {BiLogInCircle} from "react-icons/bi";
 import {ChartContainer} from "../../components/charts/chart-container";
 
@@ -82,7 +82,7 @@ const Home: FC = () => {
     return <div>
         {!hasAuthData ? <div>
                 <Formik initialValues={{username: "", password: ""}} onSubmit={async (values) => {
-                    const isLoggedIn = await login(values.username, values.password);
+                    const isLoggedIn = await loginByPassword(values.username, values.password);
 
                     if (isLoggedIn) {
                         window.location.reload();
@@ -132,7 +132,7 @@ const Home: FC = () => {
                  w="100%"
                  maxW="1500px"
                  mx="auto"
-                 sx={{columnCount: [1, 2, 3], columnGap: "20px", rowGap: "20px"}}>
+                 sx={{columnCount: [1, 2, 3, 4], columnGap: "20px", rowGap: "20px"}}>
                 <ChartContainer header={"Продажи по городам"}>
                     {isStatsByCityLoading ? <Spinner/> : !isStatsByCityError ?
                         <PieChart data={statsByCity!}/> : null}

@@ -1,9 +1,7 @@
 namespace choco.Responses;
 
-public class LoginResponse
+public class RefreshResponse
 {
     public string Token { get; set; }
-    public string Name { get; set; }
-    public Uri AvatarUri { get; set; }
     public string RefreshToken { get; set; }
 }
