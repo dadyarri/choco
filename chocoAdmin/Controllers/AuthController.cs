@@ -65,7 +65,7 @@ public class AuthController : ControllerBase
             return NotFound();
         }
 
-        if (!VerifyPasswordHash(body.Password, user.PasswordHash, user.PasswordSalt))
+        if (!user.RefreshToken.SequenceEqual(body.RefreshToken))
         {
             return Forbid();
         }
