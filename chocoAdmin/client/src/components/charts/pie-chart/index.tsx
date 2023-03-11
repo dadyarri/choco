@@ -60,7 +60,7 @@ export const PieChart: FC<PieChartProps> = (data) => {
             {
                 label: "Заказов",
                 data: data?.data.map(item => item.value),
-                backgroundColor: colors.map(color => hexToRgba(color, 0.2)),
+                backgroundColor: colors.map(color => hexToRgba(color, 0.5)),
                 borderColor: colors.map(color => hexToRgba(color, 1)),
                 borderWidth: 1,
             }
