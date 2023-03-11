@@ -7,4 +7,5 @@ public class User : BaseModel
     public byte[] PasswordSalt { get; set; }
     public Uri AvatarUri { get; set; }
     public string Name { get; set; }
+    public long TelegramId { get; set; }
 }
