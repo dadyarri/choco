@@ -3,4 +3,4 @@ from pydantic import BaseModel
 
 class SendMessagesRequestBody(BaseModel):
     message: str
-    userIds: list[int]
+    user_ids: list[int]

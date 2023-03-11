@@ -16,7 +16,7 @@ async def ping():
 
 @app.post("/sendMessages")
 async def root(body: SendMessagesRequestBody):
-    for userId in body.userIds:
+    for userId in body.user_ids:
         await bot.send_message(chat_id=userId, text=body.message)
 
     return {"message": "message was sent successfully"}
