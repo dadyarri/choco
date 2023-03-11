@@ -55,8 +55,42 @@ public class AuthController : ControllerBase
         return Created("/auth/register", user);
     }
 
-    [HttpPost("login")]
-    public async Task<ActionResult> Login(LoginRequestBody body)
+    [HttpPost("passwordLogin")]
+    public async Task<ActionResult> LoginByPassword(LoginByPasswordRequestBody body)
+    {
+        var user = await _db.Users.Where(u => u.Username == body.Username).FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        if (!VerifyPasswordHash(body.Password, user.PasswordHash, user.PasswordSalt))
+        {
+            return Forbid();
+        }
+
+        var token = GenerateToken(user);
+        var refreshToken = GenerateRefreshToken();
+
+        user.RefreshToken = refreshToken;
+        await _db.SaveChangesAsync();
+        
+        _logger.Information("User {Username} logged in", user.Username);
+        return Ok(
+            new LoginResponse
+            {
+                Token = token,
+                Name = user.Name,
+                AvatarUri = user.AvatarUri,
+                RefreshToken = refreshToken
+            }
+        );
+
+    }
+
+    [HttpPost("passwordLessLogin")]
+    public async Task<ActionResult> LoginByRefreshToken(LoginByRefreshTokenRequestBody body)
     {
         var user = await _db.Users.Where(u => u.Username == body.Username).FirstOrDefaultAsync();
 
