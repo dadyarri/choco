@@ -32,7 +32,6 @@ const NavMenu: FC = () => {
         position={"sticky"}
         as={"nav"}
         w={"100%"}
-        bg={"#ffffff40"}
         zIndex={2}
     >
         <Container display={"flex"} p={2} maxW={"1500px"}>
