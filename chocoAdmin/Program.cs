@@ -33,6 +33,7 @@ try
     builder.Services.AddScoped<IVkServiceClient, VkServiceClient>();
     builder.Services.AddScoped<ITelegramServiceClient, TelegramServiceClient>();
     builder.Services.AddScoped<IVkUpdateUtils, VkUpdateUtils>();
+    builder.Services.AddScoped<ITelegramInformer, TelegramInformer>();
     builder.Services.AddScoped<IDeltaUtils, DeltaUtils>();
     builder.Services.AddScoped<IReplacePostUtil, ReplacePostUtil>();
 
