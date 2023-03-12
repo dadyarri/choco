@@ -39,7 +39,7 @@ public class TelegramServiceClient : ITelegramServiceClient
 
     private static HttpClient HttpClient => new()
     {
-        BaseAddress = new Uri(IsDevelopment ? "http://localhost:8000" : "http://vkintegration.com:8080")
+        BaseAddress = new Uri(IsDevelopment ? "http://localhost:8000" : "http://tgintegration.com:8081")
     };
 
 
