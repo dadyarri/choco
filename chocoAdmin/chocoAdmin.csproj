@@ -17,6 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Grynwald.MarkdownGenerator" Version="3.0.106" />
         <PackageReference Include="LettuceEncrypt" Version="1.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.3" />
         <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.1" />

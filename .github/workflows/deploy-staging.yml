@@ -35,3 +35,10 @@ jobs:
           context: "{{defaultContext}}:VkIntegration"
           push: true
           tags: dadyarri/daa03b929cab49cb917a5830be1c03e6:latest-staging
+      - 
+        name: Build and push TelegramIntegration
+        uses: docker/build-push-action@v4
+        with:
+          context: "{{defaultContext}}:TelegramIntegration"
+          push: true
+          tags: dadyarri/3e5cb8a404704303834451b5afeab0ad:latest-staging

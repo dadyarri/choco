@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "telegramintegration"
+version = "0.1.0"
+description = ""
+authors = ["Daniil <dadyarri@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.94.0"
+uvicorn = "^0.21.0"
+aiogram = "^2.25.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

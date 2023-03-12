@@ -1,16 +1,16 @@
-name: "Deploy Vk Integration to production server"
+name: "Deploy Telegram Integration to production server"
 
 on:
   push:
     branches:
       - "main"
     tags:
-      - "bot-v*"
+      - "tgi-v*"
   workflow_dispatch: {}
     
 jobs:
   build:
-    if: startsWith(github.ref, 'refs/tags/') && github.ref != 'refs/heads/main'
+    if: startsWith(github.ref, 'refs/tags/') && github.ref == 'refs/heads/main'
     name: "Build & push services"
     runs-on: "ubuntu-latest"
     environment: "Production"
@@ -20,7 +20,7 @@ jobs:
       
       - name: Get version number
         id: vars
-        run: echo "tag=${GITHUB_REF#refs/*/bot-v}" >> $GITHUB_OUTPUT
+        run: echo "tag=${GITHUB_REF#refs/*/tgi-v}" >> $GITHUB_OUTPUT
 
       - 
         name: Set up Docker Buildx
@@ -32,12 +32,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push vk integration
+        name: Build and push telegram integration
         uses: docker/build-push-action@v4
         with:
-          context: "{{defaultContext}}:VkIntegration"
+          context: "{{defaultContext}}:TelegramIntegration"
           push: true
-          tags: "dadyarri/daa03b929cab49cb917a5830be1c03e6:${{ steps.vars.outputs.tag }}, dadyarri/daa03b929cab49cb917a5830be1c03e6:latest"
+          tags: "dadyarri/3e5cb8a404704303834451b5afeab0ad:${{ steps.vars.outputs.tag }}, dadyarri/3e5cb8a404704303834451b5afeab0ad:latest"
 
       - name: Install SSH
         run: sudo apt install openssh-client -y
@@ -51,8 +51,8 @@ jobs:
           port: ${{ secrets.PRODUCTION_PORT }}
           script: |
             cd /code
-            docker compose pull vkIntegration
-            docker compose stop vkIntergration
-            docker compose rm vkIntegration
-            docker compose up vkIntegration -d
+            docker compose pull telegramIntegration
+            docker compose stop telegramIntegration
+            docker compose rm telegramIntegration
+            docker compose up telegramIntegration -d
             docker compose logs
