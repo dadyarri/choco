@@ -10,6 +10,7 @@ import {ShipmentEdit} from "../pages/shipment-edit";
 import ProductCategories from "../pages/categories";
 import {Inventory} from "../pages/inventory";
 import ProductCategoryEdit from "../pages/category-edit";
+import Customers from "../pages/customers";
 
 const routes: Route[] = [
     {
@@ -42,6 +43,11 @@ const routes: Route[] = [
         path: "/categories",
         element: <ProductCategories/>,
         label: "Категории"
+    },
+    {
+        path: "/customers",
+        element: <Customers/>,
+        label: "Клиенты"
     },
     {
         path: "/warehouse/add",
