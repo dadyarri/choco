@@ -32,7 +32,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push chocoAdmin
+        name: Build and push vk integration
         uses: docker/build-push-action@v4
         with:
           context: "{{defaultContext}}:VkIntegration"
@@ -51,8 +51,8 @@ jobs:
           port: ${{ secrets.PRODUCTION_PORT }}
           script: |
             cd /code
-            docker compose pull admin
-            docker compose stop admin
-            docker compose rm admin
-            docker compose up admin -d
+            docker compose pull vkIntegration
+            docker compose stop vkIntergration
+            docker compose rm vkIntegration
+            docker compose up vkIntegration -d
             docker compose logs
