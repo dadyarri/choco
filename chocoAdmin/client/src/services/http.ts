@@ -289,6 +289,28 @@ class HttpService {
             {headers: await this.getHeaders()}
         )
     }
+
+    static async getCustomers() {
+        return await axios.get(
+            "/api/customers",
+            {headers: await this.getHeaders()}
+        )
+    }
+
+    static async deleteCustomer(id: string) {
+        return await axios.delete(
+            `/api/customers/${id}`,
+            {headers: await this.getHeaders()}
+        )
+    }
+
+    static async restoreCustomerFromDeleted(orderId: string) {
+        return await axios.put(
+            `/api/customers/${orderId}`,
+            {},
+            {headers: await this.getHeaders()}
+        )
+    }
 }
 
 export default HttpService;
