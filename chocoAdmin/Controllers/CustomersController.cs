@@ -6,7 +6,7 @@ namespace choco.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CustomersController: ControllerBase
+public class CustomersController : ControllerBase
 {
     private readonly AppDbContext _db;
 
@@ -17,8 +17,10 @@ public class CustomersController: ControllerBase
 
     public async Task<ActionResult> GetAll()
     {
-        return Ok(await _db.Customers.ToListAsync());
+        return Ok(await _db.Customers
+            .Include(c => c.Addresses)
+            .ThenInclude(a => a.City)
+            .ToListAsync()
+        );
     }
-
-
 }
