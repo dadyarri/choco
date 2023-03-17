@@ -1,7 +1,8 @@
 import React, {FC} from 'react';
 import {Pie} from "react-chartjs-2";
-import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
-import {Text} from "@chakra-ui/react";
+import {ArcElement, Chart as ChartJS, Legend, Tooltip} from 'chart.js';
+import {Text, useColorMode} from "@chakra-ui/react";
+import chroma from "chroma-js";
 
 type PieChartProps = {
     data: {
@@ -12,46 +13,50 @@ type PieChartProps = {
 
 export const PieChart: FC<PieChartProps> = (data) => {
     ChartJS.register(ArcElement, Tooltip, Legend);
-    const hexToRgba = (hex: string, opacity: number) => {
-        if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-            let sourceColor = hex.substring(1).split('');
-            if (sourceColor.length === 3) {
-                sourceColor = [sourceColor[0], sourceColor[0], sourceColor[1], sourceColor[1], sourceColor[2], sourceColor[2]];
-            }
-            const hexColor = Number(`0x${sourceColor.join('')}`);
-            const resultColor = [(hexColor >> 16) & 255, (hexColor >> 8) & 255, hexColor & 255].join(',')
-            return `rgba(${resultColor}, ${opacity})`;
-        }
-        throw new Error('Bad Hex');
-    }
+    const hexToRgba = (hex: string, opacity: number): string => {
+        return chroma(hex).alpha(opacity).css();
+    };
 
+    const generateNonSimilarColors = (N: number): string[] => {
+        const colors: string[] = [];
 
-    const getRandomColor = () => {
+        const generateColor = (): string => {
+            const hue = Math.floor(Math.random() * 360);
+            const saturation = Math.floor(Math.random() * 60) + 20;
+            const lightness = Math.floor(Math.random() * 40) + 30;
 
-        const h = Math.floor(Math.random() * 360);
-        const s = 100;
-        let l = 30;
-
-        l /= 100;
-        const a = s * Math.min(l, 1 - l) / 100;
-        const f = (n: number) => {
-            const k = (n + h / 30) % 12;
-            const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-            return Math.round(255 * color).toString(16).padStart(2, '0');
+            const hslColor = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+            return chroma(hslColor).hex();
         };
-        return `#${f(0)}${f(8)}${f(4)}`;
 
-    }
+        while (colors.length < N) {
+            const color = generateColor();
+            const isSimilar = colors.some((c) => chroma.deltaE(color, c) < 10);
+            const contrastWhite = chroma.contrast(color, 'white');
+            const contrastBlack = chroma.contrast(color, 'black');
 
-    const colors = Array.from({length: data.data.length}, getRandomColor);
+            if (!isSimilar && contrastWhite >= 4.5 && contrastBlack >= 4.5) {
+                colors.push(color);
+            }
+        }
+
+        return colors;
+    };
+
+    const colors = generateNonSimilarColors(data.data.length);
+    const {colorMode} = useColorMode();
 
     const options = {
         responsive: true,
         plugins: {
             legend: {
                 position: 'bottom' as const,
+                labels: {
+                    color: colorMode === "light" ? "#000000" : "#ffffff",
+                }
             },
         },
+
     };
 
     const pieData = {
@@ -60,7 +65,7 @@ export const PieChart: FC<PieChartProps> = (data) => {
             {
                 label: "Заказов",
                 data: data?.data.map(item => item.value),
-                backgroundColor: colors.map(color => hexToRgba(color, 0.2)),
+                backgroundColor: colors.map(color => hexToRgba(color, 0.5)),
                 borderColor: colors.map(color => hexToRgba(color, 1)),
                 borderWidth: 1,
             }

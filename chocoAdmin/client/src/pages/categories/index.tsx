@@ -8,6 +8,7 @@ import React from "react";
 import {Link} from "react-router-dom";
 import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
 import StatefulButton from "../../components/stateful-button";
+import {FaTrashRestore} from "react-icons/fa";
 
 const ProductCategories = () => {
 
@@ -115,7 +116,7 @@ const ProductCategories = () => {
                                                     <StatefulButton
                                                         variant={"blue"}
                                                         title={"Восстановить"}
-                                                        prefix={<HiOutlineTrash/>}
+                                                        prefix={<FaTrashRestore/>}
                                                         postfixWhenActive={"Восстановить?"}
                                                         clickHandler={async (_event) => {
                                                             restoreCategoryMutation.mutate(category.id);

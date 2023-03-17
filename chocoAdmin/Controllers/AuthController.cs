@@ -40,7 +40,8 @@ public class AuthController : ControllerBase
             PasswordHash = passwordHash,
             PasswordSalt = passwordSalt,
             AvatarUri = body.AvatarUri,
-            Name = body.Name
+            Name = body.Name,
+            RefreshToken = GenerateRefreshToken()
         };
 
         await _db.Users.AddAsync(user);
@@ -54,8 +55,8 @@ public class AuthController : ControllerBase
         return Created("/auth/register", user);
     }
 
-    [HttpPost("login")]
-    public async Task<ActionResult> Login(LoginRequestBody body)
+    [HttpPost("passwordLogin")]
+    public async Task<ActionResult> LoginByPassword(LoginByPasswordRequestBody body)
     {
         var user = await _db.Users.Where(u => u.Username == body.Username).FirstOrDefaultAsync();
 
@@ -70,9 +71,55 @@ public class AuthController : ControllerBase
         }
 
         var token = GenerateToken(user);
+        var refreshToken = GenerateRefreshToken();
+
+        user.RefreshToken = refreshToken;
+        await _db.SaveChangesAsync();
+        
+        _logger.Information("User {Username} logged in", user.Username);
+        return Ok(
+            new LoginResponse
+            {
+                Token = token,
+                Name = user.Name,
+                AvatarUri = user.AvatarUri,
+                RefreshToken = refreshToken
+            }
+        );
+
+    }
+
+    [HttpPost("passwordLessLogin")]
+    public async Task<ActionResult> LoginByRefreshToken(LoginByRefreshTokenRequestBody body)
+    {
+        var user = await _db.Users.Where(u => u.Username == body.Username).FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        if (!user.RefreshToken.SequenceEqual(body.RefreshToken))
+        {
+            return Forbid();
+        }
+
+        var token = GenerateToken(user);
+        var refreshToken = GenerateRefreshToken();
+
+        user.RefreshToken = refreshToken;
+        await _db.SaveChangesAsync();
 
         _logger.Information("User {Username} logged in", user.Username);
-        return Ok(new LoginResponse { Token = token, Name = user.Name, AvatarUri = user.AvatarUri });
+        return Ok(
+            new LoginResponse
+            {
+                Token = token,
+                Name = user.Name,
+                AvatarUri = user.AvatarUri,
+                RefreshToken = refreshToken
+            }
+        );
     }
 
     [Authorize]
@@ -80,6 +127,33 @@ public class AuthController : ControllerBase
     public async Task<ActionResult> Verify()
     {
         return Ok();
+    }
+
+    [HttpPost("refresh")]
+    public async Task<ActionResult> RefreshToken([FromBody] RefreshTokenRequestBody body)
+    {
+        var user = await _db.Users.Where(u => u.Username == body.Username).FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        if (!user.RefreshToken.SequenceEqual(body.RefreshToken))
+        {
+            return Forbid();
+        }
+
+        var refreshToken = GenerateRefreshToken();
+
+        user.RefreshToken = refreshToken;
+        await _db.SaveChangesAsync();
+        
+        return Ok(new RefreshResponse
+        {
+            Token = GenerateToken(user),
+            RefreshToken = refreshToken
+        });
     }
 
     private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -120,5 +194,10 @@ public class AuthController : ControllerBase
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
         return jwt;
+    }
+
+    private string GenerateRefreshToken()
+    {
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(30));
     }
 }

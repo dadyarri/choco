@@ -17,13 +17,16 @@ public class OrdersController : ControllerBase
     private readonly ILogger _logger;
     private readonly IDeltaUtils _delta;
     private readonly IVkUpdateUtils _vkUpdateUtils;
+    private readonly ITelegramInformer _telegramInformer;
 
-    public OrdersController(AppDbContext db, IVkUpdateUtils vkUpdateUtils, ILogger logger, IDeltaUtils delta)
+    public OrdersController(AppDbContext db, IVkUpdateUtils vkUpdateUtils, ILogger logger, IDeltaUtils delta,
+        ITelegramInformer telegramInformer)
     {
         _db = db;
         _vkUpdateUtils = vkUpdateUtils;
         _logger = logger;
         _delta = delta;
+        _telegramInformer = telegramInformer;
     }
 
     [HttpGet]
@@ -213,14 +216,14 @@ public class OrdersController : ControllerBase
             case "Обрабатывается":
             {
                 var delta = _delta.CalculateDelta(order.OrderItems, await FindOrderItems(body.OrderItems));
-                
+
                 if (delta.Count > 0)
                 {
                     _logger.Information("Order items list has changed. Trying to update leftovers...");
                     try
                     {
                         order.OrderItems = await _delta.ApplyDelta(order.OrderItems, delta);
-                        
+
                         await _db.OrderItems
                             .Where(oi => oi.Order == null)
                             .ForEachAsync(oi => _db.OrderItems.Remove(oi));
@@ -327,6 +330,16 @@ public class OrdersController : ControllerBase
         await _db.SaveChangesAsync();
 
         _logger.Information("Order created");
+
+        var username = User.Identity?.Name;
+        var userIdsToWhomSendMessage = await _db.Users
+            .Where(u => u.Username != username)
+            .Select(u => u.TelegramId)
+            .ToListAsync();
+
+        var messageFromOrder = _telegramInformer.GenerateMessageFromOrder(order);
+        _telegramInformer.SendMessage(messageFromOrder, userIdsToWhomSendMessage);
+
         return Created("/api/Orders", order);
     }
 

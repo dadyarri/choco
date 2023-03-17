@@ -4,6 +4,7 @@ import {getIncomesInfo, getStatsByCategory, getStatsByCity, getTopProducts} from
 import {StatsBy, StatsCompareIncomes, StatsTopProducts} from "../../services/types";
 import {AxiosError} from "axios";
 import {
+    Box,
     Button,
     Card,
     CardBody,
@@ -11,10 +12,8 @@ import {
     Center,
     FormControl,
     FormLabel,
-    GridItem,
     Heading,
     Input,
-    SimpleGrid,
     Spinner,
     VStack
 } from "@chakra-ui/react";
@@ -23,8 +22,9 @@ import {TopProducts} from "../../components/charts/top-products";
 import {CompareIncomes} from "../../components/charts/compare-incomes";
 import {IncomesChart} from "../../components/charts/incomes-chart";
 import {Field, Form, Formik} from "formik";
-import {getToken, login} from "../../services/jwt";
+import {getToken, loginByPassword} from "../../services/jwt";
 import {BiLogInCircle} from "react-icons/bi";
+import {ChartContainer} from "../../components/charts/chart-container";
 
 const Home: FC = () => {
 
@@ -82,7 +82,7 @@ const Home: FC = () => {
     return <div>
         {!hasAuthData ? <div>
                 <Formik initialValues={{username: "", password: ""}} onSubmit={async (values) => {
-                    const isLoggedIn = await login(values.username, values.password);
+                    const isLoggedIn = await loginByPassword(values.username, values.password);
 
                     if (isLoggedIn) {
                         window.location.reload();
@@ -128,64 +128,34 @@ const Home: FC = () => {
                     )}
                 </Formik>
             </div> :
-            <SimpleGrid columns={[1, 2, 3, 4]} gap={6}>
-                <GridItem w='100%'>
-                    <Card>
-                        <CardHeader>
-                            <Heading size={"md"}>Продажи по городам</Heading>
-                        </CardHeader>
-                        <CardBody>
-                            {isStatsByCityLoading ? <Spinner/> : !isStatsByCityError ?
-                                <PieChart data={statsByCity!}/> : null}
-                        </CardBody>
-                    </Card>
-                </GridItem>
-                <GridItem w='100%'>
-                    <Card>
-                        <CardHeader>
-                            <Heading size={"md"}>Сравнение продаж за последние два месяца</Heading>
-                        </CardHeader>
-                        <CardBody>
-                            {isCompareIncomesLoading ? <Spinner/> : !isCompareIncomesError ?
-                                <CompareIncomes data={compareIncomes!}/> : null}
-                        </CardBody>
-                    </Card>
-                </GridItem>
-                <GridItem w='100%'>
-                    <Card>
-                        <CardHeader>
-                            <Heading size={"md"}>10 самых продаваемых товаров</Heading>
-                        </CardHeader>
-                        <CardBody>
-                            {isTopProductsLoading ? <Spinner/> : !isTopProductsError ?
-                                <TopProducts data={topProductsData!}/> : null}
-                        </CardBody>
-                    </Card>
-                </GridItem>
-                <GridItem w='100%'>
-                    <Card>
-                        <CardHeader>
-                            <Heading size={"md"}>Продажи за последние 10 месяцев</Heading>
-                        </CardHeader>
-                        <CardBody>
-                            {isIncomesStatsLoading ? <Spinner/> : !isIncomesStatsError ?
-                                <IncomesChart data={incomesStats!}/> : null}
-                        </CardBody>
-                    </Card>
-                </GridItem>
-                <GridItem w='100%'>
-                    <Card>
-                        <CardHeader>
-                            <Heading size={"md"}>Продажи по категориям</Heading>
-                        </CardHeader>
-                        <CardBody>
-                            {isStatsByCategoryLoading ? <Spinner/> : !isStatsByCategoryError ?
-                                <PieChart data={statsByCategory!}/> : null}
-                        </CardBody>
-                    </Card>
-                </GridItem>
-            </SimpleGrid>}
+            <Box padding={4}
+                 w="100%"
+                 maxW="1500px"
+                 mx="auto"
+                 sx={{columnCount: [1, 2, 3, 4], columnGap: "20px", rowGap: "20px"}}>
+                <ChartContainer header={"Продажи по городам"}>
+                    {isStatsByCityLoading ? <Spinner/> : !isStatsByCityError ?
+                        <PieChart data={statsByCity!}/> : null}
+                </ChartContainer>
+                <ChartContainer header={"Сравнение продаж за последние два месяца"}>
+                    {isCompareIncomesLoading ? <Spinner/> : !isCompareIncomesError ?
+                        <CompareIncomes data={compareIncomes!}/> : null}
+                </ChartContainer>
+                <ChartContainer header={"10 самых продаваемых товаров"}>
+                    {isTopProductsLoading ? <Spinner/> : !isTopProductsError ?
+                        <TopProducts data={topProductsData!}/> : null}
+                </ChartContainer>
+                <ChartContainer header={"Продажи за последние 10 месяцев"}>
+                    {isIncomesStatsLoading ? <Spinner/> : !isIncomesStatsError ?
+                        <IncomesChart data={incomesStats!}/> : null}
+                </ChartContainer>
+                <ChartContainer header={"Продажи по категориям"}>
+                    {isStatsByCategoryLoading ? <Spinner/> : !isStatsByCategoryError ?
+                        <PieChart data={statsByCategory!}/> : null}
+                </ChartContainer>
+            </Box>
 
+        }
     </div>
 }
 
