@@ -7,9 +7,6 @@ on:
     tags:
       - "app-v*"
   workflow_dispatch: {}
-  
-env:
-  ENVIRONMENT: Release
     
 jobs:
   build:
@@ -41,6 +38,7 @@ jobs:
           context: "{{defaultContext}}:chocoAdmin"
           push: true
           tags: "dadyarri/9f840c17c6fd49dfb786607fdfb89e85:${{ steps.vars.outputs.tag }}, dadyarri/9f840c17c6fd49dfb786607fdfb89e85:latest"
+          build-args: ENVIRONMENT=Release
 
       - name: Install SSH
         run: sudo apt install openssh-client -y
