@@ -1,14 +1,16 @@
 version: '3.8'
 services:
   admin:
-    build: chocoAdmin
+    build: 
+      context: chocoAdmin
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
     ports:
       - "443:443"
       - "80:80"
     container_name: choco_admin
     environment:
       ASPNETCORE_HTTPS_POST: 443
-      ASPNETCORE_ENVIRONMENT: $ENVIRONMENT
     volumes:
       - "./chocoAdmin/Static:/usr/share/fonts"
       - "./chocoAdmin/appsettings.Development.json:/chocoAdmin/appsettings.Development.json"
