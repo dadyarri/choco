@@ -5,9 +5,6 @@ on:
     branches:
       - "release/*"
   workflow_dispatch: {}
-  
-env:
-  ENVIRONMENT: Staging
     
 jobs:
   build:
@@ -31,6 +28,7 @@ jobs:
           context: "{{defaultContext}}:chocoAdmin"
           push: true
           tags: dadyarri/9f840c17c6fd49dfb786607fdfb89e85:latest-staging
+          build-args: ENVIRONMENT=Staging
       - 
         name: Build and push VkIntegration
         uses: docker/build-push-action@v4
