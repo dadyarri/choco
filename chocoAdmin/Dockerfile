@@ -2,6 +2,8 @@
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
+ARG ENVIRONMENT
+ENV ASPNETCORE_ENVIRONMENT=$ENVIRONMENT
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 
@@ -16,11 +18,11 @@ COPY ["chocoAdmin.csproj", "chocoAdmin/"]
 RUN dotnet restore "chocoAdmin/chocoAdmin.csproj"
 WORKDIR "/src/chocoAdmin"
 COPY . .
-RUN dotnet build "chocoAdmin.csproj" -c Release -o /app/build
+RUN dotnet build "chocoAdmin.csproj" -o /app/build
 
 FROM build AS publish
 RUN apt-get update && apt-get install -y libfreetype6 libfontconfig1
-RUN dotnet publish "chocoAdmin.csproj" -c Release -o /app/publish
+RUN dotnet publish "chocoAdmin.csproj" -o /app/publish
 
 FROM base AS final
 WORKDIR /app
