@@ -26,8 +26,13 @@ export const PageLayout: FC<AppLayoutProps> = ({children}) => {
 
   return <Layout>
     <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-      <div style={{ height: 32, margin: 16 }} />
-      <Menu theme="dark" defaultSelectedKeys={[location.pathname]} mode="inline" items={routes.map((route) => getItem(route))} />
+      <div style={{height: 32, margin: 16}}/>
+      <Menu
+        theme="dark"
+        defaultSelectedKeys={[location.pathname]}
+        mode="inline"
+        items={routes.map((route) => getItem(route))}
+      />
     </Sider>
     <Layout>
       <Header style={{
