@@ -25,32 +25,35 @@ export const PageLayout: FC<AppLayoutProps> = ({children}) => {
 
 
   return <Layout>
-    <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-      <div style={{height: 32, margin: 16}}/>
-      <Menu
-        theme="dark"
-        defaultSelectedKeys={[location.pathname]}
-        mode="inline"
-        items={routes.map((route) => getItem(route))}
-      />
-    </Sider>
+    <Header style={{
+      position: "sticky",
+      top: 0,
+      zIndex: 1,
+      width: "100%",
+      display: "flex",
+      alignItems: "center",
+    }}>
+      <Title style={{color: "#ffffff"}} level={3}>Шокоадминка</Title>
+    </Header>
     <Layout>
-      <Header style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 1,
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-      }}>
-        <Title style={{color: "#ffffff"}} level={2}>Шокоадминка</Title>
-      </Header>
-      <Content className="site-layout" style={{padding: "0 10px", minHeight: "84vh"}}>
-        {children}
-      </Content>
-      <Footer style={{textAlign: "center"}}>ChocoManager v1.5.0 &copy; 2023 dadyarri</Footer>
+      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} breakpoint={"lg"} collapsedWidth={0}>
+        <div style={{height: 32, margin: 16}}/>
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={[location.pathname]}
+          mode="inline"
+          items={routes.map((route) => getItem(route))}
+        />
+      </Sider>
+      <Layout>
+        <Content className="site-layout" style={{padding: "0 10px", minHeight: "84vh"}}>
+          {children}
+        </Content>
+        <Footer style={{textAlign: "center"}}>ChocoManager v1.5.0 &copy; 2023 dadyarri</Footer>
+      </Layout>
     </Layout>
-  </Layout>;
+  </Layout>
+  ;
 };
 
 type AppLayoutProps = {
