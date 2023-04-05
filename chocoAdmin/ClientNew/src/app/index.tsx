@@ -6,6 +6,7 @@ import {Route as RouteType} from "../entities/route";
 import {AppWrapper} from "../shared/config/app-wrapper";
 import routes from "../shared/config/routes";
 import {withProviders} from "./providers";
+import "./index.css";
 
 function App() {
 

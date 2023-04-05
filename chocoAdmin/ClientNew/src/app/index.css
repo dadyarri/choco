@@ -1,0 +1,7 @@
+@media only screen and (max-width: 768px) {
+    .ant-layout {
+        position: relative;
+        overflow: hidden;
+        min-width: 100vw;
+    }
+}
