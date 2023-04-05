@@ -12,9 +12,9 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Routes>
-        {routes.map((route, index) => {
-          const {element, ...rest} = route;
-          return <Route key={index} {...rest} element={element}/>;
+        {routes.map((route) => {
+          const {element, key, ...rest} = route;
+          return <Route key={key} {...rest} element={element}/>;
         })}
       </Routes>
       <ReactQueryDevtools initialIsOpen={false}/>
