@@ -11,7 +11,7 @@ type MenuItem = Required<MenuProps>["items"][number];
 
 export const PageLayout: FC<AppLayoutProps> = ({children}) => {
 
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
 
   const getItem = (
     {label, path, key, icon}: Route
