@@ -9,21 +9,21 @@ const routes: Route[] = [
   {
     index: true,
     path: "/",
-    key: "home",
+    key: "/",
     element: <HomePage/>,
     icon: <BarChartOutlined />,
     label: "Главная"
   },
   {
     path: "/orders",
-    key: "orders",
+    key: "/orders",
     element: <OrdersPage/>,
     icon: <CloudDownloadOutlined />,
     label: "Заказы"
   },
   {
     path: "/shipments",
-    key: "shipments",
+    key: "/shipments",
     element: <ShipmentsPage/>,
     icon: <CloudUploadOutlined />,
     label: "Поставки"
