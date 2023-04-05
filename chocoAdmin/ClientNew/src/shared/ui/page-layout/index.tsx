@@ -1,4 +1,5 @@
-import {Layout, Menu, Typography} from "antd";
+import {MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
+import {Button, Layout, Menu, Typography} from "antd";
 import type {MenuProps} from "antd/es/menu";
 import React, {FC, ReactNode, useState} from "react";
 import {Link} from "react-router-dom";
@@ -33,10 +34,18 @@ export const PageLayout: FC<AppLayoutProps> = ({children}) => {
       display: "flex",
       alignItems: "center",
     }}>
+      <Button
+        ghost
+        icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+        style={{marginTop: "12px", marginRight: "20px"}} onClick={() => setCollapsed(!collapsed)}/>
       <Title style={{color: "#ffffff"}} level={3}>Шокоадминка</Title>
     </Header>
     <Layout>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} breakpoint={"lg"} collapsedWidth={0}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        breakpoint={"lg"}
+        collapsedWidth={0} trigger={null}>
         <div style={{height: 32, margin: 16}}/>
         <Menu
           theme="dark"
@@ -52,8 +61,7 @@ export const PageLayout: FC<AppLayoutProps> = ({children}) => {
         <Footer style={{textAlign: "center"}}>ChocoManager v1.5.0 &copy; 2023 dadyarri</Footer>
       </Layout>
     </Layout>
-  </Layout>
-  ;
+  </Layout>;
 };
 
 type AppLayoutProps = {
