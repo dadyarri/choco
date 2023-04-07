@@ -14,65 +14,65 @@ import ProductCategoryEdit from "../pages/category-edit";
 const routes: Route[] = [
     {
         index: true,
-        path: "/",
+        path: "/app",
         element: <Home/>,
         label: "Главная"
     },
     {
-        path: "/orders",
+        path: "/app/orders",
         element: <Orders/>,
         label: "Заказы"
     },
     {
-        path: "/shipments",
+        path: "/app/shipments",
         element: <Shipments/>,
         label: "Поставки"
     },
     {
-        path: "/warehouse",
+        path: "/app/warehouse",
         element: <Warehouse/>,
         label: "Склад"
     },
     {
-        path: "/inventory",
+        path: "/app/inventory",
         element: <Inventory/>,
         label: "Ревизия"
     },
     {
-        path: "/categories",
+        path: "/app/categories",
         element: <ProductCategories/>,
         label: "Категории"
     },
     {
-        path: "/warehouse/add",
+        path: "/app/warehouse/add",
         element: <ProductEdit/>
     },
     {
-        path: "/warehouse/edit/:productId",
+        path: "/app/warehouse/edit/:productId",
         element: <ProductEdit/>
     },
     {
-        path: "/orders/add",
+        path: "/app/orders/add",
         element: <OrderEdit/>
     },
     {
-        path: "/orders/edit/:orderId",
+        path: "/app/orders/edit/:orderId",
         element: <OrderEdit/>
     },
     {
-        path: "/shipments/add",
+        path: "/app/shipments/add",
         element: <ShipmentEdit/>
     },
     {
-        path: "/shipments/edit/:shipmentId",
+        path: "/app/shipments/edit/:shipmentId",
         element: <ShipmentEdit/>
     },
     {
-        path: "/categories/add",
+        path: "/app/categories/add",
         element: <ProductCategoryEdit/>
     },
     {
-        path: "/categories/edit/:categoryId",
+        path: "/app/categories/edit/:categoryId",
         element: <ProductCategoryEdit/>
     },
 ];

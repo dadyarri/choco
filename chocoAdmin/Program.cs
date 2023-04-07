@@ -10,8 +10,10 @@ using choco.Utils.Interfaces;
 using choco.Utils.Services;
 using LettuceEncrypt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Serilog;
 using Serilog.Events;
 
@@ -76,6 +78,11 @@ try
                 o => o.UseHttps(h => { h.UseLettuceEncrypt(appServices); }));
         });
     }
+    
+    builder.Services.AddSpaStaticFiles(config =>
+    {
+        config.RootPath = "client/dist";
+    });
 
     var app = builder.Build();
 
@@ -110,6 +117,44 @@ try
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller}/{action=Index}/{id?}");
+
+    var spaPath = "/app";
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapWhen(y => y.Request.Path.StartsWithSegments(spaPath), client =>
+        {
+            client.UseSpa(spa =>
+            {
+                spa.UseProxyToSpaDevelopmentServer("https://localhost:6363");
+            });
+        });
+    }
+    else
+    {
+        app.Map(spaPath, client =>
+        {
+            client.UseSpaStaticFiles();
+            client.UseSpa(spa => {
+                spa.Options.SourcePath = "client";
+
+                // adds no-store header to index page to prevent deployment issues (prevent linking to old .js files)
+                // .js and other static resources are still cached by the browser
+                spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions
+                {
+                    OnPrepareResponse = ctx =>
+                    {
+                        ResponseHeaders headers = ctx.Context.Response.GetTypedHeaders();
+                        headers.CacheControl = new CacheControlHeaderValue
+                        {
+                            NoCache = true,
+                            NoStore = true,
+                            MustRevalidate = true
+                        };
+                    }
+                };
+            });
+        });
+    }
 
     app.MapFallbackToFile("index.html");
     app.UseSerilogRequestLogging();
