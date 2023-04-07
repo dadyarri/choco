@@ -101,3 +101,12 @@ export type GeocodingPosition = {
     lat: number,
     lng: number
 }
+
+export type Customer = {
+    id: string,
+    firstName: string,
+    lastName: string,
+    phone: string,
+    addresses: OrderAddress[],
+    deleted: boolean
+}
