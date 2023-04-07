@@ -1,32 +1,19 @@
-import React, {FC} from 'react';
+import React from 'react';
 import {Route, Routes} from 'react-router-dom';
-import Layout from "../components/layout";
 import routes from "../routes";
-import {QueryClient, QueryClientProvider} from "react-query";
-import {ReactQueryDevtools} from "react-query/devtools";
 import 'react-toastify/dist/ReactToastify.min.css';
-import {ChakraProvider} from "@chakra-ui/react";
-import theme from "../theme";
+import {withProviders} from "./providers";
 
-const App: FC = () => {
-
-    const queryClient = new QueryClient();
+const App = () => {
 
     return (
-        <ChakraProvider theme={theme}>
-            <QueryClientProvider client={queryClient}>
-                <Layout>
-                    <Routes>
-                        {routes.map((route, index) => {
-                            const {element, ...rest} = route;
-                            return <Route key={index} {...rest} element={element}/>;
-                        })}
-                    </Routes>
-                </Layout>
-                <ReactQueryDevtools initialIsOpen={false}/>
-            </QueryClientProvider>
-        </ChakraProvider>
+        <Routes>
+            {routes.map((route, index) => {
+                const {element, ...rest} = route;
+                return <Route key={index} {...rest} element={element}/>;
+            })}
+        </Routes>
     );
 }
 
-export default App;
+export default withProviders(App);
