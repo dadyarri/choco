@@ -1,12 +1,12 @@
 import React, {FC} from 'react';
 import {Route, Routes} from 'react-router-dom';
-import Layout from "./components/layout";
-import routes from "./routes";
+import Layout from "../components/layout";
+import routes from "../routes";
 import {QueryClient, QueryClientProvider} from "react-query";
 import {ReactQueryDevtools} from "react-query/devtools";
 import 'react-toastify/dist/ReactToastify.min.css';
 import {ChakraProvider} from "@chakra-ui/react";
-import theme from "./theme";
+import theme from "../theme";
 
 const App: FC = () => {
 
