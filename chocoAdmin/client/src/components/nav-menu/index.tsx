@@ -104,7 +104,7 @@ const NavMenu: FC = () => {
                                 }}
                                 icon={<BiLogOutCircle/>}
                             >Выйти</MenuItem>
-                            <Text fontSize={"xs"} as={"i"} mx={3} my={2}>Версия: 1.4.0</Text>
+                            <Text fontSize={"xs"} as={"i"} mx={3} my={2}>Версия: 1.5.0-dev</Text>
                         </MenuList>
                     </Menu>
                 </Box>
