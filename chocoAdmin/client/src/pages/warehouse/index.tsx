@@ -1,7 +1,7 @@
 import React, {FC, useState} from "react";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {BeatLoader} from "react-spinners";
-import {Product} from "services/types";
+import {Product} from "entities";
 import {GiWeight} from "react-icons/gi";
 import {ImWarning} from "react-icons/im";
 import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";

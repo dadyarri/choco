@@ -1,4 +1,4 @@
-import {Product} from "services/types";
+import {Product} from "entities/product";
 import {UpdateProductRequestBody} from "services/request-bodies";
 import api from "shared/config/axios";
 import {handleError} from "shared/api/helpers";

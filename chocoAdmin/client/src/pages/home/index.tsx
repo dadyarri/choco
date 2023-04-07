@@ -1,7 +1,7 @@
 import React, {FC} from "react";
 import {useQuery} from "react-query";
 import {getIncomesInfo, getStatsByCategory, getStatsByCity, getTopProducts} from "./index.utils";
-import {StatsBy, StatsCompareIncomes, StatsTopProducts} from "services/types";
+import {StatsSalesByCategory, StatsSalesByCity, StatsSalesByProduct, StatsIncomesComparsion} from "entities";
 import {AxiosError} from "axios";
 import {
     Box,
@@ -34,7 +34,7 @@ const Home: FC = () => {
         isLoading: isStatsByCityLoading,
         isError: isStatsByCityError,
         data: statsByCity
-    } = useQuery<StatsBy, AxiosError>(
+    } = useQuery<StatsSalesByCity, AxiosError>(
         "statsByCity",
         getStatsByCity,
         {enabled: hasAuthData}
@@ -43,7 +43,7 @@ const Home: FC = () => {
         isLoading: isCompareIncomesLoading,
         isError: isCompareIncomesError,
         data: compareIncomes
-    } = useQuery<StatsCompareIncomes, AxiosError>(
+    } = useQuery<StatsIncomesComparsion, AxiosError>(
         ["compareIncomes", 2],
         () => getIncomesInfo(2),
         {enabled: hasAuthData}
@@ -53,7 +53,7 @@ const Home: FC = () => {
         isLoading: isTopProductsLoading,
         isError: isTopProductsError,
         data: topProductsData
-    } = useQuery<StatsTopProducts, AxiosError>(
+    } = useQuery<StatsSalesByProduct, AxiosError>(
         "topProducts",
         getTopProducts,
         {enabled: hasAuthData}
@@ -63,7 +63,7 @@ const Home: FC = () => {
         isLoading: isIncomesStatsLoading,
         isError: isIncomesStatsError,
         data: incomesStats
-    } = useQuery<StatsCompareIncomes, AxiosError>(
+    } = useQuery<StatsIncomesComparsion, AxiosError>(
         ["compareIncomes", 10],
         () => getIncomesInfo(10),
         {enabled: hasAuthData}
@@ -73,7 +73,7 @@ const Home: FC = () => {
         isLoading: isStatsByCategoryLoading,
         isError: isStatsByCategoryError,
         data: statsByCategory
-    } = useQuery<StatsBy, AxiosError>(
+    } = useQuery<StatsSalesByCategory, AxiosError>(
         "statsByCategory",
         getStatsByCategory,
         {enabled: hasAuthData}

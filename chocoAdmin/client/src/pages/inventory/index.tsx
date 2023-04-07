@@ -1,7 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useQuery} from "react-query";
 import {AxiosError} from "axios";
-import {Product} from "services/types";
+import {Product} from "entities";
 import {fetchProductsList, sendInventory} from "./index.utils";
 import React, {useState} from "react";
 import {BeatLoader} from "react-spinners";

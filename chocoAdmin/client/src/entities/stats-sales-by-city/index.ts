@@ -1,0 +1,1 @@
+export type {StatsSalesByCity} from "./model";

@@ -1,0 +1,1 @@
+export type {ShipmentStatus} from "./model";

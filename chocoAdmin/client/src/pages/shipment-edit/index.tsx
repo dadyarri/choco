@@ -1,7 +1,7 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useQuery, useQueryClient} from "react-query";
 import {AxiosError} from "axios";
-import {Product, Shipment, ShipmentStatus} from "services/types";
+import {Product, Shipment, ShipmentStatus} from "entities";
 import React, {useState} from "react";
 import * as Yup from "yup";
 import {BeatLoader} from "react-spinners";

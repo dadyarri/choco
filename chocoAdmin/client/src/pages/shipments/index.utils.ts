@@ -1,4 +1,4 @@
-import {Shipment} from "services/types";
+import {Shipment} from "entities";
 import HttpService from "services/http";
 import {toast} from "react-toastify";
 

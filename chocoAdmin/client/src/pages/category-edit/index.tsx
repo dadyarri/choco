@@ -1,6 +1,6 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useQuery, useQueryClient} from "react-query";
-import {ProductCategory} from "services/types";
+import {ProductCategory} from "entities";
 import {AxiosError} from "axios";
 import {createProductCategory, getProductCategoryById, updateProductCategory} from "./index.utils";
 import {BeatLoader} from "react-spinners";

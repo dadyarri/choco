@@ -1,10 +1,10 @@
 import {Badge, Center, Flex, Heading, Spacer, Text} from "@chakra-ui/react";
 import {BsArrowDownRight, BsArrowUpRight} from "react-icons/bs";
 import React, {FC} from "react";
-import {IncomeInfo} from "services/types";
+import {StatsIncomesComparsion} from "entities";
 
 type CompareIncomesProps = {
-    data: IncomeInfo[]
+    data: StatsIncomesComparsion
 }
 
 export const CompareIncomes: FC<CompareIncomesProps> = ({data}) => {

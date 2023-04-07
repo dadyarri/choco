@@ -1,4 +1,4 @@
-import {Product, ProductCategory} from "services/types";
+import {Product, ProductCategory} from "entities";
 import HttpService from "services/http";
 import {toast} from "react-toastify";
 import {UpdateProductRequestBody} from "services/request-bodies";

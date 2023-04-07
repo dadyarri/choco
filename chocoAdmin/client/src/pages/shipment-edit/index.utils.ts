@@ -1,4 +1,4 @@
-import {Shipment, ShipmentStatus} from "services/types";
+import {Shipment, ShipmentStatus} from "entities";
 import HttpService from "services/http";
 import {toast} from "react-toastify";
 import {UpdateShipmentRequestBody} from "services/request-bodies";

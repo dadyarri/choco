@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {AxiosError} from "axios";
-import {Order} from "services/types";
+import {Order} from "entities";
 import {deleteOrder, fetchOrdersList, requestRouteLink, restoreFromDeleted} from "./index.utils";
 import {BeatLoader} from "react-spinners";
 import {Box, Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";

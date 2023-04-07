@@ -1,0 +1,1 @@
+export type {Shipment} from "./model";

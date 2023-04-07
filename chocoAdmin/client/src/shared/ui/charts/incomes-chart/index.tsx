@@ -1,11 +1,11 @@
 import {BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip,} from 'chart.js';
 import {Bar} from "react-chartjs-2";
-import {IncomeInfo} from "services/types";
+import {StatsIncomesSummary, StatsIncomesComparsion} from "entities";
 import {FC} from "react";
 import {useColorMode} from "@chakra-ui/react";
 
 type IncomesChartProps = {
-    data: IncomeInfo[]
+    data: StatsIncomesComparsion
 }
 
 export const IncomesChart: FC<IncomesChartProps> = ({data}) => {
@@ -57,11 +57,11 @@ export const IncomesChart: FC<IncomesChartProps> = ({data}) => {
     data = data.sort((a, b) => b.index - a.index)
 
     const chartData = {
-        labels: data?.map((item: IncomeInfo) => item.dateInfo),
+        labels: data?.map((item: StatsIncomesSummary) => item.dateInfo),
         datasets: [
             {
                 label: 'Сумма заказов',
-                data: data?.map((item: IncomeInfo) => item.total),
+                data: data?.map((item: StatsIncomesSummary) => item.total),
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
             }
         ],

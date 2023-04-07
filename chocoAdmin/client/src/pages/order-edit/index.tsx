@@ -1,7 +1,7 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useQuery, useQueryClient} from "react-query";
 import {AxiosError} from "axios";
-import {Order, OrderCity, OrderStatus, Product} from "services/types";
+import {Order, OrderCity, OrderStatus, Product} from "entities";
 import {createOrder, fetchOrderCitiesList, fetchOrderStatusesList, getOrderById, updateOrder} from "./index.utils";
 import React, {useState} from "react";
 import * as Yup from "yup";

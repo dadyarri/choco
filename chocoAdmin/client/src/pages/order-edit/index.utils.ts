@@ -1,4 +1,4 @@
-import {Order, OrderCity, OrderStatus} from "services/types";
+import {Order, OrderCity, OrderStatus} from "entities";
 import HttpService from "services/http";
 import {toast} from "react-toastify";
 import {UpdateOrderRequestBody} from "services/request-bodies";
