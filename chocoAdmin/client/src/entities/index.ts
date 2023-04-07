@@ -1,5 +1,6 @@
 export type {BaseName} from "./base-name";
 export type {BaseStats} from "./base-stats";
+export type {Error} from "./error";
 export type {GeocodingItem} from "./geocoding-item";
 export type {GeocodingPosition} from "./geocoding-position";
 export type {GeocodingResult} from "./geocoding-result";
