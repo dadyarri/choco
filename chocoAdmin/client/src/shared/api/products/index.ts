@@ -8,6 +8,7 @@ const baseURL: string = '/products';
 export const getAll = async () => {
     try {
         const {data} = await api.get<Product[]>(baseURL);
+        return data;
     } catch (error) {
         return handleError(error);
     }
