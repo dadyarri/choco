@@ -38,35 +38,6 @@ class HttpService {
         return {}
     }
 
-    public static async getProductById(productId: string): Promise<AxiosResponse> {
-        return await axios.get(
-            `/api/products/${productId}`,
-            {headers: await this.getHeaders()}
-        )
-    }
-
-    public static async getProducts(): Promise<AxiosResponse> {
-        return await axios.get(
-            "/api/products",
-            {headers: await this.getHeaders()}
-        )
-    }
-
-    public static async deleteProduct(itemId: string): Promise<AxiosResponse> {
-        return await axios.delete(
-            `/api/products/${itemId}`,
-            {headers: await this.getHeaders()}
-        )
-    }
-
-    public static async updateProduct(itemId: string, body: UpdateProductRequestBody): Promise<AxiosResponse> {
-        return await axios.patch(
-            `/api/products/${itemId}`,
-            body,
-            {headers: await this.getHeaders()}
-        )
-    }
-
     public static async getMarketUrl(marketId: number) {
         return await axios.get(
             `/api/vk/productUrl/${marketId}`,
@@ -77,14 +48,6 @@ class HttpService {
     static async getProductCategories() {
         return await axios.get(
             `/api/productCategories`,
-            {headers: await this.getHeaders()}
-        )
-    }
-
-    static async createProduct(body: UpdateProductRequestBody) {
-        return await axios.post(
-            "/api/products",
-            body,
             {headers: await this.getHeaders()}
         )
     }
@@ -232,14 +195,6 @@ class HttpService {
         return await axios.post(
             "/api/inventory",
             values,
-            {headers: await this.getHeaders()}
-        )
-    }
-
-    static async restoreProduct(productId: string) {
-        return await axios.put(
-            `/api/products/${productId}`,
-            {},
             {headers: await this.getHeaders()}
         )
     }
