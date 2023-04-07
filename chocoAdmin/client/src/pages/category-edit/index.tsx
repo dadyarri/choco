@@ -7,7 +7,7 @@ import {BeatLoader} from "react-spinners";
 import React, {useState} from "react";
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-import {LoadingButton} from "components/loading-button";
+import {LoadingButton} from "shared/ui/loading-button";
 import {Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, VStack} from "@chakra-ui/react";
 import {BiArrowBack} from "react-icons/bi";
 

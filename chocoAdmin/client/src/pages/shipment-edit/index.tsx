@@ -26,11 +26,10 @@ import {
 } from "@chakra-ui/react";
 import {Field, FieldArray, Form, Formik} from "formik";
 import {BiArrowBack, BiSave} from "react-icons/bi";
-import {LoadingButton} from "components/loading-button";
+import {LoadingButton} from "shared/ui/loading-button";
 import {HiOutlineTrash, HiPlus} from "react-icons/hi";
-import {fetchProductsList} from "orders/index.utils";
 import {DateTime} from "luxon";
-import {createShipment, fetchShipmentStatusesList, getShipmentById, updateShipment} from "./index.utils";
+import {createShipment, fetchProductsList, fetchShipmentStatusesList, getShipmentById, updateShipment} from "./index.utils";
 
 export const ShipmentEdit = () => {
 

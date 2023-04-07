@@ -17,14 +17,14 @@ import {
     Spinner,
     VStack
 } from "@chakra-ui/react";
-import {PieChart} from "components/charts/pie-chart";
-import {TopProducts} from "components/charts/top-products";
-import {CompareIncomes} from "components/charts/compare-incomes";
-import {IncomesChart} from "components/charts/incomes-chart";
+import {PieChart} from "shared/ui/charts/pie-chart";
+import {TopProducts} from "shared/ui/charts/top-products";
+import {CompareIncomes} from "shared/ui/charts/compare-incomes";
+import {IncomesChart} from "shared/ui/charts/incomes-chart";
 import {Field, Form, Formik} from "formik";
 import {getToken, loginByPassword} from "services/jwt";
 import {BiLogInCircle} from "react-icons/bi";
-import {ChartContainer} from "components/charts/chart-container";
+import {ChartContainer} from "shared/ui/charts/chart-container";
 
 const Home: FC = () => {
 

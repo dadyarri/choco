@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import {Field, FieldArray, Form, Formik} from "formik";
 import {BiSave} from "react-icons/bi";
-import {LoadingButton} from "components/loading-button";
+import {LoadingButton} from "shared/ui/loading-button";
 
 export const Inventory = () => {
 

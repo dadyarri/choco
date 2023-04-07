@@ -7,7 +7,7 @@ import {Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thea
 import React from "react";
 import {Link} from "react-router-dom";
 import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
-import StatefulButton from "components/stateful-button";
+import StatefulButton from "shared/ui/stateful-button";
 import {FaTrashRestore} from "react-icons/fa";
 
 const ProductCategories = () => {

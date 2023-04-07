@@ -8,7 +8,7 @@ import {Link} from "react-router-dom";
 import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
 import React from "react";
 import {DateTime} from "luxon";
-import StatefulButton from "components/stateful-button";
+import StatefulButton from "shared/ui/stateful-button";
 import {GiCancel, GiCheckMark, GiSandsOfTime} from "react-icons/gi";
 import {TbTruckDelivery} from "react-icons/tb";
 import {MdRestoreFromTrash} from "react-icons/md";

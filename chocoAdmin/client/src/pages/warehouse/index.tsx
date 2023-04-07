@@ -8,7 +8,7 @@ import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
 import {SlSocialVkontakte} from "react-icons/sl";
 import {AxiosError} from "axios";
 import {deleteProduct, fetchProductsList, openVkPageOfProduct, restoreProduct} from "./index.utils";
-import StatefulButton from "components/stateful-button";
+import StatefulButton from "shared/ui/stateful-button";
 import {Link} from "react-router-dom";
 import {
     Button,
