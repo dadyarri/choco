@@ -1,7 +1,7 @@
-import {Order, OrderCity, OrderStatus} from "../../services/types";
-import HttpService from "../../services/http";
+import {Order, OrderCity, OrderStatus} from "services/types";
+import HttpService from "services/http";
 import {toast} from "react-toastify";
-import {UpdateOrderRequestBody} from "../../services/request-bodies";
+import {UpdateOrderRequestBody} from "services/request-bodies";
 
 export const getOrderById = async (orderId: string): Promise<Order> => {
     return await HttpService.getOrderById(orderId)
@@ -53,6 +53,16 @@ export const createOrder = async (values: UpdateOrderRequestBody): Promise<Order
         .then((response) => response.data)
         .catch((error) => {
             toast(`Ошибка создания заказа!
+            ${error?.response.data}`);
+            throw error;
+        })
+}
+
+export const fetchProductsList = async () => {
+    return await HttpService.getProducts()
+        .then((response) => response.data)
+        .catch((error) => {
+            toast(`Ошибка получения списка товаров!
             ${error?.response.data}`);
             throw error;
         })

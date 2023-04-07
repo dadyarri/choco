@@ -1,7 +1,7 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useQuery, useQueryClient} from "react-query";
 import {AxiosError} from "axios";
-import {Product, Shipment, ShipmentStatus} from "../../services/types";
+import {Product, Shipment, ShipmentStatus} from "services/types";
 import React, {useState} from "react";
 import * as Yup from "yup";
 import {BeatLoader} from "react-spinners";
@@ -26,9 +26,9 @@ import {
 } from "@chakra-ui/react";
 import {Field, FieldArray, Form, Formik} from "formik";
 import {BiArrowBack, BiSave} from "react-icons/bi";
-import {LoadingButton} from "../../components/loading-button";
+import {LoadingButton} from "components/loading-button";
 import {HiOutlineTrash, HiPlus} from "react-icons/hi";
-import {fetchProductsList} from "../orders/index.utils";
+import {fetchProductsList} from "orders/index.utils";
 import {DateTime} from "luxon";
 import {createShipment, fetchShipmentStatusesList, getShipmentById, updateShipment} from "./index.utils";
 

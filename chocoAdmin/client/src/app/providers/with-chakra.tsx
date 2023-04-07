@@ -1,4 +1,4 @@
-import theme from "../../theme";
+import theme from "theme";
 import {ChakraProvider, ColorModeScript} from "@chakra-ui/react";
 import React from "react";
 

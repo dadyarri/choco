@@ -1,5 +1,5 @@
-import {Shipment} from "../../services/types";
-import HttpService from "../../services/http";
+import {Shipment} from "services/types";
+import HttpService from "services/http";
 import {toast} from "react-toastify";
 
 export const fetchShipmentsList = async (): Promise<Shipment[]> => {

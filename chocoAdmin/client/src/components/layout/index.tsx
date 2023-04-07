@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import LayoutProps from "./index.specs";
-import NavMenu from "../nav-menu";
+import NavMenu from "nav-menu";
 import {Container, useColorMode} from "@chakra-ui/react";
 import {ToastContainer} from "react-toastify";
 

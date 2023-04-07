@@ -1,7 +1,7 @@
-import {Shipment, ShipmentStatus} from "../../services/types";
-import HttpService from "../../services/http";
+import {Shipment, ShipmentStatus} from "services/types";
+import HttpService from "services/http";
 import {toast} from "react-toastify";
-import {UpdateShipmentRequestBody} from "../../services/request-bodies";
+import {UpdateShipmentRequestBody} from "services/request-bodies";
 
 export const getShipmentById = async (shipmentId: string): Promise<Shipment> => {
     return await HttpService.getShipmentById(shipmentId)

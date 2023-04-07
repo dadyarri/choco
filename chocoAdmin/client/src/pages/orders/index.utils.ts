@@ -1,5 +1,5 @@
-import {GeocodingResult, Order} from "../../services/types";
-import HttpService from "../../services/http";
+import {GeocodingResult, Order} from "services/types";
+import HttpService from "services/http";
 import {toast} from "react-toastify";
 import H from "@here/maps-api-for-javascript";
 

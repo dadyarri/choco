@@ -1,14 +1,14 @@
 import React, {FC, useState} from "react";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {BeatLoader} from "react-spinners";
-import {Product} from "../../services/types";
+import {Product} from "services/types";
 import {GiWeight} from "react-icons/gi";
 import {ImWarning} from "react-icons/im";
 import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
 import {SlSocialVkontakte} from "react-icons/sl";
 import {AxiosError} from "axios";
 import {deleteProduct, fetchProductsList, openVkPageOfProduct, restoreProduct} from "./index.utils";
-import StatefulButton from "../../components/stateful-button";
+import StatefulButton from "components/stateful-button";
 import {Link} from "react-router-dom";
 import {
     Button,

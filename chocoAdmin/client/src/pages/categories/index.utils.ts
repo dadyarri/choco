@@ -1,5 +1,5 @@
-import {ProductCategory} from "../../services/types";
-import HttpService from "../../services/http";
+import {ProductCategory} from "services/types";
+import HttpService from "services/http";
 import {toast} from "react-toastify";
 
 export const fetchCategoriesList = async (): Promise<ProductCategory[]> => {

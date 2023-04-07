@@ -1,4 +1,4 @@
-import HttpService from "../../services/http";
+import HttpService from "services/http";
 import {toast} from "react-toastify";
 
 export const fetchProductsList = async () => {

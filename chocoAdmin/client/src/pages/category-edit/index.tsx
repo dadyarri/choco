@@ -1,13 +1,13 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useQuery, useQueryClient} from "react-query";
-import {ProductCategory} from "../../services/types";
+import {ProductCategory} from "services/types";
 import {AxiosError} from "axios";
 import {createProductCategory, getProductCategoryById, updateProductCategory} from "./index.utils";
 import {BeatLoader} from "react-spinners";
 import React, {useState} from "react";
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-import {LoadingButton} from "../../components/loading-button";
+import {LoadingButton} from "components/loading-button";
 import {Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, VStack} from "@chakra-ui/react";
 import {BiArrowBack} from "react-icons/bi";
 

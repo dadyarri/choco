@@ -1,7 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useQuery} from "react-query";
 import {AxiosError} from "axios";
-import {Product} from "../../services/types";
+import {Product} from "services/types";
 import {fetchProductsList, sendInventory} from "./index.utils";
 import React, {useState} from "react";
 import {BeatLoader} from "react-spinners";
@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import {Field, FieldArray, Form, Formik} from "formik";
 import {BiSave} from "react-icons/bi";
-import {LoadingButton} from "../../components/loading-button";
+import {LoadingButton} from "components/loading-button";
 
 export const Inventory = () => {
 

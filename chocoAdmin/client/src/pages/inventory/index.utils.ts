@@ -1,6 +1,6 @@
-import HttpService from "../../services/http";
+import HttpService from "services/http";
 import {toast} from "react-toastify";
-import {InventoryRequestBody} from "../../services/request-bodies";
+import {InventoryRequestBody} from "services/request-bodies";
 
 export const fetchProductsList = async () => {
     return await HttpService.getProducts()

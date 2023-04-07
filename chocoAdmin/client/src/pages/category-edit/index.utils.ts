@@ -1,7 +1,7 @@
-import {ProductCategory} from "../../services/types";
-import HttpService from "../../services/http";
+import {ProductCategory} from "services/types";
+import HttpService from "services/http";
 import {toast} from "react-toastify";
-import {UpdateProductCategoryRequestBody} from "../../services/request-bodies";
+import {UpdateProductCategoryRequestBody} from "services/request-bodies";
 
 export const getProductCategoryById = async (productCategoryId: string): Promise<ProductCategory> => {
     return await HttpService.getProductCategoryById(productCategoryId)

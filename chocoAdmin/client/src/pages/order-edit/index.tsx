@@ -1,7 +1,7 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useQuery, useQueryClient} from "react-query";
 import {AxiosError} from "axios";
-import {Order, OrderCity, OrderStatus, Product} from "../../services/types";
+import {Order, OrderCity, OrderStatus, Product} from "services/types";
 import {createOrder, fetchOrderCitiesList, fetchOrderStatusesList, getOrderById, updateOrder} from "./index.utils";
 import React, {useState} from "react";
 import * as Yup from "yup";
@@ -27,9 +27,9 @@ import {
 } from "@chakra-ui/react";
 import {Field, FieldArray, Form, Formik} from "formik";
 import {BiArrowBack, BiSave} from "react-icons/bi";
-import {LoadingButton} from "../../components/loading-button";
+import {LoadingButton} from "components/loading-button";
 import {HiOutlineTrash, HiPlus} from "react-icons/hi";
-import {fetchProductsList} from "../orders/index.utils";
+import {fetchProductsList} from "./index.utils";
 import {DateTime} from "luxon";
 
 export const OrderEdit = () => {

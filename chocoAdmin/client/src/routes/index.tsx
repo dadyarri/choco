@@ -1,15 +1,15 @@
 import Route from "./index.specs";
 import React from "react";
-import Warehouse from "../pages/warehouse";
-import Home from "../pages/home";
-import ProductEdit from "../pages/product-edit";
-import Orders from "../pages/orders";
-import {OrderEdit} from "../pages/order-edit";
-import Shipments from "../pages/shipments";
-import {ShipmentEdit} from "../pages/shipment-edit";
-import ProductCategories from "../pages/categories";
-import {Inventory} from "../pages/inventory";
-import ProductCategoryEdit from "../pages/category-edit";
+import Warehouse from "pages/warehouse";
+import Home from "pages/home";
+import ProductEdit from "pages/product-edit";
+import Orders from "pages/orders";
+import {OrderEdit} from "pages/order-edit";
+import Shipments from "pages/shipments";
+import {ShipmentEdit} from "pages/shipment-edit";
+import ProductCategories from "pages/categories";
+import {Inventory} from "pages/inventory";
+import ProductCategoryEdit from "pages/category-edit";
 
 const routes: Route[] = [
     {

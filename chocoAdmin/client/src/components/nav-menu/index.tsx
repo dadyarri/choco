@@ -1,6 +1,6 @@
 import React, {FC} from "react";
 import {Link} from "react-router-dom";
-import routes from "../../routes/index";
+import routes from "routes/index";
 import {v4 as uuid} from "uuid";
 import {
     Avatar,
@@ -20,7 +20,7 @@ import {
     useColorMode
 } from "@chakra-ui/react";
 import {GiHamburgerMenu} from "react-icons/gi";
-import {getToken} from "../../services/jwt";
+import {getToken} from "services/jwt";
 import {BiLogOutCircle} from "react-icons/bi";
 
 const NavMenu: FC = () => {

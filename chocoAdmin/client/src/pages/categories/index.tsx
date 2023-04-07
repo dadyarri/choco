@@ -1,13 +1,13 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {AxiosError} from "axios";
-import {ProductCategory} from "../../services/types";
+import {ProductCategory} from "services/types";
 import {deleteCategory, fetchCategoriesList, restoreCategory} from "./index.utils";
 import {BeatLoader} from "react-spinners";
 import {Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
 import {Link} from "react-router-dom";
 import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
-import StatefulButton from "../../components/stateful-button";
+import StatefulButton from "components/stateful-button";
 import {FaTrashRestore} from "react-icons/fa";
 
 const ProductCategories = () => {

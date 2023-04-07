@@ -1,6 +1,6 @@
 import {BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip,} from 'chart.js';
 import {Bar} from "react-chartjs-2";
-import {IncomeInfo} from "../../../services/types";
+import {IncomeInfo} from "services/types";
 import {FC} from "react";
 import {useColorMode} from "@chakra-ui/react";
 

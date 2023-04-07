@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {AxiosError} from "axios";
-import {Order} from "../../services/types";
+import {Order} from "services/types";
 import {deleteOrder, fetchOrdersList, requestRouteLink, restoreFromDeleted} from "./index.utils";
 import {BeatLoader} from "react-spinners";
 import {Box, Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
@@ -8,7 +8,7 @@ import {Link} from "react-router-dom";
 import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
 import React from "react";
 import {DateTime} from "luxon";
-import StatefulButton from "../../components/stateful-button";
+import StatefulButton from "components/stateful-button";
 import {GiCancel, GiCheckMark, GiSandsOfTime} from "react-icons/gi";
 import {TbTruckDelivery} from "react-icons/tb";
 import {MdRestoreFromTrash} from "react-icons/md";
