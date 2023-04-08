@@ -1,10 +1,8 @@
 import {toast} from "react-toastify";
 
+import {Error} from "entities/error";
 import HttpService from "services/http";
 import {InventoryRequestBody} from "services/request-bodies";
-
-import {Error} from "entities/error";
-
 import {products} from "shared/api";
 import {errorHappened, sendToast} from "shared/lib";
 

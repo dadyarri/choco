@@ -8,7 +8,6 @@ import {Link} from "react-router-dom";
 import {BeatLoader} from "react-spinners";
 
 import {ProductCategory} from "entities/product-category";
-
 import StatefulButton from "shared/ui/stateful-button";
 
 import {deleteCategory, fetchCategoriesList, restoreCategory} from "./index.utils";

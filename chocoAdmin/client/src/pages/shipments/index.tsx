@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
 
 import { Shipment } from "entities/shipment";
-
 import StatefulButton from "shared/ui/stateful-button";
 
 import { deleteShipment, fetchShipmentsList, restoreFromDeleted } from "./index.utils";

@@ -1,8 +1,8 @@
 import {toast} from "react-toastify";
 
+import {ProductCategory} from "entities/product-category";
 import HttpService from "services/http";
 
-import {ProductCategory} from "entities/product-category";
 
 export const fetchCategoriesList = async (): Promise<ProductCategory[]> => {
     return await HttpService.getProductCategories()

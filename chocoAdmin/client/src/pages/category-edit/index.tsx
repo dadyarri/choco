@@ -9,7 +9,6 @@ import {BeatLoader} from "react-spinners";
 import * as Yup from "yup";
 
 import {ProductCategory} from "entities/product-category";
-
 import {LoadingButton} from "shared/ui/loading-button";
 
 import {createProductCategory, getProductCategoryById, updateProductCategory} from "./index.utils";

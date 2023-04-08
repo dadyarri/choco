@@ -32,7 +32,6 @@ import {Order} from "entities/order";
 import {OrderCity} from "entities/order-city";
 import {OrderStatus} from "entities/order-status";
 import {Product} from "entities/product";
-
 import {LoadingButton} from "shared/ui/loading-button";
 
 import {createOrder, fetchOrderCitiesList, fetchOrderStatusesList, getOrderById, updateOrder,fetchProductsList} from "./index.utils";

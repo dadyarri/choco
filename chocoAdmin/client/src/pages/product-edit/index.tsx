@@ -22,7 +22,6 @@ import * as Yup from "yup";
 
 import {Product} from "entities/product";
 import {ProductCategory} from "entities/product-category";
-
 import {LoadingButton} from "shared/ui/loading-button";
 
 import {createProduct, getProductById, getProductCategories, updateProduct} from "./index.utils";

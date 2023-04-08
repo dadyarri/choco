@@ -12,7 +12,6 @@ import {Link} from "react-router-dom";
 import {BeatLoader} from "react-spinners";
 
 import {Order} from "entities/order";
-
 import StatefulButton from "shared/ui/stateful-button";
 
 import {deleteOrder, fetchOrdersList, requestRouteLink, restoreFromDeleted} from "./index.utils";

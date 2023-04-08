@@ -1,8 +1,8 @@
 import {toast} from "react-toastify";
 
+import {Shipment} from "entities/shipment";
 import HttpService from "services/http";
 
-import {Shipment} from "entities/shipment";
 
 export const fetchShipmentsList = async (): Promise<Shipment[]> => {
     return await HttpService.getShipments()

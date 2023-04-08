@@ -21,7 +21,6 @@ import {useNavigate} from "react-router-dom";
 import {BeatLoader} from "react-spinners";
 
 import {Product} from "entities/product";
-
 import {LoadingButton} from "shared/ui/loading-button";
 
 import {fetchProductsList, sendInventory} from "./index.utils";
