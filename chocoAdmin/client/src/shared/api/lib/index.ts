@@ -1,9 +1,10 @@
-import axios, {AxiosError} from "axios";
-import {Error} from "entities";
+import {AxiosError, isAxiosError} from "axios";
+
+import {Error} from "entities/error";
 
 export const handleError = (error: AxiosError | unknown): Error => {
     let message: string;
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
         if (error.response) {
             message = `API Error (${error.response.status}): ${error.response.data}`;
             console.error(message);

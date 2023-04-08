@@ -1,4 +1,4 @@
-import {Product} from "./types";
+import {Product} from "entities/product";
 
 export type UpdateProductRequestBody = {
     name: string,

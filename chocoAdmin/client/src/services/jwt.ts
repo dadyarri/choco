@@ -1,5 +1,6 @@
-import axios, {AxiosError, AxiosResponse} from "axios";
-import {toast} from "react-toastify";
+import axios, { AxiosError } from "axios";
+import type { AxiosResponse } from "axios";
+import { toast } from "react-toastify";
 
 export const getToken = () => {
     return localStorage.getItem("token");
@@ -14,7 +15,8 @@ const updateLocalStorage = (username: string, loginResponse: AxiosResponse) => {
 };
 
 export const loginByRefreshToken = (username: string, refreshToken: string) => {
-    return axios.post("/api/auth/passwordLessLogin", {username, refreshToken})
+    return axios
+        .post("/api/auth/passwordLessLogin", { username, refreshToken })
         .then((response) => {
             updateLocalStorage(username, response);
             window.location.reload();
@@ -32,7 +34,8 @@ export const loginByRefreshToken = (username: string, refreshToken: string) => {
 };
 
 export const loginByPassword = (username: string, password: string) => {
-    return axios.post("/api/auth/passwordLogin", {username, password})
+    return axios
+        .post("/api/auth/passwordLogin", { username, password })
         .then((response) => {
             updateLocalStorage(username, response);
             window.location.reload();
@@ -50,7 +53,8 @@ export const loginByPassword = (username: string, password: string) => {
 };
 
 export const verifyToken = (token: string) => {
-    return axios.get("/api/auth/verify", {headers: {Authorization: `Bearer ${token}`}})
-        .then((_) =>  true)
+    return axios
+        .get("/api/auth/verify", { headers: { Authorization: `Bearer ${token}` } })
+        .then((_) => true)
         .catch((_) => false);
 };

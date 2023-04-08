@@ -1,7 +1,8 @@
 import {Badge, Center, Flex, Heading, Spacer, Text} from "@chakra-ui/react";
-import {StatsIncomesComparsion} from "entities";
 import React, {FC} from "react";
 import {BsArrowDownRight, BsArrowUpRight} from "react-icons/bs";
+
+import {StatsIncomesComparsion} from "entities/stats-incomes-comparsion";
 
 type CompareIncomesProps = {
     data: StatsIncomesComparsion

@@ -13,7 +13,6 @@ import {
     Tr
 } from "@chakra-ui/react";
 import {AxiosError} from "axios";
-import {Product} from "entities";
 import {Field, Formik} from "formik";
 import React, {FC, useState} from "react";
 import {GiWeight} from "react-icons/gi";
@@ -24,6 +23,8 @@ import {SlSocialVkontakte} from "react-icons/sl";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {Link} from "react-router-dom";
 import {BeatLoader} from "react-spinners";
+
+import {Product} from "entities/product";
 
 import StatefulButton from "shared/ui/stateful-button";
 

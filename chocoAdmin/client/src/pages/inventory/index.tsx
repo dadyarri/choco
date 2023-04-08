@@ -13,13 +13,14 @@ import {
     VStack
 } from "@chakra-ui/react";
 import {AxiosError} from "axios";
-import {Product} from "entities";
 import {Field, FieldArray, Form, Formik} from "formik";
 import React, {useState} from "react";
 import {BiSave} from "react-icons/bi";
 import {useQuery} from "react-query";
 import {useNavigate} from "react-router-dom";
 import {BeatLoader} from "react-spinners";
+
+import {Product} from "entities/product";
 
 import {LoadingButton} from "shared/ui/loading-button";
 

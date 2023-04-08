@@ -1,8 +1,11 @@
 import H from "@here/maps-api-for-javascript";
-import {GeocodingResult, Order} from "entities";
 import {toast} from "react-toastify";
 
 import HttpService from "services/http";
+
+import {GeocodingResult} from "entities/geocoding-result";
+import {Order} from "entities/order";
+
 
 export const fetchOrdersList = async (): Promise<Order[]> => {
     return await HttpService.getOrders()

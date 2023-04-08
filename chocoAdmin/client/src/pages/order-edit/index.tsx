@@ -18,7 +18,6 @@ import {
     VStack
 } from "@chakra-ui/react";
 import {AxiosError} from "axios";
-import {Order, OrderCity, OrderStatus, Product} from "entities";
 import {Field, FieldArray, Form, Formik} from "formik";
 import {DateTime} from "luxon";
 import React, {useState} from "react";
@@ -28,6 +27,11 @@ import {useQuery, useQueryClient} from "react-query";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {BeatLoader} from "react-spinners";
 import * as Yup from "yup";
+
+import {Order} from "entities/order";
+import {OrderCity} from "entities/order-city";
+import {OrderStatus} from "entities/order-status";
+import {Product} from "entities/product";
 
 import {LoadingButton} from "shared/ui/loading-button";
 

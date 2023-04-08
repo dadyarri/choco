@@ -1,12 +1,13 @@
 import {Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
 import {AxiosError} from "axios";
-import {ProductCategory} from "entities";
 import React from "react";
 import {FaTrashRestore} from "react-icons/fa";
 import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 import {Link} from "react-router-dom";
 import {BeatLoader} from "react-spinners";
+
+import {ProductCategory} from "entities/product-category";
 
 import StatefulButton from "shared/ui/stateful-button";
 

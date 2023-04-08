@@ -1,6 +1,5 @@
 import {Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, VStack} from "@chakra-ui/react";
 import {AxiosError} from "axios";
-import {ProductCategory} from "entities";
 import {Field, Form, Formik} from "formik";
 import React, {useState} from "react";
 import {BiArrowBack} from "react-icons/bi";
@@ -8,6 +7,8 @@ import {useQuery, useQueryClient} from "react-query";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {BeatLoader} from "react-spinners";
 import * as Yup from "yup";
+
+import {ProductCategory} from "entities/product-category";
 
 import {LoadingButton} from "shared/ui/loading-button";
 

@@ -1,8 +1,10 @@
-import {Product, ProductCategory} from "entities";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 import HttpService from "services/http";
-import {UpdateProductRequestBody} from "services/request-bodies";
+import { UpdateProductRequestBody } from "services/request-bodies";
+
+import { Product } from "entities/product";
+import { ProductCategory } from "entities/product-category";
 
 export const getProductById = async (productId: string): Promise<Product> => {
     return await HttpService.getProductById(productId)
@@ -24,7 +26,10 @@ export const getProductCategories = async (): Promise<ProductCategory[]> => {
         });
 };
 
-export const updateProduct = async (itemId: string, body: UpdateProductRequestBody): Promise<Product> => {
+export const updateProduct = async (
+    itemId: string,
+    body: UpdateProductRequestBody,
+): Promise<Product> => {
     return await HttpService.updateProduct(itemId, body)
         .then((response) => {
             toast("Заказ успешно обновлён!");

@@ -13,13 +13,17 @@ import {
     VStack
 } from "@chakra-ui/react";
 import {AxiosError} from "axios";
-import {StatsSalesByCategory, StatsSalesByCity, StatsSalesByProduct, StatsIncomesComparsion} from "entities";
 import {Field, Form, Formik} from "formik";
 import React, {FC} from "react";
 import {BiLogInCircle} from "react-icons/bi";
 import {useQuery} from "react-query";
 
 import {getToken, loginByPassword} from "services/jwt";
+
+import { StatsIncomesComparsion } from "entities/stats-incomes-comparsion";
+import {StatsSalesByCategory} from "entities/stats-sales-by-category";
+import {StatsSalesByCity} from "entities/stats-sales-by-city";
+import {StatsSalesByProduct} from "entities/stats-sales-by-products";
 
 import {ChartContainer} from "shared/ui/charts/chart-container";
 import {CompareIncomes} from "shared/ui/charts/compare-incomes";

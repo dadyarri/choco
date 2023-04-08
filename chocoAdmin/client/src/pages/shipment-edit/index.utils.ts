@@ -1,8 +1,10 @@
-import {Shipment, ShipmentStatus} from "entities";
 import {toast} from "react-toastify";
 
 import HttpService from "services/http";
 import {UpdateShipmentRequestBody} from "services/request-bodies";
+
+import {Shipment} from "entities/shipment";
+import {ShipmentStatus} from "entities/shipment-status";
 
 export const getShipmentById = async (shipmentId: string): Promise<Shipment> => {
     return await HttpService.getShipmentById(shipmentId)

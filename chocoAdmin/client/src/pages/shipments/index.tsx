@@ -1,6 +1,5 @@
 import { Box, Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { AxiosError } from "axios";
-import { Shipment } from "entities";
 import { DateTime } from "luxon";
 import React from "react";
 import { GiCancel, GiCheckMark, GiSandsOfTime } from "react-icons/gi";
@@ -10,6 +9,8 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
+
+import { Shipment } from "entities/shipment";
 
 import StatefulButton from "shared/ui/stateful-button";
 

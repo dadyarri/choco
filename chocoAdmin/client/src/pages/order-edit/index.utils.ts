@@ -1,8 +1,11 @@
-import {Order, OrderCity, OrderStatus} from "entities";
 import {toast} from "react-toastify";
 
 import HttpService from "services/http";
 import {UpdateOrderRequestBody} from "services/request-bodies";
+
+import {Order} from "entities/order";
+import {OrderCity} from "entities/order-city";
+import {OrderStatus} from "entities/order-status";
 
 export const getOrderById = async (orderId: string): Promise<Order> => {
     return await HttpService.getOrderById(orderId)
