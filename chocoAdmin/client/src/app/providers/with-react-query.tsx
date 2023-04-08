@@ -9,5 +9,5 @@ export const withReactQuery = (component: () => React.ReactNode) => () => {
     return <QueryClientProvider client={queryClient}>
         {component()}
         <ReactQueryDevtools initialIsOpen={false}/>
-    </QueryClientProvider>
+    </QueryClientProvider>;
 };

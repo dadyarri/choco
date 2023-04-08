@@ -1,8 +1,10 @@
-import React, {FC} from "react";
-import LayoutProps from "./index.specs";
-import NavMenu from "shared/ui/nav-menu";
 import {Container, useColorMode} from "@chakra-ui/react";
+import React, {FC} from "react";
 import {ToastContainer} from "react-toastify";
+
+import NavMenu from "shared/ui/nav-menu";
+
+import LayoutProps from "./index.specs";
 
 const Layout: FC<LayoutProps> = ({ children }) => {
 
@@ -29,7 +31,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
                 theme={colorMode}
             />
         </div>
-    )
-}
+    );
+};
 
 export default Layout;

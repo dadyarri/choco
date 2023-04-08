@@ -1,7 +1,7 @@
 import {Badge, Center, Flex, Heading, Spacer, Text} from "@chakra-ui/react";
-import {BsArrowDownRight, BsArrowUpRight} from "react-icons/bs";
-import React, {FC} from "react";
 import {StatsIncomesComparsion} from "entities";
+import React, {FC} from "react";
+import {BsArrowDownRight, BsArrowUpRight} from "react-icons/bs";
 
 type CompareIncomesProps = {
     data: StatsIncomesComparsion
@@ -17,7 +17,7 @@ export const CompareIncomes: FC<CompareIncomesProps> = ({data}) => {
             </Center>
             <Spacer/>
             <Center>
-                <Badge colorScheme={isSurplus ? "green" : "red"} fontSize={'2em'}>
+                <Badge colorScheme={isSurplus ? "green" : "red"} fontSize={"2em"}>
                     <Heading size={"sm"} p={2}>
                         <Flex>
                             {isSurplus ? <BsArrowUpRight/> : <BsArrowDownRight/>}
@@ -27,5 +27,5 @@ export const CompareIncomes: FC<CompareIncomesProps> = ({data}) => {
                 </Badge>
             </Center>
         </Flex>
-    )
-}
+    );
+};

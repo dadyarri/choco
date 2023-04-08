@@ -1,15 +1,3 @@
-import React, {FC, useState} from "react";
-import {useMutation, useQuery, useQueryClient} from "react-query";
-import {BeatLoader} from "react-spinners";
-import {Product} from "entities";
-import {GiWeight} from "react-icons/gi";
-import {ImWarning} from "react-icons/im";
-import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
-import {SlSocialVkontakte} from "react-icons/sl";
-import {AxiosError} from "axios";
-import {deleteProduct, fetchProductsList, openVkPageOfProduct, restoreProduct} from "./index.utils";
-import StatefulButton from "shared/ui/stateful-button";
-import {Link} from "react-router-dom";
 import {
     Button,
     ButtonGroup,
@@ -24,35 +12,50 @@ import {
     Thead,
     Tr
 } from "@chakra-ui/react";
+import {AxiosError} from "axios";
+import {Product} from "entities";
 import {Field, Formik} from "formik";
+import React, {FC, useState} from "react";
+import {GiWeight} from "react-icons/gi";
+import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
+import {ImWarning} from "react-icons/im";
 import {MdRestoreFromTrash} from "react-icons/md";
+import {SlSocialVkontakte} from "react-icons/sl";
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {Link} from "react-router-dom";
+import {BeatLoader} from "react-spinners";
+
+import StatefulButton from "shared/ui/stateful-button";
+
+import {deleteProduct, fetchProductsList, openVkPageOfProduct, restoreProduct} from "./index.utils";
+
 
 const Warehouse: FC = () => {
 
     const productList = useQuery<Product[], AxiosError>(
-        'products',
+        "products",
         fetchProductsList,
-    )
+    );
     const queryClient = useQueryClient();
     const deleteProductMutation = useMutation((id: string) => {
-        return deleteProduct(id)
+        return deleteProduct(id);
     }, {
         onSuccess: async () => {
-            await queryClient.invalidateQueries("products")
+            await queryClient.invalidateQueries("products");
         }
     });
 
     const restoreProductMutation = useMutation((id: string) => {
-        return restoreProduct(id)
+        return restoreProduct(id);
     }, {
         onSuccess: async () => {
-            await queryClient.invalidateQueries("products")
+            await queryClient.invalidateQueries("products");
         }
     });
 
     const goToMarketMutation = useMutation((marketId: number) => {
-        return openVkPageOfProduct(marketId)
-    })
+        return openVkPageOfProduct(marketId);
+    });
 
     const [showWholesalePrice, setShowWholesalePrice] = useState(false);
 
@@ -107,7 +110,7 @@ const Warehouse: FC = () => {
                                             <Td>{product.name}</Td>
                                             <Td>{product.isByWeight ? <GiWeight/> : null}</Td>
                                             <Td>{showWholesalePrice && product.wholesalePrice}{showWholesalePrice && " ("}{product.retailPrice}{showWholesalePrice && ")"} &#8381;</Td>
-                                            <Td>{product.leftover} {product.isByWeight ? 'кг.' : 'шт.'} {product.leftover < 0 ?
+                                            <Td>{product.leftover} {product.isByWeight ? "кг." : "шт."} {product.leftover < 0 ?
                                                 <ImWarning
                                                     title={"Количество товара опустилось ниже нуля"}/> : null}</Td>
                                             <Td>
@@ -128,7 +131,7 @@ const Warehouse: FC = () => {
                                                         prefix={<HiOutlineTrash/>}
                                                         postfixWhenActive={"Удалить?"}
                                                         clickHandler={async (_event) => {
-                                                            await deleteProductMutation.mutate(product.id)
+                                                            await deleteProductMutation.mutate(product.id);
                                                         }}/>
                                                     {product.marketId ? <Button
                                                         colorScheme={"teal"}
@@ -168,7 +171,7 @@ const Warehouse: FC = () => {
                                                 <Td>{product.name}</Td>
                                                 <Td>{product.isByWeight ? <GiWeight/> : null}</Td>
                                                 <Td>{showWholesalePrice && product.wholesalePrice}{showWholesalePrice && " ("}{product.retailPrice}{showWholesalePrice && ")"} &#8381;</Td>
-                                                <Td>{product.leftover} {product.isByWeight ? 'кг.' : 'шт.'} {product.leftover < 0 ?
+                                                <Td>{product.leftover} {product.isByWeight ? "кг." : "шт."} {product.leftover < 0 ?
                                                     <ImWarning
                                                         title={"Количество товара опустилось ниже нуля"}/> : null}</Td>
                                                 <Td>
@@ -179,7 +182,7 @@ const Warehouse: FC = () => {
                                                             prefix={<MdRestoreFromTrash/>}
                                                             postfixWhenActive={"Восстановить?"}
                                                             clickHandler={async (_event) => {
-                                                                await restoreProductMutation.mutate(product.id)
+                                                                await restoreProductMutation.mutate(product.id);
                                                             }}/>
                                                     </ButtonGroup>
                                                 </Td>
@@ -192,7 +195,7 @@ const Warehouse: FC = () => {
                     }
 
                 </div>
-    )
-}
+    );
+};
 
 export default Warehouse;

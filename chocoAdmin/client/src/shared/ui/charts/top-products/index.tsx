@@ -29,5 +29,5 @@ export const TopProducts: FC<TopProductsProps> = ({data}) => {
     return (data.length > 0 ? <UnorderedList>
         {data.map((item) => <ListItem
             key={item.name}>{item.name} (в {item.value} {inclineWord(item.value)})</ListItem>)}
-    </UnorderedList> : <Text>Недостаточно данных</Text>)
-}
+    </UnorderedList> : <Text>Недостаточно данных</Text>);
+};

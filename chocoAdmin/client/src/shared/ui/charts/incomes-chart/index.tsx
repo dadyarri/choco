@@ -1,8 +1,8 @@
-import {BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip,} from 'chart.js';
-import {Bar} from "react-chartjs-2";
+import {useColorMode} from "@chakra-ui/react";
+import {BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip,} from "chart.js";
 import {StatsIncomesSummary, StatsIncomesComparsion} from "entities";
 import {FC} from "react";
-import {useColorMode} from "@chakra-ui/react";
+import {Bar} from "react-chartjs-2";
 
 type IncomesChartProps = {
     data: StatsIncomesComparsion
@@ -25,7 +25,7 @@ export const IncomesChart: FC<IncomesChartProps> = ({data}) => {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'bottom' as const,
+                    position: "bottom" as const,
                     labels: {
                         color: colorMode === "light" ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
                     }
@@ -54,20 +54,20 @@ export const IncomesChart: FC<IncomesChartProps> = ({data}) => {
         }
     ;
 
-    data = data.sort((a, b) => b.index - a.index)
+    data = data.sort((a, b) => b.index - a.index);
 
     const chartData = {
         labels: data?.map((item: StatsIncomesSummary) => item.dateInfo),
         datasets: [
             {
-                label: 'Сумма заказов',
+                label: "Сумма заказов",
                 data: data?.map((item: StatsIncomesSummary) => item.total),
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                backgroundColor: "rgba(255, 99, 132, 0.5)",
             }
         ],
     };
 
     return (
         <Bar options={options} data={chartData} style={{height: "250px"}}/>
-    )
-}
+    );
+};

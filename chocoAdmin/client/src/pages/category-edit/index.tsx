@@ -1,15 +1,17 @@
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {useQuery, useQueryClient} from "react-query";
-import {ProductCategory} from "entities";
-import {AxiosError} from "axios";
-import {createProductCategory, getProductCategoryById, updateProductCategory} from "./index.utils";
-import {BeatLoader} from "react-spinners";
-import React, {useState} from "react";
-import {Field, Form, Formik} from "formik";
-import * as Yup from "yup";
-import {LoadingButton} from "shared/ui/loading-button";
 import {Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, VStack} from "@chakra-ui/react";
+import {AxiosError} from "axios";
+import {ProductCategory} from "entities";
+import {Field, Form, Formik} from "formik";
+import React, {useState} from "react";
 import {BiArrowBack} from "react-icons/bi";
+import {useQuery, useQueryClient} from "react-query";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {BeatLoader} from "react-spinners";
+import * as Yup from "yup";
+
+import {LoadingButton} from "shared/ui/loading-button";
+
+import {createProductCategory, getProductCategoryById, updateProductCategory} from "./index.utils";
 
 
 const ProductCategoryEdit = () => {
@@ -24,7 +26,7 @@ const ProductCategoryEdit = () => {
         ["category", categoryId],
         () => getProductCategoryById(categoryId!),
         {enabled: categoryId !== undefined}
-    )
+    );
     const queryClient = useQueryClient();
 
     const [isSubmitting, setSubmitting] = useState(false);
@@ -52,18 +54,18 @@ const ProductCategoryEdit = () => {
                     >Назад</Button>
                     <Formik
                         initialValues={{
-                            name: data ? data.name : ''
+                            name: data ? data.name : ""
                         }}
                         onSubmit={async (values) => {
                             setSubmitting(true);
                             if (data) {
                                 await updateProductCategory(data.id, values);
-                                await queryClient.invalidateQueries(["category", categoryId])
+                                await queryClient.invalidateQueries(["category", categoryId]);
                             } else {
                                 await createProductCategory(values);
                                 navigate("/categories");
                             }
-                            setSubmitting(false)
+                            setSubmitting(false);
                         }}
                         validationSchema={validationSchema}
                     >
@@ -88,7 +90,7 @@ const ProductCategoryEdit = () => {
                         )}
                     </Formik>
                 </div>
-    )
-}
+    );
+};
 
 export default ProductCategoryEdit;

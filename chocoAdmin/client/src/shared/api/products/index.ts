@@ -1,9 +1,11 @@
-import {Product} from "entities/product";
 import {UpdateProductRequestBody} from "services/request-bodies";
-import api from "shared/config/axios";
-import {handleError} from "shared/api/lib";
 
-const baseURL: string = '/products';
+import {Product} from "entities/product";
+
+import {handleError} from "shared/api/lib";
+import api from "shared/config/axios";
+
+const baseURL = "/products";
 
 export const getAll = async () => {
     try {
@@ -53,6 +55,6 @@ export const restore = async (id: string) => {
     try {
         await api.put(`${baseURL}/${id}`);
     } catch (error) {
-        return handleError(error)
+        return handleError(error);
     }
-}
+};

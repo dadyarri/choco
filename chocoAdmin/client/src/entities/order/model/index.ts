@@ -1,6 +1,6 @@
-import {OrderStatus} from "entities/order-status";
-import {OrderItem} from "entities/order-item";
 import {OrderAddress} from "entities/order-address";
+import {OrderItem} from "entities/order-item";
+import {OrderStatus} from "entities/order-status";
 
 export type Order = {
     id: string

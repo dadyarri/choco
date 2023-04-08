@@ -1,12 +1,13 @@
-import Headers from "./http.specs";
 import axios, {AxiosResponse} from "axios";
+
+import Headers from "./http.specs";
+import {getToken, loginByRefreshToken, verifyToken} from "./jwt";
 import {
     InventoryRequestBody,
     UpdateOrderRequestBody, UpdateProductCategoryRequestBody,
     UpdateProductRequestBody,
     UpdateShipmentRequestBody
 } from "./request-bodies";
-import {getToken, loginByRefreshToken, verifyToken} from "./jwt";
 
 class HttpService {
 
@@ -35,42 +36,42 @@ class HttpService {
         }
 
         window.location.href = "/";
-        return {}
+        return {};
     }
 
     public static async getMarketUrl(marketId: number) {
         return await axios.get(
             `/api/vk/productUrl/${marketId}`,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async getProductCategories() {
         return await axios.get(
-            `/api/productCategories`,
+            "/api/productCategories",
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async getOrders() {
         return await axios.get(
             "/api/orders",
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async getOrderStatuses() {
         return await axios.get(
             "/api/orderstatuses",
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async getOrderById(orderId: string) {
         return await axios.get(
             `/api/orders/${orderId}`,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async updateOrder(orderId: string, values: UpdateOrderRequestBody) {
@@ -78,7 +79,7 @@ class HttpService {
             `/api/orders/${orderId}`,
             values,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async createOrder(values: UpdateOrderRequestBody) {
@@ -86,21 +87,21 @@ class HttpService {
             "/api/orders",
             values,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async deleteOrder(orderId: string) {
         return await axios.delete(
             `/api/orders/${orderId}`,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async getOrderCities() {
         return await axios.get(
             "/api/ordercities",
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async restoreOrderFromDeleted(orderId: string) {
@@ -108,7 +109,7 @@ class HttpService {
             `/api/orders/${orderId}`,
             {},
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async getStatsByCity() {
@@ -134,7 +135,7 @@ class HttpService {
 
     static async getStatsByCategory() {
         return await axios.get(
-            `/api/Stats/Categories`,
+            "/api/Stats/Categories",
             {headers: await this.getHeaders()}
         );
     }
@@ -143,21 +144,21 @@ class HttpService {
         return await axios.get(
             "/api/shipments",
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async getShipmentById(shipmentId: string) {
         return await axios.get(
             `/api/shipments/${shipmentId}`,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async getShipmentStatuses() {
         return await axios.get(
             "/api/shipmentstatuses",
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async updateShipment(shipmentId: string, values: UpdateShipmentRequestBody) {
@@ -165,7 +166,7 @@ class HttpService {
             `/api/shipments/${shipmentId}`,
             values,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async createShipment(values: UpdateShipmentRequestBody) {
@@ -173,14 +174,14 @@ class HttpService {
             "/api/shipments",
             values,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async deleteShipment(shipmentId: string) {
         return await axios.delete(
             `/api/shipments/${shipmentId}`,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async restoreShipmentFromDeleted(shipmentId: string) {
@@ -188,7 +189,7 @@ class HttpService {
             `/api/shipments/${shipmentId}`,
             {},
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async sendInventory(values: InventoryRequestBody) {
@@ -196,14 +197,14 @@ class HttpService {
             "/api/inventory",
             values,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     public static async deleteCategory(itemId: string): Promise<AxiosResponse> {
         return await axios.delete(
             `/api/productcategories/${itemId}`,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async restoreCategoryFromDeleted(orderId: string) {
@@ -211,14 +212,14 @@ class HttpService {
             `/api/productcategories/${orderId}`,
             {},
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async getProductCategoryById(productCategoryId: string) {
         return await axios.get(
             `/api/productcategories/${productCategoryId}`,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async updateProductCategory(itemId: string, body: UpdateProductCategoryRequestBody) {
@@ -226,7 +227,7 @@ class HttpService {
             `/api/productcategories/${itemId}`,
             body,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async createProductCategory(body: UpdateProductCategoryRequestBody) {
@@ -234,7 +235,7 @@ class HttpService {
             "/api/productcategories",
             body,
             {headers: await this.getHeaders()}
-        )
+        );
     }
 
     static async getRouteLink(address: string, latitude: number, longitude: number) {
@@ -242,7 +243,7 @@ class HttpService {
             "/api/geocode",
             {address, latitude, longitude},
             {headers: await this.getHeaders()}
-        )
+        );
     }
 }
 

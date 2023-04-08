@@ -1,7 +1,3 @@
-import React, {FC} from "react";
-import {Link} from "react-router-dom";
-import routes from "routes/index";
-import {v4 as uuid} from "uuid";
 import {
     Avatar,
     Box,
@@ -19,9 +15,15 @@ import {
     Text,
     useColorMode
 } from "@chakra-ui/react";
-import {GiHamburgerMenu} from "react-icons/gi";
-import {getToken} from "services/jwt";
+import React, {FC} from "react";
 import {BiLogOutCircle} from "react-icons/bi";
+import {GiHamburgerMenu} from "react-icons/gi";
+import {Link} from "react-router-dom";
+import {v4 as uuid} from "uuid";
+
+import routes from "routes/index";
+import {getToken} from "services/jwt";
+
 
 const NavMenu: FC = () => {
 
@@ -100,7 +102,7 @@ const NavMenu: FC = () => {
                             <MenuItem
                                 onClick={() => {
                                     localStorage.removeItem("token");
-                                    window.location.reload()
+                                    window.location.reload();
                                 }}
                                 icon={<BiLogOutCircle/>}
                             >Выйти</MenuItem>
@@ -110,7 +112,7 @@ const NavMenu: FC = () => {
                 </Box>
             </HStack>}
         </Container>
-    </Box>
-}
+    </Box>;
+};
 
 export default NavMenu;

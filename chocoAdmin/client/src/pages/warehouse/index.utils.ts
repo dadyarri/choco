@@ -1,5 +1,6 @@
-import HttpService from "services/http";
 import {toast} from "react-toastify";
+
+import HttpService from "services/http";
 
 export const fetchProductsList = async () => {
     return await HttpService.getProducts()
@@ -8,8 +9,8 @@ export const fetchProductsList = async () => {
             toast(`Ошибка получения списка товаров!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const deleteProduct = async (id: string) => {
     return await HttpService.deleteProduct(id)
@@ -18,8 +19,8 @@ export const deleteProduct = async (id: string) => {
             toast(`Ошибка удаления товара!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const restoreProduct = async (id: string) => {
     return await HttpService.restoreProduct(id)
@@ -28,8 +29,8 @@ export const restoreProduct = async (id: string) => {
             toast(`Ошибка восстановления товара!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 export const openVkPageOfProduct = async (marketId: number) => {
     return await HttpService.getMarketUrl(marketId)
         .then((response) => {
@@ -40,5 +41,5 @@ export const openVkPageOfProduct = async (marketId: number) => {
             toast(`Ошибка получения ссылки на товар!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};

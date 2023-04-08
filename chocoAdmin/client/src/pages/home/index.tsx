@@ -1,8 +1,3 @@
-import React, {FC} from "react";
-import {useQuery} from "react-query";
-import {getIncomesInfo, getStatsByCategory, getStatsByCity, getTopProducts} from "./index.utils";
-import {StatsSalesByCategory, StatsSalesByCity, StatsSalesByProduct, StatsIncomesComparsion} from "entities";
-import {AxiosError} from "axios";
 import {
     Box,
     Button,
@@ -17,14 +12,22 @@ import {
     Spinner,
     VStack
 } from "@chakra-ui/react";
-import {PieChart} from "shared/ui/charts/pie-chart";
-import {TopProducts} from "shared/ui/charts/top-products";
+import {AxiosError} from "axios";
+import {StatsSalesByCategory, StatsSalesByCity, StatsSalesByProduct, StatsIncomesComparsion} from "entities";
+import {Field, Form, Formik} from "formik";
+import React, {FC} from "react";
+import {BiLogInCircle} from "react-icons/bi";
+import {useQuery} from "react-query";
+
+import {getToken, loginByPassword} from "services/jwt";
+
+import {ChartContainer} from "shared/ui/charts/chart-container";
 import {CompareIncomes} from "shared/ui/charts/compare-incomes";
 import {IncomesChart} from "shared/ui/charts/incomes-chart";
-import {Field, Form, Formik} from "formik";
-import {getToken, loginByPassword} from "services/jwt";
-import {BiLogInCircle} from "react-icons/bi";
-import {ChartContainer} from "shared/ui/charts/chart-container";
+import {PieChart} from "shared/ui/charts/pie-chart";
+import {TopProducts} from "shared/ui/charts/top-products";
+
+import {getIncomesInfo, getStatsByCategory, getStatsByCity, getTopProducts} from "./index.utils";
 
 const Home: FC = () => {
 
@@ -156,7 +159,7 @@ const Home: FC = () => {
             </Box>
 
         }
-    </div>
-}
+    </div>;
+};
 
 export default Home;

@@ -3,7 +3,7 @@ import {toast} from "react-toastify";
 
 export const getToken = () => {
     return localStorage.getItem("token");
-}
+};
 
 const updateLocalStorage = (username: string, loginResponse: AxiosResponse) => {
     localStorage.setItem("username", username);
@@ -11,7 +11,7 @@ const updateLocalStorage = (username: string, loginResponse: AxiosResponse) => {
     localStorage.setItem("token", loginResponse.data.token);
     localStorage.setItem("name", loginResponse.data.name);
     localStorage.setItem("avatarUri", loginResponse.data.avatarUri);
-}
+};
 
 export const loginByRefreshToken = (username: string, refreshToken: string) => {
     return axios.post("/api/auth/passwordLessLogin", {username, refreshToken})
@@ -25,11 +25,11 @@ export const loginByRefreshToken = (username: string, refreshToken: string) => {
                 toast("Ошибка входа: Нет такого пользователя");
             }
             if (error.response?.status === 403) {
-                toast(`Ошибка входа: Неверный пароль`);
+                toast("Ошибка входа: Неверный пароль");
             }
             return false;
         });
-}
+};
 
 export const loginByPassword = (username: string, password: string) => {
     return axios.post("/api/auth/passwordLogin", {username, password})
@@ -43,14 +43,14 @@ export const loginByPassword = (username: string, password: string) => {
                 toast("Ошибка входа: Нет такого пользователя");
             }
             if (error.response?.status === 403) {
-                toast(`Ошибка входа: Неверный пароль`);
+                toast("Ошибка входа: Неверный пароль");
             }
             return false;
         });
-}
+};
 
 export const verifyToken = (token: string) => {
     return axios.get("/api/auth/verify", {headers: {Authorization: `Bearer ${token}`}})
         .then((_) =>  true)
         .catch((_) => false);
-}
+};

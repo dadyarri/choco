@@ -1,11 +1,3 @@
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {useQuery, useQueryClient} from "react-query";
-import {AxiosError} from "axios";
-import {Order, OrderCity, OrderStatus, Product} from "entities";
-import {createOrder, fetchOrderCitiesList, fetchOrderStatusesList, getOrderById, updateOrder} from "./index.utils";
-import React, {useState} from "react";
-import * as Yup from "yup";
-import {BeatLoader} from "react-spinners";
 import {
     Button,
     Flex,
@@ -25,12 +17,21 @@ import {
     Tr,
     VStack
 } from "@chakra-ui/react";
+import {AxiosError} from "axios";
+import {Order, OrderCity, OrderStatus, Product} from "entities";
 import {Field, FieldArray, Form, Formik} from "formik";
-import {BiArrowBack, BiSave} from "react-icons/bi";
-import {LoadingButton} from "shared/ui/loading-button";
-import {HiOutlineTrash, HiPlus} from "react-icons/hi";
-import {fetchProductsList} from "./index.utils";
 import {DateTime} from "luxon";
+import React, {useState} from "react";
+import {BiArrowBack, BiSave} from "react-icons/bi";
+import {HiOutlineTrash, HiPlus} from "react-icons/hi";
+import {useQuery, useQueryClient} from "react-query";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {BeatLoader} from "react-spinners";
+import * as Yup from "yup";
+
+import {LoadingButton} from "shared/ui/loading-button";
+
+import {createOrder, fetchOrderCitiesList, fetchOrderStatusesList, getOrderById, updateOrder,fetchProductsList} from "./index.utils";
 
 export const OrderEdit = () => {
 
@@ -52,13 +53,13 @@ export const OrderEdit = () => {
     } = useQuery(
         "products",
         fetchProductsList,
-    )
+    );
 
-    const orderItems = []
+    const orderItems = [];
 
     if (order) {
         for (let i = 0; i < order.orderItems.length; i++) {
-            orderItems.push({id: order.orderItems[i].product.id, amount: order.orderItems[i].amount})
+            orderItems.push({id: order.orderItems[i].product.id, amount: order.orderItems[i].amount});
         }
     }
 
@@ -96,7 +97,7 @@ export const OrderEdit = () => {
             ),
             building: Yup.string().required("Обязательное поле!")
         })
-    })
+    });
 
     return (
         isOrderLoading ?
@@ -116,13 +117,13 @@ export const OrderEdit = () => {
                     >Назад</Button>
                     <Formik
                         initialValues={{
-                            date: order ? order.date : '',
+                            date: order ? order.date : "",
                             orderItems: order ? orderItems : [],
                             status: order ? order.status.id : undefined,
                             address: {
-                                city: order ? order.address.city.id : '',
-                                street: order ? order.address.street : '',
-                                building: order ? order.address.building : '',
+                                city: order ? order.address.city.id : "",
+                                street: order ? order.address.street : "",
+                                building: order ? order.address.building : "",
                             }
                         }}
                         onSubmit={async (values) => {
@@ -208,9 +209,9 @@ export const OrderEdit = () => {
                                                             colorScheme={"green"} mb={4}
                                                             onClick={() => {
                                                                 arrayHelpers.push({
-                                                                    id: '',
-                                                                    amount: ''
-                                                                })
+                                                                    id: "",
+                                                                    amount: ""
+                                                                });
                                                             }}
                                                             aria-label={"create"}>
 
@@ -262,7 +263,7 @@ export const OrderEdit = () => {
                                                                             title={"Удалить"}
                                                                             icon={<HiOutlineTrash/>}
                                                                             onClick={() => {
-                                                                                arrayHelpers.remove(index)
+                                                                                arrayHelpers.remove(index);
                                                                             }}
                                                                             aria-label={"delete"}/>
                                                                     </Td>
@@ -288,5 +289,5 @@ export const OrderEdit = () => {
 
                     </Formik>
                 </div>
-    )
-}
+    );
+};

@@ -1,13 +1,3 @@
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {useQuery, useQueryClient} from "react-query";
-import {Product, ProductCategory} from "entities";
-import {AxiosError} from "axios";
-import {createProduct, getProductById, getProductCategories, updateProduct} from "./index.utils";
-import {BeatLoader} from "react-spinners";
-import React, {useState} from "react";
-import {Field, Form, Formik} from "formik";
-import * as Yup from "yup";
-import {LoadingButton} from "shared/ui/loading-button";
 import {
     Button,
     Checkbox,
@@ -21,7 +11,19 @@ import {
     Select,
     VStack
 } from "@chakra-ui/react";
+import {AxiosError} from "axios";
+import {Product, ProductCategory} from "entities";
+import {Field, Form, Formik} from "formik";
+import React, {useState} from "react";
 import {BiArrowBack} from "react-icons/bi";
+import {useQuery, useQueryClient} from "react-query";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {BeatLoader} from "react-spinners";
+import * as Yup from "yup";
+
+import {LoadingButton} from "shared/ui/loading-button";
+
+import {createProduct, getProductById, getProductCategories, updateProduct} from "./index.utils";
 
 
 const ProductEdit = () => {
@@ -36,7 +38,7 @@ const ProductEdit = () => {
         ["product", productId],
         () => getProductById(productId!),
         {enabled: productId !== undefined}
-    )
+    );
     const queryClient = useQueryClient();
 
     const [isSubmitting, setSubmitting] = useState(false);
@@ -72,23 +74,23 @@ const ProductEdit = () => {
                     >Назад</Button>
                     <Formik
                         initialValues={{
-                            name: data ? data.name : '',
-                            wholesalePrice: data ? data.wholesalePrice : '',
-                            retailPrice: data ? data.retailPrice : '',
-                            category: data ? data.category.id : '',
-                            marketId: data ? data.marketId : '',
+                            name: data ? data.name : "",
+                            wholesalePrice: data ? data.wholesalePrice : "",
+                            retailPrice: data ? data.retailPrice : "",
+                            category: data ? data.category.id : "",
+                            marketId: data ? data.marketId : "",
                             isByWeight: data ? data.isByWeight : false
                         }}
                         onSubmit={async (values) => {
                             setSubmitting(true);
                             if (data) {
                                 await updateProduct(data.id, values);
-                                await queryClient.invalidateQueries(["product", productId])
+                                await queryClient.invalidateQueries(["product", productId]);
                             } else {
                                 await createProduct(values);
                                 navigate("/warehouse");
                             }
-                            setSubmitting(false)
+                            setSubmitting(false);
                         }}
                         validationSchema={validationSchema}
                     >
@@ -159,7 +161,7 @@ const ProductEdit = () => {
                         )}
                     </Formik>
                 </div>
-    )
-}
+    );
+};
 
 export default ProductEdit;

@@ -1,18 +1,20 @@
-import {useMutation, useQuery, useQueryClient} from "react-query";
+import {Box, Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
 import {AxiosError} from "axios";
 import {Order} from "entities";
-import {deleteOrder, fetchOrdersList, requestRouteLink, restoreFromDeleted} from "./index.utils";
-import {BeatLoader} from "react-spinners";
-import {Box, Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
-import {Link} from "react-router-dom";
-import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
-import React from "react";
 import {DateTime} from "luxon";
-import StatefulButton from "shared/ui/stateful-button";
-import {GiCancel, GiCheckMark, GiSandsOfTime} from "react-icons/gi";
-import {TbTruckDelivery} from "react-icons/tb";
-import {MdRestoreFromTrash} from "react-icons/md";
+import React from "react";
 import {FaMapMarkerAlt} from "react-icons/fa";
+import {GiCancel, GiCheckMark, GiSandsOfTime} from "react-icons/gi";
+import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
+import {MdRestoreFromTrash} from "react-icons/md";
+import {TbTruckDelivery} from "react-icons/tb";
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {Link} from "react-router-dom";
+import {BeatLoader} from "react-spinners";
+
+import StatefulButton from "shared/ui/stateful-button";
+
+import {deleteOrder, fetchOrdersList, requestRouteLink, restoreFromDeleted} from "./index.utils";
 
 const Orders = () => {
 
@@ -21,22 +23,22 @@ const Orders = () => {
     const getOrderStatusIcon = (status: string) => {
         switch (status) {
             case "Выполнен": {
-                return <GiCheckMark/>
+                return <GiCheckMark/>;
             }
             case "Доставляется": {
-                return <TbTruckDelivery/>
+                return <TbTruckDelivery/>;
             }
             case "Обрабатывается": {
-                return <GiSandsOfTime/>
+                return <GiSandsOfTime/>;
             }
             case "Отменён": {
-                return <GiCancel/>
+                return <GiCancel/>;
             }
             default: {
-                return null
+                return null;
             }
         }
-    }
+    };
 
     const deleteOrderMutation = useMutation(
         "deleteOrder",
@@ -47,7 +49,7 @@ const Orders = () => {
 
             }
         }
-    )
+    );
 
     const restoreFromDeletedMutation = useMutation(
         "restoreDeletedOrder",
@@ -57,16 +59,16 @@ const Orders = () => {
                 await queryClient.invalidateQueries("orders");
             }
         }
-    )
+    );
 
     const plotRoute = async (address: string) => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 const {latitude, longitude} = position.coords;
-                requestRouteLink(address, latitude, longitude)
-            })
+                requestRouteLink(address, latitude, longitude);
+            });
         }
-    }
+    };
 
     const queryClient = useQueryClient();
 
@@ -143,7 +145,7 @@ const Orders = () => {
                                                     </Button>
                                                 </ButtonGroup>
                                             </Td>
-                                        </Tr>
+                                        </Tr>;
                                     })}
                                 </Tbody>
                             </Table>
@@ -209,7 +211,7 @@ const Orders = () => {
                     </Box>
                     }
                 </div>
-    )
-}
+    );
+};
 
 export default Orders;

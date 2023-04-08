@@ -1,6 +1,7 @@
 import {Product, ProductCategory} from "entities";
-import HttpService from "services/http";
 import {toast} from "react-toastify";
+
+import HttpService from "services/http";
 import {UpdateProductRequestBody} from "services/request-bodies";
 
 export const getProductById = async (productId: string): Promise<Product> => {
@@ -11,7 +12,7 @@ export const getProductById = async (productId: string): Promise<Product> => {
             ${error?.response.data}`);
             throw error;
         });
-}
+};
 
 export const getProductCategories = async (): Promise<ProductCategory[]> => {
     return await HttpService.getProductCategories()
@@ -20,21 +21,21 @@ export const getProductCategories = async (): Promise<ProductCategory[]> => {
             toast(`Ошибка получения списка категорий товара!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const updateProduct = async (itemId: string, body: UpdateProductRequestBody): Promise<Product> => {
     return await HttpService.updateProduct(itemId, body)
         .then((response) => {
             toast("Заказ успешно обновлён!");
-            return response.data
+            return response.data;
         })
         .catch((error) => {
             toast(`Ошибка обновления товара!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const createProduct = async (body: UpdateProductRequestBody): Promise<Product> => {
     return await HttpService.createProduct(body)
@@ -43,5 +44,5 @@ export const createProduct = async (body: UpdateProductRequestBody): Promise<Pro
             toast(`Ошибка создания товара!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};

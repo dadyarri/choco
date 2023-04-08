@@ -1,6 +1,7 @@
 import {Shipment, ShipmentStatus} from "entities";
-import HttpService from "services/http";
 import {toast} from "react-toastify";
+
+import HttpService from "services/http";
 import {UpdateShipmentRequestBody} from "services/request-bodies";
 
 export const getShipmentById = async (shipmentId: string): Promise<Shipment> => {
@@ -9,10 +10,10 @@ export const getShipmentById = async (shipmentId: string): Promise<Shipment> => 
         .catch((error) => {
             toast(`Ошибка получения данных о поставке!
             ${error?.response.data}`);
-            throw error
-        })
+            throw error;
+        });
 
-}
+};
 
 export const fetchProductsList = async () => {
     return await HttpService.getProducts()
@@ -21,8 +22,8 @@ export const fetchProductsList = async () => {
             toast(`Ошибка получения списка товаров!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const fetchShipmentStatusesList = async (): Promise<ShipmentStatus[]> => {
     return await HttpService.getShipmentStatuses()
@@ -31,22 +32,22 @@ export const fetchShipmentStatusesList = async (): Promise<ShipmentStatus[]> => 
             toast(`Ошибка получения списка статусов поставок!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 
 export const updateShipment = async (shipmentId: string, values: UpdateShipmentRequestBody): Promise<ShipmentStatus> => {
     return await HttpService.updateShipment(shipmentId, values)
         .then((response) => {
-            toast("Поставка обновлена!")
-            return response.data
+            toast("Поставка обновлена!");
+            return response.data;
         })
         .catch((error) => {
             toast(`Ошибка обновления поставки!
 ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const createShipment = async (values: UpdateShipmentRequestBody): Promise<Shipment> => {
     return await HttpService.createShipment(values)
@@ -55,5 +56,5 @@ export const createShipment = async (values: UpdateShipmentRequestBody): Promise
             toast(`Ошибка создания поставки!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};

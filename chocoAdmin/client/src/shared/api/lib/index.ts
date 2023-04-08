@@ -8,15 +8,15 @@ export const handleError = (error: AxiosError | unknown): Error => {
             message = `API Error (${error.response.status}): ${error.response.data}`;
             console.error(message);
         } else if (error.request) {
-            message = 'API Error (No Response)';
+            message = "API Error (No Response)";
             console.error(message, error.request);
         } else {
-            message = 'API Error';
+            message = "API Error";
             console.error(message, error.message);
         }
     } else {
-        message = 'Unexpected Error';
+        message = "Unexpected Error";
         console.error(message, error);
     }
     return {message: message, error: error};
-}
+};

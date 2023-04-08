@@ -1,14 +1,16 @@
-import {useMutation, useQuery, useQueryClient} from "react-query";
+import {Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
 import {AxiosError} from "axios";
 import {ProductCategory} from "entities";
-import {deleteCategory, fetchCategoriesList, restoreCategory} from "./index.utils";
-import {BeatLoader} from "react-spinners";
-import {Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
 import React from "react";
-import {Link} from "react-router-dom";
-import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
-import StatefulButton from "shared/ui/stateful-button";
 import {FaTrashRestore} from "react-icons/fa";
+import {HiOutlineTrash, HiPencil, HiPlus} from "react-icons/hi";
+import {useMutation, useQuery, useQueryClient} from "react-query";
+import {Link} from "react-router-dom";
+import {BeatLoader} from "react-spinners";
+
+import StatefulButton from "shared/ui/stateful-button";
+
+import {deleteCategory, fetchCategoriesList, restoreCategory} from "./index.utils";
 
 const ProductCategories = () => {
 
@@ -35,7 +37,7 @@ const ProductCategories = () => {
 
             }
         }
-    )
+    );
 
     return (
         categories.isLoading ?
@@ -132,7 +134,7 @@ const ProductCategories = () => {
                     {categories.data !== undefined && categories.data.length === 0 &&
                         <Heading as={"h3"} size={"md"}>Нет категорий</Heading>}
                 </div>
-    )
-}
+    );
+};
 
 export default ProductCategories;

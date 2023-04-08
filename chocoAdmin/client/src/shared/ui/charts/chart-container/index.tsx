@@ -1,5 +1,5 @@
-import React, {FC, ReactNode} from "react";
 import {Card, CardBody, CardHeader, Heading} from "@chakra-ui/react";
+import React, {FC, ReactNode} from "react";
 
 type ChartContainerProps = {
     header: string,
@@ -17,5 +17,5 @@ export const ChartContainer: FC<ChartContainerProps> = ({header, children}) => {
         <CardBody>
             {children}
         </CardBody>
-    </Card>
-}
+    </Card>;
+};

@@ -1,6 +1,7 @@
 import {ProductCategory} from "entities";
-import HttpService from "services/http";
 import {toast} from "react-toastify";
+
+import HttpService from "services/http";
 import {UpdateProductCategoryRequestBody} from "services/request-bodies";
 
 export const getProductCategoryById = async (productCategoryId: string): Promise<ProductCategory> => {
@@ -11,20 +12,20 @@ export const getProductCategoryById = async (productCategoryId: string): Promise
             ${error?.response.data}`);
             throw error;
         });
-}
+};
 
 export const updateProductCategory = async (itemId: string, body: UpdateProductCategoryRequestBody): Promise<ProductCategory> => {
     return await HttpService.updateProductCategory(itemId, body)
         .then((response) => {
             toast("Категория успешно обновлена!");
-            return response.data
+            return response.data;
         })
         .catch((error) => {
             toast(`Ошибка обновления категории!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const createProductCategory = async (body: UpdateProductCategoryRequestBody): Promise<ProductCategory> => {
     return await HttpService.createProductCategory(body)
@@ -33,5 +34,5 @@ export const createProductCategory = async (body: UpdateProductCategoryRequestBo
             toast(`Ошибка создания категории!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};

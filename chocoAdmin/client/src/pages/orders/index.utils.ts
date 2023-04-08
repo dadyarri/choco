@@ -1,7 +1,8 @@
-import {GeocodingResult, Order} from "entities";
-import HttpService from "services/http";
-import {toast} from "react-toastify";
 import H from "@here/maps-api-for-javascript";
+import {GeocodingResult, Order} from "entities";
+import {toast} from "react-toastify";
+
+import HttpService from "services/http";
 
 export const fetchOrdersList = async (): Promise<Order[]> => {
     return await HttpService.getOrders()
@@ -10,8 +11,8 @@ export const fetchOrdersList = async (): Promise<Order[]> => {
             toast(`Ошибка получения списка заказов!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const fetchProductsList = async () => {
     return await HttpService.getProducts()
@@ -20,8 +21,8 @@ export const fetchProductsList = async () => {
             toast(`Ошибка получения списка товаров!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const deleteOrder = async (orderId: string) => {
     return await HttpService.deleteOrder(orderId)
@@ -30,8 +31,8 @@ export const deleteOrder = async (orderId: string) => {
             toast(`Ошибка удаления заказа!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const restoreFromDeleted = async (orderId: string) => {
     return await HttpService.restoreOrderFromDeleted(orderId)
@@ -40,8 +41,8 @@ export const restoreFromDeleted = async (orderId: string) => {
             toast(`Ошибка восстановления заказа
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const requestRouteLink = async (address: string, latitude: number, longitude: number) => {
     const platform = new H.service.Platform({
@@ -50,12 +51,12 @@ export const requestRouteLink = async (address: string, latitude: number, longit
     const service = platform.getSearchService();
     service.geocode({q: address},
         (result) => {
-            const {lat, lng} = (result as GeocodingResult).items[0].position
+            const {lat, lng} = (result as GeocodingResult).items[0].position;
 
             window.open(`https://yandex.ru/maps/?mode=routes&rtext=${latitude},${longitude}~${lat},${lng}`, "_blank");
         },
         (error) => {
-            throw error
+            throw error;
         }
     );
-}
+};

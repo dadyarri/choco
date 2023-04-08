@@ -1,5 +1,5 @@
-import {ShipmentStatus} from "entities/shipment-status";
 import {ShipmentItem} from "entities/shipment-item";
+import {ShipmentStatus} from "entities/shipment-status";
 
 export type Shipment = {
     id: string

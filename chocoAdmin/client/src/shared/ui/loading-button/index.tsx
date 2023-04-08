@@ -1,6 +1,7 @@
-import React, {FC} from "react";
-import {LoadingButtonSpecs} from "./index.specs";
 import {Button, Spinner} from "@chakra-ui/react";
+import React, {FC} from "react";
+
+import {LoadingButtonSpecs} from "./index.specs";
 
 export const LoadingButton: FC<LoadingButtonSpecs> = ({
                                                           variant,
@@ -27,6 +28,6 @@ export const LoadingButton: FC<LoadingButtonSpecs> = ({
                 <Spinner size={"xs"}/>}&nbsp;
             {label}
         </Button>
-    )
+    );
 
-}
+};

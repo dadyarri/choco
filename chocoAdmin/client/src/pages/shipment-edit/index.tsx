@@ -1,10 +1,3 @@
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {useQuery, useQueryClient} from "react-query";
-import {AxiosError} from "axios";
-import {Product, Shipment, ShipmentStatus} from "entities";
-import React, {useState} from "react";
-import * as Yup from "yup";
-import {BeatLoader} from "react-spinners";
 import {
     Button,
     Flex,
@@ -24,11 +17,21 @@ import {
     Tr,
     VStack
 } from "@chakra-ui/react";
+import {AxiosError} from "axios";
+import {Product, Shipment, ShipmentStatus} from "entities";
 import {Field, FieldArray, Form, Formik} from "formik";
-import {BiArrowBack, BiSave} from "react-icons/bi";
-import {LoadingButton} from "shared/ui/loading-button";
-import {HiOutlineTrash, HiPlus} from "react-icons/hi";
 import {DateTime} from "luxon";
+import React, {useState} from "react";
+import {BiArrowBack, BiSave} from "react-icons/bi";
+import {HiOutlineTrash, HiPlus} from "react-icons/hi";
+import {useQuery, useQueryClient} from "react-query";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {BeatLoader} from "react-spinners";
+import * as Yup from "yup";
+
+import {LoadingButton} from "shared/ui/loading-button";
+
+
 import {createShipment, fetchProductsList, fetchShipmentStatusesList, getShipmentById, updateShipment} from "./index.utils";
 
 export const ShipmentEdit = () => {
@@ -51,13 +54,13 @@ export const ShipmentEdit = () => {
     } = useQuery(
         "products",
         fetchProductsList,
-    )
+    );
 
-    const shipmentItems = []
+    const shipmentItems = [];
 
     if (shipment) {
         for (let i = 0; i < shipment.shipmentItems.length; i++) {
-            shipmentItems.push({id: shipment.shipmentItems[i].product.id, amount: shipment.shipmentItems[i].amount})
+            shipmentItems.push({id: shipment.shipmentItems[i].product.id, amount: shipment.shipmentItems[i].amount});
         }
     }
 
@@ -78,7 +81,7 @@ export const ShipmentEdit = () => {
                 amount: Yup.number().required("Количество товара обязательно!").positive("Количество товара не может быть меньше или равно нулю")
             })
         )
-    })
+    });
 
     return (
         isShipmentLoading ?
@@ -98,7 +101,7 @@ export const ShipmentEdit = () => {
                     >Назад</Button>
                     <Formik
                         initialValues={{
-                            date: shipment ? shipment.date : '',
+                            date: shipment ? shipment.date : "",
                             shipmentItems: shipment ? shipmentItems : [],
                             status: shipment ? shipment.status.id : undefined,
                         }}
@@ -158,9 +161,9 @@ export const ShipmentEdit = () => {
                                                             colorScheme={"green"} mb={4}
                                                             onClick={() => {
                                                                 arrayHelpers.push({
-                                                                    id: '',
-                                                                    amount: ''
-                                                                })
+                                                                    id: "",
+                                                                    amount: ""
+                                                                });
                                                             }}
                                                             aria-label={"create"}>
 
@@ -213,7 +216,7 @@ export const ShipmentEdit = () => {
                                                                             title={"Удалить"}
                                                                             icon={<HiOutlineTrash/>}
                                                                             onClick={() => {
-                                                                                arrayHelpers.remove(index)
+                                                                                arrayHelpers.remove(index);
                                                                             }}
                                                                             aria-label={"delete"}/>
                                                                     </Td>
@@ -239,5 +242,5 @@ export const ShipmentEdit = () => {
 
                     </Formik>
                 </div>
-    )
-}
+    );
+};

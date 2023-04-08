@@ -1,10 +1,3 @@
-import {useNavigate} from "react-router-dom";
-import {useQuery} from "react-query";
-import {AxiosError} from "axios";
-import {Product} from "entities";
-import {fetchProductsList, sendInventory} from "./index.utils";
-import React, {useState} from "react";
-import {BeatLoader} from "react-spinners";
 import {
     FormControl,
     FormLabel,
@@ -19,16 +12,25 @@ import {
     Tr,
     VStack
 } from "@chakra-ui/react";
+import {AxiosError} from "axios";
+import {Product} from "entities";
 import {Field, FieldArray, Form, Formik} from "formik";
+import React, {useState} from "react";
 import {BiSave} from "react-icons/bi";
+import {useQuery} from "react-query";
+import {useNavigate} from "react-router-dom";
+import {BeatLoader} from "react-spinners";
+
 import {LoadingButton} from "shared/ui/loading-button";
+
+import {fetchProductsList, sendInventory} from "./index.utils";
 
 export const Inventory = () => {
 
     const products = useQuery<Product[], AxiosError>(
         "products",
         fetchProductsList,
-    )
+    );
 
     const [isSubmitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
@@ -119,5 +121,5 @@ export const Inventory = () => {
 
                     </Formik>
                 </div>
-    )
-}
+    );
+};

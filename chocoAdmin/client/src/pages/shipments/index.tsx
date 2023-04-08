@@ -1,17 +1,19 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { Box, Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { Shipment } from "entities";
-import { deleteShipment, fetchShipmentsList, restoreFromDeleted } from "./index.utils";
-import { BeatLoader } from "react-spinners";
-import { Box, Button, ButtonGroup, Heading, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
-import { HiOutlineTrash, HiPencil, HiPlus } from "react-icons/hi";
-import React from "react";
 import { DateTime } from "luxon";
-import StatefulButton from "shared/ui/stateful-button";
+import React from "react";
 import { GiCancel, GiCheckMark, GiSandsOfTime } from "react-icons/gi";
-import { TbTruckDelivery } from "react-icons/tb";
+import { HiOutlineTrash, HiPencil, HiPlus } from "react-icons/hi";
 import { MdRestoreFromTrash } from "react-icons/md";
+import { TbTruckDelivery } from "react-icons/tb";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { Link } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
+
+import StatefulButton from "shared/ui/stateful-button";
+
+import { deleteShipment, fetchShipmentsList, restoreFromDeleted } from "./index.utils";
 
 const Shipments = () => {
 
@@ -20,22 +22,22 @@ const Shipments = () => {
     const getShipmentStatusIcon = (status: string) => {
         switch (status) {
             case "Выполнена": {
-                return <GiCheckMark />
+                return <GiCheckMark />;
             }
             case "Доставляется": {
-                return <TbTruckDelivery />
+                return <TbTruckDelivery />;
             }
             case "Обрабатывается": {
-                return <GiSandsOfTime />
+                return <GiSandsOfTime />;
             }
             case "Отменена": {
-                return <GiCancel />
+                return <GiCancel />;
             }
             default: {
-                return null
+                return null;
             }
         }
-    }
+    };
 
     const deleteShipmentMutation = useMutation(
         "deleteShipment",
@@ -46,7 +48,7 @@ const Shipments = () => {
 
             }
         }
-    )
+    );
 
     const restoreFromDeletedMutation = useMutation(
         "restoreDeletedShipments",
@@ -56,7 +58,7 @@ const Shipments = () => {
                 await queryClient.invalidateQueries("shipments");
             }
         }
-    )
+    );
 
     const queryClient = useQueryClient();
 
@@ -190,7 +192,7 @@ const Shipments = () => {
                     </Box>
                     }
                 </div>
-    )
-}
+    );
+};
 
 export default Shipments;

@@ -1,8 +1,8 @@
-import React, {FC} from 'react';
-import {Pie} from "react-chartjs-2";
-import {ArcElement, Chart as ChartJS, Legend, Tooltip} from 'chart.js';
 import {Text, useColorMode} from "@chakra-ui/react";
+import {ArcElement, Chart as ChartJS, Legend, Tooltip} from "chart.js";
 import chroma from "chroma-js";
+import React, {FC} from "react";
+import {Pie} from "react-chartjs-2";
 
 type PieChartProps = {
     data: {
@@ -32,8 +32,8 @@ export const PieChart: FC<PieChartProps> = (data) => {
         while (colors.length < N) {
             const color = generateColor();
             const isSimilar = colors.some((c) => chroma.deltaE(color, c) < 10);
-            const contrastWhite = chroma.contrast(color, 'white');
-            const contrastBlack = chroma.contrast(color, 'black');
+            const contrastWhite = chroma.contrast(color, "white");
+            const contrastBlack = chroma.contrast(color, "black");
 
             if (!isSimilar && contrastWhite >= 4.5 && contrastBlack >= 4.5) {
                 colors.push(color);
@@ -50,7 +50,7 @@ export const PieChart: FC<PieChartProps> = (data) => {
         responsive: true,
         plugins: {
             legend: {
-                position: 'bottom' as const,
+                position: "bottom" as const,
                 labels: {
                     color: colorMode === "light" ? "#000000" : "#ffffff",
                 }
@@ -70,11 +70,11 @@ export const PieChart: FC<PieChartProps> = (data) => {
                 borderWidth: 1,
             }
         ]
-    }
+    };
 
     return (
         data.data.length > 0 ? <Pie options={options} data={pieData}/> : <Text>Недостаточно данных</Text>
-    )
+    );
 
 
-}
+};

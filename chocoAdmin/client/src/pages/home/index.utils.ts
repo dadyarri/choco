@@ -1,5 +1,6 @@
-import HttpService from "services/http";
 import {toast} from "react-toastify";
+
+import HttpService from "services/http";
 
 
 export const getStatsByCity = async () => {
@@ -8,8 +9,8 @@ export const getStatsByCity = async () => {
     ).catch((error) => {
         toast(`Ошибка получения данных статистики по городам
         ${error.data?.message}`);
-    })
-}
+    });
+};
 
 export const getTopProducts = async () => {
     return await HttpService.getTopProducts()
@@ -17,9 +18,9 @@ export const getTopProducts = async () => {
         .catch((error) => {
             toast(`Ошибка получения самых продаваемых товаров
         ${error.data?.message}`);
-            throw error
-        })
-}
+            throw error;
+        });
+};
 
 export const getIncomesInfo = async (months: number) => {
     return await HttpService.getIncomesInfo(months)
@@ -27,9 +28,9 @@ export const getIncomesInfo = async (months: number) => {
         .catch((error) => {
             toast(`Ошибка получения суммы продаж за ${months} месяц(ев)
         ${error.data?.message}`);
-            throw error
-        })
-}
+            throw error;
+        });
+};
 
 export const getStatsByCategory = async () => {
     return await HttpService.getStatsByCategory().then(
@@ -38,5 +39,5 @@ export const getStatsByCategory = async () => {
         toast(`Ошибка получения статистики продаж по категориям
         ${error.data?.message}`);
         throw error;
-    })
-}
+    });
+};

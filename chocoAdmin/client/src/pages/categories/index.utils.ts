@@ -1,6 +1,7 @@
 import {ProductCategory} from "entities";
-import HttpService from "services/http";
 import {toast} from "react-toastify";
+
+import HttpService from "services/http";
 
 export const fetchCategoriesList = async (): Promise<ProductCategory[]> => {
     return await HttpService.getProductCategories()
@@ -9,8 +10,8 @@ export const fetchCategoriesList = async (): Promise<ProductCategory[]> => {
             toast(`Ошибка получения списка категорий!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const deleteCategory = async (categoryId: string) => {
     return await HttpService.deleteCategory(categoryId)
@@ -19,8 +20,8 @@ export const deleteCategory = async (categoryId: string) => {
             toast(`Ошибка удаления категории!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
 
 export const restoreCategory = async (categoryId: string) => {
     return await HttpService.restoreCategoryFromDeleted(categoryId)
@@ -29,5 +30,5 @@ export const restoreCategory = async (categoryId: string) => {
             toast(`Ошибка восстановления категории!
             ${error?.response.data}`);
             throw error;
-        })
-}
+        });
+};
