@@ -3,7 +3,29 @@ import { AxiosError, isAxiosError } from "axios";
 import { Error } from "entities/error";
 import api from "shared/config/axios";
 
-export abstract class Api<TModel, TRequestBody> {
+export abstract class BaseApi {
+    protected handleError(error: AxiosError | unknown): Error {
+        let message: string;
+        if (isAxiosError(error)) {
+            if (error.response) {
+                message = `API Error (${error.response.status}): ${error.response.data}`;
+                console.error(message);
+            } else if (error.request) {
+                message = "API Error (No Response)";
+                console.error(message, error.request);
+            } else {
+                message = "API Error";
+                console.error(message, error.message);
+            }
+        } else {
+            message = "Unexpected Error";
+            console.error(message, error);
+        }
+        return { message: message, error: error };
+    }
+}
+
+export abstract class ModelApi<TModel, TRequestBody> extends BaseApi{
     protected baseURL = "";
     async getAll(): Promise<TModel[] | Error> {
         try {
@@ -50,25 +72,5 @@ export abstract class Api<TModel, TRequestBody> {
         } catch (error) {
             return this.handleError(error);
         }
-    }
-
-    private handleError(error: AxiosError | unknown): Error {
-        let message: string;
-        if (isAxiosError(error)) {
-            if (error.response) {
-                message = `API Error (${error.response.status}): ${error.response.data}`;
-                console.error(message);
-            } else if (error.request) {
-                message = "API Error (No Response)";
-                console.error(message, error.request);
-            } else {
-                message = "API Error";
-                console.error(message, error.message);
-            }
-        } else {
-            message = "Unexpected Error";
-            console.error(message, error);
-        }
-        return { message: message, error: error };
     }
 }
