@@ -1,31 +1,32 @@
-import {Button, FormControl, FormErrorMessage, FormLabel, Heading, Input, VStack} from "@chakra-ui/react";
-import {AxiosError} from "axios";
-import {Field, Form, Formik} from "formik";
-import React, {useState} from "react";
-import {BiArrowBack} from "react-icons/bi";
-import {useQuery, useQueryClient} from "react-query";
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {BeatLoader} from "react-spinners";
+import {
+    Button,
+    FormControl,
+    FormErrorMessage,
+    FormLabel,
+    Heading,
+    Input,
+    VStack,
+} from "@chakra-ui/react";
+import { AxiosError } from "axios";
+import { Field, Form, Formik } from "formik";
+import React, { useState } from "react";
+import { BiArrowBack } from "react-icons/bi";
+import { useQuery, useQueryClient } from "react-query";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 import * as Yup from "yup";
 
-import {ProductCategory} from "entities/product-category";
-import {LoadingButton} from "shared/ui/loading-button";
-
-import {createProductCategory, getProductCategoryById, updateProductCategory} from "./index.utils";
-
+import { productCategoryLib } from "entities";
+import { ProductCategory } from "entities/product-category";
+import { LoadingButton } from "shared/ui/loading-button";
 
 const ProductCategoryEdit = () => {
-    const {categoryId} = useParams();
+    const { categoryId } = useParams();
 
-    const {
-        isLoading,
-        isError,
-        data,
-        error
-    } = useQuery<ProductCategory, AxiosError>(
+    const category = useQuery<ProductCategory, AxiosError>(
         ["category", categoryId],
-        () => getProductCategoryById(categoryId!),
-        {enabled: categoryId !== undefined}
+        () => productCategoryLib.getProductCategoryById(categoryId!),
+        { enabled: categoryId !== undefined },
     );
     const queryClient = useQueryClient();
 
@@ -33,63 +34,67 @@ const ProductCategoryEdit = () => {
     const navigate = useNavigate();
 
     const validationSchema = Yup.object().shape({
-        name: Yup.string().required("Поле должно быть заполнено!")
+        name: Yup.string().required("Поле должно быть заполнено!"),
     });
 
-    return (
-        isLoading ?
-            <BeatLoader color="#36d7b7"/> :
-            isError ?
-                <div>
-                    <Heading as={"h1"}>Ошибка загрузки</Heading>
-                    <p>{error?.message}</p>
-                </div> :
-                <div>
-                    <Heading as={"h1"} mb={4}>{data ? "Редактирование" : "Создание"} категории товара</Heading>
-                    <Button as={Link}
-                            colorScheme={"purple"}
-                            to={"/categories"}
-                            leftIcon={<BiArrowBack/>}
-                            mb={4}
-                    >Назад</Button>
-                    <Formik
-                        initialValues={{
-                            name: data ? data.name : ""
-                        }}
-                        onSubmit={async (values) => {
-                            setSubmitting(true);
-                            if (data) {
-                                await updateProductCategory(data.id, values);
-                                await queryClient.invalidateQueries(["category", categoryId]);
-                            } else {
-                                await createProductCategory(values);
-                                navigate("/categories");
-                            }
-                            setSubmitting(false);
-                        }}
-                        validationSchema={validationSchema}
-                    >
-                        {({errors, touched}) => (
-                            <Form>
-                                <VStack spacing={4} align={"flex-start"}>
-                                    <FormControl
-                                        isInvalid={!!errors.name && touched.name}>
-                                        <FormLabel>Название</FormLabel>
-                                        <Field type={"text"} name={"name"} as={Input}/>
-                                        <FormErrorMessage>{errors.name}</FormErrorMessage>
-                                    </FormControl>
-                                    <LoadingButton
-                                        variant={"green"}
-                                        label={"Сохранить"}
-                                        title={"Сохранить"}
-                                        type={"submit"}
-                                        isSubmitting={isSubmitting}
-                                    />
-                                </VStack>
-                            </Form>
-                        )}
-                    </Formik>
-                </div>
+    return category.isLoading ? (
+        <BeatLoader color="#36d7b7" />
+    ) : category.isError ? (
+        <div>
+            <Heading as={"h1"}>Ошибка загрузки</Heading>
+            <p>{category.error?.message}</p>
+        </div>
+    ) : (
+        <div>
+            <Heading as={"h1"} mb={4}>
+                {category.data ? "Редактирование" : "Создание"} категории товара
+            </Heading>
+            <Button
+                as={Link}
+                colorScheme={"purple"}
+                to={"/app/categories"}
+                leftIcon={<BiArrowBack />}
+                mb={4}
+            >
+                Назад
+            </Button>
+            <Formik
+                initialValues={{
+                    name: category.data ? category.data.name : "",
+                }}
+                onSubmit={async (values) => {
+                    setSubmitting(true);
+                    if (category.data) {
+                        await productCategoryLib.updateProductCategory(category.data.id, values);
+                        await queryClient.invalidateQueries(["category", categoryId]);
+                    } else {
+                        await productCategoryLib.createProductCategory(values);
+                        navigate("/app/categories");
+                    }
+                    setSubmitting(false);
+                }}
+                validationSchema={validationSchema}
+            >
+                {({ errors, touched }) => (
+                    <Form>
+                        <VStack spacing={4} align={"flex-start"}>
+                            <FormControl isInvalid={!!errors.name && touched.name}>
+                                <FormLabel>Название</FormLabel>
+                                <Field type={"text"} name={"name"} as={Input} />
+                                <FormErrorMessage>{errors.name}</FormErrorMessage>
+                            </FormControl>
+                            <LoadingButton
+                                variant={"green"}
+                                label={"Сохранить"}
+                                title={"Сохранить"}
+                                type={"submit"}
+                                isSubmitting={isSubmitting}
+                            />
+                        </VStack>
+                    </Form>
+                )}
+            </Formik>
+        </div>
     );
 };
 
