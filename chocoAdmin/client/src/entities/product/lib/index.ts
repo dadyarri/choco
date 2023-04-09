@@ -1,11 +1,11 @@
 import { toast } from "react-toastify";
 
 import { Error } from "entities";
-import { InventoryRequestBody, UpdateProductRequestBody } from 'services/request-bodies';
+import { InventoryRequestBody, UpdateProductRequestBody } from "services/request-bodies";
 import { inventory, products } from "shared/api";
 import { errorHappened } from "shared/lib";
 
-const getProducts = async () => {
+export const getProducts = async () => {
     products.getAll().then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -17,7 +17,7 @@ const getProducts = async () => {
     });
 };
 
-const getProductById = async (id: string) => {
+export const getProductById = async (id: string) => {
     products.getById(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -29,7 +29,7 @@ const getProductById = async (id: string) => {
     });
 };
 
-const createProduct = async (model: UpdateProductRequestBody) => {
+export const createProduct = async (model: UpdateProductRequestBody) => {
     products.create(model).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -41,7 +41,7 @@ const createProduct = async (model: UpdateProductRequestBody) => {
     });
 };
 
-const updateProduct = async (id: string, model: UpdateProductRequestBody) => {
+export const updateProduct = async (id: string, model: UpdateProductRequestBody) => {
     products.update(id, model).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -53,7 +53,7 @@ const updateProduct = async (id: string, model: UpdateProductRequestBody) => {
     });
 };
 
-const deleteProduct = async (id: string) => {
+export const deleteProduct = async (id: string) => {
     products.delete(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -65,7 +65,7 @@ const deleteProduct = async (id: string) => {
     });
 };
 
-const restoreProduct = async (id: string) => {
+export const restoreProduct = async (id: string) => {
     products.restore(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -77,7 +77,7 @@ const restoreProduct = async (id: string) => {
     });
 };
 
-const sendInventory = async (body: InventoryRequestBody) => {
+export const sendInventory = async (body: InventoryRequestBody) => {
     inventory.send(body).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;

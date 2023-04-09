@@ -4,7 +4,7 @@ import { Error } from "entities";
 import { orderStatuses } from "shared/api";
 import { errorHappened } from "shared/lib";
 
-const getOrderStatuses = async () => {
+export const getOrderStatuses = async () => {
     orderStatuses.getAll().then((data) => {
         if (errorHappened(data)) {
             data = data as Error;

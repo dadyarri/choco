@@ -5,7 +5,7 @@ import { UpdateShipmentRequestBody } from "services/request-bodies";
 import { shipments } from "shared/api";
 import { errorHappened } from "shared/lib";
 
-const getShipments = async () => {
+export const getShipments = async () => {
     shipments.getAll().then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -17,7 +17,7 @@ const getShipments = async () => {
     });
 };
 
-const getShipmentById = async (id: string) => {
+export const getShipmentById = async (id: string) => {
     shipments.getById(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -29,7 +29,7 @@ const getShipmentById = async (id: string) => {
     });
 };
 
-const createShipment = async (model: UpdateShipmentRequestBody) => {
+export const createShipment = async (model: UpdateShipmentRequestBody) => {
     shipments.create(model).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -41,7 +41,7 @@ const createShipment = async (model: UpdateShipmentRequestBody) => {
     });
 };
 
-const updateShipment = async (id: string, model: UpdateShipmentRequestBody) => {
+export const updateShipment = async (id: string, model: UpdateShipmentRequestBody) => {
     shipments.update(id, model).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -53,7 +53,7 @@ const updateShipment = async (id: string, model: UpdateShipmentRequestBody) => {
     });
 };
 
-const deleteShipment = async (id: string) => {
+export const deleteShipment = async (id: string) => {
     shipments.delete(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -65,7 +65,7 @@ const deleteShipment = async (id: string) => {
     });
 };
 
-const restoreShipment = async (id: string) => {
+export const restoreShipment = async (id: string) => {
     shipments.restore(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;

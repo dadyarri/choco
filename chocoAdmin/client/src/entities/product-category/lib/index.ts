@@ -5,7 +5,7 @@ import { UpdateProductRequestBody } from "services/request-bodies";
 import { productCategories } from "shared/api";
 import { errorHappened } from "shared/lib";
 
-const getProductCategories = async () => {
+export const getProductCategories = async () => {
     productCategories.getAll().then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -16,7 +16,7 @@ const getProductCategories = async () => {
         }
     });
 };
-const getProductCategoryById = async (id: string) => {
+export const getProductCategoryById = async (id: string) => {
     productCategories.getById(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -28,7 +28,7 @@ const getProductCategoryById = async (id: string) => {
     });
 };
 
-const createProductCategory = async (model: UpdateProductRequestBody) => {
+export const createProductCategory = async (model: UpdateProductRequestBody) => {
     productCategories.create(model).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -40,7 +40,7 @@ const createProductCategory = async (model: UpdateProductRequestBody) => {
     });
 };
 
-const updateProductCategory = async (id: string, model: UpdateProductRequestBody) => {
+export const updateProductCategory = async (id: string, model: UpdateProductRequestBody) => {
     productCategories.update(id, model).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -52,7 +52,7 @@ const updateProductCategory = async (id: string, model: UpdateProductRequestBody
     });
 };
 
-const deleteProductCategory = async (id: string) => {
+export const deleteProductCategory = async (id: string) => {
     productCategories.delete(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -64,7 +64,7 @@ const deleteProductCategory = async (id: string) => {
     });
 };
 
-const restoreProductCategory = async (id: string) => {
+export const restoreProductCategory = async (id: string) => {
     productCategories.restore(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;

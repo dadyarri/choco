@@ -5,7 +5,7 @@ import { UpdateOrderRequestBody } from "services/request-bodies";
 import { orders } from "shared/api";
 import { errorHappened } from "shared/lib";
 
-const getOrders = async () => {
+export const getOrders = async () => {
     orders.getAll().then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -17,7 +17,7 @@ const getOrders = async () => {
     });
 };
 
-const getOrderById = async (id: string) => {
+export const getOrderById = async (id: string) => {
     orders.getById(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -29,7 +29,7 @@ const getOrderById = async (id: string) => {
     });
 };
 
-const createOrder = async (model: UpdateOrderRequestBody) => {
+export const createOrder = async (model: UpdateOrderRequestBody) => {
     orders.create(model).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -41,7 +41,7 @@ const createOrder = async (model: UpdateOrderRequestBody) => {
     });
 };
 
-const updateOrder = async (id: string, model: UpdateOrderRequestBody) => {
+export const updateOrder = async (id: string, model: UpdateOrderRequestBody) => {
     orders.update(id, model).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -53,7 +53,7 @@ const updateOrder = async (id: string, model: UpdateOrderRequestBody) => {
     });
 };
 
-const deleteOrder = async (id: string) => {
+export const deleteOrder = async (id: string) => {
     orders.delete(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;
@@ -65,7 +65,7 @@ const deleteOrder = async (id: string) => {
     });
 };
 
-const restoreOrder = async (id: string) => {
+export const restoreOrder = async (id: string) => {
     orders.restore(id).then((data) => {
         if (errorHappened(data)) {
             data = data as Error;

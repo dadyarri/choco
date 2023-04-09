@@ -4,7 +4,7 @@ import {Error} from "entities";
 import { stats } from "shared/api";
 import { errorHappened } from "shared/lib";
 
-const getIncomesComparsion = (months: number) => {
+export const getIncomesComparsion = (months: number) => {
   stats.getIncomesComparsionByNMonths(months).then((data) => {
     if (errorHappened(data)) {
       data = data as Error;

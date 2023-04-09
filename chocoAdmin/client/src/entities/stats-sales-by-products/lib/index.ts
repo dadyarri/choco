@@ -4,7 +4,7 @@ import { Error } from "entities";
 import { stats } from "shared/api";
 import { errorHappened } from "shared/lib";
 
-const getSalesByProducts = () => {
+export const getSalesByProducts = () => {
   stats.getSalesByProducts().then((data) => {
     if (errorHappened(data)) {
       data = data as Error;
