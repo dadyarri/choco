@@ -1,77 +1,63 @@
 import { toast } from "react-toastify";
 
-import { Error } from "entities";
-import { UpdateProductRequestBody } from "services/request-bodies";
+import { UpdateProductCategoryRequestBody } from "services/request-bodies";
 import { productCategories } from "shared/api";
-import { errorHappened } from "shared/lib";
 
 export const getProductCategories = async () => {
-    productCategories.getAll().then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка получения списка категорий: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return productCategories
+        .getAll()
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка получения списка категорий: ${error.message}`);
+            throw error;
+        });
 };
 export const getProductCategoryById = async (id: string) => {
-    productCategories.getById(id).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка получения категории: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return productCategories
+        .getById(id)
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка получения категории: ${error.message}`);
+            throw error;
+        });
 };
 
-export const createProductCategory = async (model: UpdateProductRequestBody) => {
-    productCategories.create(model).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка создания категории: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+export const createProductCategory = async (model: UpdateProductCategoryRequestBody) => {
+    return productCategories
+        .create(model)
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка создания категории: ${error.message}`);
+            throw error;
+        });
 };
 
-export const updateProductCategory = async (id: string, model: UpdateProductRequestBody) => {
-    productCategories.update(id, model).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка обновления категории: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+export const updateProductCategory = async (id: string, model: UpdateProductCategoryRequestBody) => {
+    return productCategories
+      .update(id, model)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка обновления категории: ${error.message}`);
+          throw error;
+      });
 };
 
 export const deleteProductCategory = async (id: string) => {
-    productCategories.delete(id).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка удаления категории: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return productCategories
+      .delete(id)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка удаления категории: ${error.message}`);
+          throw error;
+      });
 };
 
 export const restoreProductCategory = async (id: string) => {
-    productCategories.restore(id).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка восстановления категории: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return productCategories
+      .restore(id)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка восстановления категории: ${error.message}`);
+          throw error;
+      });
 };
