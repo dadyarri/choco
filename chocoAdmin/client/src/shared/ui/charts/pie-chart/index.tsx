@@ -1,15 +1,15 @@
-import {Text, useColorMode} from "@chakra-ui/react";
-import {ArcElement, Chart as ChartJS, Legend, Tooltip} from "chart.js";
+import { Text, useColorMode } from "@chakra-ui/react";
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import chroma from "chroma-js";
-import React, {FC} from "react";
-import {Pie} from "react-chartjs-2";
+import React, { FC } from "react";
+import { Pie } from "react-chartjs-2";
 
 type PieChartProps = {
     data: {
-        name: string
-        value: number
-    }[]
-}
+        name: string;
+        value: number;
+    }[];
+};
 
 export const PieChart: FC<PieChartProps> = (data) => {
     ChartJS.register(ArcElement, Tooltip, Legend);
@@ -44,7 +44,7 @@ export const PieChart: FC<PieChartProps> = (data) => {
     };
 
     const colors = generateNonSimilarColors(data.data.length);
-    const {colorMode} = useColorMode();
+    const { colorMode } = useColorMode();
 
     const options = {
         responsive: true,
@@ -53,28 +53,27 @@ export const PieChart: FC<PieChartProps> = (data) => {
                 position: "bottom" as const,
                 labels: {
                     color: colorMode === "light" ? "#000000" : "#ffffff",
-                }
+                },
             },
         },
-
     };
 
     const pieData = {
-        labels: data.data?.map(item => item.name),
+        labels: data.data?.map((item) => item.name),
         datasets: [
             {
                 label: "Заказов",
-                data: data?.data.map(item => item.value),
-                backgroundColor: colors.map(color => hexToRgba(color, 0.5)),
-                borderColor: colors.map(color => hexToRgba(color, 1)),
+                data: data?.data.map((item) => item.value),
+                backgroundColor: colors.map((color) => hexToRgba(color, 0.5)),
+                borderColor: colors.map((color) => hexToRgba(color, 1)),
                 borderWidth: 1,
-            }
-        ]
+            },
+        ],
     };
 
-    return (
-        data.data.length > 0 ? <Pie options={options} data={pieData}/> : <Text>Недостаточно данных</Text>
+    return data.data.length > 0 ? (
+        <Pie options={options} data={pieData} />
+    ) : (
+        <Text>Недостаточно данных</Text>
     );
-
-
 };

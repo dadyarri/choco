@@ -1,1 +1,1 @@
-export type {GeocodingItem} from "./model";
+export type { GeocodingItem } from "./model";

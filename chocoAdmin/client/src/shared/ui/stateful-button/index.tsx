@@ -1,21 +1,23 @@
-import {Button, HStack} from "@chakra-ui/react";
-import React, {FC, MouseEventHandler, useState} from "react";
+import { Button, HStack } from "@chakra-ui/react";
+import React, { FC, MouseEventHandler, useState } from "react";
 
 import StatefulButtonProps from "./index.specs";
 
 const StatefulButton: FC<StatefulButtonProps> = ({
-                                                     variant,
-                                                     title,
-                                                     clickHandler,
-                                                     prefix,
-                                                     postfixWhenActive,
-                                                     activeByDefault = false,
-                                                 }) => {
-
+    variant,
+    title,
+    clickHandler,
+    prefix,
+    postfixWhenActive,
+    activeByDefault = false,
+}) => {
     const [isActive, setIsActive] = useState(activeByDefault);
     const [clickCount, setClickCount] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
-    const buttonClickHandler = (event: React.MouseEvent<HTMLButtonElement>, baseHandler: MouseEventHandler<HTMLButtonElement>) => {
+    const buttonClickHandler = (
+        event: React.MouseEvent<HTMLButtonElement>,
+        baseHandler: MouseEventHandler<HTMLButtonElement>,
+    ) => {
         const count = clickCount + 1;
         setClickCount(count);
 
@@ -45,7 +47,8 @@ const StatefulButton: FC<StatefulButtonProps> = ({
             }}
         >
             <HStack align={"center"}>
-                {prefix}{isActive && !isLoading && <p>{postfixWhenActive}</p>}
+                {prefix}
+                {isActive && !isLoading && <p>{postfixWhenActive}</p>}
             </HStack>
         </Button>
     );

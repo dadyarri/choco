@@ -1,1 +1,1 @@
-export type {OrderAddress} from "./model";
+export type { OrderAddress } from "./model";

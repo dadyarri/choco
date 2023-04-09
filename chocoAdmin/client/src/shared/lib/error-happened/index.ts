@@ -1,5 +1,5 @@
-import {Error} from "entities/error";
+import { Error } from "entities/error";
 
 export const errorHappened = (data: unknown) => {
-  return (<Error>data).error !== undefined;
+    return (<Error>data).error !== undefined;
 };

@@ -1,1 +1,1 @@
-export type {Error} from "./model";
+export type { Error } from "./model";

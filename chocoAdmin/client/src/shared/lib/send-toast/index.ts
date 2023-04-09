@@ -1,6 +1,6 @@
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
-import {Error} from "entities/error";
+import { Error } from "entities/error";
 
 export const sendToast = (info: Error, message: string) => {
     toast(`${message}

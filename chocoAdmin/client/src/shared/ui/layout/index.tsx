@@ -1,20 +1,18 @@
-import {Container, useColorMode} from "@chakra-ui/react";
-import React, {FC} from "react";
-import {ToastContainer} from "react-toastify";
+import { Container, useColorMode } from "@chakra-ui/react";
+import React, { FC } from "react";
+import { ToastContainer } from "react-toastify";
 
 import NavMenu from "shared/ui/nav-menu";
 
 import LayoutProps from "./index.specs";
 
 const Layout: FC<LayoutProps> = ({ children }) => {
-
-
-    const {colorMode} = useColorMode();
+    const { colorMode } = useColorMode();
     console.log(`colorMode: ${colorMode}`);
 
     return (
         <div>
-            <NavMenu/>
+            <NavMenu />
             <Container as={"main"} maxW={"1300px"}>
                 {children}
             </Container>

@@ -1,7 +1,7 @@
-import {Product} from "entities/product";
+import { Product } from "entities/product";
 
 export type ShipmentItem = {
-    id: string
-    product: Product
-    amount: number
-}
+    id: string;
+    product: Product;
+    amount: number;
+};

@@ -1,1 +1,1 @@
-export type {BaseStats} from "./model";
+export type { BaseStats } from "./model";

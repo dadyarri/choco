@@ -1,1 +1,1 @@
-export type {StatsIncomesSummary} from "./model";
+export type { StatsIncomesSummary } from "./model";

@@ -1,4 +1,4 @@
 export type BaseName = {
-    id: string,
-    name: string
-}
+    id: string;
+    name: string;
+};

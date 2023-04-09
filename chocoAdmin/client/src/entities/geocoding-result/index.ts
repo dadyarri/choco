@@ -1,2 +1,2 @@
-export type {GeocodingResult} from "./model";
+export type { GeocodingResult } from "./model";
 export * as geocodingLib from "./lib";

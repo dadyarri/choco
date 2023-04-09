@@ -1,44 +1,44 @@
-import {Product} from "entities/product";
+import { Product } from "entities/product";
 
 export type UpdateProductRequestBody = {
-    name: string,
-    wholesalePrice: string | number,
-    retailPrice: string | number,
-    category: string,
-    marketId: string | number,
-    isByWeight: boolean
-}
+    name: string;
+    wholesalePrice: string | number;
+    retailPrice: string | number;
+    category: string;
+    marketId: string | number;
+    isByWeight: boolean;
+};
 
 export type UpdateOrderRequestBody = {
-    date: Date | string,
-    orderItems: OrderItemsRequestBody[]
-    status: string | undefined,
+    date: Date | string;
+    orderItems: OrderItemsRequestBody[];
+    status: string | undefined;
     address: {
-        city: string,
-        street: string,
-        building: string
-    }
-}
+        city: string;
+        street: string;
+        building: string;
+    };
+};
 export type UpdateShipmentRequestBody = {
-    date: Date | string,
-    shipmentItems: ShipmentItemsRequestBody[]
-    status: string | undefined,
-}
+    date: Date | string;
+    shipmentItems: ShipmentItemsRequestBody[];
+    status: string | undefined;
+};
 
 export type OrderItemsRequestBody = {
-    id: string
-    amount: number
-}
+    id: string;
+    amount: number;
+};
 
 export type ShipmentItemsRequestBody = {
-    id: string
-    amount: number
-}
+    id: string;
+    amount: number;
+};
 
 export type InventoryRequestBody = {
-    products: Product[] | undefined
-}
+    products: Product[] | undefined;
+};
 
 export type UpdateProductCategoryRequestBody = {
-    name: string
-}
+    name: string;
+};

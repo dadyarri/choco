@@ -1,2 +1,2 @@
-export type {StatsSalesByCategory} from "./model";
+export type { StatsSalesByCategory } from "./model";
 export * as statsSalesByCategoryLib from "./lib";

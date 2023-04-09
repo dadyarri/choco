@@ -1,6 +1,6 @@
-import {AxiosError} from "axios";
+import { AxiosError } from "axios";
 
 export type Error = {
-    message: string,
-    error: AxiosError | unknown
-}
+    message: string;
+    error: AxiosError | unknown;
+};

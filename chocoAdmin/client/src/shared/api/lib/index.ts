@@ -25,7 +25,7 @@ export abstract class BaseApi {
     }
 }
 
-export abstract class ModelApi<TModel, TRequestBody> extends BaseApi{
+export abstract class ModelApi<TModel, TRequestBody> extends BaseApi {
     protected baseURL = "";
     async getAll() {
         try {

@@ -1,1 +1,1 @@
-export type {GeocodingPosition} from "./model";
+export type { GeocodingPosition } from "./model";

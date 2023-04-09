@@ -1,4 +1,4 @@
 export type GeocodingPosition = {
-    lat: number,
-    lng: number
-}
+    lat: number;
+    lng: number;
+};

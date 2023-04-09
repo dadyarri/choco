@@ -1,18 +1,17 @@
-import {Button, Spinner} from "@chakra-ui/react";
-import React, {FC} from "react";
+import { Button, Spinner } from "@chakra-ui/react";
+import React, { FC } from "react";
 
-import {LoadingButtonSpecs} from "./index.specs";
+import { LoadingButtonSpecs } from "./index.specs";
 
 export const LoadingButton: FC<LoadingButtonSpecs> = ({
-                                                          variant,
-                                                          label,
-                                                          title,
-                                                          type,
-                                                          isSubmitting,
-                                                          clickHandler,
-                                                          leftIcon
-                                                      }) => {
-
+    variant,
+    label,
+    title,
+    type,
+    isSubmitting,
+    clickHandler,
+    leftIcon,
+}) => {
     return (
         <Button
             colorScheme={variant}
@@ -23,11 +22,10 @@ export const LoadingButton: FC<LoadingButtonSpecs> = ({
                 if (clickHandler) {
                     clickHandler(event);
                 }
-            }}>
-            {isSubmitting &&
-                <Spinner size={"xs"}/>}&nbsp;
+            }}
+        >
+            {isSubmitting && <Spinner size={"xs"} />}&nbsp;
             {label}
         </Button>
     );
-
 };

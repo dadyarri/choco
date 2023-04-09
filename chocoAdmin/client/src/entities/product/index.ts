@@ -1,2 +1,2 @@
-export type {Product} from "./model";
+export type { Product } from "./model";
 export * as productLib from "./lib";

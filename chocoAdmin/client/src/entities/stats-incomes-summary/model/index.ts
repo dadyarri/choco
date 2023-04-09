@@ -1,5 +1,5 @@
 export type StatsIncomesSummary = {
-    index: number
-    dateInfo: string,
-    total: number
-}
+    index: number;
+    dateInfo: string;
+    total: number;
+};

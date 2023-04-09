@@ -1,5 +1,5 @@
-import {GeocodingPosition} from "entities/geocoding-position";
+import { GeocodingPosition } from "entities/geocoding-position";
 
 export type GeocodingItem = {
-    position: GeocodingPosition
-}
+    position: GeocodingPosition;
+};

@@ -24,7 +24,7 @@ export type { Product } from "./product";
 export { productLib } from "./product";
 
 export type { ProductCategory } from "./product-category";
-export {productCategoryLib} from "./product-category";
+export { productCategoryLib } from "./product-category";
 
 export type { Shipment } from "./shipment";
 export { shipmentLib } from "./shipment";
@@ -47,4 +47,3 @@ export { statsSalesbyCityLib } from "./stats-sales-by-city";
 
 export type { StatsSalesByProduct } from "./stats-sales-by-products";
 export { statsSalesByProductLib } from "./stats-sales-by-products";
-

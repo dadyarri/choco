@@ -32,32 +32,35 @@ export const createProductCategory = async (model: UpdateProductCategoryRequestB
         });
 };
 
-export const updateProductCategory = async (id: string, model: UpdateProductCategoryRequestBody) => {
+export const updateProductCategory = async (
+    id: string,
+    model: UpdateProductCategoryRequestBody,
+) => {
     return productCategories
-      .update(id, model)
-      .then((data) => data)
-      .catch((error) => {
-          toast(`Ошибка обновления категории: ${error.message}`);
-          throw error;
-      });
+        .update(id, model)
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка обновления категории: ${error.message}`);
+            throw error;
+        });
 };
 
 export const deleteProductCategory = async (id: string) => {
     return productCategories
-      .delete(id)
-      .then((data) => data)
-      .catch((error) => {
-          toast(`Ошибка удаления категории: ${error.message}`);
-          throw error;
-      });
+        .delete(id)
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка удаления категории: ${error.message}`);
+            throw error;
+        });
 };
 
 export const restoreProductCategory = async (id: string) => {
     return productCategories
-      .restore(id)
-      .then((data) => data)
-      .catch((error) => {
-          toast(`Ошибка восстановления категории: ${error.message}`);
-          throw error;
-      });
+        .restore(id)
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка восстановления категории: ${error.message}`);
+            throw error;
+        });
 };

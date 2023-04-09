@@ -1,1 +1,1 @@
-export type {BaseName} from "./model";
+export type { BaseName } from "./model";

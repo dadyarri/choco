@@ -1,5 +1,5 @@
-import {GeocodingItem} from "entities/geocoding-item";
+import { GeocodingItem } from "entities/geocoding-item";
 
 export type GeocodingResult = {
-    items: GeocodingItem[]
-}
+    items: GeocodingItem[];
+};

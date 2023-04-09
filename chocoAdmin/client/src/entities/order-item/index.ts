@@ -1,1 +1,1 @@
-export type {OrderItem} from "./model";
+export type { OrderItem } from "./model";

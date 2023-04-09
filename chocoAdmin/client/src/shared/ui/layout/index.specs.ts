@@ -1,7 +1,7 @@
-import {ReactNode} from "react";
+import { ReactNode } from "react";
 
 type LayoutProps = {
-    children: ReactNode
-}
+    children: ReactNode;
+};
 
 export default LayoutProps;
