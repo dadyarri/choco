@@ -42,7 +42,7 @@ const App = () => {
 
                 <BrowserRouter>
                     <Suspense fallback={"Loading..."}>
-                        <Container maxWidth={"xl"}>
+                        <Container maxWidth={"xl"} sx={{padding: 3}}>
                             <Routing />
                         </Container>
                         <BottomNavigationContextProvider>
