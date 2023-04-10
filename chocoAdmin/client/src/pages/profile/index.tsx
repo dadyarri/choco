@@ -16,7 +16,7 @@ import React from "react";
 export default () => {
     return (
         <>
-            <Typography variant={"h2"}>Профиль</Typography>
+            <Typography variant={"h4"}>Профиль</Typography>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <List>
                     <ListItem>
