@@ -1,17 +1,13 @@
 import { toast } from "react-toastify";
 
-import { Error } from "entities";
 import { orderCities } from "shared/api";
-import { errorHappened } from "shared/lib";
 
 export const getOrderCities = async () => {
-    orderCities.getAll().then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка получения списка городов: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return orderCities
+        .getAll()
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка получения списка городов: ${error.message}`);
+            throw error;
+        });
 };

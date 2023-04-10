@@ -1,78 +1,64 @@
 import { toast } from "react-toastify";
 
-import { Error } from "entities";
 import { UpdateShipmentRequestBody } from "services/request-bodies";
 import { shipments } from "shared/api";
-import { errorHappened } from "shared/lib";
 
 export const getShipments = async () => {
-    shipments.getAll().then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка получения списка поставок: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return shipments
+        .getAll()
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка получения списка поставок: ${error.message}`);
+            throw error;
+        });
 };
 
 export const getShipmentById = async (id: string) => {
-    shipments.getById(id).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка получения поставки: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return shipments
+      .getById(id)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка получения поставки: ${error.message}`);
+          throw error;
+      });
 };
 
 export const createShipment = async (model: UpdateShipmentRequestBody) => {
-    shipments.create(model).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка создания поставки: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return shipments
+      .create(model)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка создания поставки: ${error.message}`);
+          throw error;
+      });
 };
 
 export const updateShipment = async (id: string, model: UpdateShipmentRequestBody) => {
-    shipments.update(id, model).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка обновления поставки: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return shipments
+      .update(id, model)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка обновления поставки: ${error.message}`);
+          throw error;
+      });
 };
 
 export const deleteShipment = async (id: string) => {
-    shipments.delete(id).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка удаления поставки: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return shipments
+      .delete(id)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка удаления поставки: ${error.message}`);
+          throw error;
+      });
 };
 
 export const restoreShipment = async (id: string) => {
-    shipments.restore(id).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка восстановления поставки: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return shipments
+      .restore(id)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка восстановления поставки: ${error.message}`);
+          throw error;
+      });
 };

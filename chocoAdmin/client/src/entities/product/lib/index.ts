@@ -1,90 +1,74 @@
 import { toast } from "react-toastify";
 
-import { Error } from "entities";
 import { InventoryRequestBody, UpdateProductRequestBody } from "services/request-bodies";
 import { inventory, products } from "shared/api";
-import { errorHappened } from "shared/lib";
 
 export const getProducts = async () => {
-    products.getAll().then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка получения списка товаров: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return products
+        .getAll()
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка получения списка товаров: ${error.message}`);
+            throw error;
+        });
 };
 
 export const getProductById = async (id: string) => {
-    products.getById(id).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка получения товара: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return products
+      .getById(id)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка получения товара: ${error.message}`);
+          throw error;
+      });
 };
 
 export const createProduct = async (model: UpdateProductRequestBody) => {
-    products.create(model).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка создания товара: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return products
+      .create(model)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка создания товара: ${error.message}`);
+          throw error;
+      });
 };
 
 export const updateProduct = async (id: string, model: UpdateProductRequestBody) => {
-    products.update(id, model).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка обновления товара: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return products
+      .update(id, model)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка обновления товара: ${error.message}`);
+          throw error;
+      });
 };
 
 export const deleteProduct = async (id: string) => {
-    products.delete(id).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка удаления товара: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return products
+      .delete(id)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка удаления товара: ${error.message}`);
+          throw error;
+      });
 };
 
 export const restoreProduct = async (id: string) => {
-    products.restore(id).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка восстановления товара: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return products
+      .restore(id)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка восстановления товара: ${error.message}`);
+          throw error;
+      });
 };
 
 export const sendInventory = async (body: InventoryRequestBody) => {
-    inventory.send(body).then((data) => {
-        if (errorHappened(data)) {
-            data = data as Error;
-            toast(`Ошибка проведения ревизии: ${data.message}`);
-            throw data.error;
-        } else {
-            return data;
-        }
-    });
+    return inventory
+      .send(body)
+      .then((data) => data)
+      .catch((error) => {
+          toast(`Ошибка проведения ревизии: ${error.message}`);
+          throw error;
+      });
 };
