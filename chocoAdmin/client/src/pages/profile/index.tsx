@@ -6,6 +6,7 @@ import {
     Divider,
     List,
     ListItem,
+    ListItemAvatar,
     ListItemButton,
     ListItemIcon,
     Typography,
@@ -19,24 +20,24 @@ export default () => {
             <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <List>
                     <ListItem>
-                        <ListItemIcon>
+                        <ListItemAvatar>
                             <Avatar
                                 alt={"avatar"}
                                 src={"https://www.dadyarri.ru/images/index/webp/avatar.webp"}
                             ></Avatar>
-                        </ListItemIcon>
+                        </ListItemAvatar>
                         Привет, Даниил
                     </ListItem>
-                    <ListItem>
+                    <ListItem sx={{ paddingX: 0 }}>
                         <ListItemButton>
-                            <ListItemIcon>
+                            <ListItemAvatar>
                                 <LogoutIcon />
-                            </ListItemIcon>
+                            </ListItemAvatar>
                             Выйти
                         </ListItemButton>
                     </ListItem>
-                    <Divider/>
-                    <ListItem>
+                    <Divider />
+                    <ListItem sx={{marginY: 2}}>
                         <ListItemIcon>
                             <InfoIcon />
                         </ListItemIcon>
