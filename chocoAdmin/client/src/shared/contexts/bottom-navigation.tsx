@@ -17,7 +17,7 @@ export const BottomNavigationContext = createContext<BottomNavigationProps>({
 export const BottomNavigationContextProvider: FC<BottomNavigationContextProviderProps> = ({
     children,
 }) => {
-    const [active, setActive] = useState("home");
+    const [active, setActive] = useState(location.pathname.split("/").slice(-1)[0]);
 
     const defaultValue = {
         active: active,
