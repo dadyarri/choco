@@ -1,11 +1,11 @@
 import { Container, CssBaseline, useMediaQuery, useTheme } from "@mui/material";
-import React, { Suspense, useState } from "react";
+import React, { Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter } from "react-router-dom";
 
 import { Routing } from "pages";
-import { BottomNavigationContext } from "shared/contexts/bottom-navigation";
+import { BottomNavigationContextProvider } from "shared/contexts/bottom-navigation";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -17,8 +17,6 @@ const App = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-    const [active, changeActive] = useState("home");
-
     return (
         <QueryClientProvider client={queryClient}>
             <CssBaseline />
@@ -28,11 +26,9 @@ const App = () => {
                     <Container maxWidth={"xl"}>
                         <Routing />
                     </Container>
-                    <BottomNavigationContext.Provider
-                        value={{ active: active, changeActive: changeActive }}
-                    >
+                    <BottomNavigationContextProvider>
                         {isMobile && <MobileNavigation />}
-                    </BottomNavigationContext.Provider>
+                    </BottomNavigationContextProvider>
                 </Suspense>
             </BrowserRouter>
             <ReactQueryDevtools initialIsOpen={false} />
