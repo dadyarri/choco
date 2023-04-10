@@ -1,4 +1,11 @@
-import { Container, CssBaseline, useMediaQuery, useTheme } from "@mui/material";
+import {
+    Container,
+    createTheme,
+    CssBaseline,
+    ThemeProvider,
+    useMediaQuery,
+    useTheme,
+} from "@mui/material";
 import React, { Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
@@ -16,23 +23,37 @@ const App = () => {
     const queryClient = new QueryClient();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+    const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+    const themeString = (b: boolean) => (b ? "dark" : "light");
+    const muiTheme = React.useMemo(
+        () =>
+            createTheme({
+                palette: {
+                    mode: themeString(prefersDarkMode),
+                },
+            }),
+        [prefersDarkMode],
+    );
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <CssBaseline />
+        <ThemeProvider theme={muiTheme}>
+            <QueryClientProvider client={queryClient}>
+                <CssBaseline />
 
-            <BrowserRouter>
-                <Suspense fallback={"Loading..."}>
-                    <Container maxWidth={"xl"}>
-                        <Routing />
-                    </Container>
-                    <BottomNavigationContextProvider>
-                        {isMobile && <MobileNavigation />}
-                    </BottomNavigationContextProvider>
-                </Suspense>
-            </BrowserRouter>
-            <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+                <BrowserRouter>
+                    <Suspense fallback={"Loading..."}>
+                        <Container maxWidth={"xl"}>
+                            <Routing />
+                        </Container>
+                        <BottomNavigationContextProvider>
+                            {isMobile && <MobileNavigation />}
+                        </BottomNavigationContextProvider>
+                    </Suspense>
+                </BrowserRouter>
+
+                <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
+        </ThemeProvider>
     );
 };
 
