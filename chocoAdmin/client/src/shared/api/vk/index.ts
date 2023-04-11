@@ -1,4 +1,3 @@
-import { Error } from "entities";
 import { BaseApi } from "shared/api/lib";
 import api from "shared/config/axios";
 

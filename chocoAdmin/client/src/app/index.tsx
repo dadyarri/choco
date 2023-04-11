@@ -6,6 +6,7 @@ import {
     useMediaQuery,
     useTheme,
 } from "@mui/material";
+import { SnackbarProvider } from "notistack";
 import React, { Suspense, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
@@ -19,7 +20,6 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import DesktopNavigation from "shared/ui/desktop-navigation";
 import { MobileNavigation } from "shared/ui/mobile-navigation";
-import { SnackbarProvider } from "notistack";
 
 const App = () => {
     const queryClient = new QueryClient();
