@@ -2,7 +2,8 @@ import BackupIcon from "@mui/icons-material/Backup";
 import CloudIcon from "@mui/icons-material/Cloud";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import HomeIcon from "@mui/icons-material/Home";
-import { Avatar, BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
@@ -50,13 +51,7 @@ export const MobileNavigation = () => {
                     value={"profile"}
                     component={Link}
                     to={"/app/profile"}
-                    icon={
-                        <Avatar
-                            alt={"Avatar"}
-                            src={"https://www.dadyarri.ru/images/index/webp/avatar.webp"}
-                            sx={{ width: 24, height: 24 }}
-                        />
-                    }
+                    icon={<PersonIcon />}
                 />
             </BottomNavigation>
         </Paper>
