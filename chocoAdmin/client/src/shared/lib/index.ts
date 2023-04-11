@@ -1,2 +1,1 @@
-export { sendToast } from "./send-toast";
-export { errorHappened } from "./error-happened";
+export { sendErrorSnackbar } from "./send-toast";
