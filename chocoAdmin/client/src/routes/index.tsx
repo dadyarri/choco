@@ -5,6 +5,7 @@ import React from "react";
 import Home from "pages/home";
 // import { Inventory } from "pages/inventory";
 // import { OrderEdit } from "pages/order-edit";
+import Login from "pages/login";
 import Orders from "pages/orders";
 // import ProductEdit from "pages/product-edit";
 // import { ShipmentEdit } from "pages/shipment-edit";
@@ -39,8 +40,12 @@ const routes: Route[] = [
     {
         path: "/app/profile",
         element: <Profile />,
-        label: "Склад",
+        label: "Профиль",
     },
+    {
+        path: "/app/login",
+        element: <Login/>
+    }
     // {
     //     path: "/app/inventory",
     //     element: <Inventory />,
