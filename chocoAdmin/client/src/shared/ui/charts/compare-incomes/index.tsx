@@ -1,6 +1,7 @@
-import { Badge, Center, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
+import CallMadeIcon from "@mui/icons-material/CallMade";
+import CallReceivedIcon from "@mui/icons-material/CallReceived";
+import { Box, Chip, Typography } from "@mui/material";
 import React, { FC } from "react";
-import { BsArrowDownRight, BsArrowUpRight } from "react-icons/bs";
 
 import { StatsIncomesComparsion } from "entities/stats-incomes-comparsion";
 
@@ -11,21 +12,17 @@ type CompareIncomesProps = {
 export const CompareIncomes: FC<CompareIncomesProps> = ({ data }) => {
     const isSurplus = data[0].total >= data[1].total;
     return (
-        <Flex>
-            <Center>
-                <Heading size={"sm"}>{data[0].total} &#8381;</Heading>
-            </Center>
-            <Spacer />
-            <Center>
-                <Badge colorScheme={isSurplus ? "green" : "red"} fontSize={"2em"}>
-                    <Heading size={"sm"} p={2}>
-                        <Flex>
-                            {isSurplus ? <BsArrowUpRight /> : <BsArrowDownRight />}
-                            <Text ml={1}>{Math.abs(data[0].total - data[1].total)}</Text>
-                        </Flex>
-                    </Heading>
-                </Badge>
-            </Center>
-        </Flex>
+        <Box sx={{display: "flex", justifyContent: "space-between"}}>
+            <Typography variant={"h6"}>{data[0].total}&#8381;</Typography>
+            <Chip
+                icon={isSurplus ? <CallMadeIcon /> : <CallReceivedIcon />}
+                color={isSurplus ? "success" : "error"}
+                label={
+                    <Typography variant={"h6"} sx={{ marginLeft: 2 }}>
+                        {Math.abs(data[0].total - data[1].total)}
+                    </Typography>
+                }
+            />
+        </Box>
     );
 };
