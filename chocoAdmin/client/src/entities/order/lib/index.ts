@@ -1,13 +1,14 @@
 import { UpdateOrderRequestBody } from "services/request-bodies";
 import { orders } from "shared/api";
-import { sendToast } from "shared/lib";
+import { sendSnackbar } from "shared/lib";
 
 export const getOrders = async () => {
     return orders
         .getAll()
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка получения списка заказов");
+            sendSnackbar(error, "Ошибка получения списка заказов");
+            throw error;
         });
 };
 
@@ -16,7 +17,8 @@ export const getOrderById = async (id: string) => {
         .getById(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка получения заказа");
+            sendSnackbar(error, "Ошибка получения заказа");
+            throw error;
         });
 };
 
@@ -25,7 +27,8 @@ export const createOrder = async (model: UpdateOrderRequestBody) => {
         .create(model)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка создания заказа");
+            sendSnackbar(error, "Ошибка создания заказа");
+            throw error;
         });
 };
 
@@ -34,7 +37,8 @@ export const updateOrder = async (id: string, model: UpdateOrderRequestBody) => 
         .update(id, model)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка обновления заказа");
+            sendSnackbar(error, "Ошибка обновления заказа");
+            throw error;
         });
 };
 
@@ -43,7 +47,8 @@ export const deleteOrder = async (id: string) => {
         .delete(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка удаления заказа");
+            sendSnackbar(error, "Ошибка удаления заказа");
+            throw error;
         });
 };
 
@@ -52,6 +57,7 @@ export const restoreOrder = async (id: string) => {
         .restore(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка восстановления заказа");
+            sendSnackbar(error, "Ошибка восстановления заказа");
+            throw error;
         });
 };

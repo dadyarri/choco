@@ -1,7 +1,7 @@
 import H from "@here/maps-api-for-javascript";
 
 import { GeocodingResult } from "entities";
-import { sendToast } from "shared/lib";
+import { sendSnackbar } from "shared/lib";
 
 export const getRouteLink = async (address: string, latitude: number, longitude: number) => {
     const platform = new H.service.Platform({
@@ -19,7 +19,8 @@ export const getRouteLink = async (address: string, latitude: number, longitude:
             );
         },
         (error) => {
-            sendToast({ error: error, message: "" }, "Ошибка получения ссылки на маршрут");
+            sendSnackbar({ error: error, message: "" }, "Ошибка получения ссылки на маршрут");
+            throw error;
         },
     );
 };

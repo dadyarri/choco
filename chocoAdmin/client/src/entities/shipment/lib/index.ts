@@ -1,13 +1,14 @@
 import { UpdateShipmentRequestBody } from "services/request-bodies";
 import { shipments } from "shared/api";
-import { sendToast } from "shared/lib";
+import { sendSnackbar } from "shared/lib";
 
 export const getShipments = async () => {
     return shipments
         .getAll()
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка получения списка поставок");
+            sendSnackbar(error, "Ошибка получения списка поставок");
+            throw error;
         });
 };
 
@@ -16,7 +17,8 @@ export const getShipmentById = async (id: string) => {
         .getById(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка получения поставки");
+            sendSnackbar(error, "Ошибка получения поставки");
+            throw error;
             throw error;
         });
 };
@@ -26,7 +28,8 @@ export const createShipment = async (model: UpdateShipmentRequestBody) => {
         .create(model)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка создания поставки");
+            sendSnackbar(error, "Ошибка создания поставки");
+            throw error;
         });
 };
 
@@ -35,7 +38,8 @@ export const updateShipment = async (id: string, model: UpdateShipmentRequestBod
         .update(id, model)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка обновления поставки");
+            sendSnackbar(error, "Ошибка обновления поставки");
+            throw error;
         });
 };
 
@@ -44,7 +48,8 @@ export const deleteShipment = async (id: string) => {
         .delete(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка удаления поставки");
+            sendSnackbar(error, "Ошибка удаления поставки");
+            throw error;
         });
 };
 
@@ -53,6 +58,7 @@ export const restoreShipment = async (id: string) => {
         .restore(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка восстановления поставки");
+            sendSnackbar(error, "Ошибка восстановления поставки");
+            throw error;
         });
 };

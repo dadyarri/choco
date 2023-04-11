@@ -1,13 +1,14 @@
 import { UpdateProductCategoryRequestBody } from "services/request-bodies";
 import { productCategories } from "shared/api";
-import { sendToast } from "shared/lib";
+import { sendSnackbar } from "shared/lib";
 
 export const getProductCategories = async () => {
     return productCategories
         .getAll()
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка получения списка категорий");
+            sendSnackbar(error, "Ошибка получения списка категорий");
+            throw error;
         });
 };
 export const getProductCategoryById = async (id: string) => {
@@ -15,7 +16,8 @@ export const getProductCategoryById = async (id: string) => {
         .getById(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка получения категории");
+            sendSnackbar(error, "Ошибка получения категории");
+            throw error;
         });
 };
 
@@ -24,7 +26,8 @@ export const createProductCategory = async (model: UpdateProductCategoryRequestB
         .create(model)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка создания категории");
+            sendSnackbar(error, "Ошибка создания категории");
+            throw error;
         });
 };
 
@@ -36,7 +39,8 @@ export const updateProductCategory = async (
         .update(id, model)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка обновления категории");
+            sendSnackbar(error, "Ошибка обновления категории");
+            throw error;
         });
 };
 
@@ -45,7 +49,8 @@ export const deleteProductCategory = async (id: string) => {
         .delete(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка удаления категории");
+            sendSnackbar(error, "Ошибка удаления категории");
+            throw error;
         });
 };
 
@@ -54,6 +59,7 @@ export const restoreProductCategory = async (id: string) => {
         .restore(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка восстановления категории");
+            sendSnackbar(error, "Ошибка восстановления категории");
+            throw error;
         });
 };

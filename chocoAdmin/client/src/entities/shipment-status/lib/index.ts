@@ -1,11 +1,12 @@
 import { shipmentStatuses } from "shared/api";
-import { sendToast } from "shared/lib";
+import { sendSnackbar } from "shared/lib";
 
 export const getShipmentStatuses = async () => {
     return shipmentStatuses
         .getAll()
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка получения статусов поставки");
+            sendSnackbar(error, "Ошибка получения статусов поставки");
+            throw error;
         });
 };

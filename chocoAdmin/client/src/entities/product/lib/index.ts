@@ -1,13 +1,14 @@
 import { InventoryRequestBody, UpdateProductRequestBody } from "services/request-bodies";
 import { inventory, products } from "shared/api";
-import { sendToast } from "shared/lib";
+import { sendSnackbar } from "shared/lib";
 
 export const getProducts = async () => {
     return products
         .getAll()
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка получения списка товаров");
+            sendSnackbar(error, "Ошибка получения списка товаров");
+            throw error;
         });
 };
 
@@ -16,7 +17,8 @@ export const getProductById = async (id: string) => {
         .getById(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка получения товара");
+            sendSnackbar(error, "Ошибка получения товара");
+            throw error;
         });
 };
 
@@ -25,7 +27,8 @@ export const createProduct = async (model: UpdateProductRequestBody) => {
         .create(model)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка создания товара");
+            sendSnackbar(error, "Ошибка создания товара");
+            throw error;
         });
 };
 
@@ -34,7 +37,8 @@ export const updateProduct = async (id: string, model: UpdateProductRequestBody)
         .update(id, model)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка обновления товара");
+            sendSnackbar(error, "Ошибка обновления товара");
+            throw error;
         });
 };
 
@@ -43,7 +47,8 @@ export const deleteProduct = async (id: string) => {
         .delete(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка удаления товара");
+            sendSnackbar(error, "Ошибка удаления товара");
+            throw error;
         });
 };
 
@@ -52,7 +57,8 @@ export const restoreProduct = async (id: string) => {
         .restore(id)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка восстановления товара");
+            sendSnackbar(error, "Ошибка восстановления товара");
+            throw error;
         });
 };
 
@@ -61,6 +67,7 @@ export const sendInventory = async (body: InventoryRequestBody) => {
         .send(body)
         .then((data) => data)
         .catch((error) => {
-            sendToast(error, "Ошибка проведения ревизии");
+            sendSnackbar(error, "Ошибка проведения ревизии");
+            throw error;
         });
 };
