@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Typography } from "@mui/material";
+import { AppBar, Avatar, Box, Button, Container, Typography } from "@mui/material";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -21,7 +21,7 @@ export default () => {
                 >
                     Шокоадминка
                 </Typography>
-                <Box sx={{ flexGrow: 1, display: "flex"}}>
+                <Box sx={{ flexGrow: 1, display: "flex" }}>
                     <Button
                         sx={{ color: "white", display: "block" }}
                         component={Link}
@@ -43,13 +43,14 @@ export default () => {
                     >
                         Склад
                     </Button>
-                    <Button
-                        sx={{ color: "white", display: "block" }}
+                </Box>
+                <Box sx={{ flexGrow: 0 }}>
+                    <Avatar
+                        alt={"avatar"}
                         component={Link}
                         to={"/app/profile"}
-                    >
-                        Профиль
-                    </Button>
+                        src={"https://dadyarri.ru/images/index/webp/avatar.webp"}
+                    />
                 </Box>
             </Container>
         </AppBar>
