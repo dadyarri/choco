@@ -24,7 +24,7 @@ export class StatsApi extends BaseApi {
 
     async getSalesByCategory() {
         try {
-            const { data } = await api.get<StatsSalesByCategory>(`${this.baseURL}/byCategory`, {
+            const { data } = await api.get<StatsSalesByCategory>(`${this.baseURL}/Categories`, {
                 headers: { Authorization: `Bearer ${auth.getToken()}` },
             });
             return data;
