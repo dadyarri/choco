@@ -26,7 +26,11 @@ export const getProfileData = () => {
 };
 
 export const hasToken = () => {
-    return Boolean(localStorage.getItem("token"));
+    return Boolean(getToken());
+};
+
+export const getToken = () => {
+    return localStorage.getItem("token");
 };
 
 export const login = (username: string, password: string) => {

@@ -1,6 +1,7 @@
 import { AxiosError, isAxiosError } from "axios";
 
 import { Error } from "entities/error";
+import { auth } from "features";
 import api from "shared/config/axios";
 
 export abstract class BaseApi {
@@ -27,48 +28,66 @@ export abstract class BaseApi {
 
 export abstract class ModelApi<TModel, TRequestBody> extends BaseApi {
     protected baseURL = "";
+
     async getAll() {
         try {
-            const { data } = await api.get<TModel[]>(this.baseURL);
+            const { data } = await api.get<TModel[]>(this.baseURL, {
+                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+            });
             return data;
         } catch (error) {
             throw this.handleError(error);
         }
     }
+
     async getById(id: string) {
         try {
-            const { data } = await api.get<TModel>(`${this.baseURL}/${id}`);
+            const { data } = await api.get<TModel>(`${this.baseURL}/${id}`, {
+                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+            });
             return data;
         } catch (error) {
             throw this.handleError(error);
         }
     }
+
     async create(model: TRequestBody) {
         try {
-            const { data } = await api.post<TModel>(this.baseURL, model);
+            const { data } = await api.post<TModel>(this.baseURL, model, {
+                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+            });
             return data;
         } catch (error) {
             throw this.handleError(error);
         }
     }
+
     async update(id: string, model: TRequestBody) {
         try {
-            const { data } = await api.patch<TModel>(`${this.baseURL}/${id}`, model);
+            const { data } = await api.patch<TModel>(`${this.baseURL}/${id}`, model, {
+                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+            });
             return data;
         } catch (error) {
             throw this.handleError(error);
         }
     }
+
     async delete(id: string) {
         try {
-            await api.delete(`${this.baseURL}/${id}`);
+            await api.delete(`${this.baseURL}/${id}`, {
+                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+            });
         } catch (error) {
             throw this.handleError(error);
         }
     }
+
     async restore(id: string) {
         try {
-            await api.put(`${this.baseURL}/${id}`);
+            await api.put(`${this.baseURL}/${id}`, {
+                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+            });
         } catch (error) {
             throw this.handleError(error);
         }
