@@ -2,7 +2,11 @@ import { AppBar, Avatar, Box, Button, Container, Typography } from "@mui/materia
 import React from "react";
 import { Link } from "react-router-dom";
 
+import { auth } from "features";
+
 export default () => {
+    const profileData = auth.getProfileData();
+
     return (
         <AppBar position={"sticky"}>
             <Container maxWidth={"xl"} sx={{ padding: 1, display: "flex" }}>
@@ -49,7 +53,7 @@ export default () => {
                         alt={"avatar"}
                         component={Link}
                         to={"/app/profile"}
-                        src={"https://dadyarri.ru/images/index/webp/avatar.webp"}
+                        src={profileData.avatarUri}
                     />
                 </Box>
             </Container>

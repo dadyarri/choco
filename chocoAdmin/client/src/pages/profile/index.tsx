@@ -11,14 +11,13 @@ import {
     ListItemIcon,
     Typography,
 } from "@mui/material";
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { auth } from "features";
 
 export default () => {
     const navigate = useNavigate();
-
 
     useEffect(() => {
         if (!auth.hasToken()) {
@@ -30,6 +29,8 @@ export default () => {
         auth.removeAuthData();
     };
 
+    const profileData = auth.getProfileData();
+
     return (
         <>
             <Typography variant={"h4"}>Профиль</Typography>
@@ -39,10 +40,10 @@ export default () => {
                         <ListItemAvatar>
                             <Avatar
                                 alt={"avatar"}
-                                src={"https://www.dadyarri.ru/images/index/webp/avatar.webp"}
+                                src={profileData.avatarUri}
                             ></Avatar>
                         </ListItemAvatar>
-                        Привет, Даниил
+                        Привет, {profileData.name}
                     </ListItem>
                     <ListItem sx={{ paddingX: 0 }}>
                         <ListItemButton onClick={handleClickLogout}>
