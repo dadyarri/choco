@@ -1,3 +1,4 @@
+import { AuthApi } from "./auth";
 import { InventoryApi } from "./inventory";
 import { OrderCitiesApi } from "./order-cities";
 import { OrderStatusesApi } from "./order-statuses";
@@ -9,6 +10,7 @@ import { ShipmentsApi } from "./shipments";
 import { StatsApi } from "./stats";
 import { VkApi } from "./vk";
 
+const auth = new AuthApi();
 const inventory = new InventoryApi();
 const orderCities = new OrderCitiesApi();
 const orderStatuses = new OrderStatusesApi();
@@ -21,6 +23,7 @@ const stats = new StatsApi();
 const vk = new VkApi();
 
 export {
+    auth,
     inventory,
     orderCities,
     orderStatuses,
