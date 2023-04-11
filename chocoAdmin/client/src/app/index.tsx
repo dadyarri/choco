@@ -12,6 +12,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter } from "react-router-dom";
 
+import { auth } from "features";
 import { Routing } from "pages";
 import { BottomNavigationContextProvider } from "shared/contexts/bottom-navigation";
 import "@fontsource/roboto/300.css";
@@ -49,12 +50,12 @@ const App = () => {
 
                     <BrowserRouter>
                         <Suspense fallback={"Loading..."}>
-                            {!isMobile && <DesktopNavigation />}
+                            {!isMobile && auth.hasToken() && <DesktopNavigation />}
                             <Container maxWidth={"xl"} sx={{ padding: 3 }}>
                                 <Routing />
                             </Container>
                             <BottomNavigationContextProvider>
-                                {isMobile && <MobileNavigation />}
+                                {isMobile && auth.hasToken() && <MobileNavigation />}
                             </BottomNavigationContextProvider>
                         </Suspense>
                     </BrowserRouter>

@@ -7,6 +7,15 @@ const updateAuthData = ({ token, avatarUri, refreshToken, name }: LoginResponse)
     localStorage.setItem("refreshToken", refreshToken);
     localStorage.setItem("avatarUri", avatarUri);
     localStorage.setItem("name", name);
+    location.reload();
+};
+
+export const removeAuthData = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("avatarUri");
+    localStorage.removeItem("name");
+    location.reload();
 };
 
 export const hasToken = () => {

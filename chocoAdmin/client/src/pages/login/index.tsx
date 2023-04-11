@@ -12,12 +12,20 @@ import {
     Typography,
 } from "@mui/material";
 import { Field, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { auth } from "features";
 
 export default () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (auth.hasToken()) {
+            navigate("/app");
+        }
+    }, []);
+
     const [showPassword, setShowPassword] = useState(false);
 
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -25,8 +33,6 @@ export default () => {
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
-
-    const navigate = useNavigate();
 
     return (
         <>

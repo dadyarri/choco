@@ -27,8 +27,7 @@ export default () => {
     }, []);
 
     const handleClickLogout = () => {
-        localStorage.removeItem("token");
-        navigate("/app/login");
+        auth.removeAuthData();
     };
 
     return (
