@@ -9,7 +9,7 @@ const updateAuthData = ({ token, avatarUri, refreshToken, name }: LoginResponse)
     localStorage.setItem("name", name);
 };
 
-const hasToken = () => {
+export const hasToken = () => {
     return Boolean(localStorage.getItem("token"));
 };
 
