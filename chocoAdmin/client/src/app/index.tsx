@@ -39,7 +39,11 @@ const App = () => {
 
     return (
         <ThemeProvider theme={muiTheme}>
-            <SnackbarProvider maxSnack={2} autoHideDuration={2000} anchorOrigin={{ horizontal: "right", vertical: "top" }}>
+            <SnackbarProvider
+                maxSnack={2}
+                autoHideDuration={2000}
+                anchorOrigin={{ horizontal: "right", vertical: "top" }}
+            >
                 <QueryClientProvider client={queryClient}>
                     <CssBaseline />
 
