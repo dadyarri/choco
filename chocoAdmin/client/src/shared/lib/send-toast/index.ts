@@ -1,9 +1,8 @@
-import { toast } from "react-toastify";
-
+import { enqueueSnackbar } from "notistack";
 import { Error } from "entities/error";
 
 export const sendToast = (info: Error, message: string) => {
-    toast(`${message}
+    enqueueSnackbar(`${message}
     ${info.message}`);
     throw info.error;
 };
