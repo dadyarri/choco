@@ -1,4 +1,4 @@
-import { ListItem, Text, UnorderedList } from "@chakra-ui/react";
+import { ListItem, Typography, List } from "@mui/material";
 import React, { FC } from "react";
 
 type TopProduct = {
@@ -26,14 +26,14 @@ export const TopProducts: FC<TopProductsProps> = ({ data }) => {
     };
 
     return data.length > 0 ? (
-        <UnorderedList>
+        <List>
             {data.map((item) => (
                 <ListItem key={item.name}>
                     {item.name} (в {item.value} {inclineWord(item.value)})
                 </ListItem>
             ))}
-        </UnorderedList>
+        </List>
     ) : (
-        <Text>Недостаточно данных</Text>
+        <Typography variant={"h6"}>Недостаточно данных</Typography>
     );
 };
