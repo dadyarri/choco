@@ -13,6 +13,9 @@ import {
 } from "@mui/material";
 import { Field, Form, Formik } from "formik";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { auth } from "features";
 
 export default () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -23,16 +26,20 @@ export default () => {
         event.preventDefault();
     };
 
+    const navigate = useNavigate();
+
     return (
         <>
             <Typography variant={"h4"}>Войти в аккаунт</Typography>
             <Formik
                 initialValues={{
-                    login: "",
+                    username: "",
                     password: "",
                 }}
                 onSubmit={(values) => {
-                    console.log(values);
+                    auth.login(values.username, values.password).then(
+                        (success) => success && navigate("/app"),
+                    );
                 }}
             >
                 {({ values, handleChange, touched, errors }) => (
@@ -42,13 +49,15 @@ export default () => {
                                 <InputLabel>Логин</InputLabel>
                                 <Field
                                     as={OutlinedInput}
-                                    name={"login"}
+                                    name={"username"}
                                     label={"Логин"}
-                                    value={values.login}
-                                    error={errors.login}
+                                    value={values.username}
+                                    error={errors.password}
                                     onChange={handleChange}
                                 />
-                                <FormHelperText>{touched.login && errors.login}</FormHelperText>
+                                <FormHelperText>
+                                    {touched.username && errors.username}
+                                </FormHelperText>
                             </FormControl>
                             <FormControl variant="outlined">
                                 <InputLabel>Пароль</InputLabel>
