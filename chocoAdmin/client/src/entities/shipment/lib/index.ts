@@ -1,15 +1,13 @@
-import { toast } from "react-toastify";
-
 import { UpdateShipmentRequestBody } from "services/request-bodies";
 import { shipments } from "shared/api";
+import { sendToast } from "shared/lib";
 
 export const getShipments = async () => {
     return shipments
         .getAll()
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка получения списка поставок: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка получения списка поставок");
         });
 };
 
@@ -18,7 +16,7 @@ export const getShipmentById = async (id: string) => {
         .getById(id)
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка получения поставки: ${error.message}`);
+            sendToast(error, "Ошибка получения поставки");
             throw error;
         });
 };
@@ -28,8 +26,7 @@ export const createShipment = async (model: UpdateShipmentRequestBody) => {
         .create(model)
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка создания поставки: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка создания поставки");
         });
 };
 
@@ -38,8 +35,7 @@ export const updateShipment = async (id: string, model: UpdateShipmentRequestBod
         .update(id, model)
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка обновления поставки: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка обновления поставки");
         });
 };
 
@@ -48,8 +44,7 @@ export const deleteShipment = async (id: string) => {
         .delete(id)
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка удаления поставки: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка удаления поставки");
         });
 };
 
@@ -58,7 +53,6 @@ export const restoreShipment = async (id: string) => {
         .restore(id)
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка восстановления поставки: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка восстановления поставки");
         });
 };

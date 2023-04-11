@@ -1,12 +1,10 @@
-import { toast } from "react-toastify";
-
 import { vk } from "shared/api";
+import { sendToast } from "shared/lib";
 
 export const openProductPageInVk = async (marketId: number) => {
-    vk.getMarketId(marketId)
+    return vk.getMarketId(marketId)
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка получения ссылки на товар: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка получения ссылки на товар");
         });
 };

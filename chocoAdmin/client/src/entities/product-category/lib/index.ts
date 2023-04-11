@@ -1,15 +1,13 @@
-import { toast } from "react-toastify";
-
 import { UpdateProductCategoryRequestBody } from "services/request-bodies";
 import { productCategories } from "shared/api";
+import { sendToast } from "shared/lib";
 
 export const getProductCategories = async () => {
     return productCategories
         .getAll()
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка получения списка категорий: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка получения списка категорий");
         });
 };
 export const getProductCategoryById = async (id: string) => {
@@ -17,8 +15,7 @@ export const getProductCategoryById = async (id: string) => {
         .getById(id)
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка получения категории: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка получения категории");
         });
 };
 
@@ -27,8 +24,7 @@ export const createProductCategory = async (model: UpdateProductCategoryRequestB
         .create(model)
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка создания категории: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка создания категории");
         });
 };
 
@@ -40,8 +36,7 @@ export const updateProductCategory = async (
         .update(id, model)
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка обновления категории: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка обновления категории");
         });
 };
 
@@ -50,8 +45,7 @@ export const deleteProductCategory = async (id: string) => {
         .delete(id)
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка удаления категории: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка удаления категории");
         });
 };
 
@@ -60,7 +54,6 @@ export const restoreProductCategory = async (id: string) => {
         .restore(id)
         .then((data) => data)
         .catch((error) => {
-            toast(`Ошибка восстановления категории: ${error.message}`);
-            throw error;
+            sendToast(error, "Ошибка восстановления категории");
         });
 };
