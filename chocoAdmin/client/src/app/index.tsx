@@ -19,6 +19,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import DesktopNavigation from "shared/ui/desktop-navigation";
 import { MobileNavigation } from "shared/ui/mobile-navigation";
+import { SnackbarProvider } from "notistack";
 
 const App = () => {
     const queryClient = new QueryClient();
@@ -38,23 +39,25 @@ const App = () => {
 
     return (
         <ThemeProvider theme={muiTheme}>
-            <QueryClientProvider client={queryClient}>
-                <CssBaseline />
+            <SnackbarProvider maxSnack={2} autoHideDuration={2000} anchorOrigin={{ horizontal: "right", vertical: "top" }}>
+                <QueryClientProvider client={queryClient}>
+                    <CssBaseline />
 
-                <BrowserRouter>
-                    <Suspense fallback={"Loading..."}>
-                        {!isMobile && <DesktopNavigation />}
-                        <Container maxWidth={"xl"} sx={{ padding: 3 }}>
-                            <Routing />
-                        </Container>
-                        <BottomNavigationContextProvider>
-                            {isMobile && <MobileNavigation />}
-                        </BottomNavigationContextProvider>
-                    </Suspense>
-                </BrowserRouter>
+                    <BrowserRouter>
+                        <Suspense fallback={"Loading..."}>
+                            {!isMobile && <DesktopNavigation />}
+                            <Container maxWidth={"xl"} sx={{ padding: 3 }}>
+                                <Routing />
+                            </Container>
+                            <BottomNavigationContextProvider>
+                                {isMobile && <MobileNavigation />}
+                            </BottomNavigationContextProvider>
+                        </Suspense>
+                    </BrowserRouter>
 
-                <ReactQueryDevtools initialIsOpen={false} />
-            </QueryClientProvider>
+                    <ReactQueryDevtools initialIsOpen={false} />
+                </QueryClientProvider>
+            </SnackbarProvider>
         </ThemeProvider>
     );
 };
