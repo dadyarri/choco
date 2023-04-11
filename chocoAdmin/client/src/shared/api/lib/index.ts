@@ -32,7 +32,7 @@ export abstract class ModelApi<TModel, TRequestBody> extends BaseApi {
     async getAll() {
         try {
             const { data } = await api.get<TModel[]>(this.baseURL, {
-                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+                headers: { Authorization: `Bearer ${auth.getToken()}` },
             });
             return data;
         } catch (error) {
@@ -43,7 +43,7 @@ export abstract class ModelApi<TModel, TRequestBody> extends BaseApi {
     async getById(id: string) {
         try {
             const { data } = await api.get<TModel>(`${this.baseURL}/${id}`, {
-                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+                headers: { Authorization: `Bearer ${auth.getToken()}` },
             });
             return data;
         } catch (error) {
@@ -54,7 +54,7 @@ export abstract class ModelApi<TModel, TRequestBody> extends BaseApi {
     async create(model: TRequestBody) {
         try {
             const { data } = await api.post<TModel>(this.baseURL, model, {
-                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+                headers: { Authorization: `Bearer ${auth.getToken()}` },
             });
             return data;
         } catch (error) {
@@ -65,7 +65,7 @@ export abstract class ModelApi<TModel, TRequestBody> extends BaseApi {
     async update(id: string, model: TRequestBody) {
         try {
             const { data } = await api.patch<TModel>(`${this.baseURL}/${id}`, model, {
-                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+                headers: { Authorization: `Bearer ${auth.getToken()}` },
             });
             return data;
         } catch (error) {
@@ -76,7 +76,7 @@ export abstract class ModelApi<TModel, TRequestBody> extends BaseApi {
     async delete(id: string) {
         try {
             await api.delete(`${this.baseURL}/${id}`, {
-                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+                headers: { Authorization: `Bearer ${auth.getToken()}` },
             });
         } catch (error) {
             throw this.handleError(error);
@@ -86,7 +86,7 @@ export abstract class ModelApi<TModel, TRequestBody> extends BaseApi {
     async restore(id: string) {
         try {
             await api.put(`${this.baseURL}/${id}`, {
-                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+                headers: { Authorization: `Bearer ${auth.getToken()}` },
             });
         } catch (error) {
             throw this.handleError(error);

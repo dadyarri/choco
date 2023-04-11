@@ -14,7 +14,7 @@ export class StatsApi extends BaseApi {
     async getSalesByCity() {
         try {
             const { data } = await api.get<StatsSalesByCity>(`${this.baseURL}/byCity`, {
-                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+                headers: { Authorization: `Bearer ${auth.getToken()}` },
             });
             return data;
         } catch (error) {
@@ -25,7 +25,7 @@ export class StatsApi extends BaseApi {
     async getSalesByCategory() {
         try {
             const { data } = await api.get<StatsSalesByCategory>(`${this.baseURL}/byCategory`, {
-                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+                headers: { Authorization: `Bearer ${auth.getToken()}` },
             });
             return data;
         } catch (error) {
@@ -36,7 +36,7 @@ export class StatsApi extends BaseApi {
     async getSalesByProducts() {
         try {
             const { data } = await api.get<StatsSalesByProduct>(`${this.baseURL}/topProducts`, {
-                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+                headers: { Authorization: `Bearer ${auth.getToken()}` },
             });
             return data;
         } catch (error) {
@@ -49,7 +49,7 @@ export class StatsApi extends BaseApi {
             const { data } = await api.get<StatsIncomesComparsion>(
                 `${this.baseURL}/totalIncomes/${months}`,
                 {
-                    headers: { Authorization: `Bearer: ${auth.getToken()}` },
+                    headers: { Authorization: `Bearer ${auth.getToken()}` },
                 },
             );
             return data;

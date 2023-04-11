@@ -9,7 +9,7 @@ export class InventoryApi extends BaseApi {
     async send(body: InventoryRequestBody) {
         try {
             await api.post(this.baseURL, body, {
-                headers: { Authorization: `Bearer: ${auth.getToken()}` },
+                headers: { Authorization: `Bearer ${auth.getToken()}` },
             });
         } catch (error) {
             throw this.handleError(error);
