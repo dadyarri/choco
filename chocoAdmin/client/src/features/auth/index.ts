@@ -18,6 +18,13 @@ export const removeAuthData = () => {
     location.reload();
 };
 
+export const getProfileData = () => {
+    return {
+        name: localStorage.getItem("name") ?? undefined,
+        avatarUri: localStorage.getItem("avatarUri") ?? undefined
+    };
+};
+
 export const hasToken = () => {
     return Boolean(localStorage.getItem("token"));
 };
