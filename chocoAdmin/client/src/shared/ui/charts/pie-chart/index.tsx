@@ -1,4 +1,4 @@
-import { Text, useColorMode } from "@chakra-ui/react";
+import { Typography, useTheme } from "@mui/material";
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import chroma from "chroma-js";
 import React, { FC } from "react";
@@ -44,7 +44,7 @@ export const PieChart: FC<PieChartProps> = (data) => {
     };
 
     const colors = generateNonSimilarColors(data.data.length);
-    const { colorMode } = useColorMode();
+    const theme = useTheme();
 
     const options = {
         responsive: true,
@@ -52,7 +52,7 @@ export const PieChart: FC<PieChartProps> = (data) => {
             legend: {
                 position: "bottom" as const,
                 labels: {
-                    color: colorMode === "light" ? "#000000" : "#ffffff",
+                    color: theme.palette.mode === "light" ? "#000000" : "#ffffff",
                 },
             },
         },
@@ -74,6 +74,6 @@ export const PieChart: FC<PieChartProps> = (data) => {
     return data.data.length > 0 ? (
         <Pie options={options} data={pieData} />
     ) : (
-        <Text>Недостаточно данных</Text>
+        <Typography variant={"h6"}>Недостаточно данных</Typography>
     );
 };
