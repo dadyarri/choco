@@ -44,8 +44,8 @@ const routes: Route[] = [
     },
     {
         path: "/app/login",
-        element: <Login/>
-    }
+        element: <Login />,
+    },
     // {
     //     path: "/app/inventory",
     //     element: <Inventory />,

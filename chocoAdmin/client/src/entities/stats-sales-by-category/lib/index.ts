@@ -7,6 +7,6 @@ export const getSalesByCategory = () => {
         .then((data) => data)
         .catch((error) => {
             sendSnackbar(error, "Ошибка получения статистики продаж по категориям");
-          throw error;
+            throw error;
         });
 };
