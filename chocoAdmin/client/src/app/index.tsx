@@ -51,7 +51,7 @@ const App = () => {
                     <BrowserRouter>
                         <Suspense fallback={"Loading..."}>
                             {!isMobile && auth.hasToken() && <DesktopNavigation />}
-                            <Container maxWidth={"xl"} sx={{ padding: 3 }}>
+                            <Container maxWidth={"xl"} sx={{ padding: 3, marginBottom: 10 }}>
                                 <Routing />
                             </Container>
                             <BottomNavigationContextProvider>
