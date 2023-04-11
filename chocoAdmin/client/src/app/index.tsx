@@ -6,7 +6,7 @@ import {
     useMediaQuery,
     useTheme,
 } from "@mui/material";
-import React, { Suspense } from "react";
+import React, { Suspense, useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter } from "react-router-dom";
@@ -26,7 +26,7 @@ const App = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
     const themeString = (b: boolean) => (b ? "dark" : "light");
-    const muiTheme = React.useMemo(
+    const muiTheme = useMemo(
         () =>
             createTheme({
                 palette: {
