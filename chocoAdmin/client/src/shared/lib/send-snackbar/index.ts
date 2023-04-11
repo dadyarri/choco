@@ -8,5 +8,4 @@ export const sendSnackbar = (
     variant: "default" | "error" | "warning" | "info" | "success" = "error",
 ) => {
     enqueueSnackbar(`${message}: ${errorDetails.message}`, { variant: variant });
-    throw errorDetails.error;
 };
