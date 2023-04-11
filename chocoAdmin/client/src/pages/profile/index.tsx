@@ -12,8 +12,16 @@ import {
     Typography,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default () => {
+    const navigate = useNavigate();
+
+    const handleClickLogout = () => {
+        localStorage.removeItem("token");
+        navigate("/app/login");
+    };
+
     return (
         <>
             <Typography variant={"h4"}>Профиль</Typography>
@@ -29,7 +37,7 @@ export default () => {
                         Привет, Даниил
                     </ListItem>
                     <ListItem sx={{ paddingX: 0 }}>
-                        <ListItemButton>
+                        <ListItemButton onClick={handleClickLogout}>
                             <ListItemAvatar>
                                 <LogoutIcon />
                             </ListItemAvatar>
