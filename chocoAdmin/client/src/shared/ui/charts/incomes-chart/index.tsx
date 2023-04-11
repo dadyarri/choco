@@ -1,4 +1,4 @@
-import { useColorMode } from "@chakra-ui/react";
+import { useTheme } from "@mui/material";
 import {
     BarElement,
     CategoryScale,
@@ -21,8 +21,9 @@ type IncomesChartProps = {
 export const IncomesChart: FC<IncomesChartProps> = ({ data }) => {
     ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-    const { colorMode } = useColorMode();
+    const theme = useTheme();
 
+    const isLightMode = theme.palette.mode === "light";
     const options = {
         responsive: true,
         maintainAspectRatio: false,
@@ -31,7 +32,7 @@ export const IncomesChart: FC<IncomesChartProps> = ({ data }) => {
                 position: "bottom" as const,
                 labels: {
                     color:
-                        colorMode === "light" ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
+                        isLightMode ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
                 },
             },
         },
@@ -39,23 +40,23 @@ export const IncomesChart: FC<IncomesChartProps> = ({ data }) => {
             y: {
                 ticks: {
                     color:
-                        colorMode === "light" ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
+                        isLightMode ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
                     beginAtZero: true,
                 },
                 grid: {
                     color:
-                        colorMode === "light" ? "rgba(0, 0, 0, 0.08)" : "rgba(255, 255, 255, 0.08)",
+                        isLightMode ? "rgba(0, 0, 0, 0.08)" : "rgba(255, 255, 255, 0.08)",
                 },
             },
             x: {
                 ticks: {
                     color:
-                        colorMode === "light" ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
+                        isLightMode ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
                     beginAtZero: true,
                 },
                 grid: {
                     color:
-                        colorMode === "light" ? "rgba(0, 0, 0, 0.08)" : "rgba(255, 255, 255, 0.08)",
+                        isLightMode ? "rgba(0, 0, 0, 0.08)" : "rgba(255, 255, 255, 0.08)",
                 },
             },
         },
@@ -73,5 +74,5 @@ export const IncomesChart: FC<IncomesChartProps> = ({ data }) => {
         ],
     };
 
-    return <Bar options={options} data={chartData} style={{ height: "250px" }} />;
+    return <Bar options={options} data={chartData} style={{ maxHeight: "250px" }} />;
 };
