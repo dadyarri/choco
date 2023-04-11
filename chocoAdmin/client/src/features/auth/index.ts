@@ -57,3 +57,7 @@ export const login = (username: string, password: string) => {
             throw error;
         });
 };
+
+export const tokenIsValid = () => {
+    return auth.verify();
+};

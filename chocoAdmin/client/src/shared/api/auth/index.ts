@@ -1,3 +1,4 @@
+import { auth } from "features";
 import { BaseApi } from "shared/api/lib";
 import api from "shared/config/axios";
 
@@ -37,7 +38,9 @@ export class AuthApi extends BaseApi {
 
     async verify() {
         try {
-            await api.get(`${this.baseURL}/verify`);
+            await api.get(`${this.baseURL}/verify`, {
+                headers: { Authorization: `Bearer ${auth.getToken()}` },
+            });
             return true;
         } catch {
             return false;
