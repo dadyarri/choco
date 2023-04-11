@@ -37,7 +37,7 @@ export default () => {
                         </ListItemButton>
                     </ListItem>
                     <Divider />
-                    <ListItem sx={{marginY: 2}}>
+                    <ListItem sx={{ marginY: 2 }}>
                         <ListItemIcon>
                             <InfoIcon />
                         </ListItemIcon>

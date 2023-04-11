@@ -35,30 +35,30 @@ export const createOrder = async (model: UpdateOrderRequestBody) => {
 
 export const updateOrder = async (id: string, model: UpdateOrderRequestBody) => {
     return orders
-      .update(id, model)
-      .then((data) => data)
-      .catch((error) => {
-          toast(`Ошибка обновления заказа: ${error.message}`);
-          throw error;
-      });
+        .update(id, model)
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка обновления заказа: ${error.message}`);
+            throw error;
+        });
 };
 
 export const deleteOrder = async (id: string) => {
     return orders
-      .delete(id)
-      .then((data) => data)
-      .catch((error) => {
-          toast(`Ошибка удаления заказа: ${error.message}`);
-          throw error;
-      });
+        .delete(id)
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка удаления заказа: ${error.message}`);
+            throw error;
+        });
 };
 
 export const restoreOrder = async (id: string) => {
     return orders
-      .restore(id)
-      .then((data) => data)
-      .catch((error) => {
-          toast(`Ошибка восстановления заказа: ${error.message}`);
-          throw error;
-      });
+        .restore(id)
+        .then((data) => data)
+        .catch((error) => {
+            toast(`Ошибка восстановления заказа: ${error.message}`);
+            throw error;
+        });
 };

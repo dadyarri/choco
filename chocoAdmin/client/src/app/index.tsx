@@ -6,7 +6,7 @@ import {
     useMediaQuery,
     useTheme,
 } from "@mui/material";
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter } from "react-router-dom";
@@ -43,8 +43,8 @@ const App = () => {
 
                 <BrowserRouter>
                     <Suspense fallback={"Loading..."}>
-                        {!isMobile && <DesktopNavigation/>}
-                        <Container maxWidth={"xl"} sx={{padding: 3}}>
+                        {!isMobile && <DesktopNavigation />}
+                        <Container maxWidth={"xl"} sx={{ padding: 3 }}>
                             <Routing />
                         </Container>
                         <BottomNavigationContextProvider>
