@@ -17,6 +17,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import DesktopNavigation from "shared/ui/desktop-navigation";
 import { MobileNavigation } from "shared/ui/mobile-navigation";
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
 
                 <BrowserRouter>
                     <Suspense fallback={"Loading..."}>
+                        {!isMobile && <DesktopNavigation/>}
                         <Container maxWidth={"xl"} sx={{padding: 3}}>
                             <Routing />
                         </Container>
