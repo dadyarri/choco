@@ -54,7 +54,7 @@ export default () => {
                         component={Link}
                         to={"/app/profile"}
                         src={profileData.avatarUri}
-                    />
+                    >{!profileData.avatarUri && profileData.name && profileData.name[0]}</Avatar>
                 </Box>
             </Container>
         </AppBar>

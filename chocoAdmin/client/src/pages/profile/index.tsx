@@ -12,7 +12,7 @@ import {
     Typography,
 } from "@mui/material";
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 
 import { auth } from "features";
 
@@ -39,9 +39,11 @@ export default () => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar
-                                alt={"avatar"}
-                                src={profileData.avatarUri}
-                            ></Avatar>
+                              alt={"avatar"}
+                              component={Link}
+                              to={"/app/profile"}
+                              src={profileData.avatarUri}
+                            >{!profileData.avatarUri && profileData.name && profileData.name[0]}</Avatar>
                         </ListItemAvatar>
                         Привет, {profileData.name}
                     </ListItem>
