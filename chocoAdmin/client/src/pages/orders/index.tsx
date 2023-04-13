@@ -232,8 +232,8 @@ const OrdersPage = () => {
                                     <TableRow>
                                         <TableCell />
                                         <TableCell>Дата</TableCell>
-                                        <TableCell>Статус</TableCell>
-                                        {isOnDesktop && <TableCell>Содержимое</TableCell>}
+                                        {isOnDesktop && <TableCell>Статус</TableCell>}
+                                        <TableCell>Содержимое</TableCell>
                                         {isOnDesktop && <TableCell>Адрес</TableCell>}
                                         {isOnDesktop && <TableCell>Итог</TableCell>}
                                     </TableRow>
