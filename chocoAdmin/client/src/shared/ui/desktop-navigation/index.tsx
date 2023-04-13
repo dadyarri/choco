@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { auth } from "features";
 
-export default () => {
+const DesktopNavigation = () => {
     const profileData = auth.getProfileData();
 
     return (
@@ -60,3 +60,5 @@ export default () => {
         </AppBar>
     );
 };
+
+export default DesktopNavigation;

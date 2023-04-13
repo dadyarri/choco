@@ -15,14 +15,14 @@ import { IncomesChart } from "shared/ui/charts/incomes-chart";
 import { PieChart } from "shared/ui/charts/pie-chart";
 import { TopProducts } from "shared/ui/charts/top-products";
 
-export default () => {
+const HomePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!auth.hasToken() || !auth.tokenIsValid()) {
             navigate("/app/login");
         }
-    }, []);
+    }, [navigate]);
 
     const statsByCity = useQuery("statsByCity", statsSalesbyCityLib.getSalesByCity);
     const statsByCategory = useQuery("statsByCategory", statsSalesByCategoryLib.getSalesByCategory);
@@ -103,3 +103,5 @@ export default () => {
         </>
     );
 };
+
+export default HomePage;

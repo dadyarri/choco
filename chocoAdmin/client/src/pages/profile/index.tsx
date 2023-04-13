@@ -12,18 +12,18 @@ import {
     Typography,
 } from "@mui/material";
 import React, { useEffect } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 
 import { auth } from "features";
 
-export default () => {
+const ProfilePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!auth.hasToken()) {
             navigate("/app/login");
         }
-    }, []);
+    }, [navigate]);
 
     const handleClickLogout = () => {
         auth.removeAuthData();
@@ -67,3 +67,5 @@ export default () => {
         </>
     );
 };
+
+export default ProfilePage;

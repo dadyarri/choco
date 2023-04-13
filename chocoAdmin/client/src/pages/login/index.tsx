@@ -17,14 +17,14 @@ import { useNavigate } from "react-router-dom";
 
 import { auth } from "features";
 
-export default () => {
+const LoginPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
         if (auth.hasToken()) {
             navigate("/app");
         }
-    }, []);
+    }, [navigate]);
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -107,3 +107,5 @@ export default () => {
         </>
     );
 };
+
+export default LoginPage;
