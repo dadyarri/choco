@@ -64,10 +64,10 @@ const routes: Route[] = [
     //     path: "/app/warehouse/edit/:productId",
     //     element: <ProductEdit />,
     // },
-    // {
-    //     path: "/app/orders/add",
-    //     element: <OrderEdit />,
-    // },
+    {
+        path: "/app/orders/add",
+        element: <OrderEdit />,
+    },
     {
         path: "/app/orders/edit/:orderId",
         element: <OrderEdit />,
