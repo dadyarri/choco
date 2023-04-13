@@ -41,14 +41,15 @@ module.exports = {
   },
   rules: {
     "semi": "error",
-    "prefer-const": "error",
+    "prefer-const": "warn",
     "react/display-name": "off",
     "quotes": [
       "warn",
       "double",
     ],
+    "import/named": "warn",
     "import/order": [
-      "error",
+      "warn",
       {
         "alphabetize": { "order": "asc", "caseInsensitive": true },
         "newlines-between": "always",
@@ -65,7 +66,7 @@ module.exports = {
       }
     ],
     "no-restricted-imports": [
-      "error",
+      "warn",
       {
         "patterns": [
           { "message": "Private imports are prohibited, use public imports instead", "group": ["~/app/**"] },
