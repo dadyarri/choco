@@ -8,6 +8,7 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import RouteIcon from "@mui/icons-material/Route";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import {
     Box,
@@ -172,6 +173,16 @@ const OrdersPage = () => {
                                 </Typography>
                                 <Paper sx={{ maxWidth: 250, padding: 3 }}>
                                     <Stack spacing={2}>
+                                        <Button
+                                            color={"success"}
+                                            variant={"outlined"}
+                                            size={"small"}
+                                            startIcon={<VisibilityIcon />}
+                                            component={Link}
+                                            to={`/app/orders/view/${order.id}`}
+                                        >
+                                            Просмотреть
+                                        </Button>
                                         <Button
                                             color={"primary"}
                                             variant={"outlined"}
