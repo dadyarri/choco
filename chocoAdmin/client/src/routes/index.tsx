@@ -6,11 +6,11 @@ import Home from "pages/home";
 // import { Inventory } from "pages/inventory";
 // import { OrderEdit } from "pages/order-edit";
 import Login from "pages/login";
-import Orders from "pages/orders";
+import Orders from "pages/orders/show";
 // import ProductEdit from "pages/product-edit";
 // import { ShipmentEdit } from "pages/shipment-edit";
 import Profile from "pages/profile";
-import Shipments from "pages/shipments";
+import Shipments from "pages/shipments/show";
 import Warehouse from "pages/warehouse";
 
 import Route from "./index.specs";
