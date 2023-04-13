@@ -14,6 +14,7 @@
     "@here/maps-api-for-javascript": "^1.38.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.11.16",
+    "@mui/x-data-grid": "^6.1.0",
     "axios": "^1.2.4",
     "chart.js": "^4.2.1",
     "chroma-js": "^2.4.2",
