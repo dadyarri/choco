@@ -1,7 +1,7 @@
 import { Typography, useTheme } from "@mui/material";
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import chroma from "chroma-js";
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import { Pie } from "react-chartjs-2";
 
 type PieChartProps = {
@@ -17,7 +17,7 @@ export const PieChart: FC<PieChartProps> = (data) => {
         return chroma(hex).alpha(opacity).css();
     };
 
-    const generateNonSimilarColors = (N: number): string[] => {
+    const generateNonSimilarColors = useCallback((N: number): string[] => {
         const colors: string[] = [];
 
         const generateColor = (): string => {
@@ -41,7 +41,7 @@ export const PieChart: FC<PieChartProps> = (data) => {
         }
 
         return colors;
-    };
+    }, []);
 
     const colors = generateNonSimilarColors(data.data.length);
     const theme = useTheme();
