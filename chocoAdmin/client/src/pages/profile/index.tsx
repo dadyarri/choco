@@ -39,11 +39,13 @@ const ProfilePage = () => {
                     <ListItem>
                         <ListItemAvatar>
                             <Avatar
-                              alt={"avatar"}
-                              component={Link}
-                              to={"/app/profile"}
-                              src={profileData.avatarUri}
-                            >{!profileData.avatarUri && profileData.name && profileData.name[0]}</Avatar>
+                                alt={"avatar"}
+                                component={Link}
+                                to={"/app/profile"}
+                                src={profileData.avatarUri}
+                            >
+                                {!profileData.avatarUri && profileData.name && profileData.name[0]}
+                            </Avatar>
                         </ListItemAvatar>
                         Привет, {profileData.name}
                     </ListItem>

@@ -31,32 +31,27 @@ export const IncomesChart: FC<IncomesChartProps> = ({ data }) => {
             legend: {
                 position: "bottom" as const,
                 labels: {
-                    color:
-                        isLightMode ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
+                    color: isLightMode ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
                 },
             },
         },
         scales: {
             y: {
                 ticks: {
-                    color:
-                        isLightMode ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
+                    color: isLightMode ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
                     beginAtZero: true,
                 },
                 grid: {
-                    color:
-                        isLightMode ? "rgba(0, 0, 0, 0.08)" : "rgba(255, 255, 255, 0.08)",
+                    color: isLightMode ? "rgba(0, 0, 0, 0.08)" : "rgba(255, 255, 255, 0.08)",
                 },
             },
             x: {
                 ticks: {
-                    color:
-                        isLightMode ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
+                    color: isLightMode ? "rgba(0, 0, 0, 0.92)" : "rgba(255, 255, 255, 0.92)",
                     beginAtZero: true,
                 },
                 grid: {
-                    color:
-                        isLightMode ? "rgba(0, 0, 0, 0.08)" : "rgba(255, 255, 255, 0.08)",
+                    color: isLightMode ? "rgba(0, 0, 0, 0.08)" : "rgba(255, 255, 255, 0.08)",
                 },
             },
         },

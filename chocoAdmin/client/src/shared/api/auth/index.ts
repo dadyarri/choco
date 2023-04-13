@@ -46,5 +46,4 @@ export class AuthApi extends BaseApi {
             return false;
         }
     }
-
 }

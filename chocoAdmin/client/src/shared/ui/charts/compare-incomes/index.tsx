@@ -12,7 +12,7 @@ type CompareIncomesProps = {
 export const CompareIncomes: FC<CompareIncomesProps> = ({ data }) => {
     const isSurplus = data[0].total >= data[1].total;
     return (
-        <Box sx={{display: "flex", justifyContent: "space-between"}}>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography variant={"h6"}>{data[0].total}&#8381;</Typography>
             <Chip
                 icon={isSurplus ? <CallMadeIcon /> : <CallReceivedIcon />}

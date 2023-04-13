@@ -95,7 +95,9 @@ const HomePage = () => {
                                 Самые продаваемые товары
                             </Typography>
                             {statsByProducts.isLoading && <CircularProgress />}
-                            {statsByProducts.data !== undefined && <TopProducts data={statsByProducts.data} />}
+                            {statsByProducts.data !== undefined && (
+                                <TopProducts data={statsByProducts.data} />
+                            )}
                         </CardContent>
                     </Card>
                 </Grid>

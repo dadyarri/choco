@@ -21,7 +21,7 @@ export const removeAuthData = () => {
 export const getProfileData = () => {
     return {
         name: localStorage.getItem("name") ?? undefined,
-        avatarUri: localStorage.getItem("avatarUri") ?? undefined
+        avatarUri: localStorage.getItem("avatarUri") ?? undefined,
     };
 };
 
@@ -34,7 +34,8 @@ export const getToken = () => {
 };
 
 export const login = (username: string, password: string) => {
-    return auth.passwordLogin(username, password)
+    return auth
+        .passwordLogin(username, password)
         .then((data) => {
             updateAuthData(data);
             return true;
