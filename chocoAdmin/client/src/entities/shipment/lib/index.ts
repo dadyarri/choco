@@ -19,7 +19,6 @@ export const getShipmentById = async (id: string) => {
         .catch((error) => {
             sendSnackbar(error, "Ошибка получения поставки");
             throw error;
-            throw error;
         });
 };
 
