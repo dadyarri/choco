@@ -1,4 +1,4 @@
-import CheckIcon from "@mui/icons-material/Check";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
@@ -6,8 +6,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import PaymentsIcon from "@mui/icons-material/Payments";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import WatchLaterIcon from "@mui/icons-material/WatchLater";
 import {
     Box,
     Button,
@@ -65,7 +65,7 @@ const ShipmentsPage = () => {
         switch (label) {
             case "Обрабатывается": {
                 color = "warning";
-                icon = <WatchLaterIcon />;
+                icon = <ScheduleIcon />;
                 break;
             }
             case "Доставляется": {
@@ -75,7 +75,7 @@ const ShipmentsPage = () => {
             }
             case "Выполнена": {
                 color = "success";
-                icon = <CheckIcon />;
+                icon = <CheckCircleOutlineIcon />;
                 break;
             }
             case "Отменена": {
