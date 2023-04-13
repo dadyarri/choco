@@ -103,7 +103,7 @@ const OrdersPage = () => {
         )} ₽`;
         return (
             <>
-                <TableRow key={order.id}>
+                <TableRow key={order.id} onClick={() => setOpen(!open)}>
                     <TableCell>
                         <IconButton
                             aria-label="expand row"
