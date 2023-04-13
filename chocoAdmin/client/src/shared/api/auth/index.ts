@@ -37,13 +37,11 @@ export class AuthApi extends BaseApi {
     }
 
     async verify() {
-        try {
-            await api.get(`${this.baseURL}/verify`, {
+        return await api
+            .get(`${this.baseURL}/verify`, {
                 headers: { Authorization: `Bearer ${auth.getToken()}` },
-            });
-            return true;
-        } catch {
-            return false;
-        }
+            })
+            .then((_) => true)
+            .catch((_) => false);
     }
 }
