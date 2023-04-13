@@ -8,9 +8,7 @@ const WarehousePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!auth.hasToken()) {
-            navigate("/app/login");
-        }
+        auth.hasToken().then((result) => !result && navigate("/app/login"));
     }, [navigate]);
 
     return <Typography variant={"h4"}>Склад</Typography>;

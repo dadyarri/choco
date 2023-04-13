@@ -21,9 +21,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (auth.hasToken()) {
-            navigate("/app");
-        }
+        auth.hasToken().then((result) => result && navigate("/app"));
     }, [navigate]);
 
     const [showPassword, setShowPassword] = useState(false);

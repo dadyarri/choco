@@ -24,7 +24,7 @@ import {
     Typography,
 } from "@mui/material";
 import { DateTime } from "luxon";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -35,8 +35,17 @@ import { auth } from "features";
 const OrderViewPage = () => {
     const { orderId } = useParams();
     const [open, setOpen] = useState(true);
+    const hasToken = true;
 
     const order = useQuery(["order", orderId], () => orderLib.getOrderById(orderId!));
+
+    useEffect(() => {
+        const f = async () => {
+            return await auth.hasToken();
+        };
+
+        const h = f();
+    }, [hasToken]);
 
     const getStatusChip = (label: string) => {
         let icon: React.ReactElement | undefined;
@@ -83,27 +92,30 @@ const OrderViewPage = () => {
             <Typography variant={"h4"} sx={{ marginBottom: 2 }}>
                 Просмотр заказа
             </Typography>
-            {auth.hasToken() && (
-                <Stack spacing={2} direction={"row"} sx={{ marginBottom: 2 }}>
-                    <Button
-                        color={"primary"}
-                        variant={"outlined"}
-                        component={Link}
-                        startIcon={<EditIcon />}
-                        to={`/app/orders/edit/${orderId}`}
-                    >
-                        Редактировать
-                    </Button>
-                    <Button
-                        color={"secondary"}
-                        variant={"outlined"}
-                        component={Link}
-                        startIcon={<ChevronLeftIcon />}
-                        to={"/app/orders"}
-                    >
-                        Назад
-                    </Button>
-                </Stack>
+            {auth.hasToken().then(
+                (hasToken) =>
+                    hasToken && (
+                        <Stack spacing={2} direction={"row"} sx={{ marginBottom: 2 }}>
+                            <Button
+                                color={"primary"}
+                                variant={"outlined"}
+                                component={Link}
+                                startIcon={<EditIcon />}
+                                to={`/app/orders/edit/${orderId}`}
+                            >
+                                Редактировать
+                            </Button>
+                            <Button
+                                color={"secondary"}
+                                variant={"outlined"}
+                                component={Link}
+                                startIcon={<ChevronLeftIcon />}
+                                to={"/app/orders"}
+                            >
+                                Назад
+                            </Button>
+                        </Stack>
+                    ),
             )}
 
             {order.isLoading && <CircularProgress />}

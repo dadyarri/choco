@@ -4,9 +4,9 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 
 import {
-    statsSalesbyCityLib,
-    statsSalesByCategoryLib,
     statsIncomesComparsionLib,
+    statsSalesByCategoryLib,
+    statsSalesbyCityLib,
     statsSalesByProductLib,
 } from "entities";
 import { auth } from "features";
@@ -19,9 +19,7 @@ const HomePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!auth.hasToken() || !auth.tokenIsValid()) {
-            navigate("/app/login");
-        }
+        auth.hasToken().then((result) => !result && navigate("/app/login"));
     }, [navigate]);
 
     const statsByCity = useQuery("statsByCity", statsSalesbyCityLib.getSalesByCity);

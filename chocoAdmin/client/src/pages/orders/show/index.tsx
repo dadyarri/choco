@@ -45,9 +45,7 @@ const OrdersPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!auth.hasToken()) {
-            navigate("/app/login");
-        }
+        auth.hasToken().then((result) => !result && navigate("/app/login"));
     }, [navigate]);
 
     const orders = useQuery("orders", orderLib.getOrders);
