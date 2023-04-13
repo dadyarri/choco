@@ -35,7 +35,7 @@ import {
 import { DateTime } from "luxon";
 import React, { FC, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { Order, OrderItem, orderLib } from "entities";
 import { auth } from "features";
@@ -177,6 +177,8 @@ const OrdersPage = () => {
                                             variant={"outlined"}
                                             size={"small"}
                                             startIcon={<EditIcon />}
+                                            component={Link}
+                                            to={`/app/orders/edit/${order.id}`}
                                         >
                                             Редактировать
                                         </Button>
