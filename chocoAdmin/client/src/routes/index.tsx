@@ -4,8 +4,8 @@ import React from "react";
 // import ProductCategoryEdit from "pages/category-edit";
 import Home from "pages/home";
 // import { Inventory } from "pages/inventory";
-// import { OrderEdit } from "pages/order-edit";
 import Login from "pages/login";
+import OrderEdit from "pages/orders/edit";
 import Orders from "pages/orders/show";
 // import ProductEdit from "pages/product-edit";
 // import { ShipmentEdit } from "pages/shipment-edit";
@@ -68,10 +68,10 @@ const routes: Route[] = [
     //     path: "/app/orders/add",
     //     element: <OrderEdit />,
     // },
-    // {
-    //     path: "/app/orders/edit/:orderId",
-    //     element: <OrderEdit />,
-    // },
+    {
+        path: "/app/orders/edit/:orderId",
+        element: <OrderEdit />,
+    },
     // {
     //     path: "/app/shipments/add",
     //     element: <ShipmentEdit />,
