@@ -26,7 +26,7 @@ export const getProfileData = () => {
 };
 
 export const hasToken = () => {
-    return Boolean(getToken());
+    return auth.verify().then((result) => result && Boolean(getToken()));
 };
 
 export const getToken = () => {
