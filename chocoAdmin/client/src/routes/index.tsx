@@ -7,6 +7,7 @@ import Home from "pages/home";
 import Login from "pages/login";
 import OrderEdit from "pages/orders/edit";
 import Orders from "pages/orders/show";
+import OrderView from "pages/orders/view";
 // import ProductEdit from "pages/product-edit";
 // import { ShipmentEdit } from "pages/shipment-edit";
 import Profile from "pages/profile";
@@ -71,6 +72,10 @@ const routes: Route[] = [
     {
         path: "/app/orders/edit/:orderId",
         element: <OrderEdit />,
+    },
+    {
+        path: "/app/orders/view/:orderId",
+        element: <OrderView />,
     },
     // {
     //     path: "/app/shipments/add",
