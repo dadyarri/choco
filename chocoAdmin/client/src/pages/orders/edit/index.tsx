@@ -1,12 +1,23 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { Button, CircularProgress, Typography } from "@mui/material";
-import { Form, Formik } from "formik";
+import SaveIcon from "@mui/icons-material/Save";
+import {
+    Button,
+    CircularProgress,
+    InputLabel,
+    MenuItem,
+    Select,
+    Stack,
+    Typography,
+} from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import { Field, Form, Formik } from "formik";
+import { DateTime } from "luxon";
 import React, { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 
-import { orderLib } from "entities";
+import { orderCityLib, orderLib, orderStatusLib } from "entities";
 import { auth } from "features";
 
 const OrderEditPage = () => {
@@ -24,6 +35,10 @@ const OrderEditPage = () => {
         enabled: editMode,
     });
 
+    const orderStatuses = useQuery("orderStatuses", orderStatusLib.getOrderStatuses);
+
+    const orderCities = useQuery("orderCities", orderCityLib.getOrderCities);
+
     return (
         <>
             <Typography variant={"h4"} sx={{ marginBottom: 2 }}>
@@ -39,10 +54,89 @@ const OrderEditPage = () => {
             >
                 Назад
             </Button>
-            {order.isLoading && <CircularProgress />}
-            {order.data && (
-                <Formik initialValues={{}} onSubmit={(values) => console.log(values)}>
-                    <Form></Form>
+            {order.isLoading ? (
+                <CircularProgress />
+            ) : (
+                <Formik
+                    initialValues={{
+                        date: order.data
+                            ? DateTime.fromFormat(order.data.date, "yyyy-MM-dd")
+                            : DateTime.now(),
+                        status: order.data ? order.data.status.id : "",
+                        city: order.data ? order.data.address.city.id : "",
+                    }}
+                    onSubmit={(values) => console.log(values)}
+                >
+                    {({ values, touched, errors, handleChange }) => (
+                        <Form>
+                            <Stack spacing={3} sx={{ width: { sm: "90%", md: 400 }, margin: 2 }}>
+                                <InputLabel>Дата</InputLabel>
+                                <Field
+                                    as={DatePicker}
+                                    name={"date"}
+                                    id={"date"}
+                                    variant={"outlined"}
+                                    value={values.date}
+                                    onChange={handleChange}
+                                    label={"Дата заказа"}
+                                    error={touched.date && errors.date}
+                                    type={"date"}
+                                    format={"dd.MM.yyyy"}
+                                />
+                                <InputLabel>Статус заказа</InputLabel>
+                                <Field
+                                    as={Select}
+                                    name={"status"}
+                                    id={"status"}
+                                    variant={"outlined"}
+                                    label={"Статус заказа"}
+                                    type={"select"}
+                                    value={values.status}
+                                    onChange={handleChange}
+                                    error={touched.status && errors.status}
+                                >
+                                    <MenuItem defaultChecked disabled>
+                                        -- Выберите статус --
+                                    </MenuItem>
+                                    {orderStatuses.data &&
+                                        orderStatuses.data.map((status) => (
+                                            <MenuItem value={status.id} key={status.id}>
+                                                {status.name}
+                                            </MenuItem>
+                                        ))}
+                                </Field>
+                                <InputLabel>Город</InputLabel>
+                                <Field
+                                    as={Select}
+                                    name={"city"}
+                                    id={"city"}
+                                    variant={"outlined"}
+                                    label={"Город"}
+                                    type={"select"}
+                                    value={values.city}
+                                    onChange={handleChange}
+                                    error={touched.city && errors.city}
+                                >
+                                    <MenuItem defaultChecked disabled>
+                                        -- Выберите город --
+                                    </MenuItem>
+                                    {orderCities.data &&
+                                        orderCities.data.map((city) => (
+                                            <MenuItem value={city.id} key={city.id}>
+                                                {city.name}
+                                            </MenuItem>
+                                        ))}
+                                </Field>
+                                <Button
+                                    type={"submit"}
+                                    variant={"outlined"}
+                                    startIcon={<SaveIcon />}
+                                >
+                                    Сохранить
+                                </Button>
+                            </Stack>
+                        </Form>
+                    )}
                 </Formik>
             )}
         </>
