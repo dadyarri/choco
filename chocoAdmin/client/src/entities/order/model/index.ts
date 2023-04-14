@@ -4,7 +4,7 @@ import { OrderStatus } from "entities/order-status";
 
 export type Order = {
     id: string;
-    date: Date;
+    date: string;
     status: OrderStatus;
     orderItems: OrderItem[];
     address: OrderAddress;
