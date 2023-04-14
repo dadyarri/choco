@@ -17,7 +17,6 @@ import {
     Chip,
     CircularProgress,
     Collapse,
-    Container,
     Fab,
     IconButton,
     List,
@@ -223,43 +222,41 @@ const OrdersPage = () => {
         <>
             <Typography variant={"h4"}>Заказы</Typography>
             {orders.isLoading && <CircularProgress />}
-            <Container maxWidth={"xl"}>
-                {orders.data !== undefined && (
-                    <Paper>
-                        <TableContainer sx={{ overflowX: "initial" }}>
-                            <Table stickyHeader>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell />
-                                        <TableCell>Дата</TableCell>
-                                        {isOnDesktop && <TableCell>Статус</TableCell>}
-                                        <TableCell>Содержимое</TableCell>
-                                        {isOnDesktop && <TableCell>Адрес</TableCell>}
-                                        {isOnDesktop && <TableCell>Итог</TableCell>}
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {orders.data.map((order: Order) => (
-                                        <Row order={order} key={order.id} />
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Paper>
-                )}
-                <Fab
-                    color="primary"
-                    aria-label="add"
-                    onClick={() => navigate("/app/orders/add")}
-                    sx={{
-                        position: "fixed",
-                        bottom: 80,
-                        right: 20,
-                    }}
-                >
-                    <AddIcon />
-                </Fab>
-            </Container>
+            {orders.data !== undefined && (
+                <Paper>
+                    <TableContainer sx={{ overflowX: "initial" }}>
+                        <Table stickyHeader>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell />
+                                    <TableCell>Дата</TableCell>
+                                    {isOnDesktop && <TableCell>Статус</TableCell>}
+                                    <TableCell>Содержимое</TableCell>
+                                    {isOnDesktop && <TableCell>Адрес</TableCell>}
+                                    {isOnDesktop && <TableCell>Итог</TableCell>}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {orders.data.map((order: Order) => (
+                                    <Row order={order} key={order.id} />
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Paper>
+            )}
+            <Fab
+                color="primary"
+                aria-label="add"
+                onClick={() => navigate("/app/orders/add")}
+                sx={{
+                    position: "fixed",
+                    bottom: 80,
+                    right: 20,
+                }}
+            >
+                <AddIcon />
+            </Fab>
         </>
     );
 };
