@@ -6,8 +6,10 @@ import {
     useMediaQuery,
     useTheme,
 } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { SnackbarProvider } from "notistack";
-import React, { Suspense, useMemo } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter } from "react-router-dom";
@@ -26,6 +28,7 @@ const App = () => {
     const queryClient = new QueryClient();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+    const [hasToken, setHasToken] = useState(false);
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
     const themeString = (b: boolean) => (b ? "dark" : "light");
     const muiTheme = useMemo(
@@ -38,32 +41,42 @@ const App = () => {
         [prefersDarkMode],
     );
 
+    useEffect(() => {
+        const f = async () => {
+            setHasToken(await auth.hasToken());
+        };
+
+        f();
+    }, [hasToken]);
+
     return (
-        <ThemeProvider theme={muiTheme}>
-            <SnackbarProvider
-                maxSnack={2}
-                autoHideDuration={2000}
-                anchorOrigin={{ horizontal: "right", vertical: "top" }}
-            >
-                <QueryClientProvider client={queryClient}>
-                    <CssBaseline />
+        <LocalizationProvider dateAdapter={AdapterLuxon}>
+            <ThemeProvider theme={muiTheme}>
+                <SnackbarProvider
+                    maxSnack={2}
+                    autoHideDuration={2000}
+                    anchorOrigin={{ horizontal: "right", vertical: "top" }}
+                >
+                    <QueryClientProvider client={queryClient}>
+                        <CssBaseline />
 
-                    <BrowserRouter>
-                        <Suspense fallback={"Loading..."}>
-                            {!isMobile && auth.hasToken() && <DesktopNavigation />}
-                            <Container maxWidth={"xl"} sx={{ padding: 3, marginBottom: 10 }}>
-                                <Routing />
-                            </Container>
-                            <BottomNavigationContextProvider>
-                                {isMobile && auth.hasToken() && <MobileNavigation />}
-                            </BottomNavigationContextProvider>
-                        </Suspense>
-                    </BrowserRouter>
+                        <BrowserRouter>
+                            <Suspense fallback={"Loading..."}>
+                                {!isMobile && hasToken && <DesktopNavigation />}
+                                <Container maxWidth={"xl"} sx={{ padding: 3, marginBottom: 10 }}>
+                                    <Routing />
+                                </Container>
+                                <BottomNavigationContextProvider>
+                                    {isMobile && hasToken && <MobileNavigation />}
+                                </BottomNavigationContextProvider>
+                            </Suspense>
+                        </BrowserRouter>
 
-                    <ReactQueryDevtools initialIsOpen={false} />
-                </QueryClientProvider>
-            </SnackbarProvider>
-        </ThemeProvider>
+                        <ReactQueryDevtools initialIsOpen={false} />
+                    </QueryClientProvider>
+                </SnackbarProvider>
+            </ThemeProvider>
+        </LocalizationProvider>
     );
 };
 
