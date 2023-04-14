@@ -1,3 +1,4 @@
+import AddIcon from "@mui/icons-material/Add";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -17,6 +18,7 @@ import {
     CircularProgress,
     Collapse,
     Container,
+    Fab,
     IconButton,
     List,
     ListItem,
@@ -245,6 +247,18 @@ const OrdersPage = () => {
                         </TableContainer>
                     </Paper>
                 )}
+                <Fab
+                    color="primary"
+                    aria-label="add"
+                    onClick={() => navigate("/app/orders/add")}
+                    sx={{
+                        position: "fixed",
+                        bottom: 80,
+                        right: 20,
+                    }}
+                >
+                    <AddIcon />
+                </Fab>
             </Container>
         </>
     );
