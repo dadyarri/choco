@@ -66,7 +66,9 @@ const OrderEditPage = () => {
                             ? DateTime.fromFormat(order.data.date, "yyyy-MM-dd")
                             : DateTime.now(),
                         status: order.data ? order.data.status.id : "",
-                        city: order.data ? order.data.address.city.id : "",
+                        address: {
+                            city: order.data ? order.data.address.city.id : "",
+                        },
                     }}
                     onSubmit={(values) => console.log(values)}
                 >
@@ -144,14 +146,14 @@ const OrderEditPage = () => {
                                 </InputLabel>
                                 <Field
                                     as={Select}
-                                    name={"city"}
+                                    name={"address.city"}
                                     id={"city"}
                                     variant={"outlined"}
                                     label={"Город"}
                                     type={"select"}
-                                    value={values.city}
+                                    value={values.address.city}
                                     onChange={handleChange}
-                                    error={touched.city && errors.city}
+                                    error={touched.address?.city && errors.address?.city}
                                 >
                                     <MenuItem defaultChecked disabled>
                                         -- Выберите город --
