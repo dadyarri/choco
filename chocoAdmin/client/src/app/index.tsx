@@ -6,7 +6,7 @@ import {
     useMediaQuery,
     useTheme,
 } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers";
+import { LocalizationProvider, ruRU } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { SnackbarProvider } from "notistack";
 import React, { Suspense, useEffect, useMemo, useState } from "react";
@@ -50,7 +50,10 @@ const App = () => {
     }, [hasToken]);
 
     return (
-        <LocalizationProvider dateAdapter={AdapterLuxon}>
+        <LocalizationProvider
+            dateAdapter={AdapterLuxon}
+            localeText={ruRU.components.MuiLocalizationProvider.defaultProps.localeText}
+        >
             <ThemeProvider theme={muiTheme}>
                 <SnackbarProvider
                     maxSnack={2}
