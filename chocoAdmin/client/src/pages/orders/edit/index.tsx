@@ -1,5 +1,8 @@
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 import SaveIcon from "@mui/icons-material/Save";
+import ViewTimelineIcon from "@mui/icons-material/ViewTimeline";
 import {
     Button,
     CircularProgress,
@@ -70,7 +73,18 @@ const OrderEditPage = () => {
                     {({ values, touched, errors, handleChange }) => (
                         <Form>
                             <Stack spacing={3} sx={{ width: { sm: "90%", md: 400 }, margin: 2 }}>
-                                <InputLabel>Дата</InputLabel>
+                                <InputLabel>
+                                    <Typography
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            flexWrap: "wrap",
+                                        }}
+                                    >
+                                        <CalendarMonthIcon sx={{ marginRight: 1 }} />{" "}
+                                        <span>Дата</span>
+                                    </Typography>
+                                </InputLabel>
                                 <Field
                                     as={DatePicker}
                                     name={"date"}
@@ -83,7 +97,18 @@ const OrderEditPage = () => {
                                     type={"date"}
                                     format={"dd.MM.yyyy"}
                                 />
-                                <InputLabel>Статус заказа</InputLabel>
+                                <InputLabel>
+                                    <Typography
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            flexWrap: "wrap",
+                                        }}
+                                    >
+                                        <ViewTimelineIcon sx={{ marginRight: 1 }} />{" "}
+                                        <span>Статус заказа</span>
+                                    </Typography>
+                                </InputLabel>
                                 <Field
                                     as={Select}
                                     name={"status"}
@@ -105,7 +130,18 @@ const OrderEditPage = () => {
                                             </MenuItem>
                                         ))}
                                 </Field>
-                                <InputLabel>Город</InputLabel>
+                                <InputLabel>
+                                    <Typography
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            flexWrap: "wrap",
+                                        }}
+                                    >
+                                        <LocationCityIcon sx={{ marginRight: 1 }} />{" "}
+                                        <span>Город</span>
+                                    </Typography>
+                                </InputLabel>
                                 <Field
                                     as={Select}
                                     name={"city"}
