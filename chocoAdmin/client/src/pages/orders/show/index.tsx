@@ -39,8 +39,9 @@ import React, { FC, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Order, OrderItem, orderLib } from "entities";
+import { geocodingLib, Order, OrderItem, orderLib } from "entities";
 import { auth } from "features";
+import { sendSnackbar } from "../../../shared/lib";
 
 const OrdersPage = () => {
     const navigate = useNavigate();
@@ -197,6 +198,30 @@ const OrdersPage = () => {
                                             variant={"outlined"}
                                             size={"small"}
                                             startIcon={<RouteIcon />}
+                                            onClick={() => {
+                                                if (navigator.geolocation) {
+                                                    navigator.geolocation.getCurrentPosition(
+                                                        (position) => {
+                                                            const { latitude, longitude } =
+                                                                position.coords;
+                                                            geocodingLib.getRouteLink(
+                                                                address,
+                                                                latitude,
+                                                                longitude,
+                                                            );
+                                                        },
+                                                        (positionError) => {
+                                                            sendSnackbar(
+                                                                {
+                                                                    error: positionError,
+                                                                    message: "",
+                                                                },
+                                                                "Ошибка получения местоположения",
+                                                            );
+                                                        },
+                                                    );
+                                                }
+                                            }}
                                         >
                                             Маршрут
                                         </Button>
