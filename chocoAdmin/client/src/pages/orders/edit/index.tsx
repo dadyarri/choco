@@ -1,5 +1,7 @@
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import EditRoadIcon from "@mui/icons-material/EditRoad";
+import HomeIcon from "@mui/icons-material/Home";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import SaveIcon from "@mui/icons-material/Save";
 import ViewTimelineIcon from "@mui/icons-material/ViewTimeline";
@@ -10,6 +12,7 @@ import {
     MenuItem,
     Select,
     Stack,
+    TextField,
     Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
@@ -68,6 +71,8 @@ const OrderEditPage = () => {
                         status: order.data ? order.data.status.id : "",
                         address: {
                             city: order.data ? order.data.address.city.id : "",
+                            street: order.data ? order.data.address.street : "",
+                            building: order.data ? order.data.address.building : "",
                         },
                     }}
                     onSubmit={(values) => console.log(values)}
@@ -144,27 +149,65 @@ const OrderEditPage = () => {
                                         <span>Город</span>
                                     </Typography>
                                 </InputLabel>
+                                {!orderCities.isLoading && (
+                                    <Field
+                                        as={Select}
+                                        name={"address.city"}
+                                        id={"city"}
+                                        variant={"outlined"}
+                                        label={"Город"}
+                                        type={"select"}
+                                        value={values.address.city}
+                                        onChange={handleChange}
+                                        error={touched.address?.city && errors.address?.city}
+                                    >
+                                        <MenuItem defaultChecked disabled>
+                                            -- Выберите город --
+                                        </MenuItem>
+                                        {orderCities.data &&
+                                            orderCities.data.map((city) => (
+                                                <MenuItem value={city.id} key={city.id}>
+                                                    {city.name}
+                                                </MenuItem>
+                                            ))}
+                                    </Field>
+                                )}
+                                <InputLabel>
+                                    <Typography
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            flexWrap: "wrap",
+                                        }}
+                                    >
+                                        <EditRoadIcon sx={{ marginRight: 1 }} /> <span>Улица</span>
+                                    </Typography>
+                                </InputLabel>
                                 <Field
-                                    as={Select}
-                                    name={"address.city"}
-                                    id={"city"}
-                                    variant={"outlined"}
-                                    label={"Город"}
-                                    type={"select"}
-                                    value={values.address.city}
-                                    onChange={handleChange}
-                                    error={touched.address?.city && errors.address?.city}
-                                >
-                                    <MenuItem defaultChecked disabled>
-                                        -- Выберите город --
-                                    </MenuItem>
-                                    {orderCities.data &&
-                                        orderCities.data.map((city) => (
-                                            <MenuItem value={city.id} key={city.id}>
-                                                {city.name}
-                                            </MenuItem>
-                                        ))}
-                                </Field>
+                                    as={TextField}
+                                    name={"address.street"}
+                                    id={"street"}
+                                    label={"Улица"}
+                                    value={values.address.street}
+                                />
+                                <InputLabel>
+                                    <Typography
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            flexWrap: "wrap",
+                                        }}
+                                    >
+                                        <HomeIcon sx={{ marginRight: 1 }} /> <span>Дом</span>
+                                    </Typography>
+                                </InputLabel>
+                                <Field
+                                    as={TextField}
+                                    name={"address.building"}
+                                    id={"building"}
+                                    label={"Дом"}
+                                    value={values.address.building}
+                                />
                                 <Button
                                     type={"submit"}
                                     variant={"outlined"}
