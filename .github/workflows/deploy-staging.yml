@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - "release/*"
+      - "feature/*"
+      - "refactor/*"
+      - "fix/*"
   workflow_dispatch: {}
     
 jobs:
