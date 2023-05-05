@@ -5,6 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PaymentsIcon from "@mui/icons-material/Payments";
@@ -41,7 +42,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { geocodingLib, Order, OrderItem, orderLib } from "entities";
 import { auth } from "features";
-import { sendSnackbar } from "../../../shared/lib";
+import { sendSnackbar } from "shared/lib";
 
 const OrdersPage = () => {
     const navigate = useNavigate();
@@ -83,6 +84,11 @@ const OrdersPage = () => {
             case "Отменён": {
                 color = "error";
                 icon = <HighlightOffIcon />;
+                break;
+            }
+            case "Ожидает получения": {
+                color = "secondary";
+                icon = <HourglassTopIcon />;
                 break;
             }
             default: {

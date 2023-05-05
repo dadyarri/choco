@@ -31,6 +31,7 @@ import { Link } from "react-router-dom";
 
 import { OrderItem, orderLib } from "entities";
 import { auth } from "features";
+import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 
 const OrderViewPage = () => {
     const { orderId } = useParams();
@@ -77,6 +78,11 @@ const OrderViewPage = () => {
             case "Отменён": {
                 color = "error";
                 icon = <HighlightOffIcon />;
+                break;
+            }
+            case "Ожидает получения": {
+                color = "secondary";
+                icon = <HourglassTopIcon />;
                 break;
             }
             default: {
