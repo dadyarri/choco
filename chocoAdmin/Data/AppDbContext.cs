@@ -38,6 +38,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<OrderStatus>().HasData(
             new OrderStatus { Id = new Guid("f6ef3e23-a292-4ee8-ac4b-03ba6d95830f"), Name = "Обрабатывается" },
             new OrderStatus { Id = new Guid("3c3fd23a-e53f-446f-b7d9-82647eb87e59"), Name = "Доставляется" },
+            new OrderStatus { Id = new Guid("4aa80967-1dbb-452e-acba-ac027d88fea6"), Name = "Ожидает получения" },
             new OrderStatus { Id = new Guid("bd40220b-354c-474f-a6eb-e5106ca7dd2a"), Name = "Выполнен" },
             new OrderStatus { Id = new Guid("1ffb1ac4-2cfe-42af-8b4c-e782ea720f97"), Name = "Отменён" }
         );
