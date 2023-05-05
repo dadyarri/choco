@@ -77,7 +77,7 @@ const OrderEditPage = () => {
                     }}
                     onSubmit={(values) => console.log(values)}
                 >
-                    {({ values, touched, errors, handleChange }) => (
+                    {({ values, touched, errors, handleChange, setFieldValue }) => (
                         <Form>
                             <Stack spacing={3} sx={{ width: { sm: "90%", md: 400 }, margin: 2 }}>
                                 <InputLabel>
@@ -98,7 +98,7 @@ const OrderEditPage = () => {
                                     id={"date"}
                                     variant={"outlined"}
                                     value={values.date}
-                                    onChange={handleChange}
+                                    onChange={(value: any) => setFieldValue("date", value, true)}
                                     label={"Дата заказа"}
                                     error={touched.date && errors.date}
                                     type={"date"}
