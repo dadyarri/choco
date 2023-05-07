@@ -1,29 +1,47 @@
+import AddIcon from "@mui/icons-material/Add";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditRoadIcon from "@mui/icons-material/EditRoad";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import HomeIcon from "@mui/icons-material/Home";
+import HourglassTopIcon from "@mui/icons-material/HourglassTop";
+import ListIcon from "@mui/icons-material/List";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import SaveIcon from "@mui/icons-material/Save";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 import ViewTimelineIcon from "@mui/icons-material/ViewTimeline";
 import {
     Button,
+    ButtonGroup,
     CircularProgress,
+    IconButton,
     InputLabel,
+    ListItemIcon,
     MenuItem,
+    Paper,
     Select,
     Stack,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
     TextField,
     Typography,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { Field, Form, Formik } from "formik";
+import { Field, FieldArray, Form, Formik } from "formik";
 import { DateTime } from "luxon";
 import React, { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 
-import { orderCityLib, orderLib, orderStatusLib } from "entities";
+import { orderCityLib, OrderItem, orderLib, orderStatusLib, productLib } from "entities";
 import { auth } from "features";
 
 const OrderEditPage = () => {
@@ -44,6 +62,31 @@ const OrderEditPage = () => {
     const orderStatuses = useQuery("orderStatuses", orderStatusLib.getOrderStatuses);
 
     const orderCities = useQuery("orderCities", orderCityLib.getOrderCities);
+
+    const products = useQuery("products", productLib.getProducts);
+
+    const getStatusIcon = (statusName: string) => {
+        switch (statusName) {
+            case "Обрабатывается": {
+                return <ScheduleIcon />;
+            }
+            case "Доставляется": {
+                return <LocalShippingIcon />;
+            }
+            case "Выполнен": {
+                return <CheckCircleOutlineIcon />;
+            }
+            case "Отменён": {
+                return <HighlightOffIcon />;
+            }
+            case "Ожидает получения": {
+                return <HourglassTopIcon />;
+            }
+            default: {
+                return undefined;
+            }
+        }
+    };
 
     return (
         <>
@@ -74,8 +117,18 @@ const OrderEditPage = () => {
                             street: order.data ? order.data.address.street : "",
                             building: order.data ? order.data.address.building : "",
                         },
+                        orderItems: order.data ? order.data.orderItems : [],
                     }}
-                    onSubmit={(values) => console.log(values)}
+                    onSubmit={(values) => {
+                        console.log(values);
+                        // if (order.data) {
+                        //     updateOrder(order.data.id, {
+                        //         ...values,
+                        //         orderItems: [],
+                        //         date: values.date.toJSDate(),
+                        //     });
+                        // }
+                    }}
                 >
                     {({ values, touched, errors, handleChange, setFieldValue }) => (
                         <Form>
@@ -133,6 +186,9 @@ const OrderEditPage = () => {
                                     {orderStatuses.data &&
                                         orderStatuses.data.map((status) => (
                                             <MenuItem value={status.id} key={status.id}>
+                                                <ListItemIcon>
+                                                    {getStatusIcon(status.name)}
+                                                </ListItemIcon>
                                                 {status.name}
                                             </MenuItem>
                                         ))}
@@ -207,6 +263,140 @@ const OrderEditPage = () => {
                                     id={"building"}
                                     label={"Дом"}
                                     value={values.address.building}
+                                />
+                                <InputLabel>
+                                    <Typography
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            flexWrap: "wrap",
+                                        }}
+                                    >
+                                        <ListIcon sx={{ marginRight: 1 }} />{" "}
+                                        <span>Содержимое заказа</span>
+                                    </Typography>
+                                </InputLabel>
+                                <FieldArray
+                                    name={"orderItems"}
+                                    render={(arrayHelpers) => {
+                                        return (
+                                            <>
+                                                <Button
+                                                    variant={"outlined"}
+                                                    color={"success"}
+                                                    startIcon={<AddIcon />}
+                                                    onClick={() =>
+                                                        arrayHelpers.push({
+                                                            id: values.orderItems.length,
+                                                            product: { name: "qwerty" },
+                                                            amount: 3,
+                                                        })
+                                                    }
+                                                >
+                                                    Добавить
+                                                </Button>
+                                                {values.orderItems.length > 0 && (
+                                                    <TableContainer component={Paper}>
+                                                        <Table>
+                                                            <TableHead>
+                                                                <TableRow>
+                                                                    <TableCell>Товар</TableCell>
+                                                                    <TableCell>
+                                                                        Количество
+                                                                    </TableCell>
+                                                                    <TableCell>Действия</TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                {values.orderItems &&
+                                                                    values.orderItems.map(
+                                                                        (
+                                                                            orderItem: OrderItem,
+                                                                            index,
+                                                                        ) => (
+                                                                            <TableRow
+                                                                                key={orderItem.id}
+                                                                            >
+                                                                                <TableCell>
+                                                                                    <Field
+                                                                                        name={`orderItems[${index}].id`}
+                                                                                        as={Select}
+                                                                                        value={
+                                                                                            orderItem
+                                                                                                .product
+                                                                                                .id
+                                                                                        }
+                                                                                    >
+                                                                                        <MenuItem
+                                                                                            defaultChecked
+                                                                                            disabled
+                                                                                        >
+                                                                                            --
+                                                                                            Выберите
+                                                                                            товар --
+                                                                                        </MenuItem>
+                                                                                        {products.data &&
+                                                                                            products.data.map(
+                                                                                                (
+                                                                                                    product,
+                                                                                                ) => (
+                                                                                                    <MenuItem
+                                                                                                        disabled={
+                                                                                                            product.leftover <=
+                                                                                                            0
+                                                                                                        }
+                                                                                                        key={
+                                                                                                            product.id
+                                                                                                        }
+                                                                                                        value={
+                                                                                                            product.id
+                                                                                                        }
+                                                                                                    >
+                                                                                                        {
+                                                                                                            product.name
+                                                                                                        }{" "}
+                                                                                                        (
+                                                                                                        {
+                                                                                                            product.retailPrice
+                                                                                                        }
+                                                                                                        ₽)
+                                                                                                    </MenuItem>
+                                                                                                ),
+                                                                                            )}
+                                                                                    </Field>
+                                                                                </TableCell>
+                                                                                <TableCell>
+                                                                                    <Field
+                                                                                        name={`orderItems[${index}].amount`}
+                                                                                        as={
+                                                                                            TextField
+                                                                                        }
+                                                                                        value={
+                                                                                            orderItem.amount
+                                                                                        }
+                                                                                    />
+                                                                                </TableCell>
+                                                                                <TableCell>
+                                                                                    <ButtonGroup>
+                                                                                        <IconButton
+                                                                                            color={
+                                                                                                "error"
+                                                                                            }
+                                                                                        >
+                                                                                            <DeleteIcon />
+                                                                                        </IconButton>
+                                                                                    </ButtonGroup>
+                                                                                </TableCell>
+                                                                            </TableRow>
+                                                                        ),
+                                                                    )}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                                )}
+                                            </>
+                                        );
+                                    }}
                                 />
                                 <Button
                                     type={"submit"}
