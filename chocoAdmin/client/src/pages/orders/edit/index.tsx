@@ -274,19 +274,6 @@ const OrderEditPage = () => {
                   render={(arrayHelpers) => {
                     return (
                       <>
-                        <Button
-                          variant={"outlined"}
-                          color={"success"}
-                          startIcon={<AddIcon />}
-                          onClick={() =>
-                            arrayHelpers.push({
-                              id: "",
-                              amount: 0,
-                            })
-                          }
-                        >
-                          Добавить
-                        </Button>
                         {values.orderItems.length > 0 &&
                           values.orderItems &&
                           values.orderItems.map((orderItem: OrderItem, index) => (
@@ -376,6 +363,19 @@ const OrderEditPage = () => {
                               </Stack>
                             </Paper>
                           ))}
+                        <Button
+                          variant={"outlined"}
+                          color={"success"}
+                          startIcon={<AddIcon />}
+                          onClick={() =>
+                            arrayHelpers.push({
+                              id: "",
+                              amount: 0,
+                            })
+                          }
+                        >
+                          Добавить
+                        </Button>
                       </>
                     );
                   }}
