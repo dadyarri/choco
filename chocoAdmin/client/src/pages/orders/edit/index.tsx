@@ -293,7 +293,7 @@ const OrderEditPage = () => {
                                   </InputLabel>
                                   <Field
                                     type={"select"}
-                                    value={values.orderItems[index].id}
+                                    value={values.orderItems[index].product.id}
                                     name={`orderItems[${index}].id`}
                                     as={Select}
                                     onChange={handleChange}
