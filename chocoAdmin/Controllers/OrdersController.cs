@@ -367,6 +367,7 @@ public class OrdersController : ControllerBase
                oldStatus == "Отменён" && newStatus == "Обрабатывается" ||
                oldStatus == "Доставляется" && newStatus == "Отменён" ||
                oldStatus == "Отменён" && newStatus == "Доставляется" ||
+               oldStatus == "Ожидает получения" && newStatus == "Выполнен" ||
                oldStatus == newStatus;
     }
 }
