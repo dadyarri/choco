@@ -382,6 +382,11 @@ const OrderEditPage = () => {
                                                                                             color={
                                                                                                 "error"
                                                                                             }
+                                                                                            onClick={() =>
+                                                                                                arrayHelpers.remove(
+                                                                                                    index,
+                                                                                                )
+                                                                                            }
                                                                                         >
                                                                                             <DeleteIcon />
                                                                                         </IconButton>
