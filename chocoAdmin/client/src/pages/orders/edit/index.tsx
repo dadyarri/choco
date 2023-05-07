@@ -287,9 +287,8 @@ const OrderEditPage = () => {
                                                     startIcon={<AddIcon />}
                                                     onClick={() =>
                                                         arrayHelpers.push({
-                                                            id: values.orderItems.length,
-                                                            product: { name: "qwerty" },
-                                                            amount: 3,
+                                                            id: "",
+                                                            amount: 0,
                                                         })
                                                     }
                                                 >
@@ -314,17 +313,22 @@ const OrderEditPage = () => {
                                                                             orderItem: OrderItem,
                                                                             index,
                                                                         ) => (
-                                                                            <TableRow
-                                                                                key={orderItem.id}
-                                                                            >
+                                                                            <TableRow key={index}>
                                                                                 <TableCell>
                                                                                     <Field
+                                                                                        type={
+                                                                                            "select"
+                                                                                        }
+                                                                                        value={
+                                                                                            values
+                                                                                                .orderItems[
+                                                                                                index
+                                                                                            ].id
+                                                                                        }
                                                                                         name={`orderItems[${index}].id`}
                                                                                         as={Select}
-                                                                                        value={
-                                                                                            orderItem
-                                                                                                .product
-                                                                                                .id
+                                                                                        onChange={
+                                                                                            handleChange
                                                                                         }
                                                                                     >
                                                                                         <MenuItem
