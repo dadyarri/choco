@@ -40,6 +40,7 @@ import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 
 import { orderCityLib, OrderItem, orderLib, orderStatusLib, productLib } from "entities";
+import { createOrder, updateOrder } from "entities/order/lib";
 import { auth } from "features";
 
 const OrderEditPage = () => {
@@ -116,14 +117,16 @@ const OrderEditPage = () => {
             orderItems: order.data ? order.data.orderItems : [],
           }}
           onSubmit={(values) => {
-            console.log(values);
-            // if (order.data) {
-            //     updateOrder(order.data.id, {
-            //         ...values,
-            //         orderItems: [],
-            //         date: values.date.toJSDate(),
-            //     });
-            // }
+            const data = {
+              ...values,
+              date: values.date.toFormat("yyyy-MM-dd"),
+            };
+            console.log(data);
+            if (order.data) {
+              updateOrder(order.data.id, data);
+            } else {
+              createOrder(data);
+            }
           }}
         >
           {({ values, touched, errors, handleChange, setFieldValue }) => (
